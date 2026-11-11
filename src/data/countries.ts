@@ -30,16 +30,55 @@ function displayNames(lang: string) {
   }
 }
 
-/** Localized country name by ISO code (or the "Global" label) */
+/** Map non-ISO region names / aliases to UN M.49 numerical region codes or ISO codes for Intl.DisplayNames */
+const REGION_TO_ISO_OR_UN: Record<string, string> = {
+  europa: '150',
+  europe: '150',
+  європа: '150',
+  европа: '150',
+  еўропа: '150',
+  eu: '150',
+  asia: '142',
+  азія: '142',
+  азия: '142',
+  azja: '142',
+  asien: '142',
+  africa: '002',
+  африка: '002',
+  afryka: '002',
+  afrika: '002',
+  афрыка: '002',
+  usa: 'US',
+  сша: 'US',
+  зша: 'US',
+  ақш: 'US',
+  global: '001',
+  світ: '001',
+  мир: '001',
+  world: '001',
+};
+
+/** Localized country name by ISO code / region (or the "Global" label) */
 export function countryName(code: string, lang: LangCode, globalLabel: string) {
   if (!code || code.toUpperCase() === 'GLOBAL') return globalLabel;
-  return displayNames(lang).of(code.toUpperCase()) ?? code;
+  const lookup = REGION_TO_ISO_OR_UN[code.toLowerCase()] || code.toUpperCase();
+  try {
+    return displayNames(lang).of(lookup) ?? code;
+  } catch {
+    return code;
+  }
 }
 
 /** Country names for the <datalist> in the current UI language */
 export function countryOptions(lang: LangCode) {
   const dn = displayNames(lang);
-  return ISO_COUNTRY_CODES.map((c) => dn.of(c) ?? c).sort((a, b) => a.localeCompare(b, lang));
+  return ISO_COUNTRY_CODES.map((c) => {
+    try {
+      return dn.of(c) ?? c;
+    } catch {
+      return c;
+    }
+  }).sort((a, b) => a.localeCompare(b, lang));
 }
 
 /** Every accepted lowercase value: country names in all 6 languages, ISO codes and regions */
@@ -49,8 +88,10 @@ export function acceptedCountryValues() {
     const dn = displayNames(lang);
     for (const c of ISO_COUNTRY_CODES) {
       set.add(c.toLowerCase());
-      const name = dn.of(c);
-      if (name) set.add(name.toLowerCase());
+      try {
+        const name = dn.of(c);
+        if (name) set.add(name.toLowerCase());
+      } catch {}
     }
   }
   ['united states', 'america', 'uk', 'england', 'china', 'prc'].forEach((v) => set.add(v));
