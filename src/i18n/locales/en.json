@@ -164,5 +164,15 @@
   "monobankSupportBtn": "Support via Monobank Jar",
   "futureGoalLabel": "Future Goal & Roadmap",
   "futureGoalTitle": "Dedicated Translation Platform for Ukrainian Localization",
-  "futureGoalDesc": "Launching a dedicated web service with tools for creators and community members to translate Minecraft launchers, mods, and documentation into Ukrainian."
+  "futureGoalDesc": "Launching a dedicated web service with tools for creators and community members to translate Minecraft launchers, mods, and documentation into Ukrainian.",
+  "verifiedBadge": "VERIFIED",
+  "verifiedTitle": "Verified MeowProject Product",
+  "verifiedDesc": "This project has undergone a complete manual and technical security audit by MeowProject. Its open-source code has been verified free of malware, viruses, trojans, or credential stealing. This product is 100% trustworthy and safe for your system and Minecraft accounts.",
+  "verifiedTooltip": "Click to view security verification details",
+  "footerPrivacy": "Privacy Policy",
+  "footerTerms": "Terms & Rights",
+  "privacyModalTitle": "Privacy Policy (Honest & Transparent)",
+  "privacyModalText": "MeowProject is a non-profit open-source directory. We collect ZERO personal data: no account registration, no passwords, no trackers, and no advertising cookies. All comments and reviews are submitted voluntarily via GitHub Issues.",
+  "termsModalTitle": "Terms of Use & Copyright",
+  "termsModalText": "Minecraft is a registered trademark of Mojang Synergies AB and Microsoft Corporation. MeowProject is not affiliated with Mojang or Microsoft. All launcher, mod, and server logos and titles belong to their respective creators. The website code is licensed under GPL-3.0."
 }

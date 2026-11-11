@@ -145,5 +145,15 @@
   "screenTooSmallTitle": "Экран ажыратымдылығы тым төмен",
   "screenTooSmallDesc": "MeowProject каталогы толық өлшемді компьютерлік экрандар үшін жасалған. Шолушы терезесін толық экранға жайыңыз немесе экран ажыратымдылығын арттырыңыз (ені кемінде 1024px).",
   "blockedRequiredDevice": "Қажетті құрылғы: Компьютер немесе Ноутбук (экран ені 1024px бастап)",
-  "blockedCurrentViewport": "Ағымдағы ажыратымдылық:"
+  "blockedCurrentViewport": "Ағымдағы ажыратымдылық:",
+  "verifiedBadge": "ТЕКСЕРІЛДІ",
+  "verifiedTitle": "MeowProject тексерген өнім",
+  "verifiedDesc": "Бұл жоба MeowProject қауіпсіздік тексеруінен толық өтті. Оның ашық бастапқы коды вирустар мен қауіптерден таза екені расталды. Бұл өнімге 100% сенуге болады.",
+  "verifiedTooltip": "Қауіпсіздікті тексеру туралы толығырақ білу үшін басыңыз",
+  "footerPrivacy": "Құпиялылық саясаты",
+  "footerTerms": "Шарттар мен құқықтар",
+  "privacyModalTitle": "Құпиялылық саясаты (Шынайы)",
+  "privacyModalText": "MeowProject ешқандай жеке деректерді ЖИНАМАЙДЫ: тіркелу, құпиясөздер, трекерлер немесе жарнамалық cookies жоқ. Барлық пікірлер GitHub Issues арқылы өз еркімен қалдырылады.",
+  "termsModalTitle": "Пайдалану шарттары мен авторлық құқық",
+  "termsModalText": "Minecraft — Mojang Synergies AB және Microsoft сауда белгісі. MeowProject Mojang немесе Microsoft компанияларымен байланысты емес."
 }

@@ -145,5 +145,15 @@
   "screenTooSmallTitle": "Rozdzielczość ekranu jest zbyt mała",
   "screenTooSmallDesc": "Katalog MeowProject został zaprojektowany dla ekranów komputerowych. Rozwiń okno przeglądarki na pełny ekran lub zwiększ rozdzielczość (minimum 1024px szerokości).",
   "blockedRequiredDevice": "Wymagane urządzenie: Komputer PC lub Laptop (szerokość ekranu od 1024px)",
-  "blockedCurrentViewport": "Bieżąca rozdzielczość:"
+  "blockedCurrentViewport": "Bieżąca rozdzielczość:",
+  "verifiedBadge": "ZWERYFIKOWANY",
+  "verifiedTitle": "Zweryfikowany produkt MeowProject",
+  "verifiedDesc": "Ten projekt przeszedł pełny audyt bezpieczeństwa MeowProject. Jego kod źródłowy został sprawdzony pod kątem braku złośliwego oprogramowania. Produkt jest w 100% bezpieczny i godny zaufania.",
+  "verifiedTooltip": "Kliknij, aby zobaczyć szczegóły weryfikacji",
+  "footerPrivacy": "Polityka prywatności",
+  "footerTerms": "Warunki i prawa",
+  "privacyModalTitle": "Polityka prywatności (Uczciwie i otwarcie)",
+  "privacyModalText": "MeowProject to katalog open-source. NIE zbieramy żadnych danych osobowych: brak rejestracji, brak haseł, brak trackerów czy plików cookie. Oceny i recenzje są dodawane dobrowolnie na GitHub Issues.",
+  "termsModalTitle": "Warunki korzystania i prawa autorskie",
+  "termsModalText": "Minecraft jest znakiem towarowym firmy Mojang Synergies AB i Microsoft Corporation. MeowProject nie jest powiązany z Mojang ani Microsoft. Wszelkie loga należą do ich twórców."
 }

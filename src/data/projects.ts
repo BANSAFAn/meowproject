@@ -43,6 +43,7 @@ export interface ProjectMeta {
   tags: string[];
   screenshots: string[];
   order?: number;
+  verified?: boolean;
 }
 
 export interface ProjectLocale {

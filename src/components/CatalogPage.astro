@@ -159,6 +159,59 @@ const jsonLdSchema = {
       })();
     </script>
     <ClientRouter />
+    <style is:global>
+      /* Retro-Technical Archival Scrollbar */
+      html, body {
+        scrollbar-width: thin;
+        scrollbar-color: #d97706 #141417;
+      }
+      *::-webkit-scrollbar,
+      ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+        background-color: #141417;
+      }
+      *::-webkit-scrollbar-track,
+      ::-webkit-scrollbar-track {
+        background: #141417;
+        border-left: 1px solid #33302b;
+      }
+      *::-webkit-scrollbar-thumb,
+      ::-webkit-scrollbar-thumb {
+        background-color: #2e2b26;
+        border: 2px solid #141417;
+        border-radius: 0;
+      }
+      *::-webkit-scrollbar-thumb:hover,
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #d97706;
+      }
+      *::-webkit-scrollbar-corner,
+      ::-webkit-scrollbar-corner {
+        background: #141417;
+      }
+      html[data-theme='light'] {
+        scrollbar-color: #d97706 #e8e2d5;
+      }
+      html[data-theme='light'] *::-webkit-scrollbar,
+      html[data-theme='light'] ::-webkit-scrollbar {
+        background-color: #e8e2d5;
+      }
+      html[data-theme='light'] *::-webkit-scrollbar-track,
+      html[data-theme='light'] ::-webkit-scrollbar-track {
+        background: #e8e2d5;
+        border-left: 1px solid #c9c1b1;
+      }
+      html[data-theme='light'] *::-webkit-scrollbar-thumb,
+      html[data-theme='light'] ::-webkit-scrollbar-thumb {
+        background-color: #c9c1b1;
+        border: 2px solid #e8e2d5;
+      }
+      html[data-theme='light'] *::-webkit-scrollbar-thumb:hover,
+      html[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+        background-color: #d97706;
+      }
+    </style>
     <style>
       :root,
       html[data-theme='light'] {
@@ -343,6 +396,47 @@ const jsonLdSchema = {
       .stamp-opensource-link:hover {
         transform: translate(1px, 1px);
         box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .stamp-verified {
+        background: #0f2b1a;
+        color: #2ecc71;
+        border: 1px solid #2ecc71;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        transition: transform 100ms ease, box-shadow 100ms ease, background 100ms ease;
+      }
+
+      .stamp-verified:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+        background: #19462a;
+      }
+
+      html[data-theme='light'] .stamp-verified {
+        background: #e8f8f0;
+        color: #1e824c;
+        border-color: #27ae60;
+      }
+
+      .text-link-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        color: var(--ink-muted);
+        text-decoration: underline;
+        cursor: pointer;
+        transition: color 120ms ease;
+      }
+
+      .text-link-btn:hover {
+        color: var(--ink);
       }
 
       .top-links-row {
@@ -1777,30 +1871,6 @@ const jsonLdSchema = {
         }
       }
 
-      /* Custom Scrollbar - Retro-Technical Archival Aesthetic */
-      html {
-        scrollbar-color: var(--border-ink) var(--bg-desk);
-        scrollbar-width: thin;
-      }
-      ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-        background-color: var(--bg-desk);
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--bg-desk);
-        border-left: 1px solid var(--border-ink);
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: var(--paper-sheet);
-        border: 1.5px solid var(--border-ink);
-        box-shadow: 2px 2px 0 var(--shadow-hard);
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--accent-amber);
-        border-color: var(--accent-amber);
-      }
-
       /* Server Hero Banner */
       .server-hero-banner {
         width: 100%;
@@ -2225,10 +2295,7 @@ const jsonLdSchema = {
       <div class="container header-inner">
         <a href={getLangHref(lang)} class="brand" data-switch-view="catalog">
           <img src="/favicon.svg" alt="MeowProject" class="brand-icon" width="38" height="38" />
-          <div>
-            <span class="brand-title">MeowProject</span>
-            <span class="brand-sub">PAPER ARCHIVE · OPEN DIRECTORY</span>
-          </div>
+          <span class="brand-title">MeowProject</span>
         </a>
 
         <div class="header-controls">
@@ -2639,6 +2706,22 @@ const jsonLdSchema = {
 
                           <span class="stamp stamp-open">{project.license}</span>
 
+                          <!-- Verified Stamp (for audited / trusted projects) -->
+                          {project.verified && (
+                            <button
+                              type="button"
+                              class="stamp stamp-verified"
+                              data-open-verified-modal
+                              title={t.verifiedTooltip}
+                            >
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                <polyline points="9 12 11 14 15 10"></polyline>
+                              </svg>
+                              <span>{t.verifiedBadge}</span>
+                            </button>
+                          )}
+
                           <!-- Community Rating Stamp (shown only if somebody rated) -->
                           <span class="stamp stamp-alpha" data-rating-stamp={project.slug} style="display: none;">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
@@ -2714,9 +2797,9 @@ const jsonLdSchema = {
                         </div>
                         <div class="server-badges">
                           {project.serverOnline && (
-                            <span class="stamp stamp-online">
+                            <span class="stamp stamp-online" data-live-server-ip={project.serverIp}>
                               <span class="online-dot"></span>
-                              {project.serverOnline}
+                              <span class="online-text">{project.serverOnline}</span>
                             </span>
                           )}
                           <span class={`stamp ${project.licenseRequired ? 'stamp-alpha' : 'stamp-open'}`}>
@@ -3474,6 +3557,11 @@ const jsonLdSchema = {
           <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.footerAbout}</p>
           <p style="font-size: 0.86rem; font-weight: 700;">{t.footerAlphaNote}</p>
           <p style="font-size: 0.84rem; color: var(--ink-muted);">{t.footerNoAuthNote}</p>
+          <div style="display: flex; gap: 0.85rem; align-items: center; margin-top: 0.35rem; font-size: 0.82rem;">
+            <button type="button" id="open-privacy-btn" class="text-link-btn">{t.footerPrivacy}</button>
+            <span style="color: var(--ink-muted);">·</span>
+            <button type="button" id="open-terms-btn" class="text-link-btn">{t.footerTerms}</button>
+          </div>
         </div>
 
         <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
@@ -3524,6 +3612,77 @@ const jsonLdSchema = {
         </div>
         <div class="lightbox-img-box">
           <img id="lightbox-img" src="" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Verified Modal -->
+    <div id="verified-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #2ecc7122; border: 1.5px solid #2ecc71; border-radius: 4px; color: #2ecc71;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+            </div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 900;">{t.verifiedTitle}</h3>
+          </div>
+          <button type="button" id="verified-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem; color: var(--ink);">
+          {t.verifiedDesc}
+        </p>
+        <div style="background: var(--paper); border: 1px dashed var(--border-ink); padding: 0.85rem; font-size: 0.82rem; line-height: 1.5;">
+          <strong>Критерії верифікації безпеки MeowProject:</strong>
+          <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0;">
+            <li>Відкритий вихідний код на GitHub без обфускації шкідливого характеру.</li>
+            <li>Відсутність прихованого збору паролів, токенів чи облікових даних гравця.</li>
+            <li>Безпечні алгоритми завантаження бібліотек та файлів гри.</li>
+            <li>Бездоганна репутація серед незалежних розробників Minecraft-спільноти.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 900;">{t.privacyModalTitle}</h3>
+          <button type="button" id="privacy-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div style="font-size: 0.92rem; line-height: 1.6; color: var(--ink);">
+          <p style="margin-bottom: 0.8rem;">{t.privacyModalText}</p>
+          <p style="margin-bottom: 0.8rem;">
+            <strong>Безпека та кукі:</strong> Ми не використовуємо Google Analytics, Meta Pixel чи рекламні шпигунські трекери. Єдине, що зберігається локально у вашому браузері — це вибрана тема та мова (LocalStorage).
+          </p>
+          <p style="margin: 0;">
+            <strong>Зовнішні сервіси:</strong> Інформація про онлайн серверів отримується через відкритий API mcstatus.io без передачі ваших персональних даних.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms & Copyright Modal -->
+    <div id="terms-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 900;">{t.termsModalTitle}</h3>
+          <button type="button" id="terms-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div style="font-size: 0.92rem; line-height: 1.6; color: var(--ink);">
+          <p style="margin-bottom: 0.8rem;">{t.termsModalText}</p>
+          <p style="margin-bottom: 0.8rem;">
+            <strong>Вміст каталогу:</strong> Описи, посилання та медіа-матеріали публікуються у пізнавальних цілях для підтримки та розвитку Minecraft-спільноти. Усі права на проєкти належать їхнім авторам.
+          </p>
+          <p style="margin: 0;">
+            <strong>Скарги та видалення:</strong> Якщо ви є автором проєкту та бажаєте змінити або видалити дані про ваш проєкт, створіть Issue на нашому GitHub-репозиторії.
+          </p>
         </div>
       </div>
     </div>
@@ -3668,6 +3827,29 @@ const jsonLdSchema = {
               } catch (_) {}
             }
           });
+        });
+
+        // Live Minecraft Server Pinger
+        document.querySelectorAll('[data-live-server-ip]').forEach((badge) => {
+          const rawIp = badge.getAttribute('data-live-server-ip');
+          if (!rawIp) return;
+          const host = rawIp.trim();
+          fetch(`https://api.mcstatus.io/v2/status/java/${encodeURIComponent(host)}`)
+            .then((res) => (res.ok ? res.json() : null))
+            .then((data) => {
+              if (!data) return;
+              const onlineText = badge.querySelector('.online-text');
+              const dot = badge.querySelector('.online-dot');
+              if (data.online) {
+                const count = data.players?.online ?? 0;
+                if (onlineText) onlineText.textContent = `${count.toLocaleString()} онлайн`;
+                if (dot) dot.style.background = '#2ecc71';
+              } else {
+                if (onlineText) onlineText.textContent = 'Офлайн';
+                if (dot) dot.style.background = '#e74c3c';
+              }
+            })
+            .catch(() => {});
         });
 
         // 3. Animated Tutorial Loop in Tab 02
@@ -4070,8 +4252,45 @@ const jsonLdSchema = {
             if (e.target === modal) closeModal();
           });
         }
+
+        // Generic Modal Handler
+        function bindGenericModal(modalId, closeBtnId, triggerSelector) {
+          const m = document.getElementById(modalId);
+          const closeBtn = document.getElementById(closeBtnId);
+          if (!m) return;
+          const open = () => {
+            m.classList.add('open');
+            m.setAttribute('aria-hidden', 'false');
+          };
+          const close = () => {
+            m.classList.remove('open');
+            m.setAttribute('aria-hidden', 'true');
+          };
+          if (triggerSelector) {
+            document.querySelectorAll(triggerSelector).forEach((btn) => {
+              btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                open();
+              });
+            });
+          }
+          if (closeBtn) closeBtn.addEventListener('click', close);
+          m.addEventListener('click', (e) => {
+            if (e.target === m) close();
+          });
+        }
+
+        bindGenericModal('verified-modal', 'verified-close', '[data-open-verified-modal]');
+        bindGenericModal('privacy-modal', 'privacy-close', '#open-privacy-btn');
+        bindGenericModal('terms-modal', 'terms-close', '#open-terms-btn');
+
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') closeModal();
+          if (e.key === 'Escape') {
+            document.querySelectorAll('.lightbox.open').forEach((m) => {
+              m.classList.remove('open');
+              m.setAttribute('aria-hidden', 'true');
+            });
+          }
         });
 
         // 8. Real Community Reviews & [rating](0-100) Parser
