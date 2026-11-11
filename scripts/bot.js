@@ -331,12 +331,47 @@ async function handlePushOrDispatch() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ state: 'closed' })
           });
-          await postOrUpdateBotComment(pr.number, `Closed duplicate PR: this project is already part of the MeowProject catalog.`);
+          // Delete any bot comments on the closed PR
+          try {
+            const { data: prComments } = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${pr.number}/comments?per_page=100`);
+            if (Array.isArray(prComments)) {
+              for (const pc of prComments) {
+                if ((pc.user?.login || '').includes('github-actions') || (pc.user?.type === 'Bot')) {
+                  await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/comments/${pc.id}`, { method: 'DELETE' });
+                }
+              }
+            }
+          } catch (_) {}
         }
       }
     }
   } catch (e) {
     appendSummary(`Note: cleanup PRs status: ${e.message}`);
+  }
+
+  // Clean up any old bot error comments on official catalog discussion issues (#1-#5)
+  for (const issNum of [1, 2, 3, 4, 5]) {
+    try {
+      const { data: comments } = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issNum}/comments?per_page=100`);
+      if (Array.isArray(comments)) {
+        for (const c of comments) {
+          const isBot = (c.user?.login || '').includes('github-actions') || (c.user?.type === 'Bot');
+          const isSpam = (c.body || '').includes('[MeowProject Bot]') && (
+            c.body.includes('Description Required') ||
+            c.body.includes('Title Format Verification') ||
+            c.body.includes('Submission Verified') ||
+            c.body.includes('Translation Template') ||
+            c.body.includes('Closed duplicate PR')
+          );
+          if (isBot && isSpam) {
+            console.log(`Deleting spam bot comment #${c.id} from catalog issue #${issNum}`);
+            await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/comments/${c.id}`, { method: 'DELETE' });
+          }
+        }
+      }
+    } catch (e) {
+      console.error(`Note: clean comments on #${issNum}: ${e.message}`);
+    }
   }
 
   try {
@@ -368,6 +403,14 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   const title = (issue.title || '').trim();
   const body = (issue.body || '').trim();
 
+  // Never process existing catalog projects as new proposals!
+  const projectsDir = path.resolve('src/projects');
+  const catalogIssues = [1, 2, 3, 4, 5];
+  if (catalogIssues.includes(issue.number)) {
+    console.log(`Issue #${issue.number} is an official catalog thread. Skipping proposal.`);
+    return;
+  }
+
   appendSummary(`### 🚀 Processing New Project Proposal from Issue #${issue.number}: "${title}"`);
 
   const category = matchedPrefix.replace(':', '').trim().toLowerCase();
@@ -378,6 +421,11 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   }
   const name = rawName || 'Untitled Project';
   const slug = name.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+
+  if (fs.existsSync(path.join(projectsDir, slug, 'project.json'))) {
+    console.log(`Project with slug "${slug}" is already in the catalog (src/projects/${slug}). Skipping.`);
+    return;
+  }
 
   const country = extractSection(body, 'Country') || 'GLOBAL';
   const platformsRaw = extractSection(body, 'Platforms');
