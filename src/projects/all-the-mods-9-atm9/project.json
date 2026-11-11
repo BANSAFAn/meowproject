@@ -1,0 +1,23 @@
+{
+  "slug": "all-the-mods-9-atm9",
+  "name": "All the Mods 9 (ATM9)",
+  "shortName": "All the Mods 9 (ATM9)",
+  "category": "modpack",
+  "icon": "/favicon.svg",
+  "country": "GLOBAL",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "Windows"
+  ],
+  "website": "",
+  "sourceLinks": [],
+  "issueThreadNumber": 3,
+  "issueSearchTerm": "All the Mods 9 (ATM9)",
+  "tags": [
+    "modpack",
+    "Windows",
+    "GLOBAL"
+  ],
+  "screenshots": []
+}
