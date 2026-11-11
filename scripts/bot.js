@@ -43,6 +43,44 @@ async function githubApi(endpoint, options = {}) {
   return { status: res.status, ok: res.ok, data };
 }
 
+async function postOrUpdateBotComment(issueNumber, markdownBody) {
+  try {
+    const { data: comments } = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issueNumber}/comments?per_page=100`);
+    const existingComments = Array.isArray(comments) ? comments : [];
+
+    // Find any existing comment posted by MeowProject Bot
+    const botComment = existingComments.find(c => {
+      const isBotUser = (c.user?.login || '').includes('github-actions') || (c.user?.type === 'Bot');
+      const hasMarker = (c.body || '').includes('[MeowProject Bot]');
+      return isBotUser || hasMarker;
+    });
+
+    if (botComment) {
+      if (botComment.body.trim() === markdownBody.trim()) {
+        console.log(`Bot comment on #${issueNumber} is identical, no update needed.`);
+        return botComment;
+      }
+      console.log(`Updating existing bot comment #${botComment.id} on issue #${issueNumber}`);
+      const updateRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/comments/${botComment.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: markdownBody })
+      });
+      return updateRes.data;
+    } else {
+      console.log(`Posting new bot comment on issue #${issueNumber}`);
+      const createRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issueNumber}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: markdownBody })
+      });
+      return createRes.data;
+    }
+  } catch (err) {
+    console.error(`Error in postOrUpdateBotComment for issue #${issueNumber}:`, err.message);
+  }
+}
+
 function extractSection(text, title) {
   const reg = new RegExp('(?:^|\\n)###\\s+' + title + '\\s*\\n([\\s\\S]*?)(?=\\n###\\s+|$)', 'i');
   const m = text.match(reg);
@@ -280,30 +318,25 @@ async function handlePushOrDispatch() {
   // Compile reviews.json from real comments!
   await compileReviews(issues, slugs, projectsDir);
 
-  // Scan open issues for new project proposals or translation proposals that don't have PRs yet!
-  appendSummary('### 🔍 Checking open issues for pending project proposals...');
-  const { data: openPrs } = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=50`);
-  const prList = Array.isArray(openPrs) ? openPrs : [];
-
-  for (const iss of issues) {
-    if (iss.state !== 'open' || iss.pull_request) continue;
-    const lowerTitle = (iss.title || '').toLowerCase().trim();
-    const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
-    const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
-    if (matchedPrefix) {
-      const rawName = iss.title.replace(new RegExp('^' + matchedPrefix, 'i'), '').trim();
-      const slug = rawName.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
-
-      // Has this project already been merged into main?
-      const alreadyMerged = fs.existsSync(path.join(projectsDir, slug, 'project.json'));
-      // Does a PR already exist for this issue?
-      const hasOpenPr = prList.some(p => (p.head?.ref || '').includes(`issue-${iss.number}`) || (p.title || '').includes(`#${iss.number}`));
-
-      if (!alreadyMerged && !hasOpenPr) {
-        appendSummary(`Found unprocessed proposal in Issue #${iss.number} ("${iss.title}"). Automatically generating Pull Request...`);
-        await handleProjectSubmission(iss, matchedPrefix);
+  // Auto-close accidental PRs for existing catalog issues (#3 ATM9, #4 Sodium, #5 Lunar Client)
+  try {
+    const { data: openPrs } = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=50`);
+    if (Array.isArray(openPrs)) {
+      for (const pr of openPrs) {
+        // If PR points to issue 3, 4, 5 (existing catalog items)
+        if ([3, 4, 5].some(num => (pr.title || '').includes(`(#${num})`) || (pr.head?.ref || '').includes(`issue-${num}`))) {
+          appendSummary(`Closing duplicate PR #${pr.number} ("${pr.title}")...`);
+          await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls/${pr.number}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ state: 'closed' })
+          });
+          await postOrUpdateBotComment(pr.number, `Closed duplicate PR: this project is already part of the MeowProject catalog.`);
+        }
       }
     }
+  } catch (e) {
+    appendSummary(`Note: cleanup PRs status: ${e.message}`);
   }
 
   try {
@@ -412,12 +445,13 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     const meta = LANG_METADATA[code] || { flag: '🌐', name: code.toUpperCase() };
     const label = `${meta.flag} **${code.toUpperCase()}** (${meta.name})`;
 
-    if (text && text.length >= 20 && text.length <= 2000) {
+    // Expanded limit: 20 to 5,000 characters
+    if (text && text.length >= 20 && text.length <= 5000) {
       validLangs.push(code);
       langTableRows.push(`| ${label} | ${text.length} chars | ✅ **Included in PR** |`);
     } else if (text) {
       invalidLangs.push(code);
-      langTableRows.push(`| ${label} | ${text.length} chars | ⚠️ **Out of bounds** (20–2,000 chars required) |`);
+      langTableRows.push(`| ${label} | ${text.length} chars | ⚠️ **Out of bounds** (20–5,000 chars required) |`);
     } else {
       missingLangs.push(code);
       langTableRows.push(`| ${label} | — | ⚪ **Not provided** (can be added later via issue) |`);
@@ -425,32 +459,26 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   }
 
   if (validLangs.length === 0) {
-    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        body: [
-          `### [MeowProject Bot] Description Required ❌`,
-          ``,
-          `Could not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).`,
-          ``,
-          `#### 🌐 Current Verification Status:`,
-          `| Language | Length | Status |`,
-          `|:---|:---|:---|`,
-          ...langTableRows,
-          ``,
-          `Please edit your issue description and add language headers like:`,
-          `\`\`\`markdown`,
-          `### Description`,
-          `#### UK`,
-          `Ваш опис українською мовою...`,
-          ``,
-          `#### EN`,
-          `Your description in English...`,
-          `\`\`\``
-        ].join('\n')
-      })
-    });
+    await postOrUpdateBotComment(issue.number, [
+      `### [MeowProject Bot] Description Required ❌`,
+      ``,
+      `Could not find a valid description in any supported language. Each description must have between 20 and 5,000 characters.`,
+      ``,
+      `#### 🌐 Current Verification Status:`,
+      `| Language | Length | Status |`,
+      `|:---|:---|:---|`,
+      ...langTableRows,
+      ``,
+      `Please edit your issue description and add language headers like:`,
+      `\`\`\`markdown`,
+      `### Description`,
+      `#### UK`,
+      `Ваш опис українською мовою...`,
+      ``,
+      `#### EN`,
+      `Your description in English...`,
+      `\`\`\``
+    ].join('\n'));
     return;
   }
 
@@ -536,7 +564,7 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     execSync('git config user.name "github-actions[bot]"');
     execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
     execSync(`git checkout -B ${branchName}`);
-    execSync(`git add src/projects/${slug}/ public/projects/${slug}/`);
+    execSync(`git add src/projects/${slug}/ public/projects/${slug}/ wrangler.jsonc`);
     execSync(`git commit -m "feat(catalog): propose ${category} ${name} from issue #${issue.number}"`);
     execSync(`git push origin ${branchName} --force`);
     appendSummary(`✅ Created & pushed branch: \`${branchName}\``);
@@ -585,57 +613,44 @@ async function handleProjectSubmission(issue, matchedPrefix) {
         errorNote += `\n\n> ⚠️ **Потрібен дозвіл у налаштуваннях репозиторію**:\n> GitHub за замовчуванням блокує створення Pull Request через автоматизацію GitHub Actions.\n> **Як увімкнути за 10 секунд**:\n> 1. Перейдіть у вкладку **Settings** репозиторію -> **Actions** -> **General**\n> 2. Прокрутіть до розділу **Workflow permissions**\n> 3. Оберіть **"Read and write permissions"**\n> 4. Поставте галочку: ☑ **"Allow GitHub Actions to create and approve pull requests"**\n> 5. Натисніть **Save**! Після цього бот зможе самостійно відкривати PR без будь-яких ручних дій!`;
       }
 
-      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          body: [
-            `### [MeowProject Bot] Гілку створено, але створення Pull Request заблоковано GitHub ⚠️`,
-            ``,
-            `- **Проєкт:** **${name}** (\`${category}\`)`,
-            `- **Гілка:** \`${branchName}\` (вже створена та завантажена в репозиторій)`,
-            ``,
-            `#### 🌐 Статус перевірки мов:`,
-            `| Мова | Символи | Статус |`,
-            `|:---|:---|:---|`,
-            ...langTableRows,
-            ``,
-            `---`,
-            errorNote
-          ].join('\n')
-        })
-      });
+      await postOrUpdateBotComment(issue.number, [
+        `### [MeowProject Bot] Гілку створено, але створення Pull Request заблоковано GitHub ⚠️`,
+        ``,
+        `- **Проєкт:** **${name}** (\`${category}\`)`,
+        `- **Гілка:** \`${branchName}\` (вже створена та завантажена в репозиторій)`,
+        ``,
+        `#### 🌐 Статус перевірки мов:`,
+        `| Мова | Символи | Статус |`,
+        `|:---|:---|:---|`,
+        ...langTableRows,
+        ``,
+        `---`,
+        errorNote
+      ].join('\n'));
       return;
     }
 
     const prUrl = prRes.data?.html_url || `branch \`${branchName}\``;
     const prNumber = prRes.data?.number ? `#${prRes.data.number}` : '';
 
-    // Comment back on the Issue
-    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        body: [
-          `### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉`,
-          ``,
-          `Thank you for contributing **${name}** to MeowProject!`,
-          ``,
-          `- **Project:** **${name}** (\`${category}\`)`,
-          `- **Country:** ${country}`,
-          `- **Platforms:** ${platforms.join(', ')}`,
-          `- **Pull Request:** ${prNumber} ([View Pull Request](${prUrl}))`,
-          ``,
-          `#### 🌐 Language Verification Breakdown:`,
-          `| Language | Length | Status |`,
-          `|:---|:---|:---|`,
-          ...langTableRows,
-          ``,
-          `---`,
-          `> 💡 **Next steps:** The Pull Request **${prNumber}** is open in the [Pull Requests](https://github.com/${GITHUB_REPOSITORY}/pulls) tab. Click **"Merge pull request"** to approve and publish to the live site!`
-        ].join('\n')
-      })
-    });
+    await postOrUpdateBotComment(issue.number, [
+      `### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉`,
+      ``,
+      `Thank you for contributing **${name}** to MeowProject!`,
+      ``,
+      `- **Project:** **${name}** (\`${category}\`)`,
+      `- **Country:** ${country}`,
+      `- **Platforms:** ${platforms.join(', ')}`,
+      `- **Pull Request:** ${prNumber} ([View Pull Request](${prUrl}))`,
+      ``,
+      `#### 🌐 Language Verification Breakdown:`,
+      `| Language | Length | Status |`,
+      `|:---|:---|:---|`,
+      ...langTableRows,
+      ``,
+      `---`,
+      `> 💡 **Next steps:** The Pull Request **${prNumber}** is open in the [Pull Requests](https://github.com/${GITHUB_REPOSITORY}/pulls) tab. Click **"Merge pull request"** to approve and publish to the live site!`
+    ].join('\n'));
 
     appendSummary(`🎉 Pull Request created successfully: ${prUrl}`);
   } catch (err) {
@@ -660,6 +675,13 @@ async function handleIssues(eventPayload) {
 
   appendSummary(`Processing issue #${issue.number} ("${title}") [action: ${action}]`);
 
+  // Catalog projects (issues #1-#5) are discussion threads, NOT new submissions!
+  const catalogThreadNumbers = [1, 2, 3, 4, 5];
+  if (catalogThreadNumbers.includes(issue.number)) {
+    console.log(`Issue #${issue.number} is a catalog discussion thread. Skipping proposal processing.`);
+    return;
+  }
+
   // 1. Translation Contribution: [i18n: <slug>]
   const i18nMatch = lowerTitle.match(/^(?:\[i18n:\s*([a-z0-9_-]+)\]|translate:\s*([a-z0-9_-]+))/i);
   if (i18nMatch) {
@@ -667,13 +689,7 @@ async function handleIssues(eventPayload) {
     const projectDir = path.resolve('src/projects', slug);
 
     if (!fs.existsSync(projectDir)) {
-      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          body: `### [MeowProject Bot] Project Not Found\n\nCould not find a project with slug \`${slug}\` in \`src/projects/\`. Please verify the project slug.`
-        })
-      });
+      await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Project Not Found\n\nCould not find a project with slug \`${slug}\` in \`src/projects/\`. Please verify the project slug.`);
       return;
     }
 
@@ -690,13 +706,7 @@ async function handleIssues(eventPayload) {
 
     const detectedCodes = Object.keys(submittedTranslations);
     if (detectedCodes.length === 0) {
-      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          body: `### [MeowProject Bot] Translation Template Needed\n\nPlease structure your description using language headers like:\n\n\`\`\`markdown\n#### EN\nYour English description here (at least 20 chars)...\n\n#### DE\nIhre deutsche Beschreibung hier...\n\`\`\``
-        })
-      });
+      await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Translation Template Needed\n\nPlease structure your description using language headers like:\n\n\`\`\`markdown\n#### EN\nYour English description here (at least 20 chars)...\n\n#### DE\nIhre deutsche Beschreibung hier...\n\`\`\``);
       return;
     }
 
@@ -747,13 +757,7 @@ async function handleIssues(eventPayload) {
       });
 
       const prUrl = prRes.data ? prRes.data.html_url : `branch ${branchName}`;
-      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          body: `### [MeowProject Bot] Automated PR Created!\n\nThank you for contributing translations for **${slug}**! 🎉\n\n- **Target Languages:** \`${detectedCodes.join(', ')}\`\n- **Pull Request:** ${prUrl}\n\nOnce reviewed and merged, the site will automatically update!`
-        })
-      });
+      await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Automated PR Created!\n\nThank you for contributing translations for **${slug}**! 🎉\n\n- **Target Languages:** \`${detectedCodes.join(', ')}\`\n- **Pull Request:** ${prUrl}\n\nOnce reviewed and merged, the site will automatically update!`);
 
       execSync('git checkout main');
     }
@@ -765,13 +769,7 @@ async function handleIssues(eventPayload) {
   const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
 
   if (!matchedPrefix) {
-    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        body: `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`service: Name\`\n- \`website: Name\`\n- \`project: Name\``
-      })
-    });
+    await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`service: Name\`\n- \`website: Name\`\n- \`project: Name\``);
     return;
   }
 
@@ -782,8 +780,10 @@ async function handleIssues(eventPayload) {
     body: JSON.stringify({ labels: [typeLabel, 'verified-submission', 'automated-pr'] })
   });
 
-  // Handle proposal and create PR!
-  await handleProjectSubmission(issue, matchedPrefix);
+  // Only run proposal processing when opened or edited
+  if (action === 'opened' || action === 'edited') {
+    await handleProjectSubmission(issue, matchedPrefix);
+  }
 }
 
 async function main() {
