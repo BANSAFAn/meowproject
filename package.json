@@ -6,10 +6,14 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "deploy": "npm run build && npx wrangler deploy",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.160.0"
   }
 }
