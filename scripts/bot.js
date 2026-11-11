@@ -10,6 +10,16 @@ const STEP_SUMMARY_PATH = process.env.GITHUB_STEP_SUMMARY;
 
 const RATING_REGEX = /(?:\[rating\]\(\s*(100|[1-9]?\d)\s*\)|\[rating:\s*(100|[1-9]?\d)(?:\s*\/\s*100)?\s*\]|rating:\s*(100|[1-9]?\d))/i;
 
+const SUPPORTED_LANGS = ['uk', 'en', 'de', 'pl', 'be', 'kk'];
+const LANG_METADATA = {
+  uk: { flag: '🇺🇦', name: 'Українська' },
+  en: { flag: '🇬🇧', name: 'English' },
+  pl: { flag: '🇵🇱', name: 'Polski' },
+  de: { flag: '🇩🇪', name: 'Deutsch' },
+  be: { flag: '🇧🇾', name: 'Беларуская' },
+  kk: { flag: '🇰🇿', name: 'Қазақша' }
+};
+
 function appendSummary(text) {
   console.log(text);
   if (STEP_SUMMARY_PATH && fs.existsSync(path.dirname(STEP_SUMMARY_PATH))) {
@@ -33,6 +43,31 @@ async function githubApi(endpoint, options = {}) {
   return { status: res.status, ok: res.ok, data };
 }
 
+function extractSection(text, title) {
+  const reg = new RegExp('(?:^|\\n)###\\s+' + title + '\\s*\\n([\\s\\S]*?)(?=\\n###\\s+|$)', 'i');
+  const m = text.match(reg);
+  return m ? m[1].trim() : '';
+}
+
+async function downloadImage(url, destPath) {
+  try {
+    const rawUrl = url
+      .replace('github.com/', 'raw.githubusercontent.com/')
+      .replace('/blob/', '/');
+    const res = await fetch(rawUrl);
+    if (res.ok) {
+      const buffer = Buffer.from(await res.arrayBuffer());
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+      fs.writeFileSync(destPath, buffer);
+      return true;
+    }
+  } catch (_) {}
+  return false;
+}
+
+// -----------------------------------------------------------------------------
+// A. REVIEW COMPILER (issues comments -> static reviews.json)
+// -----------------------------------------------------------------------------
 async function compileReviews(issues, slugs, projectsDir) {
   appendSummary('### 💬 Compiling Community Reviews & Ratings into static reviews.json');
   
@@ -121,6 +156,9 @@ async function compileReviews(issues, slugs, projectsDir) {
   return true;
 }
 
+// -----------------------------------------------------------------------------
+// B. HANDLE PUSH / DISPATCH
+// -----------------------------------------------------------------------------
 async function handlePushOrDispatch() {
   appendSummary('## 🐾 MeowProject Bot: Syncing Discussion Issues');
   
@@ -130,13 +168,9 @@ async function handlePushOrDispatch() {
     return;
   }
 
-  // 1. Fetch all existing issues
   const { status, ok, data: issues } = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues?state=all&per_page=100`);
   if (!ok) {
     appendSummary(`❌ Failed to fetch issues (HTTP ${status}): ${JSON.stringify(issues)}`);
-    if (status === 403) {
-      appendSummary('> ⚠️ **Permission notice**: Please ensure GitHub Actions has **Read and write permissions** in:\n> `Repository Settings -> Actions -> General -> Workflow permissions`.');
-    }
     return;
   }
 
@@ -204,7 +238,6 @@ async function handlePushOrDispatch() {
         `Write your feedback in a comment below! Adding \`[rating](0-100)\` at the end (e.g. \`[rating](95)\`) is completely optional and will be automatically displayed on the MeowProject directory card.`,
       ].join('\n');
 
-      // Try with labels first
       let createRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -215,7 +248,6 @@ async function handlePushOrDispatch() {
         })
       });
 
-      // If failed due to non-existent labels (422), retry without labels
       if (!createRes.ok && createRes.status === 422) {
         createRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues`, {
           method: 'POST',
@@ -270,18 +302,308 @@ async function handleComment() {
   await handlePushOrDispatch();
 }
 
+// -----------------------------------------------------------------------------
+// C. PROJECT PROPOSAL -> AUTOMATED PULL REQUEST
+// -----------------------------------------------------------------------------
+async function handleProjectSubmission(issue, matchedPrefix) {
+  const title = (issue.title || '').trim();
+  const body = (issue.body || '').trim();
+
+  appendSummary(`### 🚀 Processing New Project Proposal from Issue #${issue.number}: "${title}"`);
+
+  const category = matchedPrefix.replace(':', '').trim().toLowerCase();
+  let rawName = title.replace(new RegExp('^' + matchedPrefix, 'i'), '').trim();
+  if (!rawName) {
+    const fromSection = extractSection(body, 'Type & Name');
+    rawName = fromSection.replace(/^`?.*:\s*|`?$/g, '').trim();
+  }
+  const name = rawName || 'Untitled Project';
+  const slug = name.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+
+  const country = extractSection(body, 'Country') || 'GLOBAL';
+  const platformsRaw = extractSection(body, 'Platforms');
+  const platforms = platformsRaw
+    ? platformsRaw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean)
+    : ['Windows'];
+
+  const website = extractSection(body, 'Website');
+
+  // Source code links
+  const sourceSection = extractSection(body, 'Source code');
+  const sourceLinks = [];
+  for (const line of sourceSection.split('\n')) {
+    const clean = line.replace(/^[-*]\s*/, '').trim();
+    const m = clean.match(/^([a-z0-9_-]+)\s*:\s*(https?:\/\/\S+)/i);
+    if (m) {
+      sourceLinks.push({
+        host: m[1].toLowerCase(),
+        label: m[1].charAt(0).toUpperCase() + m[1].slice(1),
+        url: m[2]
+      });
+    } else if (/^https?:\/\//i.test(clean)) {
+      sourceLinks.push({
+        host: 'git',
+        label: 'Repository',
+        url: clean
+      });
+    }
+  }
+
+  // Captions & Features
+  const featureLines = extractSection(body, 'Key Features')
+    .split('\n')
+    .map(s => s.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean);
+
+  const captionLines = extractSection(body, 'Screenshot Captions')
+    .split('\n')
+    .map(s => s.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean);
+
+  // Parse multi-language descriptions
+  const descSection = extractSection(body, 'Description') || body;
+  const langRegex = /(?:^|\n)####\s+([A-Za-z]{2})\s*\n([\s\S]*?)(?=\n####\s+[A-Za-z]{2}|$)/gi;
+  
+  const parsedDescriptions = {};
+  let lMatch;
+  while ((lMatch = langRegex.exec(descSection)) !== null) {
+    const code = lMatch[1].toLowerCase();
+    parsedDescriptions[code] = lMatch[2].trim();
+  }
+
+  // Fallback if no language tags were used
+  if (Object.keys(parsedDescriptions).length === 0 && descSection.length >= 20) {
+    parsedDescriptions['en'] = descSection;
+  }
+
+  const validLangs = [];
+  const invalidLangs = [];
+  const missingLangs = [];
+  const langTableRows = [];
+
+  for (const code of SUPPORTED_LANGS) {
+    const text = parsedDescriptions[code];
+    const meta = LANG_METADATA[code] || { flag: '🌐', name: code.toUpperCase() };
+    const label = `${meta.flag} **${code.toUpperCase()}** (${meta.name})`;
+
+    if (text && text.length >= 20 && text.length <= 2000) {
+      validLangs.push(code);
+      langTableRows.push(`| ${label} | ${text.length} chars | ✅ **Included in PR** |`);
+    } else if (text) {
+      invalidLangs.push(code);
+      langTableRows.push(`| ${label} | ${text.length} chars | ⚠️ **Out of bounds** (20–2,000 chars required) |`);
+    } else {
+      missingLangs.push(code);
+      langTableRows.push(`| ${label} | — | ⚪ **Not provided** (can be added later via issue) |`);
+    }
+  }
+
+  if (validLangs.length === 0) {
+    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        body: [
+          `### [MeowProject Bot] Description Required ❌`,
+          ``,
+          `Could not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).`,
+          ``,
+          `#### 🌐 Current Verification Status:`,
+          `| Language | Length | Status |`,
+          `|:---|:---|:---|`,
+          ...langTableRows,
+          ``,
+          `Please edit your issue description and add language headers like:`,
+          `\`\`\`markdown`,
+          `### Description`,
+          `#### UK`,
+          `Ваш опис українською мовою...`,
+          ``,
+          `#### EN`,
+          `Your description in English...`,
+          `\`\`\``
+        ].join('\n')
+      })
+    });
+    return;
+  }
+
+  // Images handling
+  const projectDir = path.resolve('src/projects', slug);
+  const localesDir = path.join(projectDir, 'locales');
+  const publicDir = path.resolve('public/projects', slug);
+
+  if (!fs.existsSync(localesDir)) fs.mkdirSync(localesDir, { recursive: true });
+  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+
+  let iconFinal = '/favicon.svg';
+  const iconRaw = extractSection(body, 'Icon');
+  if (iconRaw && /^https?:\/\//i.test(iconRaw)) {
+    const ext = iconRaw.endsWith('.svg') ? '.svg' : iconRaw.endsWith('.webp') ? '.webp' : '.png';
+    const localIconPath = path.join(publicDir, `icon${ext}`);
+    const downloaded = await downloadImage(iconRaw, localIconPath);
+    if (downloaded) {
+      iconFinal = `/projects/${slug}/icon${ext}`;
+    } else {
+      iconFinal = iconRaw.replace('github.com/', 'raw.githubusercontent.com/').replace('/blob/', '/');
+    }
+  }
+
+  // Screenshots handling
+  const screenshotLines = extractSection(body, 'Screenshots')
+    .split('\n')
+    .map(s => s.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean);
+
+  const screenshotsFinal = [];
+  let sIdx = 1;
+  for (const sUrl of screenshotLines) {
+    if (/^https?:\/\//i.test(sUrl)) {
+      const ext = sUrl.endsWith('.webp') ? '.webp' : '.png';
+      const localScreenPath = path.join(publicDir, `screen-${sIdx}${ext}`);
+      const downloaded = await downloadImage(sUrl, localScreenPath);
+      if (downloaded) {
+        screenshotsFinal.push(`/projects/${slug}/screen-${sIdx}${ext}`);
+      } else {
+        screenshotsFinal.push(sUrl.replace('github.com/', 'raw.githubusercontent.com/').replace('/blob/', '/'));
+      }
+      sIdx++;
+    }
+  }
+
+  // Write locales
+  for (const lang of validLangs) {
+    const localeFile = path.join(localesDir, `${lang}.json`);
+    const localeContent = {
+      tagline: featureLines[0] || name,
+      description: parsedDescriptions[lang],
+      features: featureLines,
+      screenshotCaptions: captionLines
+    };
+    fs.writeFileSync(localeFile, JSON.stringify(localeContent, null, 2) + '\n', 'utf8');
+  }
+
+  // Write project.json
+  const projectJsonPath = path.join(projectDir, 'project.json');
+  const projectMeta = {
+    slug,
+    name,
+    shortName: name,
+    category,
+    icon: iconFinal,
+    country,
+    developer: sourceLinks[0]?.label || 'Community',
+    license: 'Open Source',
+    platforms,
+    website: website || sourceLinks[0]?.url || '',
+    sourceLinks,
+    issueThreadNumber: issue.number,
+    issueSearchTerm: name,
+    tags: [category, ...platforms, country].filter(Boolean),
+    screenshots: screenshotsFinal
+  };
+  fs.writeFileSync(projectJsonPath, JSON.stringify(projectMeta, null, 2) + '\n', 'utf8');
+
+  // Git Branch & Commit & Push
+  const branchName = `add-project-${slug}-issue-${issue.number}`;
+  try {
+    execSync('git config user.name "github-actions[bot]"');
+    execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+    execSync(`git checkout -B ${branchName}`);
+    execSync(`git add src/projects/${slug}/ public/projects/${slug}/`);
+    execSync(`git commit -m "feat(catalog): propose ${category} ${name} from issue #${issue.number}"`);
+    execSync(`git push origin ${branchName} --force`);
+    appendSummary(`✅ Created & pushed branch: \`${branchName}\``);
+
+    // Create GitHub Pull Request
+    const prRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: `feat(catalog): add ${category} ${name} (#${issue.number})`,
+        head: branchName,
+        base: 'main',
+        body: [
+          `### 🚀 New Project Proposal: ${name} (${category})`,
+          ``,
+          `Automated Pull Request generated by **MeowProject Bot** from issue #${issue.number}.`,
+          ``,
+          `#### 📋 Project Details:`,
+          `- **Name:** **${name}**`,
+          `- **Category:** \`${category}\``,
+          `- **Country:** ${country}`,
+          `- **Platforms:** ${platforms.join(', ')}`,
+          `- **Website:** ${website || 'N/A'}`,
+          ``,
+          `#### 🌐 Localization Status:`,
+          `| Language | Characters | Status |`,
+          `|:---|:---|:---|`,
+          ...langTableRows,
+          ``,
+          `#### 📁 Files Added:`,
+          `- \`src/projects/${slug}/project.json\``,
+          ...validLangs.map(l => `- \`src/projects/${slug}/locales/${l}.json\``),
+          ...(fs.existsSync(publicDir) ? [`- Assets in \`public/projects/${slug}/\``] : []),
+          ``,
+          `---`,
+          `Closes #${issue.number}`
+        ].join('\n')
+      })
+    });
+
+    const prUrl = prRes.data?.html_url || `branch \`${branchName}\``;
+    const prNumber = prRes.data?.number ? `#${prRes.data.number}` : '';
+
+    // Comment back on the Issue
+    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        body: [
+          `### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉`,
+          ``,
+          `Thank you for contributing **${name}** to MeowProject!`,
+          ``,
+          `- **Project:** **${name}** (\`${category}\`)`,
+          `- **Country:** ${country}`,
+          `- **Platforms:** ${platforms.join(', ')}`,
+          `- **Pull Request:** ${prNumber} ([View Pull Request](${prUrl}))`,
+          ``,
+          `#### 🌐 Language Verification Breakdown:`,
+          `| Language | Length | Status |`,
+          `|:---|:---|:---|`,
+          ...langTableRows,
+          ``,
+          `---`,
+          `> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (${prUrl}). Once merged into \`main\`, the project will automatically appear on the live website!`
+        ].join('\n')
+      })
+    });
+
+    appendSummary(`🎉 Pull Request created successfully: ${prUrl}`);
+  } catch (err) {
+    appendSummary(`❌ Failed creating PR: ${err.message}`);
+  } finally {
+    try {
+      execSync('git checkout main');
+    } catch (_) {}
+  }
+}
+
+// -----------------------------------------------------------------------------
+// D. MAIN DISPATCHER
+// -----------------------------------------------------------------------------
 async function handleIssues(eventPayload) {
   const issue = eventPayload.issue;
   if (!issue) return;
 
   const action = eventPayload.action;
   const title = (issue.title || '').trim();
-  const body = (issue.body || '').trim();
   const lowerTitle = title.toLowerCase();
 
   appendSummary(`Processing issue #${issue.number} ("${title}") [action: ${action}]`);
 
-  // 1. Translation Contribution: [i18n: <slug>] or translate: <slug>
+  // 1. Translation Contribution: [i18n: <slug>]
   const i18nMatch = lowerTitle.match(/^(?:\[i18n:\s*([a-z0-9_-]+)\]|translate:\s*([a-z0-9_-]+))/i);
   if (i18nMatch) {
     const slug = (i18nMatch[1] || i18nMatch[2]).toLowerCase().trim();
@@ -301,7 +623,7 @@ async function handleIssues(eventPayload) {
     const langRegex = /####\s+([A-Z]{2})\s*\n([\s\S]*?)(?=(?:####\s+[A-Z]{2}|$))/gi;
     let match;
     const submittedTranslations = {};
-    while ((match = langRegex.exec(body)) !== null) {
+    while ((match = langRegex.exec(issue.body || '')) !== null) {
       const langCode = match[1].toLowerCase();
       const descText = match[2].trim();
       if (descText.length >= 20) {
@@ -321,14 +643,13 @@ async function handleIssues(eventPayload) {
       return;
     }
 
-    // Add labels
     await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/labels`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ labels: ['i18n', 'automated-pr'] })
     });
 
-    if (action === 'opened') {
+    if (action === 'opened' || action === 'edited') {
       const localesDir = path.join(projectDir, 'locales');
       if (!fs.existsSync(localesDir)) fs.mkdirSync(localesDir, { recursive: true });
 
@@ -352,10 +673,10 @@ async function handleIssues(eventPayload) {
       const branchName = `i18n-${slug}-issue-${issue.number}`;
       execSync('git config user.name "github-actions[bot]"');
       execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
-      execSync(`git checkout -b ${branchName}`);
+      execSync(`git checkout -B ${branchName}`);
       execSync(`git add src/projects/${slug}/locales/`);
       execSync(`git commit -m "i18n: add/update ${detectedCodes.join(', ')} translation for ${slug} (#${issue.number})"`);
-      execSync(`git push origin ${branchName}`);
+      execSync(`git push origin ${branchName} --force`);
 
       const prRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls`, {
         method: 'POST',
@@ -376,11 +697,13 @@ async function handleIssues(eventPayload) {
           body: `### [MeowProject Bot] Automated PR Created!\n\nThank you for contributing translations for **${slug}**! 🎉\n\n- **Target Languages:** \`${detectedCodes.join(', ')}\`\n- **Pull Request:** ${prUrl}\n\nOnce reviewed and merged, the site will automatically update!`
         })
       });
+
+      execSync('git checkout main');
     }
     return;
   }
 
-  // 2. New Project Submission Issue
+  // 2. New Project Submission: prefix check
   const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
   const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
 
@@ -399,18 +722,11 @@ async function handleIssues(eventPayload) {
   await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/labels`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ labels: [typeLabel, 'verified-submission'] })
+    body: JSON.stringify({ labels: [typeLabel, 'verified-submission', 'automated-pr'] })
   });
 
-  if (action === 'opened') {
-    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        body: `### [MeowProject Bot] Submission Verified (${matchedPrefix})\n\n- **Title Format:** Confirmed (\`${title}\`)\n- **Body Length:** ${body.length} characters (limit up to 2,000 chars)\n- **Community Reviews & Ratings:** Community members can leave feedback in comments below. Adding \`[rating](0-100)\` at the end (e.g. \`[rating](95)\`) is completely optional.`
-      })
-    });
-  }
+  // Handle proposal and create PR!
+  await handleProjectSubmission(issue, matchedPrefix);
 }
 
 async function main() {
