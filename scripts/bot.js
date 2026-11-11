@@ -280,6 +280,32 @@ async function handlePushOrDispatch() {
   // Compile reviews.json from real comments!
   await compileReviews(issues, slugs, projectsDir);
 
+  // Scan open issues for new project proposals or translation proposals that don't have PRs yet!
+  appendSummary('### 🔍 Checking open issues for pending project proposals...');
+  const { data: openPrs } = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=50`);
+  const prList = Array.isArray(openPrs) ? openPrs : [];
+
+  for (const iss of issues) {
+    if (iss.state !== 'open' || iss.pull_request) continue;
+    const lowerTitle = (iss.title || '').toLowerCase().trim();
+    const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
+    const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
+    if (matchedPrefix) {
+      const rawName = iss.title.replace(new RegExp('^' + matchedPrefix, 'i'), '').trim();
+      const slug = rawName.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+
+      // Has this project already been merged into main?
+      const alreadyMerged = fs.existsSync(path.join(projectsDir, slug, 'project.json'));
+      // Does a PR already exist for this issue?
+      const hasOpenPr = prList.some(p => (p.head?.ref || '').includes(`issue-${iss.number}`) || (p.title || '').includes(`#${iss.number}`));
+
+      if (!alreadyMerged && !hasOpenPr) {
+        appendSummary(`Found unprocessed proposal in Issue #${iss.number} ("${iss.title}"). Automatically generating Pull Request...`);
+        await handleProjectSubmission(iss, matchedPrefix);
+      }
+    }
+  }
+
   try {
     const status = execSync('git status --porcelain').toString().trim();
     if (status.length > 0) {
