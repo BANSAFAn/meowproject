@@ -1,6 +1,10 @@
 name: MeowProject Issue & PR Automation Bot
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
   issues:
     types: [opened, edited]
   issue_comment:
@@ -12,7 +16,7 @@ permissions:
   issues: write
 
 jobs:
-  handle_issue_or_comment:
+  handle_automation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,7 +29,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Process Issue or Comment
+      - name: Run Automation Script
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -33,15 +37,134 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
+            // -----------------------------------------------------------------
+            // A. ON PUSH / DISPATCH: Automatically create Discussion Issues for all projects!
+            // -----------------------------------------------------------------
+            if (context.eventName === 'push' || context.eventName === 'workflow_dispatch') {
+              const projectsDir = path.join(process.env.GITHUB_WORKSPACE, 'src', 'projects');
+              if (fs.existsSync(projectsDir)) {
+                const existingIssues = await github.paginate(github.rest.issues.listForRepo, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: 'all'
+                });
+
+                // Deterministic order matching issueThreadNumber: xmcl(#1), hmcl(#2), atm9(#3), sodium(#4), lunarclient(#5)
+                const preferredOrder = ['xmcl', 'hmcl', 'atm9', 'sodium', 'lunarclient'];
+                const allFolders = fs.readdirSync(projectsDir).filter((f) => {
+                  return fs.statSync(path.join(projectsDir, f)).isDirectory() && fs.existsSync(path.join(projectsDir, f, 'project.json'));
+                });
+                
+                const slugs = [
+                  ...preferredOrder.filter((s) => allFolders.includes(s)),
+                  ...allFolders.filter((s) => !preferredOrder.includes(s))
+                ];
+
+                let modifiedFiles = false;
+
+                for (const slug of slugs) {
+                  const metaPath = path.join(projectsDir, slug, 'project.json');
+                  const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+                  const expectedTitle = `${meta.category}: ${meta.name}`;
+
+                  const existing = existingIssues.find((iss) => {
+                    if (iss.pull_request) return false;
+                    const t = (iss.title || '').toLowerCase();
+                    return t.includes(meta.name.toLowerCase()) || t.includes(slug);
+                  });
+
+                  let targetIssueNumber = existing ? existing.number : null;
+
+                  if (!existing) {
+                    let ukDesc = '';
+                    let enDesc = '';
+                    const ukPath = path.join(projectsDir, slug, 'locales', 'uk.json');
+                    const enPath = path.join(projectsDir, slug, 'locales', 'en.json');
+                    if (fs.existsSync(ukPath)) {
+                      try { ukDesc = JSON.parse(fs.readFileSync(ukPath, 'utf8')).description || ''; } catch (_) {}
+                    }
+                    if (fs.existsSync(enPath)) {
+                      try { enDesc = JSON.parse(fs.readFileSync(enPath, 'utf8')).description || ''; } catch (_) {}
+                    }
+
+                    const issueBody = [
+                      `### ${meta.category.toUpperCase()}: ${meta.name}`,
+                      ``,
+                      `Official discussion and community review thread for **${meta.name}**.`,
+                      ``,
+                      `- **Website:** ${meta.website || 'N/A'}`,
+                      `- **Country:** ${meta.country}`,
+                      `- **License:** ${meta.license}`,
+                      `- **Platforms:** ${(meta.platforms || []).join(', ')}`,
+                      ``,
+                      `---`,
+                      `#### Description (UK)`,
+                      ukDesc || 'N/A',
+                      ``,
+                      `#### Description (EN)`,
+                      enDesc || 'N/A',
+                      ``,
+                      `---`,
+                      `### How to leave a review / rating`,
+                      `Write your feedback in a comment below! Adding \`[rating](0-100)\` at the end (e.g. \`[rating](95)\`) is completely optional and will be automatically displayed on the MeowProject directory card.`,
+                    ].join('\n');
+
+                    try {
+                      const newIssue = await github.rest.issues.create({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        title: expectedTitle,
+                        body: issueBody,
+                        labels: [meta.category, 'verified-submission', 'discussion']
+                      });
+                      targetIssueNumber = newIssue.data.number;
+                      console.log(`Created discussion issue #${targetIssueNumber} for ${meta.name}`);
+                    } catch (err) {
+                      console.log(`Fallback creating issue without initial labels for ${meta.name}: ${err.message}`);
+                      const newIssue = await github.rest.issues.create({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        title: expectedTitle,
+                        body: issueBody
+                      });
+                      targetIssueNumber = newIssue.data.number;
+                    }
+                  }
+
+                  if (targetIssueNumber && meta.issueThreadNumber !== targetIssueNumber) {
+                    meta.issueThreadNumber = targetIssueNumber;
+                    fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
+                    modifiedFiles = true;
+                  }
+                }
+
+                if (modifiedFiles) {
+                  try {
+                    const exec = require('child_process').execSync;
+                    exec('git config user.name "github-actions[bot]"');
+                    exec('git config user.email "github-actions[bot]@users.noreply.github.com"');
+                    exec('git add src/projects/*/project.json');
+                    exec('git commit -m "chore(bot): sync issueThreadNumber for catalog projects"');
+                    exec('git push origin main');
+                    console.log('Successfully committed updated issueThreadNumber to main');
+                  } catch (e) {
+                    console.log('Failed to commit issueThreadNumber:', e.message);
+                  }
+                }
+              }
+              return;
+            }
+
+            // -----------------------------------------------------------------
+            // B. ON ISSUES: Process Translation Submissions or New Project Proposals
+            // -----------------------------------------------------------------
             if (context.eventName === 'issues') {
               const issue = context.payload.issue;
               const title = (issue.title || '').trim();
               const body = (issue.body || '').trim();
               const lowerTitle = title.toLowerCase();
 
-              // -------------------------------------------------------------
-              // 1. Translation Contribution Issue: [i18n: <slug>] or translate: <slug>
-              // -------------------------------------------------------------
+              // 1. Translation Contribution: [i18n: <slug>] or translate: <slug>
               const i18nMatch = lowerTitle.match(/^(?:\[i18n:\s*([a-z0-9_-]+)\]|translate:\s*([a-z0-9_-]+))/i);
               if (i18nMatch) {
                 const slug = (i18nMatch[1] || i18nMatch[2]).toLowerCase().trim();
@@ -52,12 +175,11 @@ jobs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: issue.number,
-                    body: `### [MeowProject Bot] Project Not Found\n\nCould not find a project with slug \`${slug}\` in \`src/projects/\`. Please check the project slug.`
+                    body: `### [MeowProject Bot] Project Not Found\n\nCould not find a project with slug \`${slug}\` in \`src/projects/\`. Please verify the project slug.`
                   });
                   return;
                 }
 
-                // Parse translation languages from body (format: #### UK / #### EN / #### DE / #### PL / #### BE / #### KZ)
                 const langRegex = /####\s+([A-Z]{2})\s*\n([\s\S]*?)(?=(?:####\s+[A-Z]{2}|$))/gi;
                 let match;
                 const submittedTranslations = {};
@@ -75,21 +197,21 @@ jobs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: issue.number,
-                    body: `### [MeowProject Bot] Translation Template Needed\n\nTo submit translations, please structure your description using language headers like:\n\n\`\`\`markdown\n#### EN\nYour English description here (at least 20 chars)...\n\n#### DE\nIhre deutsche Beschreibung hier...\n\`\`\``
+                    body: `### [MeowProject Bot] Translation Template Needed\n\nPlease structure your description using language headers like:\n\n\`\`\`markdown\n#### EN\nYour English description here (at least 20 chars)...\n\n#### DE\nIhre deutsche Beschreibung hier...\n\`\`\``
                   });
                   return;
                 }
 
-                // If opened, label and create automated Pull Request
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  labels: ['i18n', 'automated-pr']
-                });
+                try {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: ['i18n', 'automated-pr']
+                  });
+                } catch (_) {}
 
                 if (context.payload.action === 'opened') {
-                  // Write updated/created files
                   const localesDir = path.join(projectDir, 'locales');
                   if (!fs.existsSync(localesDir)) fs.mkdirSync(localesDir, { recursive: true });
 
@@ -110,7 +232,6 @@ jobs:
                     fs.writeFileSync(filePath, JSON.stringify(existing, null, 2) + '\n', 'utf8');
                   }
 
-                  // Git commit & PR creation
                   const branchName = `i18n-${slug}-issue-${issue.number}`;
                   const exec = require('child_process').execSync;
                   exec(`git config user.name "github-actions[bot]"`);
@@ -139,9 +260,7 @@ jobs:
                 return;
               }
 
-              // -------------------------------------------------------------
               // 2. New Project Submission Issue
-              // -------------------------------------------------------------
               const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
               const matchedPrefix = validPrefixes.find((p) => lowerTitle.startsWith(p));
 
@@ -156,12 +275,14 @@ jobs:
               }
 
               const typeLabel = matchedPrefix.replace(':', '');
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issue.number,
-                labels: [typeLabel, 'verified-submission']
-              });
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  labels: [typeLabel, 'verified-submission']
+                });
+              } catch (_) {}
 
               if (context.payload.action === 'opened') {
                 await github.rest.issues.createComment({
