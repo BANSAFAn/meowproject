@@ -1776,9 +1776,196 @@ const jsonLdSchema = {
           padding: 1.15rem;
         }
       }
+
+      /* Device Gate Overlays (Mobile & Small Resolution Blocker) */
+      .device-gate-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(14, 14, 16, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 9999999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+
+      .device-gate-card {
+        background: var(--paper-sheet, #1c1c20);
+        border: 2px solid var(--border-ink, #3a3a42);
+        box-shadow: 6px 6px 0 var(--shadow-hard, #000);
+        max-width: 520px;
+        width: 100%;
+        padding: 2.2rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .device-gate-top {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        color: var(--ink-muted);
+        border-bottom: 1px dashed var(--border-ink);
+        padding-bottom: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .device-gate-icon {
+        width: 72px;
+        height: 72px;
+        border: 1.5px solid var(--border-ink);
+        background: var(--paper-sheet-subtle, #141417);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.35rem;
+      }
+
+      .device-gate-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0 0 0.85rem 0;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+
+      .device-gate-desc {
+        font-size: 0.92rem;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        margin: 0 0 1.5rem 0;
+        max-width: 44ch;
+      }
+
+      .device-gate-meta {
+        width: 100%;
+        background: var(--paper-sheet-subtle, #141417);
+        border: 1px solid var(--border-ink);
+        padding: 0.85rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        text-align: left;
+      }
+
+      .device-gate-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .gate-label {
+        color: var(--ink-muted);
+      }
+
+      .gate-val {
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      /* Trigger rules */
+      html.gate-mobile-blocked #gate-mobile-modal {
+        display: flex !important;
+      }
+
+      html.gate-mobile-blocked body {
+        overflow: hidden !important;
+      }
+
+      /* Desktop small screen rule: viewport width < 1024px and NOT mobile */
+      @media (max-width: 1023px) {
+        html:not(.gate-mobile-blocked) #gate-desktop-resize-modal {
+          display: flex !important;
+        }
+        html:not(.gate-mobile-blocked) body {
+          overflow: hidden !important;
+        }
+      }
     </style>
+    <script is:inline>
+      (function() {
+        try {
+          var ua = navigator.userAgent || '';
+          var isMob = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
+            (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua) && screen.width < 1024);
+          if (isMob) {
+            document.documentElement.classList.add('gate-mobile-blocked');
+          }
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
+    <!-- Device & Resolution Blocker Overlays -->
+    <!-- 1. Mobile (Android / iOS) Blocker -->
+    <div id="gate-mobile-modal" class="device-gate-backdrop" role="alertdialog" aria-modal="true" aria-labelledby="gate-mobile-title">
+      <div class="device-gate-card">
+        <div class="device-gate-top">
+          <span>GATE // SEC-01</span>
+          <span class="stamp stamp-alpha">{t.mobileBlockedBadge}</span>
+        </div>
+        <div class="device-gate-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.8" aria-hidden="true">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"></line>
+            <line x1="3" y1="3" x2="21" y2="21" stroke="var(--accent-crimson, #e74c3c)" stroke-width="2.2"></line>
+          </svg>
+        </div>
+        <h2 id="gate-mobile-title" class="device-gate-title">{t.mobileBlockedTitle}</h2>
+        <p class="device-gate-desc">{t.mobileBlockedDesc}</p>
+        <div class="device-gate-meta">
+          <div class="device-gate-row">
+            <span class="gate-label">{t.blockedRequiredDevice}</span>
+          </div>
+          <div class="device-gate-row">
+            <span class="gate-label">{t.blockedCurrentViewport}</span>
+            <span class="gate-val" data-viewport-val>...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Small Screen Resolution Blocker (Desktop window < 1024px) -->
+    <div id="gate-desktop-resize-modal" class="device-gate-backdrop" role="alertdialog" aria-modal="true" aria-labelledby="gate-resize-title">
+      <div class="device-gate-card">
+        <div class="device-gate-top">
+          <span>GATE // RES-02</span>
+          <span class="stamp stamp-alpha">{t.screenTooSmallBadge}</span>
+        </div>
+        <div class="device-gate-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.8" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+            <path d="M7 8l-2 2 2 2M17 8l2 2-2 2" stroke="var(--accent-crimson, #e74c3c)" stroke-width="2"></path>
+          </svg>
+        </div>
+        <h2 id="gate-resize-title" class="device-gate-title">{t.screenTooSmallTitle}</h2>
+        <p class="device-gate-desc">{t.screenTooSmallDesc}</p>
+        <div class="device-gate-meta">
+          <div class="device-gate-row">
+            <span class="gate-label">{t.blockedRequiredDevice}</span>
+          </div>
+          <div class="device-gate-row">
+            <span class="gate-label">{t.blockedCurrentViewport}</span>
+            <span class="gate-val" data-viewport-val>...</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Top Archival Status Strip with Monobank & YouTube Support Links -->
     <div class="status-strip">
       <div class="container status-strip-inner">
@@ -3808,6 +3995,31 @@ const jsonLdSchema = {
         }
 
         loadRealReviews();
+
+        // Check device and window resolution
+        function checkDeviceAndResolution() {
+          try {
+            const ua = navigator.userAgent || '';
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
+              (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua) && screen.width < 1024);
+
+            if (isMobile) {
+              document.documentElement.classList.add('gate-mobile-blocked');
+            } else {
+              document.documentElement.classList.remove('gate-mobile-blocked');
+            }
+
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const valStr = `${w} × ${h} px`;
+            document.querySelectorAll('[data-viewport-val]').forEach((el) => {
+              el.textContent = valStr;
+            });
+          } catch (_) {}
+        }
+
+        checkDeviceAndResolution();
+        window.addEventListener('resize', checkDeviceAndResolution);
       }
 
       setupPage();

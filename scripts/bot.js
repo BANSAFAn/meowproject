@@ -246,6 +246,7 @@ async function handlePushOrDispatch() {
     let targetIssueNumber = existing ? existing.number : null;
 
     if (existing) {
+      appendSummary(`ℹ️ Issue already exists: #${existing.number} ([${existing.title}](${existing.html_url}))`);
       if (existing.state === 'closed') {
         appendSummary(`Reopening catalog discussion issue #${existing.number} for **${meta.name}**...`);
         await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${existing.number}`, {
@@ -317,8 +318,6 @@ async function handlePushOrDispatch() {
       } else {
         appendSummary(`❌ Failed to create issue for ${meta.name} (HTTP ${createRes.status}): ${JSON.stringify(createRes.data)}`);
       }
-    } else {
-      appendSummary(`ℹ️ Issue already exists: #${existing.number} ([${existing.title}](${existing.html_url}))`);
     }
 
     if (targetIssueNumber && meta.issueThreadNumber !== targetIssueNumber) {
@@ -551,20 +550,46 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   if (!fs.existsSync(localesDir)) fs.mkdirSync(localesDir, { recursive: true });
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
+  // 1. Icon handling with automated repository probing
   let iconFinal = '/favicon.svg';
+  const iconCandidates = [];
   const iconRaw = extractSection(body, 'Icon');
   if (iconRaw && /^https?:\/\//i.test(iconRaw)) {
-    const ext = iconRaw.endsWith('.svg') ? '.svg' : iconRaw.endsWith('.webp') ? '.webp' : '.png';
-    const localIconPath = path.join(publicDir, `icon${ext}`);
-    const downloaded = await downloadImage(iconRaw, localIconPath);
-    if (downloaded) {
-      iconFinal = `/projects/${slug}/icon${ext}`;
-    } else {
-      iconFinal = iconRaw.replace('github.com/', 'raw.githubusercontent.com/').replace('/blob/', '/');
+    iconCandidates.push(iconRaw);
+  }
+
+  const ghRepoLink = sourceLinks.find(s => (s.url || '').includes('github.com'));
+  if (ghRepoLink) {
+    const m = ghRepoLink.url.match(/github\.com\/([^\/]+)\/([^\/]+)/i);
+    if (m) {
+      const baseRaw = `https://raw.githubusercontent.com/${m[1]}/${m[2]}`;
+      for (const branch of ['main', 'master']) {
+        iconCandidates.push(
+          `${baseRaw}/${branch}/Natsurainko.FluentLauncher/Assets/AppIcon.png`,
+          `${baseRaw}/${branch}/Assets/AppIcon.png`,
+          `${baseRaw}/${branch}/assets/icon.png`,
+          `${baseRaw}/${branch}/assets/logo.png`,
+          `${baseRaw}/${branch}/src/assets/icon.png`,
+          `${baseRaw}/${branch}/icon.png`,
+          `${baseRaw}/${branch}/logo.png`,
+          `${baseRaw}/${branch}/icon.svg`,
+          `${baseRaw}/${branch}/logo.svg`
+        );
+      }
     }
   }
 
-  // Screenshots handling
+  for (const cand of iconCandidates) {
+    const ext = cand.includes('.svg') ? '.svg' : cand.includes('.webp') ? '.webp' : '.png';
+    const localIconPath = path.join(publicDir, `icon${ext}`);
+    const downloaded = await downloadImage(cand, localIconPath);
+    if (downloaded) {
+      iconFinal = `/projects/${slug}/icon${ext}`;
+      break;
+    }
+  }
+
+  // 2. Screenshots handling with automated GitHub link fixing & local bundling
   const screenshotLines = extractSection(body, 'Screenshots')
     .split('\n')
     .map(s => s.replace(/^[-*]\s*/, '').trim())
@@ -576,13 +601,39 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     if (/^https?:\/\//i.test(sUrl)) {
       const ext = sUrl.endsWith('.webp') ? '.webp' : '.png';
       const localScreenPath = path.join(publicDir, `screen-${sIdx}${ext}`);
-      const downloaded = await downloadImage(sUrl, localScreenPath);
+
+      let downloaded = await downloadImage(sUrl, localScreenPath);
+      if (!downloaded && sUrl.includes('/raw/')) {
+        downloaded = await downloadImage(sUrl.replace('/raw/', '/'), localScreenPath);
+      }
+      if (!downloaded && sUrl.includes('github.com')) {
+        downloaded = await downloadImage(
+          sUrl.replace('github.com/', 'raw.githubusercontent.com/').replace('/blob/', '/').replace('/raw/', '/'),
+          localScreenPath
+        );
+      }
+
       if (downloaded) {
         screenshotsFinal.push(`/projects/${slug}/screen-${sIdx}${ext}`);
-      } else {
-        screenshotsFinal.push(sUrl.replace('github.com/', 'raw.githubusercontent.com/').replace('/blob/', '/'));
+        sIdx++;
       }
-      sIdx++;
+    }
+  }
+
+  // Fallback: If no screenshots were downloaded, probe repo docs for hero images
+  if (screenshotsFinal.length === 0 && ghRepoLink) {
+    const m = ghRepoLink.url.match(/github\.com\/([^\/]+)\/([^\/]+)/i);
+    if (m) {
+      const baseRaw = `https://raw.githubusercontent.com/${m[1]}/${m[2]}`;
+      for (const branch of ['main', 'master']) {
+        const heroUrl = `${baseRaw}/${branch}/docs/images/Hero_Image.png`;
+        const localScreenPath = path.join(publicDir, `screen-1.png`);
+        const downloaded = await downloadImage(heroUrl, localScreenPath);
+        if (downloaded) {
+          screenshotsFinal.push(`/projects/${slug}/screen-1.png`);
+          break;
+        }
+      }
     }
   }
 

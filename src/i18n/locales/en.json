@@ -136,5 +136,13 @@
   "fieldCaptionsLabel": "Screenshot Captions (one per screenshot URL)",
   "fieldCaptionsPlaceholder": "Main launcher dashboard\nMod management screen\nGraphics settings",
   "guideSectionFieldsTitle": "How to specify platforms, feature highlights, and screenshot captions",
-  "guideSectionFieldsDesc": "List platforms separated by commas (Windows, macOS, Linux, etc.). Enter feature highlights and screenshot captions one per line."
+  "guideSectionFieldsDesc": "List platforms separated by commas (Windows, macOS, Linux, etc.). Enter feature highlights and screenshot captions one per line.",
+  "mobileBlockedBadge": "MOBILE ACCESS RESTRICTED",
+  "mobileBlockedTitle": "Mobile version is currently unavailable",
+  "mobileBlockedDesc": "MeowProject is not optimized for mobile smartphones (Android and iOS). Due to technical and financial constraints, a mobile version is not supported yet. Please open the catalog from a desktop PC or laptop for the full experience.",
+  "screenTooSmallBadge": "VIEWPORT TOO NARROW",
+  "screenTooSmallTitle": "Screen resolution is too small",
+  "screenTooSmallDesc": "The MeowProject catalog is designed for full-sized desktop displays. Please maximize your browser window or increase your display resolution (minimum 1024px width).",
+  "blockedRequiredDevice": "Required device: PC or Laptop (screen width 1024px or higher)",
+  "blockedCurrentViewport": "Current resolution:"
 }

@@ -136,5 +136,13 @@
   "fieldCaptionsLabel": "Screenshot-Beschriftungen (eine pro Zeile)",
   "fieldCaptionsPlaceholder": "Hauptansicht des Launchers\nMod-Verwaltung",
   "guideSectionFieldsTitle": "Plattformen, Feature-Karten und Screenshot-Beschriftungen",
-  "guideSectionFieldsDesc": "Plattformen durch Kommas getrennt angeben. Features und Bildbeschriftungen jeweils zeilenweise eingeben."
+  "guideSectionFieldsDesc": "Plattformen durch Kommas getrennt angeben. Features und Bildbeschriftungen jeweils zeilenweise eingeben.",
+  "mobileBlockedBadge": "ZUGRIFF EINGESCHRÄNKT",
+  "mobileBlockedTitle": "Mobile Version ist derzeit nicht verfügbar",
+  "mobileBlockedDesc": "MeowProject ist derzeit nicht für Smartphones (Android und iOS) optimiert. Aus finanziellen und technischen Gründen wird eine mobile Version noch nicht unterstützt. Bitte öffnen Sie die Website über einen PC oder Laptop.",
+  "screenTooSmallBadge": "AUFLÖSUNG ZU GERING",
+  "screenTooSmallTitle": "Bildschirmauflösung ist zu gering",
+  "screenTooSmallDesc": "Der MeowProject-Katalog ist für vollwertige Desktop-Bildschirme konzipiert. Bitte maximieren Sie Ihr Browserfenster oder erhöhen Sie die Auflösung (mindestens 1024px Breite).",
+  "blockedRequiredDevice": "Erforderliches Gerät: PC oder Laptop (Bildschirmbreite ab 1024px)",
+  "blockedCurrentViewport": "Aktuelle Auflösung:"
 }

@@ -136,5 +136,13 @@
   "fieldCaptionsLabel": "Podpisy do zrzutów ekranu (po jednym w wierszu)",
   "fieldCaptionsPlaceholder": "Główny ekran launchera\nZarządzanie modami",
   "guideSectionFieldsTitle": "Platformy, wyróżnione funkcje i opisy zrzutów ekranu",
-  "guideSectionFieldsDesc": "Podaj platformy oddzielone przecinkami. Cechy i podpisy do zrzutów wpisuj w oddzielnych wierszach."
+  "guideSectionFieldsDesc": "Podaj platformy oddzielone przecinkami. Cechy i podpisy do zrzutów wpisuj w oddzielnych wierszach.",
+  "mobileBlockedBadge": "DOSTĘP OGRANICZONY",
+  "mobileBlockedTitle": "Wersja mobilna jest obecnie niedostępna",
+  "mobileBlockedDesc": "MeowProject nie jest obecnie zoptymalizowany pod kątem smartfonów (Android i iOS). Ze względów finansowych i technicznych wersja mobilna nie jest wspierana. Otwórz stronę na komputerze PC lub laptopie.",
+  "screenTooSmallBadge": "OKNO ZBYT WĄSKIE",
+  "screenTooSmallTitle": "Rozdzielczość ekranu jest zbyt mała",
+  "screenTooSmallDesc": "Katalog MeowProject został zaprojektowany dla ekranów komputerowych. Rozwiń okno przeglądarki na pełny ekran lub zwiększ rozdzielczość (minimum 1024px szerokości).",
+  "blockedRequiredDevice": "Wymagane urządzenie: Komputer PC lub Laptop (szerokość ekranu od 1024px)",
+  "blockedCurrentViewport": "Bieżąca rozdzielczość:"
 }
