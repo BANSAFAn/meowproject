@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T14:31:41.850Z",
+  "updatedAt": "2026-11-11T19:49:07.823Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -42,10 +42,21 @@
     "atm9": {
       "issueNumber": 13,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/13",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 94,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6805703550,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "ну норм зборка",
+          "score": 94,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/13#issuecomment-6805703550",
+          "issueNum": 13
+        }
+      ]
     },
     "sodium": {
       "issueNumber": 14,
