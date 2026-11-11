@@ -1,0 +1,23 @@
+{
+  "slug": "lunar-client",
+  "name": "Lunar Client",
+  "shortName": "Lunar Client",
+  "category": "client",
+  "icon": "/favicon.svg",
+  "country": "GLOBAL",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "Windows"
+  ],
+  "website": "",
+  "sourceLinks": [],
+  "issueThreadNumber": 5,
+  "issueSearchTerm": "Lunar Client",
+  "tags": [
+    "client",
+    "Windows",
+    "GLOBAL"
+  ],
+  "screenshots": []
+}
