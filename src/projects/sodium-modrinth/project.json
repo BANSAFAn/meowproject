@@ -1,0 +1,23 @@
+{
+  "slug": "sodium-modrinth",
+  "name": "Sodium (Modrinth)",
+  "shortName": "Sodium (Modrinth)",
+  "category": "mod",
+  "icon": "/favicon.svg",
+  "country": "GLOBAL",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "Windows"
+  ],
+  "website": "",
+  "sourceLinks": [],
+  "issueThreadNumber": 4,
+  "issueSearchTerm": "Sodium (Modrinth)",
+  "tags": [
+    "mod",
+    "Windows",
+    "GLOBAL"
+  ],
+  "screenshots": []
+}
