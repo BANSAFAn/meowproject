@@ -8,6 +8,8 @@ const GITHUB_EVENT_NAME = process.env.GITHUB_EVENT_NAME || 'push';
 const GITHUB_EVENT_PATH = process.env.GITHUB_EVENT_PATH;
 const STEP_SUMMARY_PATH = process.env.GITHUB_STEP_SUMMARY;
 
+const RATING_REGEX = /(?:\[rating\]\(\s*(100|[1-9]?\d)\s*\)|\[rating:\s*(100|[1-9]?\d)(?:\s*\/\s*100)?\s*\]|rating:\s*(100|[1-9]?\d))/i;
+
 function appendSummary(text) {
   console.log(text);
   if (STEP_SUMMARY_PATH && fs.existsSync(path.dirname(STEP_SUMMARY_PATH))) {
@@ -29,6 +31,94 @@ async function githubApi(endpoint, options = {}) {
   const res = await fetch(url, { ...options, headers });
   const data = await res.json().catch(() => null);
   return { status: res.status, ok: res.ok, data };
+}
+
+async function compileReviews(issues, slugs, projectsDir) {
+  appendSummary('### 💬 Compiling Community Reviews & Ratings into static reviews.json');
+  
+  const reviewsData = {
+    updatedAt: new Date().toISOString(),
+    projects: {}
+  };
+
+  for (const slug of slugs) {
+    const metaPath = path.join(projectsDir, slug, 'project.json');
+    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+
+    const issue = issues.find(iss => {
+      if (iss.pull_request) return false;
+      const t = (iss.title || '').toLowerCase();
+      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase()) || iss.number === meta.issueThreadNumber;
+    });
+
+    if (!issue) {
+      reviewsData.projects[slug] = {
+        issueNumber: meta.issueThreadNumber || null,
+        issueUrl: null,
+        averageRating: null,
+        totalRatings: 0,
+        commentsCount: 0,
+        reviews: []
+      };
+      continue;
+    }
+
+    let comments = [];
+    if (issue.comments > 0) {
+      const cRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments?per_page=100`);
+      if (cRes.ok && Array.isArray(cRes.data)) {
+        comments = cRes.data;
+      }
+    }
+
+    const ratings = [];
+    const reviewsList = [];
+
+    for (const c of comments) {
+      const rawBody = (c.body || '').trim();
+      const match = rawBody.match(RATING_REGEX);
+      let score = null;
+      if (match) {
+        const val = Number(match[1] || match[2] || match[3]);
+        if (!isNaN(val) && val >= 0 && val <= 100) {
+          score = val;
+          ratings.push(score);
+        }
+      }
+      const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
+
+      reviewsList.push({
+        id: c.id,
+        author: c.user?.login || 'community-user',
+        avatar: c.user?.avatar_url || '',
+        date: (c.created_at || '').slice(0, 10),
+        body: cleanedBody,
+        score,
+        url: c.html_url || issue.html_url,
+        issueNum: issue.number
+      });
+    }
+
+    const avg = ratings.length > 0 ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length) : null;
+
+    reviewsData.projects[slug] = {
+      issueNumber: issue.number,
+      issueUrl: issue.html_url,
+      averageRating: avg,
+      totalRatings: ratings.length,
+      commentsCount: reviewsList.length,
+      reviews: reviewsList
+    };
+
+    appendSummary(`- **${meta.name}** (#${issue.number}): ${reviewsList.length} comments, avg rating: ${avg !== null ? `${avg}/100` : 'none'}`);
+  }
+
+  const outDir = path.resolve('public/data');
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+  const outPath = path.join(outDir, 'reviews.json');
+  fs.writeFileSync(outPath, JSON.stringify(reviewsData, null, 2) + '\n', 'utf8');
+  appendSummary('✅ Successfully updated `public/data/reviews.json`');
+  return true;
 }
 
 async function handlePushOrDispatch() {
@@ -74,7 +164,7 @@ async function handlePushOrDispatch() {
     const existing = issues.find(iss => {
       if (iss.pull_request) return false;
       const t = (iss.title || '').toLowerCase();
-      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase());
+      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase()) || iss.number === meta.issueThreadNumber;
     });
 
     let targetIssueNumber = existing ? existing.number : null;
@@ -139,12 +229,10 @@ async function handlePushOrDispatch() {
 
       if (createRes.ok) {
         targetIssueNumber = createRes.data.number;
+        issues.push(createRes.data);
         appendSummary(`✅ Created Issue #${targetIssueNumber}: [${expectedTitle}](${createRes.data.html_url})`);
       } else {
         appendSummary(`❌ Failed to create issue for ${meta.name} (HTTP ${createRes.status}): ${JSON.stringify(createRes.data)}`);
-        if (createRes.status === 403) {
-          appendSummary('> ⚠️ **Action Required**: GITHUB_TOKEN has insufficient permissions to write issues. Please enable **Read and write permissions** under **Settings -> Actions -> General -> Workflow permissions**.');
-        }
       }
     } else {
       appendSummary(`ℹ️ Issue already exists: #${existing.number} ([${existing.title}](${existing.html_url}))`);
@@ -157,18 +245,29 @@ async function handlePushOrDispatch() {
     }
   }
 
-  if (modifiedMeta) {
-    try {
+  // Compile reviews.json from real comments!
+  await compileReviews(issues, slugs, projectsDir);
+
+  try {
+    const status = execSync('git status --porcelain').toString().trim();
+    if (status.length > 0) {
       execSync('git config user.name "github-actions[bot]"');
       execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
-      execSync('git add src/projects/*/project.json');
-      execSync('git commit -m "chore(bot): sync issueThreadNumber for catalog projects"');
+      execSync('git add public/data/reviews.json src/projects/*/project.json');
+      execSync('git commit -m "chore(bot): sync issues and update community reviews"');
       execSync('git push origin main');
-      appendSummary('✅ Successfully committed synced `issueThreadNumber` values to main branch.');
-    } catch (e) {
-      appendSummary(`⚠️ Note: Could not commit updated issueThreadNumber: ${e.message}`);
+      appendSummary('✅ Successfully committed changes to main branch.');
+    } else {
+      appendSummary('ℹ️ No repository changes needed.');
     }
+  } catch (e) {
+    appendSummary(`⚠️ Note: Git sync status: ${e.message}`);
   }
+}
+
+async function handleComment() {
+  appendSummary('## 💬 MeowProject Bot: New Comment Detected');
+  await handlePushOrDispatch();
 }
 
 async function handleIssues(eventPayload) {
@@ -326,6 +425,8 @@ async function main() {
 
   if (GITHUB_EVENT_NAME === 'push' || GITHUB_EVENT_NAME === 'workflow_dispatch') {
     await handlePushOrDispatch();
+  } else if (GITHUB_EVENT_NAME === 'issue_comment') {
+    await handleComment();
   } else if (GITHUB_EVENT_NAME === 'issues') {
     await handleIssues(eventPayload);
   } else {

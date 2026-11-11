@@ -1,0 +1,56 @@
+{
+  "updatedAt": "2026-11-11T08:55:00Z",
+  "projects": {
+    "xmcl": {
+      "issueNumber": 1,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/1",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": "comment-xmcl-1",
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "Лаунчер чудовий і нещодавно пофіксили проблему і зробили для тих у кого ДУЖЕ слабкі пк пакет deskgap - який дуже мало їсть і дуже легкий для пк",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1",
+          "issueNum": 1
+        }
+      ]
+    },
+    "hmcl": {
+      "issueNumber": 2,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/2",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "atm9": {
+      "issueNumber": 3,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/3",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "sodium": {
+      "issueNumber": 4,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/4",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "lunarclient": {
+      "issueNumber": 5,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/5",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    }
+  }
+}

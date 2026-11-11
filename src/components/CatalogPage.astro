@@ -3547,32 +3547,32 @@ const jsonLdSchema = {
           if (e.key === 'Escape') closeModal();
         });
 
-        // 8. Real GitHub Issues & [rating](0-100) Parser
+        // 8. Real Community Reviews & [rating](0-100) Parser
         async function loadRealReviews() {
           const panels = document.querySelectorAll('[data-real-reviews-panel]');
           if (!panels.length) return;
 
-          let allIssues = null;
-          const cacheKey = `meow_gh_issues_${repo}`;
+          const ratingRegex = /(?:\[rating\]\(\s*(100|[1-9]?\d)\s*\)|\[rating:\s*(100|[1-9]?\d)(?:\s*\/\s*100)?\s*\]|rating:\s*(100|[1-9]?\d))/i;
 
+          // STEP 1: Load static reviews.json first (Zero rate limit, ultra-fast, offline-friendly)
+          let staticData = null;
           try {
-            const cached = sessionStorage.getItem(cacheKey);
-            if (cached) {
-              allIssues = JSON.parse(cached);
-            } else {
-              const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=all&per_page=50`, {
-                headers: { Accept: 'application/vnd.github.v3+json' },
-              });
-              if (res.ok) {
-                allIssues = await res.json();
-                sessionStorage.setItem(cacheKey, JSON.stringify(allIssues));
-              }
+            const resStatic = await fetch('/data/reviews.json?v=' + Date.now());
+            if (resStatic.ok) {
+              staticData = await resStatic.json();
             }
-          } catch (_) {
-            allIssues = null;
-          }
+          } catch (_) {}
 
-          const ratingRegex = /\[rating\]\(\s*(100|[1-9]?\d)\s*\)/i;
+          // STEP 2: Progressive live fetch from GitHub Issues if rate limit permits
+          let allIssues = null;
+          try {
+            const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=all&per_page=50`, {
+              headers: { Accept: 'application/vnd.github.v3+json' },
+            });
+            if (res.ok) {
+              allIssues = await res.json();
+            }
+          } catch (_) {}
 
           for (const panel of panels) {
             const slug = panel.getAttribute('data-project-slug');
@@ -3590,6 +3590,32 @@ const jsonLdSchema = {
             const collectedItems = [];
             const ratings = [];
 
+            // A. Populate from static reviews.json (always reliable)
+            const projStatic = staticData?.projects?.[slug];
+            if (projStatic) {
+              if (projStatic.issueUrl && reviewBtn) {
+                reviewBtn.dataset.hasBotIssue = '1';
+                reviewBtn.href = `${projStatic.issueUrl}#issuecomment-new`;
+              }
+              if (Array.isArray(projStatic.reviews)) {
+                projStatic.reviews.forEach((r) => {
+                  collectedItems.push({
+                    author: sanitizePlainText(r.author || 'github-user'),
+                    avatar: r.avatar || '',
+                    date: sanitizePlainText(r.date || ''),
+                    body: sanitizePlainText(r.body || ''),
+                    score: typeof r.score === 'number' ? r.score : null,
+                    url: r.url || projStatic.issueUrl,
+                    issueNum: projStatic.issueNumber || issueNumber,
+                  });
+                  if (typeof r.score === 'number') {
+                    ratings.push(r.score);
+                  }
+                });
+              }
+            }
+
+            // B. If live GitHub API is available and not rate limited, merge live comments
             if (Array.isArray(allIssues)) {
               const matchingIssues = allIssues.filter(
                 (iss) =>
@@ -3606,51 +3632,45 @@ const jsonLdSchema = {
               for (const iss of matchingIssues) {
                 if (iss.comments > 0 && iss.comments_url) {
                   try {
-                    const cKey = `meow_gh_comments_${iss.number}`;
-                    let comments = null;
-                    const cachedC = sessionStorage.getItem(cKey);
-                    if (cachedC) {
-                      comments = JSON.parse(cachedC);
-                    } else {
-                      const cRes = await fetch(iss.comments_url, {
-                        headers: { Accept: 'application/vnd.github.v3+json' },
-                      });
-                      if (cRes.ok) {
-                        comments = await cRes.json();
-                        sessionStorage.setItem(cKey, JSON.stringify(comments));
+                    const cRes = await fetch(iss.comments_url, {
+                      headers: { Accept: 'application/vnd.github.v3+json' },
+                    });
+                    if (cRes.ok) {
+                      const comments = await cRes.json();
+                      if (Array.isArray(comments) && comments.length > 0) {
+                        collectedItems.length = 0;
+                        ratings.length = 0;
+                        comments.forEach((c) => {
+                          const rawBody = sanitizePlainText(c.body || '');
+                          const match = rawBody.match(ratingRegex);
+                          let score = null;
+                          if (match) {
+                            const val = Number(match[1] || match[2] || match[3]);
+                            if (!isNaN(val) && val >= 0 && val <= 100) {
+                              score = val;
+                              ratings.push(score);
+                            }
+                          }
+                          const cleanedBody = rawBody.replace(ratingRegex, '').trim();
+
+                          collectedItems.push({
+                            author: sanitizePlainText(c.user?.login || 'github-user'),
+                            avatar: c.user?.avatar_url || '',
+                            date: sanitizePlainText((c.created_at || '').slice(0, 10)),
+                            body: cleanedBody,
+                            score,
+                            url: c.html_url || iss.html_url,
+                            issueNum: iss.number,
+                          });
+                        });
                       }
                     }
-
-                    if (Array.isArray(comments)) {
-                      comments.forEach((c) => {
-                        const rawBody = sanitizePlainText(c.body || '');
-                        const match = rawBody.match(ratingRegex);
-                        let score = null;
-                        if (match) {
-                          score = Math.max(0, Math.min(100, Number(match[1])));
-                          ratings.push(score);
-                        }
-                        const cleanedBody = rawBody.replace(ratingRegex, '').trim();
-
-                        collectedItems.push({
-                          author: sanitizePlainText(c.user?.login || 'github-user'),
-                          avatar: c.user?.avatar_url || '',
-                          date: sanitizePlainText((c.created_at || '').slice(0, 10)),
-                          body: cleanedBody,
-                          score,
-                          url: c.html_url || iss.html_url,
-                          issueNum: iss.number,
-                        });
-                      });
-                    }
-                  } catch (_) {
-                    // ignore comment fetch error
-                  }
+                  } catch (_) {}
                 }
               }
             }
 
-            // Update Project Average Rating (0-100) — only if somebody added the optional tag
+            // Update Project Average Rating (0-100)
             if (ratings.length > 0) {
               const avg = Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length);
               const scoreText = `${ratingLabel}: ${avg} / 100 (${ratings.length})`;
@@ -3677,7 +3697,6 @@ const jsonLdSchema = {
                 const card = document.createElement('div');
                 card.className = 'review-item';
                 if (idx >= 2) {
-                  // When > 2 comments, hide extras in general catalog view and show them in the dedicated project tab
                   card.setAttribute('data-review-extra-item', slug);
                   if (singleProjectSlug !== slug) {
                     card.style.display = 'none';
