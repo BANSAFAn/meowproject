@@ -89,9 +89,13 @@ function extractSection(text, title) {
 
 async function downloadImage(url, destPath) {
   try {
-    const rawUrl = url
-      .replace('github.com/', 'raw.githubusercontent.com/')
-      .replace('/blob/', '/');
+    let rawUrl = url;
+    if (rawUrl.includes('github.com')) {
+      rawUrl = rawUrl
+        .replace('github.com/', 'raw.githubusercontent.com/')
+        .replace('/blob/', '/')
+        .replace('/raw/', '/');
+    }
     const res = await fetch(rawUrl);
     if (res.ok) {
       const buffer = Buffer.from(await res.arrayBuffer());
@@ -241,7 +245,16 @@ async function handlePushOrDispatch() {
 
     let targetIssueNumber = existing ? existing.number : null;
 
-    if (!existing) {
+    if (existing) {
+      if (existing.state === 'closed') {
+        appendSummary(`Reopening catalog discussion issue #${existing.number} for **${meta.name}**...`);
+        await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${existing.number}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ state: 'open' })
+        });
+      }
+    } else {
       appendSummary(`Creating discussion issue for **${meta.name}**...`);
       let ukDesc = '';
       let enDesc = '';
@@ -723,8 +736,21 @@ async function handleIssues(eventPayload) {
 
   appendSummary(`Processing issue #${issue.number} ("${title}") [action: ${action}]`);
 
-  // Catalog projects (issues #1-#5) are discussion threads, NOT new submissions!
-  const catalogThreadNumbers = [1, 2, 3, 4, 5];
+  // Catalog projects are discussion threads, NOT new submissions!
+  const projectsDir = path.resolve('src/projects');
+  const catalogThreadNumbers = [1, 2, 3, 4, 5, 11, 12, 13, 14, 15];
+  if (fs.existsSync(projectsDir)) {
+    try {
+      const dirs = fs.readdirSync(projectsDir);
+      for (const d of dirs) {
+        const pj = path.join(projectsDir, d, 'project.json');
+        if (fs.existsSync(pj)) {
+          const num = JSON.parse(fs.readFileSync(pj, 'utf8')).issueThreadNumber;
+          if (num) catalogThreadNumbers.push(num);
+        }
+      }
+    } catch (_) {}
+  }
   if (catalogThreadNumbers.includes(issue.number)) {
     console.log(`Issue #${issue.number} is a catalog discussion thread. Skipping proposal processing.`);
     return;
