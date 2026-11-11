@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T14:02:54.242Z",
+  "updatedAt": "2026-11-11T14:05:05.328Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -100,18 +100,8 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/5",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 3,
+      "commentsCount": 2,
       "reviews": [
-        {
-          "id": 6792552653,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **Lunar Client** to MeowProject!\n\n- **Project:** **Lunar Client** (`client`)\n- **Country:** GLOBAL\n- **Platforms:** Windows\n- **Pull Request:**  ([View Pull Request](branch `add-project-lunar-client-issue-5`))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 1709 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (branch `add-project-lunar-client-issue-5`). Once merged into `main`, the project will automatically appear on the live website!",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/5#issuecomment-6792552653",
-          "issueNum": 5
-        },
         {
           "id": 6792596576,
           "author": "github-actions[bot]",
