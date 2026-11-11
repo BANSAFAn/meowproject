@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T19:49:07.823Z",
+  "updatedAt": "2026-11-11T20:07:50.293Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -74,9 +74,89 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "2b2t": {
+      "issueNumber": 16,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/16",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "complex-gaming": {
+      "issueNumber": 17,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/17",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "donutsmp": {
+      "issueNumber": 18,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/18",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "fluenlauncher": {
       "issueNumber": 6,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/6",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "gommehd": {
+      "issueNumber": 20,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "hypixel": {
+      "issueNumber": 20,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "kozakmc": {
+      "issueNumber": 21,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/21",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "mcc-island": {
+      "issueNumber": 22,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "minehut": {
+      "issueNumber": 23,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "uacraft": {
+      "issueNumber": 23,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "wynncraft": {
+      "issueNumber": 21,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/21",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
