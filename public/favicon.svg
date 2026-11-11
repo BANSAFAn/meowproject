@@ -1,3 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text y=".9em" font-size="90">🚧</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Offset hard paper shadow -->
+  <path d="M14 10H46L56 20V58H14V10Z" fill="#181615"/>
+  <!-- Main paper sheet with folded corner -->
+  <path d="M10 6H42L52 16V54H10V6Z" fill="#F4F0E6" stroke="#181615" stroke-width="3" stroke-linejoin="miter"/>
+  <path d="M42 6V16H52" fill="#E5DEC9" stroke="#181615" stroke-width="3" stroke-linejoin="miter"/>
+  <!-- M monogram & ruled lines -->
+  <path d="M19 38V22L26 30L33 22V38" stroke="#181615" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/>
+  <line x1="18" y1="45" x2="43" y2="45" stroke="#B45309" stroke-width="3"/>
 </svg>

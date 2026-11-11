@@ -1,0 +1,50 @@
+{
+  "slug": "hmcl",
+  "name": "Hello Minecraft! Launcher (HMCL)",
+  "shortName": "HMCL",
+  "category": "launcher",
+  "icon": "/projects/hmcl/icon.png",
+  "country": "CN",
+  "developer": "huanghongxun (HMCL-dev)",
+  "license": "GPL-3.0",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux",
+    "ARM64 / LoongArch"
+  ],
+  "website": "https://hmcl.huangyuhui.net",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/HMCL-dev/HMCL"
+    },
+    {
+      "host": "cnb",
+      "label": "CNB",
+      "url": "https://cnb.cool/HMCL-dev/HMCL"
+    },
+    {
+      "host": "gitee",
+      "label": "Gitee",
+      "url": "https://gitee.com/huanghongxun/HMCL"
+    }
+  ],
+  "issueThreadNumber": 2,
+  "issueSearchTerm": "HMCL",
+  "tags": [
+    "Minecraft Launcher",
+    "JavaFX",
+    "GitHub",
+    "CNB",
+    "Gitee",
+    "Cross-Platform",
+    "GPL-3.0"
+  ],
+  "screenshots": [
+    "/projects/hmcl/screen-1.webp",
+    "/projects/hmcl/screen-2.webp",
+    "/projects/hmcl/screen-3.webp"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "slug": "sodium",
+  "name": "Sodium (Modrinth)",
+  "shortName": "Sodium",
+  "category": "mod",
+  "icon": "/projects/sodium/icon.png",
+  "country": "GLOBAL",
+  "developer": "CaffeineMC (jellysquid3)",
+  "license": "PolyForm Shield 1.0.0",
+  "platforms": [
+    "Modrinth",
+    "Fabric",
+    "NeoForge",
+    "Quilt"
+  ],
+  "website": "https://modrinth.com/mod/sodium",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/CaffeineMC/sodium"
+    }
+  ],
+  "issueThreadNumber": 4,
+  "issueSearchTerm": "Sodium",
+  "tags": [
+    "Mod",
+    "Modrinth",
+    "Optimization",
+    "FPS Boost",
+    "Rendering Engine",
+    "Fabric",
+    "NeoForge"
+  ],
+  "screenshots": [
+    "/projects/sodium/screen-1.webp",
+    "/projects/sodium/screen-2.webp",
+    "/projects/sodium/screen-3.webp"
+  ]
+}

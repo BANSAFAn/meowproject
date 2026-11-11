@@ -1,0 +1,30 @@
+name: "Contribute Translation / Додати переклад"
+description: "Submit a translation for an existing project in any language"
+title: "[i18n: slug]"
+labels: ["i18n"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Project Translation Submission
+        Provide translations in any language using language code headings below (e.g., `#### DE`, `#### PL`, `#### EN`, `#### UK`, `#### BE`, `#### KZ`, or other ISO codes).
+        The bot will automatically generate a Pull Request for review!
+  - type: input
+    id: project_slug
+    attributes:
+      label: "Project Slug"
+      placeholder: "e.g. xmcl, hmcl, atm9, sodium, lunarclient"
+    validations:
+      required: true
+  - type: textarea
+    id: translations
+    attributes:
+      label: "Translations by Language Code"
+      placeholder: |
+        #### DE
+        Deutsche Übersetzung des Projekts hier...
+
+        #### PL
+        Polski opis projektu tutaj...
+    validations:
+      required: true

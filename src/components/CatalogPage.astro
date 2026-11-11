@@ -1,0 +1,3745 @@
+---
+import {
+  LANGUAGES,
+  UI_TRANSLATIONS,
+  type LangCode,
+} from '../i18n/translations';
+import {
+  PROJECTS,
+  SITE_REPO,
+  SITE_REPO_URL,
+} from '../data/projects';
+import {
+  countryName,
+  countryOptions,
+  acceptedCountryValues,
+  REGION_VALUES,
+} from '../data/countries';
+import { ClientRouter } from 'astro:transitions';
+import MonobankIcon from './icons/MonobankIcon.astro';
+import YoutubeIcon from './icons/YoutubeIcon.astro';
+
+interface Props {
+  lang: LangCode;
+}
+
+const { lang } = Astro.props;
+const t = UI_TRANSLATIONS[lang];
+const langList = Object.values(LANGUAGES);
+const currentLangMeta = LANGUAGES[lang];
+
+const MONOBANK_URL = 'https://send.monobank.ua/jar/7cQ5hJtFDy';
+const YOUTUBE_JOIN_URL = 'https://www.youtube.com/@Baneronetwo/join';
+
+const defaultSubmitIssueUrl = `${SITE_REPO_URL}/issues/new?template=submit-project.yml&title=${encodeURIComponent('project: ')}`;
+const submitPrUrl = `${SITE_REPO_URL}/pulls`;
+
+function getLangHref(targetLang: LangCode) {
+  return targetLang === 'uk' ? '/' : `/${targetLang}/`;
+}
+
+const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'service', 'website', 'project'] as const;
+
+const categoryCounts: Record<string, number> = Object.fromEntries(
+  PREFIXES.map((c) => [c, PROJECTS.filter((p) => p.category === c).length]),
+);
+
+const SOURCE_HOSTS = [
+  { value: 'github', label: 'GitHub', domains: 'github.com' },
+  { value: 'gitlab', label: 'GitLab', domains: 'gitlab.com' },
+  { value: 'gitea', label: 'Gitea', domains: 'gitea.com' },
+  { value: 'sourceforge', label: 'SourceForge', domains: 'sourceforge.net' },
+  { value: 'gitee', label: 'Gitee', domains: 'gitee.com' },
+  { value: 'cnb', label: 'CNB', domains: 'cnb.cool' },
+];
+
+const countryList = countryOptions(lang);
+const acceptedCountries = acceptedCountryValues();
+const projectCountry = (code: string) => countryName(code, lang, t.countryGlobal);
+
+const siteOrigin = Astro.url?.origin || 'https://meowproject.pages.dev';
+const canonicalUrl = `${siteOrigin}${getLangHref(lang)}`;
+
+const jsonLdSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteOrigin}/#website`,
+      name: 'MeowProject',
+      alternateName: t.metaTitle,
+      url: canonicalUrl,
+      inLanguage: lang,
+      description: t.metaDescription,
+      publisher: {
+        '@type': 'Person',
+        name: 'Baneronetwo',
+        url: YOUTUBE_JOIN_URL,
+      },
+    },
+    {
+      '@type': 'ItemList',
+      name: t.heroTitle,
+      itemListElement: PROJECTS.map((p, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        item: {
+          '@type': 'SoftwareApplication',
+          name: p.name,
+          applicationCategory: 'GameApplication',
+          operatingSystem: p.platforms.join(', '),
+          url: p.primaryLink,
+          image: `${siteOrigin}${p.icon}`,
+          description: p.locales[lang].tagline,
+          license: p.license,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; connect-src 'self' https://api.github.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none';"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{t.metaTitle}</title>
+    <meta name="description" content={t.metaDescription} />
+    <meta name="keywords" content={t.metaKeywords} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- Hreflang SEO -->
+    <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/`} />
+    {
+      langList.map((l) => (
+        <link
+          rel="alternate"
+          hreflang={l.code}
+          href={`${siteOrigin}${getLangHref(l.code)}`}
+        />
+      ))
+    }
+
+    <!-- Open Graph / Twitter SEO -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MeowProject" />
+    <meta property="og:title" content={t.metaTitle} />
+    <meta property="og:description" content={t.metaDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={currentLangMeta.ogLocale} />
+    <meta property="og:image" content={`${siteOrigin}/projects/xmcl/screen-1.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={t.metaTitle} />
+    <meta name="twitter:description" content={t.metaDescription} />
+    <meta name="twitter:image" content={`${siteOrigin}/projects/xmcl/screen-1.png`} />
+
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSchema)} />
+
+    <script is:inline>
+      (function () {
+        function applyTheme() {
+          const saved = localStorage.getItem('meow_theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = saved || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+        applyTheme();
+        document.addEventListener('astro:after-swap', applyTheme);
+      })();
+    </script>
+    <ClientRouter />
+    <style>
+      :root,
+      html[data-theme='light'] {
+        --desk-bg: #e8e2d5;
+        --paper-sheet: #f7f4ec;
+        --paper-card: #fcfaf5;
+        --paper-inset: #eee9dc;
+        --ink: #181615;
+        --ink-muted: #524d46;
+        --ink-faint: #787167;
+        --border-ink: #181615;
+        --rule-line: #c9c1b1;
+        --shadow-hard: #181615;
+        --stamp-red: #991b1b;
+        --stamp-red-bg: #fef2f2;
+        --stamp-amber: #92400e;
+        --stamp-amber-bg: #fef3c7;
+        --stamp-green: #166534;
+        --stamp-green-bg: #dcfce7;
+        --stamp-blue: #1e40af;
+        --stamp-blue-bg: #dbeafe;
+        --accent: #b45309;
+        --grid-dot: rgba(24, 22, 21, 0.08);
+      }
+
+      html[data-theme='dark'] {
+        --desk-bg: #111110;
+        --paper-sheet: #1a1917;
+        --paper-card: #22211e;
+        --paper-inset: #141311;
+        --ink: #ece7df;
+        --ink-muted: #b5aea2;
+        --ink-faint: #857e73;
+        --border-ink: #4a463f;
+        --rule-line: #33302b;
+        --shadow-hard: #050505;
+        --stamp-red: #fca5a5;
+        --stamp-red-bg: rgba(153, 27, 27, 0.25);
+        --stamp-amber: #fcd34d;
+        --stamp-amber-bg: rgba(146, 64, 14, 0.28);
+        --stamp-green: #86efac;
+        --stamp-green-bg: rgba(22, 101, 52, 0.28);
+        --stamp-blue: #93c5fd;
+        --stamp-blue-bg: rgba(30, 64, 175, 0.28);
+        --accent: #f59e0b;
+        --grid-dot: rgba(236, 231, 223, 0.06);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background-color: var(--desk-bg);
+        background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+        background-size: 20px 20px;
+        color: var(--ink);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+        transition:
+          background-color 180ms ease,
+          color 180ms ease;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 999;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        -webkit-appearance: none;
+        appearance: none;
+        background: none;
+        border: none;
+        font: inherit;
+        color: inherit;
+      }
+
+      .mono {
+        font-family:
+          ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Monaco,
+          Consolas,
+          'Liberation Mono',
+          monospace;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 1.25rem;
+      }
+
+      /* Top Archival Status Strip */
+      .status-strip {
+        background: var(--paper-inset);
+        border-bottom: 1.5px solid var(--border-ink);
+        font-size: 0.78rem;
+      }
+
+      .status-strip-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        padding: 0.5rem 0;
+      }
+
+      .stamp-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .stamp {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.16rem 0.52rem;
+        border: 1px solid var(--border-ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: var(--paper-card);
+        white-space: nowrap;
+      }
+
+      .stamp-alpha {
+        background: var(--stamp-amber-bg);
+        color: var(--stamp-amber);
+        border-color: var(--stamp-amber);
+      }
+
+      .stamp-open {
+        background: var(--stamp-green-bg);
+        color: var(--stamp-green);
+        border-color: var(--stamp-green);
+      }
+
+      .stamp-opensource-link {
+        background: var(--stamp-blue-bg);
+        color: var(--stamp-blue);
+        border-color: var(--stamp-blue);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        transition:
+          transform 100ms ease,
+          box-shadow 100ms ease;
+      }
+
+      .stamp-opensource-link:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .top-links-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .source-stamp-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.73rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-card);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        transition:
+          transform 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      .source-stamp-link:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .support-mono-link {
+        background: var(--paper-card);
+        border-color: var(--border-ink);
+      }
+
+      .support-yt-link {
+        background: var(--stamp-red-bg);
+        color: var(--stamp-red);
+        border-color: var(--stamp-red);
+      }
+
+      /* Header Sheet */
+      .site-header {
+        background: var(--paper-sheet);
+        border-bottom: 2px solid var(--border-ink);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.8rem 0;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+      }
+
+      .brand-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        display: block;
+        line-height: 1.1;
+      }
+
+      .brand-sub {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.68rem;
+        color: var(--ink-faint);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      /* 3 Distinct Paper Folder Navigation Tabs */
+      .nav-folder-tabs {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+      }
+
+      .folder-tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: var(--ink);
+        background-color: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        transition:
+          transform 120ms ease,
+          box-shadow 120ms ease,
+          background-color 120ms ease,
+          color 120ms ease;
+      }
+
+      .folder-tab-btn:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .folder-tab-btn.active {
+        background-color: var(--accent);
+        color: #ffffff;
+        border-color: var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+      }
+
+      .folder-tab-badge {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.68rem;
+        padding: 0.05rem 0.35rem;
+        border: 1px solid currentColor;
+      }
+
+      /* Flag Language Switcher */
+      .lang-bar {
+        display: inline-flex;
+        align-items: center;
+        background: var(--paper-inset);
+        border: 1.5px solid var(--border-ink);
+        padding: 2px;
+        gap: 2px;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+      }
+
+      .lang-flag-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 26px;
+        border: 1px solid transparent;
+        background: transparent;
+        transition:
+          transform 120ms ease,
+          background 120ms ease,
+          border-color 120ms ease;
+      }
+
+      .lang-flag-btn svg {
+        width: 20px;
+        height: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        display: block;
+      }
+
+      .lang-flag-btn:hover {
+        background: var(--paper-card);
+        transform: translateY(-1px);
+      }
+
+      .lang-flag-btn.active {
+        background: var(--paper-card);
+        border-color: var(--border-ink);
+        box-shadow: inset 0 -2px 0 var(--accent);
+      }
+
+      /* Theme Toggle Button */
+      .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 32px;
+        background: var(--paper-card);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        transition:
+          transform 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      .theme-btn:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      html[data-theme='light'] .icon-moon {
+        display: block;
+      }
+      html[data-theme='light'] .icon-sun {
+        display: none;
+      }
+      html[data-theme='dark'] .icon-moon {
+        display: none;
+      }
+      html[data-theme='dark'] .icon-sun {
+        display: block;
+      }
+
+      /* Main Views Management */
+      .tab-view-panel {
+        display: none;
+        animation: paperSlideIn 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .tab-view-panel.active {
+        display: block;
+      }
+
+      @keyframes paperSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .paper-sheet-box {
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 5px 5px 0 var(--shadow-hard);
+        position: relative;
+      }
+
+      .paper-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.55rem 1rem;
+        font-size: 0.86rem;
+        font-weight: 700;
+        font-family: inherit;
+        border: 1.5px solid var(--border-ink);
+        background-color: var(--paper-card);
+        color: var(--ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        cursor: pointer;
+        transition:
+          transform 120ms ease,
+          box-shadow 120ms ease,
+          background-color 120ms ease;
+      }
+
+      .paper-btn:hover {
+        transform: translate(1.5px, 1.5px);
+        box-shadow: 1.5px 1.5px 0 var(--shadow-hard);
+      }
+
+      .paper-btn:active {
+        transform: translate(3px, 3px);
+        box-shadow: 0 0 0 var(--shadow-hard);
+      }
+
+      .paper-btn-ink {
+        background-color: var(--ink);
+        color: var(--paper-sheet);
+      }
+
+      .paper-btn-accent {
+        background-color: var(--accent);
+        color: #ffffff;
+      }
+
+      /* Hero Dossier Sheet */
+      .hero-wrap {
+        margin: 2rem 0 1.75rem;
+      }
+
+      .hero-dossier {
+        padding: 2rem 2.25rem;
+        background-image: repeating-linear-gradient(
+          transparent,
+          transparent 31px,
+          var(--rule-line) 31px,
+          var(--rule-line) 32px
+        );
+      }
+
+      .hero-inner-card {
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        padding: 1.75rem 2rem;
+      }
+
+      .hero-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.2rem 0.55rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-inset);
+        margin-bottom: 0.9rem;
+      }
+
+      .hero-title {
+        font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        margin-bottom: 0.85rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.98rem;
+        color: var(--ink-muted);
+        max-width: 78ch;
+        margin-bottom: 1.4rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding-bottom: 1.4rem;
+        border-bottom: 1.5px dashed var(--rule-line);
+        margin-bottom: 1.25rem;
+      }
+
+      .hero-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .hero-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.55rem 0.75rem;
+        background: var(--paper-card);
+        border: 1px solid var(--border-ink);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      /* Filter & Index Tabs */
+      .filter-bar {
+        margin-bottom: 2rem;
+        padding: 1.1rem 1.35rem;
+      }
+
+      .search-box {
+        position: relative;
+        width: 100%;
+        margin-bottom: 0.9rem;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--ink-faint);
+        pointer-events: none;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.6rem 0.85rem 0.6rem 2.35rem;
+        background: var(--paper-card);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        font-family: inherit;
+        font-size: 0.88rem;
+      }
+
+      .search-input:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+
+      .index-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        border-top: 1px dashed var(--rule-line);
+        padding-top: 0.9rem;
+      }
+
+      .tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.38rem 0.75rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.78rem;
+        font-weight: 700;
+        background-color: var(--paper-card);
+        color: var(--ink-muted);
+        border: 1.5px solid var(--border-ink);
+        cursor: pointer;
+        transition:
+          transform 100ms ease,
+          background-color 100ms ease;
+      }
+
+      .tab-btn:hover {
+        color: var(--ink);
+        transform: translateY(-1px);
+      }
+
+      .tab-btn.active {
+        background-color: var(--ink);
+        color: var(--paper-sheet);
+        box-shadow: 2px 2px 0 var(--accent);
+      }
+
+      /* Project Dossier Sheet */
+      .projects-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        margin-bottom: 3.5rem;
+      }
+
+      .project-dossier {
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 6px 6px 0 var(--shadow-hard);
+      }
+
+      .dossier-top-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.45rem 1.25rem;
+        background: var(--paper-inset);
+        border-bottom: 1.5px solid var(--border-ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.73rem;
+        color: var(--ink-muted);
+      }
+
+      .dossier-header {
+        padding: 1.5rem 1.75rem;
+        border-bottom: 1.5px solid var(--border-ink);
+        background: var(--paper-card);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1.25rem;
+      }
+
+      .dossier-identity {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.15rem;
+        flex: 1 1 360px;
+      }
+
+      .dossier-icon-frame {
+        width: 72px;
+        height: 72px;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        padding: 0.55rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .dossier-icon-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .dossier-stamps {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.45rem;
+      }
+
+      .dossier-title {
+        font-size: 1.45rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
+      }
+
+      .prefix-code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        color: var(--accent);
+        font-weight: 800;
+      }
+
+      .dossier-tagline {
+        font-size: 0.92rem;
+        color: var(--ink-muted);
+      }
+
+      .dossier-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .dossier-body {
+        padding: 1.65rem 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+      }
+
+      .spec-table {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        border: 1.5px solid var(--border-ink);
+        background: var(--paper-card);
+      }
+
+      .spec-cell {
+        padding: 0.7rem 0.95rem;
+        border-right: 1px solid var(--rule-line);
+        border-bottom: 1px solid var(--rule-line);
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+
+      .spec-key {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ink-faint);
+      }
+
+      .spec-val {
+        font-size: 0.88rem;
+        font-weight: 700;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding-bottom: 0.45rem;
+        border-bottom: 1.5px solid var(--border-ink);
+        margin-bottom: 0.85rem;
+      }
+
+      .section-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.92rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .char-stamp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        padding: 0.1rem 0.45rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-inset);
+        white-space: nowrap;
+      }
+
+      .description-sheet {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        padding: 1.2rem 1.35rem;
+        font-size: 0.94rem;
+        line-height: 1.75;
+        white-space: pre-line;
+        color: var(--ink);
+        border-left: 4px solid var(--accent);
+      }
+
+      .features-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 0.6rem;
+        margin-top: 0.85rem;
+      }
+
+      .feature-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.6rem 0.8rem;
+        background: var(--paper-card);
+        border: 1px solid var(--border-ink);
+        font-size: 0.84rem;
+        font-weight: 600;
+      }
+
+      /* Screenshots */
+      .screenshots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+        gap: 0.9rem;
+      }
+
+      .polaroid-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        padding: 0.45rem;
+        cursor: pointer;
+        text-align: left;
+        font-family: inherit;
+        color: var(--ink);
+        transition:
+          transform 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      .polaroid-card:hover {
+        transform: translate(1.5px, 1.5px);
+        box-shadow: 1.5px 1.5px 0 var(--shadow-hard);
+      }
+
+      .polaroid-img-wrap {
+        aspect-ratio: 16 / 10;
+        border: 1px solid var(--border-ink);
+        overflow: hidden;
+        background: #111;
+      }
+
+      .polaroid-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .polaroid-caption {
+        padding: 0.5rem 0.25rem 0.2rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--ink-muted);
+      }
+
+      .no-screenshots-sheet {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem 1.25rem;
+        background: var(--paper-inset);
+        border: 1.5px dashed var(--border-ink);
+        gap: 0.45rem;
+      }
+
+      /* Reviews & Rating [rating](0-100) Section */
+      .reviews-sheet {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        padding: 1.25rem 1.35rem;
+      }
+
+      .reviews-top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-bottom: 0.9rem;
+        border-bottom: 1px dashed var(--rule-line);
+        margin-bottom: 0.9rem;
+      }
+
+      .rating-picker-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.75rem 0.95rem;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        margin-bottom: 0.9rem;
+      }
+
+      .rating-slider-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+      }
+
+      .rating-range-input {
+        accent-color: var(--accent);
+        width: 140px;
+        cursor: pointer;
+      }
+
+      .bot-note-strip {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.6rem;
+        padding: 0.65rem 0.85rem;
+        background: var(--paper-inset);
+        border: 1px solid var(--border-ink);
+        font-size: 0.82rem;
+        color: var(--ink-muted);
+        margin-bottom: 1rem;
+      }
+
+      .real-reviews-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .review-item {
+        background: var(--paper-sheet);
+        border: 1px solid var(--border-ink);
+        padding: 0.9rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+
+      .review-item-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.76rem;
+      }
+
+      .review-user {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-weight: 700;
+      }
+
+      .review-user img {
+        width: 20px;
+        height: 20px;
+        border: 1px solid var(--border-ink);
+      }
+
+      .review-body {
+        font-size: 0.88rem;
+        color: var(--ink);
+        white-space: pre-line;
+      }
+
+      .reviews-status-box {
+        padding: 1.35rem;
+        text-align: center;
+        background: var(--paper-sheet);
+        border: 1px dashed var(--border-ink);
+        font-size: 0.85rem;
+        color: var(--ink-muted);
+      }
+
+      .tags-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed var(--rule-line);
+      }
+
+      .tag-item {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        padding: 0.15rem 0.45rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-inset);
+      }
+
+      /* =========================================================
+         TAB 1: DEDICATED "HOW TO ADD PROJECT" GUIDE VIEW
+         ========================================================= */
+      .guide-sheet {
+        margin: 2rem 0 3.5rem;
+        padding: 2rem;
+      }
+
+      .prefix-showcase-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 0.75rem;
+        margin: 1.15rem 0 2rem;
+      }
+
+      .prefix-sample-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        padding: 0.8rem 1rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.84rem;
+      }
+
+      .prefix-sample-card strong {
+        color: var(--accent);
+      }
+
+      .guide-rules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.1rem;
+        margin: 1rem 0 2rem;
+      }
+
+      .guide-rule-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      /* =========================================================
+         TAB 2: ANIMATED TUTORIAL & LIVE VALIDATOR FORM VIEW
+         Fixed grid baseline alignment & non-wrapping checkboxes!
+         ========================================================= */
+      .submit-sheet {
+        margin: 2rem 0 3.5rem;
+        padding: 2rem;
+      }
+
+      .anim-stage-box {
+        background: var(--paper-inset);
+        border: 1.5px solid var(--border-ink);
+        padding: 1.5rem;
+        margin: 1.25rem 0 2.25rem;
+      }
+
+      .anim-progress-track {
+        height: 6px;
+        background: var(--paper-card);
+        border: 1px solid var(--border-ink);
+        margin-bottom: 1.25rem;
+        overflow: hidden;
+      }
+
+      .anim-progress-fill {
+        height: 100%;
+        width: 25%;
+        background: var(--accent);
+        transition: width 400ms ease;
+      }
+
+      .anim-steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .anim-step-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        padding: 1rem;
+        cursor: pointer;
+        opacity: 0.6;
+        transition:
+          opacity 250ms ease,
+          transform 250ms ease,
+          box-shadow 250ms ease,
+          border-color 250ms ease;
+      }
+
+      .anim-step-card.active {
+        opacity: 1;
+        border-color: var(--accent);
+        box-shadow: 4px 4px 0 var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .anim-terminal-preview {
+        background: var(--ink);
+        color: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        padding: 1rem 1.25rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.82rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .pulse-dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        background: #22c55e;
+        margin-right: 0.5rem;
+        animation: blinkDot 1.2s infinite ease-in-out;
+      }
+
+      @keyframes blinkDot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.25;
+        }
+      }
+
+      /* Fixed Validator Form Layout */
+      .validator-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
+
+      .form-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 4px 4px 0 var(--shadow-hard);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.15rem;
+      }
+
+      .form-row-prefix {
+        display: grid;
+        grid-template-columns: 165px 1fr;
+        gap: 0.9rem;
+        align-items: end;
+      }
+
+      .form-row-2col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.9rem;
+        align-items: end;
+      }
+
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 0.4rem;
+      }
+
+      .field-label {
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        line-height: 1.3;
+      }
+
+      .paper-input,
+      .paper-select,
+      .paper-textarea {
+        width: 100%;
+        height: 42px;
+        padding: 0.55rem 0.75rem;
+        background: var(--paper-sheet);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        font-family: inherit;
+        font-size: 0.88rem;
+      }
+
+      .paper-textarea {
+        height: auto;
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .paper-input:focus,
+      .paper-select:focus,
+      .paper-textarea:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+
+      .checklist-card {
+        background: var(--paper-card);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 4px 4px 0 var(--shadow-hard);
+        padding: 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: sticky;
+        top: 5.5rem;
+      }
+
+      .generated-title-box {
+        background: var(--paper-inset);
+        border: 1.5px solid var(--border-ink);
+        padding: 0.75rem 0.9rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.88rem;
+        font-weight: 800;
+        word-break: break-all;
+      }
+
+      .check-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .check-item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-size: 0.83rem;
+        font-weight: 600;
+        padding: 0.55rem 0.75rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-sheet);
+        color: var(--ink-muted);
+      }
+
+      .check-box-mark {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-weight: 800;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .check-item.valid {
+        background: var(--stamp-green-bg);
+        color: var(--stamp-green);
+        border-color: var(--stamp-green);
+      }
+
+      .paper-btn.disabled {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+
+      /* Footer */
+      .site-footer {
+        background: var(--paper-sheet);
+        border-top: 2px solid var(--border-ink);
+        padding: 2.25rem 0;
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1.5rem;
+      }
+
+      /* Lightbox */
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(12, 12, 11, 0.88);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+      }
+
+      .lightbox.open {
+        display: flex;
+      }
+
+      .lightbox-frame {
+        background: var(--paper-sheet);
+        border: 2px solid var(--border-ink);
+        box-shadow: 8px 8px 0 #000;
+        max-width: 1020px;
+        width: 100%;
+      }
+
+      .lightbox-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.65rem 1rem;
+        border-bottom: 1.5px solid var(--border-ink);
+        background: var(--paper-card);
+      }
+
+      .lightbox-img-box {
+        background: #090909;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-height: 78vh;
+      }
+
+      .lightbox-img-box img {
+        max-width: 100%;
+        max-height: 78vh;
+        object-fit: contain;
+      }
+
+      .no-translation-box {
+        background: var(--paper-inset);
+        border: 1.5px dashed var(--border-ink);
+        padding: 1.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .no-translation-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.95rem;
+      }
+
+      .lang-selector-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin: 0.5rem 0 0.8rem;
+      }
+
+      .lang-checkbox-hidden {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+      }
+
+      .lang-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.38rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border: 1.5px solid var(--border-ink);
+        background: var(--paper-sheet);
+        color: var(--ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        user-select: none;
+        transition:
+          transform 100ms ease,
+          box-shadow 100ms ease,
+          background-color 120ms ease,
+          border-color 120ms ease;
+      }
+
+      .lang-chip:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .lang-chip.selected {
+        background: var(--paper-card);
+        border-color: var(--accent);
+        box-shadow: 2px 2px 0 var(--accent);
+      }
+
+      .lang-chip-flag {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .lang-chip-flag svg {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        display: block;
+      }
+
+      .lang-chip-code {
+        font-weight: 800;
+        font-size: 0.82rem;
+      }
+
+      .lang-chip-label {
+        color: var(--ink-muted);
+        font-size: 0.76rem;
+      }
+
+      .lang-chip-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        font-size: 0.68rem;
+        border: 1px solid var(--border-ink);
+        background: var(--paper-inset);
+        color: transparent;
+        margin-left: 0.2rem;
+        transition: all 120ms ease;
+      }
+
+      .lang-chip.selected .lang-chip-badge {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #ffffff;
+      }
+
+      .lang-chip.selected .lang-chip-badge::after {
+        content: '✓';
+      }
+
+      /* Country / proprietary stamps */
+      .stamp-country {
+        background: var(--paper-card);
+        color: var(--ink);
+      }
+
+      .stamp-proprietary {
+        background: var(--paper-inset);
+        color: var(--ink-muted);
+        border-style: dashed;
+      }
+
+      .soft-hint {
+        display: block;
+        margin-top: 0.3rem;
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+      }
+
+      /* Prefix stamp picker */
+      .prefix-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .prefix-pill {
+        padding: 0.42rem 0.8rem;
+        font-size: 0.82rem;
+        font-weight: 800;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        cursor: pointer;
+        transition:
+          transform 100ms ease,
+          box-shadow 100ms ease,
+          background-color 120ms ease,
+          color 120ms ease;
+      }
+
+      .prefix-pill:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 var(--shadow-hard);
+      }
+
+      .prefix-pill.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--border-ink);
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+
+      .region-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .region-hint {
+        font-size: 0.75rem;
+        color: var(--ink-faint);
+      }
+
+      .region-pill {
+        padding: 0.15rem 0.5rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border: 1px dashed var(--border-ink);
+        background: var(--paper-inset);
+        cursor: pointer;
+      }
+
+      .region-pill:hover {
+        border-style: solid;
+        color: var(--accent);
+      }
+
+      .field-error {
+        display: none;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--stamp-red);
+        background: var(--stamp-red-bg);
+        border: 1px solid var(--stamp-red);
+        padding: 0.3rem 0.55rem;
+      }
+
+      .field-error.visible {
+        display: block;
+      }
+
+      .paper-textarea-sm {
+        min-height: 70px;
+      }
+
+      .desc-lang-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+        border-bottom: 1.5px solid var(--border-ink);
+      }
+
+      .desc-lang-tab {
+        position: relative;
+        padding: 0.35rem 0.8rem;
+        font-size: 0.78rem;
+        font-weight: 800;
+        border: 1.5px solid var(--border-ink);
+        border-bottom: none;
+        margin-right: -1.5px;
+        background: var(--paper-inset);
+        color: var(--ink-muted);
+        cursor: pointer;
+      }
+
+      .desc-lang-tab.active {
+        background: var(--paper-sheet);
+        color: var(--ink);
+        box-shadow: inset 0 3px 0 var(--accent);
+      }
+
+      .desc-lang-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-left: 0.35rem;
+        border: 1px solid var(--ink-faint);
+        vertical-align: middle;
+      }
+
+      .desc-lang-dot.filled {
+        background: var(--stamp-green);
+        border-color: var(--stamp-green);
+      }
+
+      .desc-lang-area {
+        border-top: none;
+      }
+
+      @media (max-width: 860px) {
+        .validator-grid,
+        .form-row-prefix,
+        .form-row-2col {
+          grid-template-columns: 1fr;
+        }
+        .hero-dossier,
+        .hero-inner-card,
+        .dossier-header,
+        .dossier-body,
+        .guide-sheet,
+        .submit-sheet {
+          padding: 1.15rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Archival Status Strip with Monobank & YouTube Support Links -->
+    <div class="status-strip">
+      <div class="container status-strip-inner">
+        <div class="stamp-list">
+          <span class="stamp stamp-alpha" title={t.alphaTooltip}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            {t.alphaBadge}
+          </span>
+
+          <span class="stamp">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+            {t.sponsoredBy}
+          </span>
+
+          <span class="stamp stamp-open">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="11" width="18" height="11" rx="1"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+            {t.noAuthBadge}
+          </span>
+        </div>
+
+        <div class="top-links-row">
+          <a
+            href={MONOBANK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-stamp-link support-mono-link"
+          >
+            <MonobankIcon size={13} />
+            {t.supportMonobank}
+          </a>
+
+          <a
+            href={YOUTUBE_JOIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-stamp-link support-yt-link"
+          >
+            <YoutubeIcon size={13} />
+            {t.supportYoutube}
+          </a>
+
+          <a
+            href={SITE_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-stamp-link"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            {t.sourceCode}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header with 3 Separate Folder Tabs, Flag Icons & Theme Switcher -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href={getLangHref(lang)} class="brand" data-switch-view="catalog">
+          <img src="/favicon.svg" alt="MeowProject" class="brand-icon" width="38" height="38" />
+          <div>
+            <span class="brand-title">MeowProject</span>
+            <span class="brand-sub">PAPER ARCHIVE · OPEN DIRECTORY</span>
+          </div>
+        </a>
+
+        <div class="header-controls">
+          <!-- 3 Separate Interactive Tabs -->
+          <nav class="nav-folder-tabs" aria-label="Main Views">
+            <button
+              type="button"
+              class="folder-tab-btn active"
+              data-view-btn="catalog"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>{t.navCatalog}</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="guide"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>{t.navHowItWorks}</span>
+              <span class="folder-tab-badge">01</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="submit"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>{t.navSubmit}</span>
+              <span class="folder-tab-badge">02</span>
+            </button>
+          </nav>
+
+          <!-- Language Switcher with Flag Icons Only -->
+          <div class="lang-bar" role="navigation" aria-label="Language Switcher">
+            <a
+              href={getLangHref('uk')}
+              class={`lang-flag-btn ${lang === 'uk' ? 'active' : ''}`}
+              title="Українська"
+              aria-label="Українська"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="8" fill="#0057B7" />
+                <rect y="8" width="24" height="8" fill="#FFD700" />
+              </svg>
+            </a>
+
+            <a
+              href={getLangHref('en')}
+              class={`lang-flag-btn ${lang === 'en' ? 'active' : ''}`}
+              title="English"
+              aria-label="English"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="16" fill="#012169" />
+                <path d="M0,0 L24,16 M24,0 L0,16" stroke="#FFF" stroke-width="3.2" />
+                <path d="M0,0 L24,16 M24,0 L0,16" stroke="#C8102E" stroke-width="1.6" />
+                <path d="M12,0 V16 M0,8 H24" stroke="#FFF" stroke-width="5" />
+                <path d="M12,0 V16 M0,8 H24" stroke="#C8102E" stroke-width="3" />
+              </svg>
+            </a>
+
+            <a
+              href={getLangHref('de')}
+              class={`lang-flag-btn ${lang === 'de' ? 'active' : ''}`}
+              title="Deutsch"
+              aria-label="Deutsch"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="5.33" fill="#000000" />
+                <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
+                <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
+              </svg>
+            </a>
+
+            <a
+              href={getLangHref('pl')}
+              class={`lang-flag-btn ${lang === 'pl' ? 'active' : ''}`}
+              title="Polski"
+              aria-label="Polski"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="8" fill="#FFFFFF" />
+                <rect y="8" width="24" height="8" fill="#DC143C" />
+              </svg>
+            </a>
+
+            <a
+              href={getLangHref('be')}
+              class={`lang-flag-btn ${lang === 'be' ? 'active' : ''}`}
+              title="Беларуская"
+              aria-label="Беларуская"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="5.33" fill="#FFFFFF" />
+                <rect y="5.33" width="24" height="5.33" fill="#D22730" />
+                <rect y="10.66" width="24" height="5.34" fill="#FFFFFF" />
+              </svg>
+            </a>
+
+            <a
+              href={getLangHref('kk')}
+              class={`lang-flag-btn ${lang === 'kk' ? 'active' : ''}`}
+              title="Қазақша"
+              aria-label="Қазақша"
+            >
+              <svg viewBox="0 0 24 16" aria-hidden="true">
+                <rect width="24" height="16" fill="#00AFCA" />
+                <circle cx="12" cy="8" r="3.6" fill="#FEC50C" />
+                <rect x="2" y="2" width="1.8" height="12" fill="#FEC50C" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Light / Dark Theme Switcher -->
+          <button
+            type="button"
+            id="theme-toggle"
+            class="theme-btn"
+            aria-label="Toggle theme"
+            title="Switch Light / Dark Paper Theme"
+          >
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- =========================================================
+           VIEW 0: CATALOG MAIN VIEW
+           ========================================================= -->
+      <div id="view-catalog" class="tab-view-panel active">
+        <!-- Hero Paper Dossier -->
+        <section class="hero-wrap">
+          <div class="paper-sheet-box hero-dossier">
+            <div class="hero-inner-card">
+              <div class="hero-kicker">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                {t.heroKicker}
+              </div>
+
+              <h1 class="hero-title">{t.heroTitle}</h1>
+              <p class="hero-subtitle">{t.heroSubtitle}</p>
+
+              <div class="hero-actions">
+                <button
+                  type="button"
+                  class="paper-btn paper-btn-ink"
+                  data-switch-view="submit"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  {t.heroSubmitIssueBtn}
+                </button>
+
+                <button
+                  type="button"
+                  class="paper-btn"
+                  data-switch-view="guide"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                  {t.heroGuideBtn}
+                </button>
+
+                <a
+                  href={MONOBANK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn"
+                >
+                  <MonobankIcon size={15} />
+                  {t.supportMonobank}
+                </a>
+
+                <a
+                  href={YOUTUBE_JOIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn"
+                >
+                  <YoutubeIcon size={15} />
+                  {t.supportYoutube}
+                </a>
+              </div>
+
+              <div class="hero-meta-grid">
+                <div class="hero-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <span>{PROJECTS.length} · {t.statProjects}</span>
+                </div>
+
+                <div class="hero-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="3" y="11" width="18" height="11" rx="1"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                  </svg>
+                  <span>{t.statNoAuth}</span>
+                </div>
+
+                <div class="hero-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>[rating](0-100)</span>
+                </div>
+
+                <div class="hero-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                  <span>Strict CSP · Anti-XSS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filter & Index Tabs (Removed the "Test No Screenshots" checkbox!) -->
+        <section id="catalog-filter-bar" class="paper-sheet-box filter-bar">
+          <div class="search-box">
+            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="search"
+              id="project-search"
+              class="search-input"
+              placeholder={t.searchPlaceholder}
+            />
+          </div>
+
+          <div class="index-tabs" role="tablist">
+            <button type="button" class="tab-btn active" data-category="all">
+              [ {t.catAll}: {PROJECTS.length} ]
+            </button>
+            {PREFIXES.map((cat) => (
+              <button type="button" class="tab-btn" data-category={cat}>
+                [ {cat}: {categoryCounts[cat]} ]
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <!-- Dedicated Single-Project Mode Banner (shown when viewing a single project's full tab) -->
+        <div
+          id="single-project-back-bar"
+          style="display: none; margin-bottom: 1.5rem;"
+        >
+          <button
+            type="button"
+            id="btn-exit-single-project"
+            class="paper-btn paper-btn-ink"
+          >
+            {t.backToCatalogBtn}
+          </button>
+        </div>
+
+        <div id="empty-filter-state" class="reviews-status-box" style="display: none; margin-bottom: 2rem;">
+          <p>{t.emptyFilterResult}</p>
+        </div>
+
+        <!-- Projects Stack -->
+        <section class="projects-stack" aria-label="Projects Directory">
+          {
+            PROJECTS.map((project, index) => {
+              const loc = project.locales[lang];
+              const hasTranslation = project.availableLangs.includes(lang);
+              const desc = hasTranslation ? loc.description : '';
+              const tagline = hasTranslation ? loc.tagline : (project.locales.en?.tagline || project.locales.uk?.tagline);
+              const features = hasTranslation ? loc.features : (project.locales.en?.features || project.locales.uk?.features || []);
+              const primaryProjectLink = project.primaryLink;
+              const primaryLinkLabel = project.website ? t.officialSite : t.fallbackProjectLink;
+              const cName = projectCountry(project.country);
+              const cCode = project.country.toUpperCase();
+              const reviewUrl = `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(`${project.category}: ${project.name}`)}&body=${encodeURIComponent(t.reviewTemplateBody)}`;
+              const contributeTranslationUrl = `${SITE_REPO_URL}/issues/new?template=submit-translation.yml&title=${encodeURIComponent(`[i18n: ${project.slug}] ${lang.toUpperCase()} translation`)}&project_slug=${encodeURIComponent(project.slug)}`;
+
+              return (
+                <article
+                  id={`project-${project.slug}`}
+                  class="project-dossier"
+                  data-project-card={project.slug}
+                  data-category={project.category}
+                  data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
+                >
+                  <!-- Dossier Index Bar -->
+                  <div class="dossier-top-bar">
+                    <span>ENTRY {String(index + 1).padStart(2, '0')} // {project.category.toUpperCase()}</span>
+                    <span data-rating-top-badge={project.slug}></span>
+                  </div>
+
+                  <!-- Header -->
+                  <div class="dossier-header">
+                    <div class="dossier-identity">
+                      <div class="dossier-icon-frame">
+                        <img src={project.icon} alt={`${project.name} logo`} loading="lazy" decoding="async" width="64" height="64" />
+                      </div>
+
+                      <div>
+                        <div class="dossier-stamps">
+                          <!-- Country Stamp -->
+                          <span class="stamp stamp-country" title={`${t.countryOrigin}: ${cName}`}>
+                            {cCode === 'CN' && (
+                              <svg width="14" height="10" viewBox="0 0 30 20" aria-hidden="true">
+                                <rect width="30" height="20" fill="#DE2910" />
+                                <polygon fill="#FFDE00" points="5,2 6,5 9,5 6.5,6.8 7.5,9.8 5,8 2.5,9.8 3.5,6.8 1,5 4,5" />
+                              </svg>
+                            )}
+                            {cCode === 'US' && (
+                              <svg width="14" height="10" viewBox="0 0 30 20" aria-hidden="true">
+                                <rect width="30" height="20" fill="#B22234" />
+                                <path d="M0 3h30M0 6.1h30M0 9.2h30M0 12.3h30M0 15.4h30M0 18.5h30" stroke="#FFFFFF" stroke-width="1.5" />
+                                <rect width="13" height="10.8" fill="#3C3B6E" />
+                              </svg>
+                            )}
+                            {cCode === 'GLOBAL' && (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                              </svg>
+                            )}
+                            {!['CN', 'US', 'GLOBAL'].includes(cCode) && (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                <line x1="4" y1="22" x2="4" y2="15"></line>
+                              </svg>
+                            )}
+                            {t.countryOrigin}: {cName}{cCode !== 'GLOBAL' ? ` (${cCode})` : ''}
+                          </span>
+
+                          <!-- Clickable source code badges (all mirrors) right next to Country -->
+                          {project.isOpenSource ? (
+                            project.sourceLinks.map((src) => (
+                              <a
+                                href={src.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="stamp stamp-opensource-link"
+                                title={`${t.openSourceBadge} — ${src.label}`}
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                  <polyline points="16 18 22 12 16 6"></polyline>
+                                  <polyline points="8 6 2 12 8 18"></polyline>
+                                </svg>
+                                <span>{t.openSourceBadge} · {src.label}</span>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true">
+                                  <path d="M7 17L17 7"></path>
+                                  <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                              </a>
+                            ))
+                          ) : (
+                            <span class="stamp stamp-proprietary">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="11" rx="1"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                              </svg>
+                              {t.proprietaryBadge}
+                            </span>
+                          )}
+
+                          <span class="stamp stamp-open">{project.license}</span>
+
+                          <!-- Community Rating Stamp (shown only if somebody rated) -->
+                          <span class="stamp stamp-alpha" data-rating-stamp={project.slug} style="display: none;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                            <span data-rating-value={project.slug}></span>
+                          </span>
+                        </div>
+
+                        <h2 class="dossier-title">{project.name}</h2>
+                        <p class="dossier-tagline">{tagline}</p>
+                      </div>
+                    </div>
+
+                    <div class="dossier-links">
+                      <a
+                        href={primaryProjectLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="paper-btn paper-btn-ink"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        {primaryLinkLabel}
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Body -->
+                  <div class="dossier-body">
+                    <!-- Technical Metadata Strip -->
+                    <div class="spec-table">
+                      <div class="spec-cell">
+                        <span class="spec-key">{t.countryOrigin}</span>
+                        <span class="spec-val">{cName}</span>
+                      </div>
+
+                      <div class="spec-cell">
+                        <span class="spec-key">{t.platformsLabel}</span>
+                        <span class="spec-val">{project.platforms.join(' / ')}</span>
+                      </div>
+
+                      <div class="spec-cell">
+                        <span class="spec-key">{t.officialSite}</span>
+                        <span class="spec-val">
+                          <a
+                            href={primaryProjectLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="text-decoration: underline;"
+                          >
+                            {primaryProjectLink.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                      <div class="section-head">
+                        <span class="section-title">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="15 2 15 8 21 8"></polyline>
+                          </svg>
+                          {t.descriptionLabel}
+                        </span>
+                      </div>
+
+                      {hasTranslation ? (
+                        <div>
+                          <div class="description-sheet">{desc}</div>
+
+                          <div class="features-list">
+                            {features.map((feat) => (
+                              <div class="feature-box">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink: 0; margin-top: 2px;">
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>{feat}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div class="no-translation-box">
+                          <div class="no-translation-header">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="12" y1="8" x2="12" y2="12"></line>
+                              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <strong>{t.noTranslationTitle} ({currentLangMeta.label})</strong>
+                          </div>
+                          <p style="font-size: 0.86rem; color: var(--ink-muted); margin: 0.5rem 0 1rem;">
+                            {t.noTranslationDesc}
+                          </p>
+                          <a
+                            href={contributeTranslationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="paper-btn paper-btn-accent"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.82rem;"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                              <path d="M5 12h14"></path>
+                              <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                            {t.helpTranslateBtn}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+
+                    <!-- Screenshots Contact Sheet -->
+                    <div>
+                      <div class="section-head">
+                        <span class="section-title">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <rect x="3" y="3" width="18" height="18" rx="1"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                          </svg>
+                          {t.screenshotsLabel} [{project.screenshots.length}]
+                        </span>
+                      </div>
+
+                      {project.screenshots.length > 0 ? (
+                        <div class="screenshots-grid">
+                          {project.screenshots.map((shotUrl, i) => {
+                            const caption = loc.screenshotCaptions[i] || project.name;
+                            return (
+                              <button
+                                type="button"
+                                class="polaroid-card"
+                                data-lightbox-src={shotUrl}
+                                data-lightbox-caption={caption}
+                                title={t.openScreenshot}
+                              >
+                                <div class="polaroid-img-wrap">
+                                  <img src={shotUrl} alt={caption} loading="lazy" decoding="async" />
+                                </div>
+                                <div class="polaroid-caption">{caption}</div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div class="no-screenshots-sheet">
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="1"></rect>
+                            <line x1="3" y1="3" x2="21" y2="21"></line>
+                          </svg>
+                          <strong>{t.noScreenshotsTitle}</strong>
+                          <p style="font-size: 0.84rem; color: var(--ink-muted); max-width: 48ch;">
+                            {t.noScreenshotsDesc}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <!-- REAL Reviews via GitHub Issues (rating is optional) -->
+                    <div
+                      class="reviews-sheet"
+                      data-real-reviews-panel
+                      data-project-slug={project.slug}
+                      data-issue-number={project.issueThreadNumber}
+                      data-search-term={project.issueSearchTerm}
+                    >
+                      <div class="reviews-top">
+                        <div>
+                          <span class="section-title">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            {t.reviewsTitle}
+                          </span>
+                          <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.2rem;">
+                            {t.reviewsSubtitle}
+                          </p>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                          <button
+                            type="button"
+                            class="paper-btn"
+                            data-open-single-project={project.slug}
+                            style="padding: 0.45rem 0.85rem; font-size: 0.8rem; display: none;"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                              <line x1="9" y1="3" x2="9" y2="21"></line>
+                            </svg>
+                            <span data-open-single-label={project.slug}>{t.openFullProjectTabBtn}</span>
+                          </button>
+
+                          <a
+                            href={reviewUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="paper-btn paper-btn-accent"
+                            data-review-action-btn={project.slug}
+                            style="padding: 0.45rem 0.9rem; font-size: 0.82rem;"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                              <path d="M12 20h9"></path>
+                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                            {t.writeReviewBtn}
+                          </a>
+                        </div>
+                      </div>
+
+                      <div class="bot-note-strip">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink: 0; margin-top: 2px;">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>
+                          {t.reviewsBotNotice}
+                          <span class="soft-hint">{t.ratingHint}</span>
+                        </span>
+                      </div>
+
+                      <div class="real-reviews-container" data-reviews-list>
+                        <div class="reviews-status-box" data-reviews-status>
+                          {t.loadingLiveReviews}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="tags-strip">
+                      {project.tags.map((tag) => (
+                        <span class="tag-item">#{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </section>
+      </div>
+
+      <!-- =========================================================
+           VIEW 1 (TAB 01): DEDICATED "HOW TO ADD PROJECT" GUIDE
+           ========================================================= -->
+      <div id="view-guide" class="tab-view-panel">
+        <section class="paper-sheet-box guide-sheet">
+          <div class="hero-kicker">{t.guideTabKicker}</div>
+          <h1 class="hero-title">{t.guideTabTitle}</h1>
+          <p class="hero-subtitle">{t.guideTabSubtitle}</p>
+
+          <div class="section-head">
+            <span class="section-title">{t.guidePrefixTitle}</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--ink-muted);">
+            {t.guidePrefixDesc}
+          </p>
+
+          <div class="prefix-showcase-grid">
+            <div class="prefix-sample-card">
+              <strong>launcher:</strong> X Minecraft Launcher
+            </div>
+            <div class="prefix-sample-card">
+              <strong>modpack:</strong> All The Mods 9
+            </div>
+            <div class="prefix-sample-card">
+              <strong>mod:</strong> Sodium
+            </div>
+            <div class="prefix-sample-card">
+              <strong>client:</strong> Custom Client
+            </div>
+            <div class="prefix-sample-card">
+              <strong>service:</strong> SkinSystem
+            </div>
+            <div class="prefix-sample-card">
+              <strong>project:</strong> Назва Проєкту
+            </div>
+          </div>
+
+          <div class="section-head">
+            <span class="section-title">{t.guideRulesTitle}</span>
+          </div>
+
+          <div class="guide-rules-grid">
+            <div class="guide-rule-card">
+              <span class="stamp" style="align-self: flex-start;">RULE 01</span>
+              <h3>{t.guideRule1Title}</h3>
+              <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.guideRule1Desc}</p>
+            </div>
+
+            <div class="guide-rule-card">
+              <span class="stamp" style="align-self: flex-start;">RULE 02</span>
+              <h3>{t.guideRule2Title}</h3>
+              <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.guideRule2Desc}</p>
+            </div>
+
+            <div class="guide-rule-card">
+              <span class="stamp" style="align-self: flex-start;">RULE 03</span>
+              <h3>{t.guideRule3Title}</h3>
+              <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.guideRule3Desc}</p>
+            </div>
+
+            <div class="guide-rule-card">
+              <span class="stamp" style="align-self: flex-start;">RULE 04</span>
+              <h3>{t.guideRule4Title}</h3>
+              <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.guideRule4Desc}</p>
+            </div>
+
+            <div class="guide-rule-card">
+              <span class="stamp" style="align-self: flex-start;">RULE 05</span>
+              <h3>{t.guideSectionFieldsTitle}</h3>
+              <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.guideSectionFieldsDesc}</p>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 0.85rem;">
+            <button
+              type="button"
+              class="paper-btn paper-btn-accent"
+              data-switch-view="submit"
+            >
+              {t.guideGoToSubmitBtn}
+            </button>
+            <button
+              type="button"
+              class="paper-btn"
+              data-switch-view="catalog"
+            >
+              ← {t.navCatalog}
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+           VIEW 2 (TAB 02): ANIMATED TUTORIAL & VALIDATOR GENERATOR
+           ========================================================= -->
+      <div id="view-submit" class="tab-view-panel">
+        <section class="paper-sheet-box submit-sheet">
+          <div class="hero-kicker">{t.submitTabKicker}</div>
+          <h1 class="hero-title">{t.submitTabTitle}</h1>
+          <p class="hero-subtitle">{t.submitTabSubtitle}</p>
+
+          <!-- Interactive Animated Tutorial Stage -->
+          <div class="anim-stage-box">
+            <div class="section-head" style="margin-bottom: 0.75rem;">
+              <span class="section-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                {t.animTitle}
+              </span>
+              <span class="stamp" id="anim-step-counter">STEP 01 / 04</span>
+            </div>
+
+            <div class="anim-progress-track">
+              <div class="anim-progress-fill" id="anim-progress-bar"></div>
+            </div>
+
+            <div class="anim-steps-grid">
+              <div class="anim-step-card active" data-anim-step="0">
+                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
+                  {t.animStep1Label}
+                </div>
+                <p style="font-size: 0.83rem;">{t.animStep1Text}</p>
+              </div>
+
+              <div class="anim-step-card" data-anim-step="1">
+                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
+                  {t.animStep2Label}
+                </div>
+                <p style="font-size: 0.83rem;">{t.animStep2Text}</p>
+              </div>
+
+              <div class="anim-step-card" data-anim-step="2">
+                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
+                  {t.animStep3Label}
+                </div>
+                <p style="font-size: 0.83rem;">{t.animStep3Text}</p>
+              </div>
+
+              <div class="anim-step-card" data-anim-step="3">
+                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
+                  {t.animStep4Label}
+                </div>
+                <p style="font-size: 0.83rem;">{t.animStep4Text}</p>
+              </div>
+            </div>
+
+            <div class="anim-terminal-preview">
+              <div>
+                <span class="pulse-dot"></span>
+                <span id="anim-terminal-text">
+                  [BOT CHECK] Title format: "launcher: XMCL" | Rating tag: "[rating](95)" | Anti-XSS: OK
+                </span>
+              </div>
+              <span class="mono" style="opacity: 0.75;">AUTO-LOOP TUTORIAL</span>
+            </div>
+          </div>
+
+          <!-- Live Submission Validator & GitHub Link Builder -->
+          <div class="section-head">
+            <span class="section-title">{t.formTitle}</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--ink-muted); margin-bottom: 1.25rem;">
+            {t.formSubtitle}
+          </p>
+
+          <div class="validator-grid">
+            <div class="form-card">
+              <!-- Prefix picker: stamp buttons instead of a native select -->
+              <div class="field-group">
+                <span class="field-label" id="sub-prefix-label">{t.fieldTypeLabel}</span>
+                <input type="hidden" id="sub-prefix" value="launcher" />
+                <div class="prefix-picker" role="radiogroup" aria-labelledby="sub-prefix-label">
+                  {PREFIXES.map((p, i) => (
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={i === 0 ? 'true' : 'false'}
+                      class={`prefix-pill mono ${i === 0 ? 'active' : ''}`}
+                      data-prefix-value={p}
+                    >
+                      {p}:
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-name">{t.fieldNameLabel}</label>
+                <input
+                  type="text"
+                  id="sub-name"
+                  class="paper-input"
+                  maxlength="80"
+                  autocomplete="off"
+                  placeholder={t.fieldNamePlaceholder}
+                />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-country">{t.fieldCountryLabel}</label>
+                <input
+                  type="text"
+                  id="sub-country"
+                  class="paper-input"
+                  list="country-datalist"
+                  autocomplete="off"
+                  maxlength="60"
+                  placeholder={t.fieldCountryPlaceholder}
+                />
+                <datalist id="country-datalist">
+                  {REGION_VALUES.map((r) => <option value={r} />)}
+                  {countryList.map((c) => <option value={c} />)}
+                </datalist>
+                <div class="region-row">
+                  <span class="region-hint">{t.fieldCountryRegionHint}</span>
+                  {REGION_VALUES.map((r) => (
+                    <button type="button" class="region-pill mono" data-region-value={r}>{r}</button>
+                  ))}
+                </div>
+                <span class="field-error" id="err-country">{t.errCountry}</span>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-site">{t.fieldSiteLabel}</label>
+                <input
+                  type="url"
+                  id="sub-site"
+                  class="paper-input"
+                  placeholder={t.fieldSitePlaceholder}
+                />
+                <span class="field-error" id="err-site">{t.errSite}</span>
+              </div>
+
+              <div class="form-row-2col">
+                <div class="field-group">
+                  <label class="field-label" for="sub-source-host">{t.fieldSourceTypeLabel}</label>
+                  <select id="sub-source-host" class="paper-select">
+                    {SOURCE_HOSTS.map((h) => (
+                      <option value={h.value} data-domain={h.domains}>{h.label} ({h.domains})</option>
+                    ))}
+                    <option value="proprietary">{t.fieldSourceProprietary}</option>
+                  </select>
+                </div>
+
+                <div class="field-group" id="sub-repo-group">
+                  <label class="field-label" for="sub-repo">{t.fieldRepoUrlLabel}</label>
+                  <input
+                    type="url"
+                    id="sub-repo"
+                    class="paper-input"
+                    placeholder={t.fieldRepoUrlPlaceholder}
+                  />
+                </div>
+              </div>
+              <span class="field-error" id="err-repo">{t.errRepoHost}</span>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-icon">{t.fieldIconUrlLabel}</label>
+                <input
+                  type="url"
+                  id="sub-icon"
+                  class="paper-input"
+                  placeholder="https://example.com/icon.svg"
+                />
+                <span class="field-error" id="err-icon">{t.errIcon}</span>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-platforms">{t.fieldPlatformsLabel}</label>
+                <input
+                  type="text"
+                  id="sub-platforms"
+                  class="paper-input"
+                  placeholder={t.fieldPlatformsPlaceholder}
+                />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-screens">{t.fieldScreenshotsLabel}</label>
+                <textarea
+                  id="sub-screens"
+                  class="paper-textarea paper-textarea-sm"
+                  placeholder="https://example.com/screen-1.png&#10;https://example.com/screen-2.jpg"
+                ></textarea>
+                <span class="field-error" id="err-screens" data-template={t.errScreens}></span>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-captions">{t.fieldCaptionsLabel}</label>
+                <textarea
+                  id="sub-captions"
+                  class="paper-textarea paper-textarea-sm"
+                  placeholder={t.fieldCaptionsPlaceholder}
+                ></textarea>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="sub-features">{t.fieldFeaturesLabel}</label>
+                <textarea
+                  id="sub-features"
+                  class="paper-textarea paper-textarea-sm"
+                  placeholder={t.fieldFeaturesPlaceholder}
+                ></textarea>
+              </div>
+
+              <!-- Multi-language description -->
+              <div class="field-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <span class="field-label">{t.fieldDescLabel}</span>
+                  <span id="sub-char-count" class="char-stamp">0 / 2000</span>
+                </div>
+                <span class="region-hint">{t.selectDescLangs}</span>
+
+                <!-- Language selection interactive chips / pills -->
+                <div class="lang-selector-row" role="group" aria-label="Languages selection">
+                  {langList.map((l) => (
+                    <label class={`lang-chip ${l.code === lang ? 'selected' : ''}`} data-lang-toggle-label={l.code}>
+                      <input
+                        type="checkbox"
+                        class="lang-checkbox-hidden"
+                        data-lang-checkbox={l.code}
+                        checked={l.code === lang}
+                      />
+                      <span class="lang-chip-flag">
+                        {l.code === 'uk' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="8" fill="#0057B7" />
+                            <rect y="8" width="24" height="8" fill="#FFD700" />
+                          </svg>
+                        )}
+                        {l.code === 'en' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="16" fill="#012169" />
+                            <path d="M0,0 L24,16 M24,0 L0,16" stroke="#FFF" stroke-width="3.2" />
+                            <path d="M0,0 L24,16 M24,0 L0,16" stroke="#C8102E" stroke-width="1.6" />
+                            <path d="M12,0 V16 M0,8 H24" stroke="#FFF" stroke-width="5" />
+                            <path d="M12,0 V16 M0,8 H24" stroke="#C8102E" stroke-width="3" />
+                          </svg>
+                        )}
+                        {l.code === 'de' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="5.33" fill="#000000" />
+                            <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
+                            <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
+                          </svg>
+                        )}
+                        {l.code === 'pl' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="8" fill="#FFFFFF" />
+                            <rect y="8" width="24" height="8" fill="#DC143C" />
+                          </svg>
+                        )}
+                        {l.code === 'be' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="5.33" fill="#FFFFFF" />
+                            <rect y="5.33" width="24" height="5.33" fill="#D22730" />
+                            <rect y="10.66" width="24" height="5.34" fill="#FFFFFF" />
+                          </svg>
+                        )}
+                        {l.code === 'kk' && (
+                          <svg viewBox="0 0 24 16" width="16" height="11" aria-hidden="true">
+                            <rect width="24" height="16" fill="#00AFCA" />
+                            <circle cx="12" cy="8" r="3.6" fill="#FEC50C" />
+                            <rect x="2" y="2" width="1.8" height="12" fill="#FEC50C" />
+                          </svg>
+                        )}
+                      </span>
+                      <span class="lang-chip-code mono">{l.short}</span>
+                      <span class="lang-chip-label">{l.label}</span>
+                      <span class="lang-chip-badge mono"></span>
+                    </label>
+                  ))}
+                </div>
+
+                <div class="desc-lang-tabs" role="tablist">
+                  {langList.map((l) => (
+                    <button
+                      type="button"
+                      role="tab"
+                      class={`desc-lang-tab mono ${l.code === lang ? 'active' : ''}`}
+                      data-desc-lang={l.code}
+                      title={l.label}
+                      style={l.code === lang ? '' : 'display: none;'}
+                    >
+                      {l.short}
+                      <span class="desc-lang-dot" data-desc-dot={l.code}></span>
+                    </button>
+                  ))}
+                </div>
+                {langList.map((l) => (
+                  <textarea
+                    class="paper-textarea desc-lang-area"
+                    data-desc-area={l.code}
+                    lang={l.code}
+                    maxlength="2000"
+                    placeholder={`[${l.short}] ${t.fieldDescPlaceholder}`}
+                    style={l.code === lang ? '' : 'display: none;'}
+                  ></textarea>
+                ))}
+                <span class="region-hint">
+                  {t.descLangFilled} <strong id="desc-filled-list">—</strong>
+                </span>
+              </div>
+            </div>
+
+            <!-- Live Validation Status & Proceed Links -->
+            <div class="checklist-card">
+              <div>
+                <div class="field-label" style="margin-bottom: 0.35rem;">{t.previewTitleLabel}</div>
+                <div id="preview-issue-title" class="generated-title-box">
+                  launcher: [Назва]
+                </div>
+              </div>
+
+              <div>
+                <div class="field-label" style="margin-bottom: 0.45rem;">{t.validationStatusTitle}</div>
+                <ul class="check-list">
+                  <li id="check-name" class="check-item">
+                    <span class="check-box-mark">[ ]</span>
+                    <span>{t.valCheckName}</span>
+                  </li>
+                  <li id="check-country" class="check-item">
+                    <span class="check-box-mark">[ ]</span>
+                    <span>{t.valCheckCountry}</span>
+                  </li>
+                  <li id="check-link" class="check-item">
+                    <span class="check-box-mark">[ ]</span>
+                    <span>{t.valCheckSourceUrl}</span>
+                  </li>
+                  <li id="check-media" class="check-item">
+                    <span class="check-box-mark">[ ]</span>
+                    <span>{t.valCheckMedia}</span>
+                  </li>
+                  <li id="check-desc" class="check-item">
+                    <span class="check-box-mark">[ ]</span>
+                    <span>{t.valCheckDesc}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.65rem; padding-top: 0.5rem; border-top: 1px dashed var(--rule-line);">
+                <a
+                  id="proceed-github-issue-btn"
+                  href={defaultSubmitIssueUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn paper-btn-accent disabled"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span>{t.proceedGithubIssueBtn}</span>
+                </a>
+
+                <a
+                  href={submitPrUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <circle cx="18" cy="18" r="3"></circle>
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+                    <line x1="6" y1="9" x2="6" y2="21"></line>
+                  </svg>
+                  <span>{t.proceedGithubPrBtn}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer with Support Links (Monobank & YouTube) -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div style="max-width: 62ch; display: flex; flex-direction: column; gap: 0.45rem;">
+          <div class="brand" data-switch-view="catalog">
+            <img src="/favicon.svg" alt="MeowProject" width="28" height="28" />
+            <span class="brand-title" style="font-size: 1.05rem;">MeowProject</span>
+          </div>
+          <p style="font-size: 0.86rem; color: var(--ink-muted);">{t.footerAbout}</p>
+          <p style="font-size: 0.86rem; font-weight: 700;">{t.footerAlphaNote}</p>
+          <p style="font-size: 0.84rem; color: var(--ink-muted);">{t.footerNoAuthNote}</p>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
+          <a
+            href={MONOBANK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="paper-btn"
+          >
+            <MonobankIcon size={15} />
+            {t.supportMonobank}
+          </a>
+
+          <a
+            href={YOUTUBE_JOIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="paper-btn paper-btn-accent"
+          >
+            <YoutubeIcon size={15} />
+            {t.supportYoutube}
+          </a>
+
+          <a
+            href={SITE_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="paper-btn"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            {t.footerSourceLink}
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame">
+        <div class="lightbox-bar">
+          <span id="lightbox-caption" class="mono" style="font-size: 0.82rem; font-weight: 700;"></span>
+          <button type="button" id="lightbox-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div class="lightbox-img-box">
+          <img id="lightbox-img" src="" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script
+      is:inline
+      define:vars={{
+        repo: SITE_REPO,
+        repoUrl: SITE_REPO_URL,
+        emptyReviewsMsg: t.reviewsEmpty,
+        verifiedLabel: t.verifiedViaGithub,
+        ratingLabel: t.ratingLabel,
+        noRatingLabel: t.noRatingYet,
+        openTabLabel: t.openFullProjectTabBtn,
+        uiLang: lang,
+        acceptedCountries,
+      }}
+    >
+      // Anti-XSS & Script Sanitizer Function
+      function sanitizePlainText(input) {
+        if (!input || typeof input !== 'string') return '';
+        return input
+          .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+          .replace(/javascript\s*:/gi, '')
+          .replace(/data\s*:\s*text\/html/gi, '')
+          .replace(/on\w+\s*=/gi, '')
+          .replace(/[<>]/g, '');
+      }
+
+      function hasForbiddenScriptPayload(input) {
+        if (!input || typeof input !== 'string') return false;
+        return /(<script|javascript\s*:|onerror\s*=|onload\s*=|<iframe|<object|<embed)/i.test(input);
+      }
+
+      function setupPage() {
+        // 1. Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        if (themeBtn && !themeBtn.dataset.bound) {
+          themeBtn.dataset.bound = '1';
+          themeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('meow_theme', next);
+          });
+        }
+
+        // 2. Top-Level Views & Dedicated Single-Project View Mode
+        const viewButtons = document.querySelectorAll('[data-view-btn]');
+        const viewPanels = {
+          catalog: document.getElementById('view-catalog'),
+          guide: document.getElementById('view-guide'),
+          submit: document.getElementById('view-submit'),
+        };
+        const filterBar = document.getElementById('catalog-filter-bar');
+        const singleBackBar = document.getElementById('single-project-back-bar');
+        const exitSingleBtn = document.getElementById('btn-exit-single-project');
+        let singleProjectSlug = null;
+
+        function updateSingleProjectView(slug) {
+          singleProjectSlug = slug;
+          const allCards = document.querySelectorAll('[data-project-card]');
+          if (filterBar) filterBar.style.display = slug ? 'none' : '';
+          if (singleBackBar) singleBackBar.style.display = slug ? 'block' : 'none';
+
+          allCards.forEach((card) => {
+            const cSlug = card.getAttribute('data-project-card');
+            if (!slug || cSlug === slug) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // Show all comments when in dedicated single-project tab, or preview 2 in catalog
+          document.querySelectorAll('[data-review-extra-item]').forEach((item) => {
+            const itemSlug = item.getAttribute('data-review-extra-item');
+            item.style.display = slug === itemSlug ? 'flex' : 'none';
+          });
+        }
+
+        function switchView(targetView) {
+          if (!viewPanels[targetView]) return;
+          if (targetView === 'catalog') {
+            updateSingleProjectView(null);
+          }
+          Object.keys(viewPanels).forEach((key) => {
+            if (viewPanels[key]) {
+              viewPanels[key].classList.toggle('active', key === targetView);
+            }
+          });
+          viewButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.getAttribute('data-view-btn') === targetView);
+          });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        viewButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            switchView(btn.getAttribute('data-view-btn'));
+          });
+        });
+
+        document.querySelectorAll('[data-switch-view]').forEach((el) => {
+          el.addEventListener('click', (e) => {
+            const target = el.getAttribute('data-switch-view');
+            if (target) {
+              e.preventDefault();
+              switchView(target);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-open-single-project]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const slug = btn.getAttribute('data-open-single-project');
+            updateSingleProjectView(slug);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+
+        if (exitSingleBtn) {
+          exitSingleBtn.addEventListener('click', () => {
+            updateSingleProjectView(null);
+          });
+        }
+
+        // 3. Animated Tutorial Loop in Tab 02
+        const animSteps = document.querySelectorAll('[data-anim-step]');
+        const animProgress = document.getElementById('anim-progress-bar');
+        const animCounter = document.getElementById('anim-step-counter');
+        const animTerminal = document.getElementById('anim-terminal-text');
+        const terminalLines = [
+          '[STEP 01] Prefix: "launcher: XMCL" | "modpack: ATM9" | "mod: Sodium" | "client: Lunar Client" | langs: UA EN DE PL BY KZ',
+          '[STEP 02] Validator: country exists? | repo domain == platform? | icon .svg/.png/.jpg | screenshots .png/.jpg | Anti-XSS',
+          '[STEP 03] Validation PASSED -> Opening pre-filled GitHub Issue / Pull Request link...',
+          '[STEP 04] GitHub Bot: verified prefix, opened the discussion thread for comments',
+        ];
+        let currentAnimStep = 0;
+
+        function setAnimStep(idx) {
+          currentAnimStep = idx % 4;
+          animSteps.forEach((card, i) => {
+            card.classList.toggle('active', i === currentAnimStep);
+          });
+          if (animProgress) animProgress.style.width = `${(currentAnimStep + 1) * 25}%`;
+          if (animCounter) animCounter.textContent = `STEP 0${currentAnimStep + 1} / 04`;
+          if (animTerminal) animTerminal.textContent = terminalLines[currentAnimStep];
+        }
+
+        animSteps.forEach((card) => {
+          card.addEventListener('click', () => {
+            setAnimStep(Number(card.getAttribute('data-anim-step') || 0));
+          });
+        });
+
+        if (window._meowAnimInterval) clearInterval(window._meowAnimInterval);
+        window._meowAnimInterval = setInterval(() => {
+          setAnimStep(currentAnimStep + 1);
+        }, 3200);
+
+        // 4. Live Submission Validator & GitHub Link Generator (strict checks + Anti-XSS)
+        const subPrefix = document.getElementById('sub-prefix');
+        const subName = document.getElementById('sub-name');
+        const subCountry = document.getElementById('sub-country');
+        const subSourceHost = document.getElementById('sub-source-host');
+        const subSite = document.getElementById('sub-site');
+        const subRepo = document.getElementById('sub-repo');
+        const subRepoGroup = document.getElementById('sub-repo-group');
+        const subPlatforms = document.getElementById('sub-platforms');
+        const subCaptions = document.getElementById('sub-captions');
+        const subFeatures = document.getElementById('sub-features');
+        const subIcon = document.getElementById('sub-icon');
+        const subScreens = document.getElementById('sub-screens');
+        const subCharCount = document.getElementById('sub-char-count');
+        const previewTitle = document.getElementById('preview-issue-title');
+        const proceedBtn = document.getElementById('proceed-github-issue-btn');
+        const descAreas = document.querySelectorAll('[data-desc-area]');
+        const descTabs = document.querySelectorAll('[data-desc-lang]');
+        const filledListEl = document.getElementById('desc-filled-list');
+        const countrySet = new Set(acceptedCountries);
+        let activeDescLang = uiLang;
+
+        const HOST_DOMAINS = {
+          github: ['github.com'],
+          gitlab: ['gitlab.com'],
+          gitea: ['gitea.com', 'gitea.io', 'codeberg.org'],
+          sourceforge: ['sourceforge.net'],
+          gitee: ['gitee.com'],
+          cnb: ['cnb.cool'],
+        };
+
+        function parseHttpsUrl(value) {
+          try {
+            const u = new URL(value);
+            if (u.protocol !== 'https:') return null;
+            if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(u.hostname)) return null;
+            if (u.username || u.password) return null;
+            return u;
+          } catch (_) {
+            return null;
+          }
+        }
+
+        function hostMatches(urlObj, domains) {
+          const h = urlObj.hostname.toLowerCase();
+          return domains.some((d) => h === d || h.endsWith(`.${d}`));
+        }
+
+        function hasExt(urlObj, exts) {
+          const path = decodeURIComponent(urlObj.pathname).toLowerCase();
+          return exts.some((e) => path.endsWith(e));
+        }
+
+        function showError(id, show, text) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (typeof text === 'string') el.textContent = text;
+          el.classList.toggle('visible', !!show);
+        }
+
+        function setCheckState(id, ok) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.classList.toggle('valid', ok);
+          const box = el.querySelector('.check-box-mark');
+          if (box) box.textContent = ok ? '[x]' : '[ ]';
+        }
+
+        // Prefix stamp picker
+        document.querySelectorAll('[data-prefix-value]').forEach((pill) => {
+          pill.addEventListener('click', () => {
+            document.querySelectorAll('[data-prefix-value]').forEach((p) => {
+              p.classList.remove('active');
+              p.setAttribute('aria-checked', 'false');
+            });
+            pill.classList.add('active');
+            pill.setAttribute('aria-checked', 'true');
+            if (subPrefix) subPrefix.value = pill.getAttribute('data-prefix-value') || 'project';
+            validateSubmissionForm();
+          });
+        });
+
+        // Region quick select
+        document.querySelectorAll('[data-region-value]').forEach((pill) => {
+          pill.addEventListener('click', () => {
+            if (subCountry) subCountry.value = pill.getAttribute('data-region-value') || '';
+            validateSubmissionForm();
+          });
+        });
+
+        // Description language toggles & tabs
+        const langCheckboxes = document.querySelectorAll('[data-lang-checkbox]');
+        function updateActiveLanguages() {
+          let firstChecked = null;
+          langCheckboxes.forEach((cb) => {
+            const code = cb.getAttribute('data-lang-checkbox');
+            const isChecked = cb.checked;
+            const label = document.querySelector(`[data-lang-toggle-label="${code}"]`);
+            if (label) label.classList.toggle('selected', isChecked);
+            const tab = document.querySelector(`[data-desc-lang="${code}"]`);
+            if (tab) tab.style.display = isChecked ? '' : 'none';
+            if (isChecked && !firstChecked) firstChecked = code;
+          });
+
+          // Ensure activeDescLang is still among checked ones
+          const activeCb = document.querySelector(`[data-lang-checkbox="${activeDescLang}"]`);
+          if (!activeCb || !activeCb.checked) {
+            activeDescLang = firstChecked || uiLang;
+          }
+
+          descTabs.forEach((x) => x.classList.toggle('active', x.getAttribute('data-desc-lang') === activeDescLang));
+          descAreas.forEach((a) => {
+            const code = a.getAttribute('data-desc-area');
+            const cb = document.querySelector(`[data-lang-checkbox="${code}"]`);
+            const isVisible = cb && cb.checked && code === activeDescLang;
+            a.style.display = isVisible ? '' : 'none';
+          });
+          validateSubmissionForm();
+        }
+
+        langCheckboxes.forEach((cb) => {
+          cb.addEventListener('change', updateActiveLanguages);
+        });
+
+        descTabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            activeDescLang = tab.getAttribute('data-desc-lang');
+            descTabs.forEach((x) => x.classList.toggle('active', x === tab));
+            descAreas.forEach((a) => {
+              const code = a.getAttribute('data-desc-area');
+              const cb = document.querySelector(`[data-lang-checkbox="${code}"]`);
+              a.style.display = (cb && cb.checked && code === activeDescLang) ? '' : 'none';
+            });
+            validateSubmissionForm();
+          });
+        });
+
+        function validateSubmissionForm() {
+          if (!subPrefix || !subName || !subCountry || !subSite) return;
+          const prefix = sanitizePlainText(subPrefix.value);
+          const name = sanitizePlainText(subName.value.trim());
+          const countryRaw = subCountry.value.trim();
+          const country = sanitizePlainText(countryRaw);
+          const host = subSourceHost ? subSourceHost.value : 'proprietary';
+          const isProprietary = host === 'proprietary';
+          const siteRaw = subSite.value.trim();
+          const repoRaw = subRepo ? subRepo.value.trim() : '';
+          const iconRaw = subIcon ? subIcon.value.trim() : '';
+          const screensRaw = subScreens ? subScreens.value.trim() : '';
+          const platformsRaw = subPlatforms ? subPlatforms.value.trim() : '';
+          const captionsRaw = subCaptions ? subCaptions.value.trim() : '';
+          const featuresRaw = subFeatures ? subFeatures.value.trim() : '';
+
+          if (subRepoGroup) subRepoGroup.style.visibility = isProprietary ? 'hidden' : 'visible';
+
+          // Title preview
+          if (previewTitle) previewTitle.textContent = `${prefix}: ${name || '[...]'}`;
+
+          // Descriptions per language (only from enabled/checked languages)
+          const descs = {};
+          descAreas.forEach((a) => {
+            const code = a.getAttribute('data-desc-area');
+            const cb = document.querySelector(`[data-lang-checkbox="${code}"]`);
+            if (cb && cb.checked) {
+              descs[code] = a.value.trim();
+            } else {
+              descs[code] = '';
+            }
+            const dot = document.querySelector(`[data-desc-dot="${code}"]`);
+            if (dot) dot.classList.toggle('filled', descs[code].length >= 20);
+          });
+          const activeLen = (descs[activeDescLang] || '').length;
+          if (subCharCount) subCharCount.textContent = `${activeLen} / 2000`;
+          const filledLangs = Object.keys(descs).filter((k) => descs[k].length > 0);
+          if (filledListEl) filledListEl.textContent = filledLangs.length ? filledLangs.map((x) => x.toUpperCase()).join(', ') : '—';
+
+          const allText = [name, countryRaw, siteRaw, repoRaw, iconRaw, screensRaw, platformsRaw, captionsRaw, featuresRaw, ...Object.values(descs)];
+          const noScripts = allText.every((v) => !hasForbiddenScriptPayload(v));
+
+          // 1. Name
+          const okName = name.length >= 2 && noScripts;
+
+          // 2. Country: real country (any of 6 languages / ISO) or region
+          const okCountry = countrySet.has(country.toLowerCase());
+          showError('err-country', country.length > 0 && !okCountry);
+
+          // 3. Website + repository domain must match the selected host
+          const siteUrl = parseHttpsUrl(siteRaw);
+          showError('err-site', siteRaw.length > 0 && !siteUrl);
+          let okRepo = true;
+          if (!isProprietary) {
+            const repoUrl = parseHttpsUrl(repoRaw);
+            const domains = HOST_DOMAINS[host] || [];
+            okRepo = !!repoUrl && hostMatches(repoUrl, domains) && repoUrl.pathname.length > 1;
+            const errTpl = document.getElementById('err-repo');
+            if (errTpl && !errTpl.dataset.tpl) errTpl.dataset.tpl = errTpl.textContent;
+            showError('err-repo', repoRaw.length > 0 && !okRepo, (errTpl?.dataset.tpl || '').replace('{host}', domains.join(' / ')));
+          } else {
+            showError('err-repo', false);
+          }
+          const okLink = !!siteUrl && okRepo && noScripts;
+
+          // 4. Media: icon (.svg/.png/.jpg) optional, screenshots (.png/.jpg) optional
+          let okIcon = true;
+          if (iconRaw) {
+            const iu = parseHttpsUrl(iconRaw);
+            okIcon = !!iu && hasExt(iu, ['.svg', '.png', '.jpg', '.jpeg']);
+          }
+          showError('err-icon', !okIcon);
+
+          const screenList = screensRaw ? screensRaw.split(/[\s,]+/).filter(Boolean) : [];
+          const badScreens = screenList.filter((s) => {
+            const su = parseHttpsUrl(s);
+            return !su || !hasExt(su, ['.png', '.jpg', '.jpeg']);
+          });
+          const errScreensEl = document.getElementById('err-screens');
+          showError(
+            'err-screens',
+            badScreens.length > 0,
+            (errScreensEl?.getAttribute('data-template') || '').replace('{list}', badScreens.slice(0, 3).map(sanitizePlainText).join(', ')),
+          );
+          const okMedia = okIcon && badScreens.length === 0 && screenList.length <= 10;
+
+          // 5. Descriptions: at least one language 20–2000 chars, none over 2000
+          const okDesc =
+            filledLangs.length > 0 &&
+            filledLangs.every((k) => descs[k].length >= 20 && descs[k].length <= 2000) &&
+            noScripts;
+
+          setCheckState('check-name', okName);
+          setCheckState('check-country', okCountry);
+          setCheckState('check-link', okLink);
+          setCheckState('check-media', okMedia);
+          setCheckState('check-desc', okDesc);
+
+          const allValid = okName && okCountry && okLink && okMedia && okDesc;
+          if (!proceedBtn) return;
+          proceedBtn.classList.toggle('disabled', !allValid);
+          proceedBtn.setAttribute('aria-disabled', allValid ? 'false' : 'true');
+          if (!allValid) return;
+
+          const descSections = filledLangs.flatMap((k) => [
+            `#### ${k.toUpperCase()}`,
+            sanitizePlainText(descs[k]),
+            '',
+          ]);
+          const sourceLine = isProprietary
+            ? '- Proprietary (closed source)'
+            : `- ${host}: ${repoRaw}`;
+          const issueBody = [
+            '### Type & Name',
+            `\`${prefix}: ${name}\``,
+            '',
+            '### Country',
+            country,
+            '',
+            '### Platforms',
+            platformsRaw || 'Windows, macOS, Linux',
+            '',
+            '### Website',
+            siteRaw,
+            '',
+            '### Source code',
+            sourceLine,
+            '',
+            '### Icon',
+            iconRaw || '—',
+            '',
+            '### Screenshots',
+            screenList.length ? screenList.map((s) => `- ${s}`).join('\n') : '—',
+            '',
+            '### Screenshot Captions',
+            captionsRaw ? captionsRaw.split('\n').filter(Boolean).map((c) => `- ${c.trim()}`).join('\n') : '—',
+            '',
+            '### Key Features',
+            featuresRaw ? featuresRaw.split('\n').filter(Boolean).map((f) => `- ${f.trim()}`).join('\n') : '—',
+            '',
+            '### Description',
+            ...descSections,
+          ].join('\n');
+
+          proceedBtn.href = `${repoUrl}/issues/new?title=${encodeURIComponent(`${prefix}: ${name}`)}&body=${encodeURIComponent(issueBody)}`;
+        }
+
+        [subName, subCountry, subSourceHost, subSite, subRepo, subIcon, subScreens, subPlatforms, subCaptions, subFeatures, ...descAreas].forEach((el) => {
+          if (el) {
+            el.addEventListener('input', validateSubmissionForm);
+            el.addEventListener('change', validateSubmissionForm);
+          }
+        });
+        validateSubmissionForm();
+
+        // 6. Category & Search Filtering
+        const searchInput = document.getElementById('project-search');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const cards = document.querySelectorAll('.project-dossier');
+        const emptyState = document.getElementById('empty-filter-state');
+        let activeCategory = 'all';
+
+        function filterProjects() {
+          if (singleProjectSlug) return;
+          const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+          let shown = 0;
+          cards.forEach((card) => {
+            const cat = card.getAttribute('data-category');
+            const hay = card.getAttribute('data-search') || '';
+            const okCat = activeCategory === 'all' || cat === activeCategory;
+            const okQuery = !q || hay.includes(q);
+            if (okCat && okQuery) {
+              card.style.display = '';
+              shown++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          if (emptyState) {
+            emptyState.style.display = shown === 0 ? 'block' : 'none';
+          }
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener('input', filterProjects);
+        }
+
+        tabButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            tabButtons.forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeCategory = btn.getAttribute('data-category') || 'all';
+            filterProjects();
+          });
+        });
+
+        // 7. Lightbox
+        const modal = document.getElementById('lightbox-modal');
+        const modalImg = document.getElementById('lightbox-img');
+        const modalCap = document.getElementById('lightbox-caption');
+        const modalClose = document.getElementById('lightbox-close');
+
+        document.querySelectorAll('[data-lightbox-src]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const src = btn.getAttribute('data-lightbox-src');
+            const cap = btn.getAttribute('data-lightbox-caption');
+            if (modal && modalImg && src) {
+              modalImg.src = src;
+              modalImg.alt = cap || '';
+              if (modalCap) modalCap.textContent = cap || '';
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+            }
+          });
+        });
+
+        function closeModal() {
+          if (modal) {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+          }
+        }
+
+        if (modalClose) modalClose.addEventListener('click', closeModal);
+        if (modal) {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+          });
+        }
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeModal();
+        });
+
+        // 8. Real GitHub Issues & [rating](0-100) Parser
+        async function loadRealReviews() {
+          const panels = document.querySelectorAll('[data-real-reviews-panel]');
+          if (!panels.length) return;
+
+          let allIssues = null;
+          const cacheKey = `meow_gh_issues_${repo}`;
+
+          try {
+            const cached = sessionStorage.getItem(cacheKey);
+            if (cached) {
+              allIssues = JSON.parse(cached);
+            } else {
+              const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=all&per_page=50`, {
+                headers: { Accept: 'application/vnd.github.v3+json' },
+              });
+              if (res.ok) {
+                allIssues = await res.json();
+                sessionStorage.setItem(cacheKey, JSON.stringify(allIssues));
+              }
+            }
+          } catch (_) {
+            allIssues = null;
+          }
+
+          const ratingRegex = /\[rating\]\(\s*(100|[1-9]?\d)\s*\)/i;
+
+          for (const panel of panels) {
+            const slug = panel.getAttribute('data-project-slug');
+            const listEl = panel.querySelector('[data-reviews-list]');
+            const statusEl = panel.querySelector('[data-reviews-status]');
+            const reviewBtn = panel.querySelector(`[data-review-action-btn="${slug}"]`);
+            const openSingleLabel = panel.querySelector(`[data-open-single-label="${slug}"]`);
+            const ratingValueEl = document.querySelector(`[data-rating-value="${slug}"]`);
+            const ratingTopBadgeEl = document.querySelector(`[data-rating-top-badge="${slug}"]`);
+            const issueNumber = Number(panel.getAttribute('data-issue-number'));
+            const searchTerm = (panel.getAttribute('data-search-term') || '').toLowerCase();
+
+            if (!listEl) continue;
+
+            const collectedItems = [];
+            const ratings = [];
+
+            if (Array.isArray(allIssues)) {
+              const matchingIssues = allIssues.filter(
+                (iss) =>
+                  !iss.pull_request &&
+                  (iss.number === issueNumber ||
+                    (iss.title && iss.title.toLowerCase().includes(searchTerm)))
+              );
+
+              if (matchingIssues.length > 0 && reviewBtn) {
+                reviewBtn.dataset.hasBotIssue = '1';
+                reviewBtn.href = `${matchingIssues[0].html_url}#issuecomment-new`;
+              }
+
+              for (const iss of matchingIssues) {
+                if (iss.comments > 0 && iss.comments_url) {
+                  try {
+                    const cKey = `meow_gh_comments_${iss.number}`;
+                    let comments = null;
+                    const cachedC = sessionStorage.getItem(cKey);
+                    if (cachedC) {
+                      comments = JSON.parse(cachedC);
+                    } else {
+                      const cRes = await fetch(iss.comments_url, {
+                        headers: { Accept: 'application/vnd.github.v3+json' },
+                      });
+                      if (cRes.ok) {
+                        comments = await cRes.json();
+                        sessionStorage.setItem(cKey, JSON.stringify(comments));
+                      }
+                    }
+
+                    if (Array.isArray(comments)) {
+                      comments.forEach((c) => {
+                        const rawBody = sanitizePlainText(c.body || '');
+                        const match = rawBody.match(ratingRegex);
+                        let score = null;
+                        if (match) {
+                          score = Math.max(0, Math.min(100, Number(match[1])));
+                          ratings.push(score);
+                        }
+                        const cleanedBody = rawBody.replace(ratingRegex, '').trim();
+
+                        collectedItems.push({
+                          author: sanitizePlainText(c.user?.login || 'github-user'),
+                          avatar: c.user?.avatar_url || '',
+                          date: sanitizePlainText((c.created_at || '').slice(0, 10)),
+                          body: cleanedBody,
+                          score,
+                          url: c.html_url || iss.html_url,
+                          issueNum: iss.number,
+                        });
+                      });
+                    }
+                  } catch (_) {
+                    // ignore comment fetch error
+                  }
+                }
+              }
+            }
+
+            // Update Project Average Rating (0-100) — only if somebody added the optional tag
+            if (ratings.length > 0) {
+              const avg = Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length);
+              const scoreText = `${ratingLabel}: ${avg} / 100 (${ratings.length})`;
+              const ratingStampEl = document.querySelector(`[data-rating-stamp="${slug}"]`);
+              if (ratingValueEl) ratingValueEl.textContent = scoreText;
+              if (ratingStampEl) ratingStampEl.style.display = '';
+              if (ratingTopBadgeEl) ratingTopBadgeEl.textContent = scoreText;
+            }
+
+            // Dedicated project tab appears only when there are more than 2 comments
+            const openSingleBtn = panel.querySelector(`[data-open-single-project="${slug}"]`);
+            if (openSingleBtn) openSingleBtn.style.display = collectedItems.length > 2 ? '' : 'none';
+            if (openSingleLabel && collectedItems.length > 2) {
+              openSingleLabel.textContent = `${openTabLabel} (${collectedItems.length})`;
+            }
+
+            if (collectedItems.length === 0) {
+              if (statusEl) {
+                statusEl.textContent = emptyReviewsMsg;
+              }
+            } else {
+              listEl.innerHTML = '';
+              collectedItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'review-item';
+                if (idx >= 2) {
+                  // When > 2 comments, hide extras in general catalog view and show them in the dedicated project tab
+                  card.setAttribute('data-review-extra-item', slug);
+                  if (singleProjectSlug !== slug) {
+                    card.style.display = 'none';
+                  }
+                }
+
+                const head = document.createElement('div');
+                head.className = 'review-item-head';
+
+                const userLink = document.createElement('a');
+                userLink.className = 'review-user';
+                userLink.href = item.url;
+                userLink.target = '_blank';
+                userLink.rel = 'noopener noreferrer';
+
+                if (item.avatar && /^https:\/\/avatars\.githubusercontent\.com\//.test(item.avatar)) {
+                  const img = document.createElement('img');
+                  img.src = item.avatar;
+                  img.alt = item.author;
+                  userLink.appendChild(img);
+                }
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = `@${item.author}`;
+                userLink.appendChild(nameSpan);
+
+                const rightMeta = document.createElement('div');
+                rightMeta.style.display = 'flex';
+                rightMeta.style.alignItems = 'center';
+                rightMeta.style.gap = '0.45rem';
+
+                if (item.score !== null) {
+                  const scoreBadge = document.createElement('span');
+                  scoreBadge.className = 'stamp stamp-alpha';
+                  scoreBadge.textContent = `[rating: ${item.score}/100]`;
+                  rightMeta.appendChild(scoreBadge);
+                }
+
+                const dateSpan = document.createElement('span');
+                dateSpan.textContent = `${verifiedLabel} #${item.issueNum} · ${item.date}`;
+                rightMeta.appendChild(dateSpan);
+
+                head.appendChild(userLink);
+                head.appendChild(rightMeta);
+
+                const bodyP = document.createElement('p');
+                bodyP.className = 'review-body';
+                bodyP.textContent = item.body;
+
+                card.appendChild(head);
+                card.appendChild(bodyP);
+                listEl.appendChild(card);
+              });
+            }
+          }
+        }
+
+        loadRealReviews();
+      }
+
+      setupPage();
+      document.addEventListener('astro:after-swap', setupPage);
+    </script>
+  </body>
+</html>

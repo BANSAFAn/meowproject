@@ -1,0 +1,19 @@
+---
+import CatalogPage from '../../components/CatalogPage.astro';
+import { LANGUAGES, type LangCode } from '../../i18n/translations';
+
+export function getStaticPaths() {
+  return (Object.keys(LANGUAGES) as LangCode[]).map((lang) => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+interface Props {
+  lang: LangCode;
+}
+
+const { lang } = Astro.props;
+---
+
+<CatalogPage lang={lang} />

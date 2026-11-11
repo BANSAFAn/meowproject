@@ -1,0 +1,15 @@
+{
+  "tagline": "Legendärer, leichtgewichtiger JavaFX-Launcher mit über 10 Jahren Entwicklungsgeschichte auf GitHub, CNB und Gitee",
+  "description": "Hello Minecraft! Launcher (HMCL) ist einer der bekanntesten und stabilsten Open-Source-Minecraft-Launcher (GPLv3), entwickelt vom chinesischen Entwickler huanghongxun und der HMCL-dev-Community. Der Quellcode wird offiziell auf GitHub, CNB und Gitee gepflegt und läuft auf nahezu jedem Betriebssystem und jeder Prozessorarchitektur (Windows, Linux, macOS, einschließlich ARM64).\n\nDa HMCL auf JavaFX basiert, wird er als kompakte, eigenständige Datei ausgeliefert, startet extrem schnell und benötigt nur minimalen Arbeitsspeicher. Er unterstützt die automatische Installation von Forge, NeoForge, Fabric, Quilt, LiteLoader und OptiFine sowie den Import und Export von CurseForge-, Modrinth- und MultiMC-Modpacks.",
+  "features": [
+    "Quellcode gleichzeitig verfügbar auf GitHub, CNB und Gitee",
+    "Extrem leichtgewichtige JavaFX-Anwendung mit minimalem RAM-Verbrauch",
+    "Breite Plattformunterstützung: Windows, Linux, macOS (x86_64, ARM64, RISC-V)",
+    "Import & Export von CurseForge-, Modrinth-, MultiMC- und MCBBS-Modpacks"
+  ],
+  "screenshotCaptions": [
+    "Hauptfenster von Hello Minecraft! Launcher (HMCL)",
+    "Automatischer Installer für Spielversionen, Forge, Fabric, Quilt und OptiFine",
+    "Personalisierungseinstellungen, Farbschemata und Launcher-Darstellung"
+  ]
+}

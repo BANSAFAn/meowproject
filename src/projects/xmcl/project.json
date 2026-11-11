@@ -1,0 +1,44 @@
+{
+  "slug": "xmcl",
+  "name": "X Minecraft Launcher (XMCL)",
+  "shortName": "XMCL",
+  "category": "launcher",
+  "icon": "/projects/xmcl/icon.svg",
+  "country": "CN",
+  "developer": "Voxelum (ci010)",
+  "license": "MIT",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux",
+    "Steam Deck",
+    "Flathub",
+    "Gamepad"
+  ],
+  "website": "https://xmcl.app",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/Voxelum/x-minecraft-launcher"
+    }
+  ],
+  "issueThreadNumber": 1,
+  "issueSearchTerm": "XMCL",
+  "tags": [
+    "Minecraft Launcher",
+    "Steam Deck",
+    "Gamepad",
+    "Flathub",
+    "Modrinth",
+    "CurseForge",
+    "Hardlinks",
+    "P2P"
+  ],
+  "screenshots": [
+    "/projects/xmcl/screen-1.png",
+    "/projects/xmcl/screen-2.png",
+    "/projects/xmcl/screen-3.png",
+    "/projects/xmcl/screen-4.png"
+  ]
+}

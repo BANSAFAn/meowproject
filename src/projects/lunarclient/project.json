@@ -1,0 +1,32 @@
+{
+  "slug": "lunarclient",
+  "name": "Lunar Client",
+  "shortName": "Lunar Client",
+  "category": "client",
+  "icon": "/projects/lunarclient/icon.webp",
+  "country": "US",
+  "developer": "Moonsworth, LLC",
+  "license": "Proprietary",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://www.lunarclient.com",
+  "sourceLinks": [],
+  "issueThreadNumber": 5,
+  "issueSearchTerm": "Lunar Client",
+  "tags": [
+    "Client",
+    "PvP",
+    "FPS Boost",
+    "65+ Built-in Mods",
+    "Fabric Support",
+    "Proprietary"
+  ],
+  "screenshots": [
+    "/projects/lunarclient/screen-1.png",
+    "/projects/lunarclient/screen-2.png",
+    "/projects/lunarclient/screen-3.png"
+  ]
+}

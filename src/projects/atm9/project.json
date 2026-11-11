@@ -1,0 +1,38 @@
+{
+  "slug": "atm9",
+  "name": "All the Mods 9 (ATM9)",
+  "shortName": "ATM9",
+  "category": "modpack",
+  "icon": "/projects/atm9/icon.png",
+  "country": "GLOBAL",
+  "developer": "ATMTeam (CurseForge)",
+  "license": "All Rights Reserved / Open Repo",
+  "platforms": [
+    "CurseForge",
+    "Minecraft 1.20.1",
+    "Forge"
+  ],
+  "website": "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/AllTheMods/ATM-9"
+    }
+  ],
+  "issueThreadNumber": 3,
+  "issueSearchTerm": "ATM9",
+  "tags": [
+    "Modpack",
+    "CurseForge",
+    "Forge 1.20.1",
+    "Quests",
+    "Tech & Magic",
+    "ATM Star",
+    "GregTech"
+  ],
+  "screenshots": [
+    "/projects/atm9/screen-1.png",
+    "/projects/atm9/screen-2.png"
+  ]
+}

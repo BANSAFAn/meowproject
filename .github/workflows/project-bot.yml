@@ -1,0 +1,174 @@
+name: MeowProject Issue & PR Automation Bot
+
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  handle_issue_or_comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Process Issue or Comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            if (context.eventName === 'issues') {
+              const issue = context.payload.issue;
+              const title = (issue.title || '').trim();
+              const body = (issue.body || '').trim();
+              const lowerTitle = title.toLowerCase();
+
+              // -------------------------------------------------------------
+              // 1. Translation Contribution Issue: [i18n: <slug>] or translate: <slug>
+              // -------------------------------------------------------------
+              const i18nMatch = lowerTitle.match(/^(?:\[i18n:\s*([a-z0-9_-]+)\]|translate:\s*([a-z0-9_-]+))/i);
+              if (i18nMatch) {
+                const slug = (i18nMatch[1] || i18nMatch[2]).toLowerCase().trim();
+                const projectDir = path.join(process.env.GITHUB_WORKSPACE, 'src', 'projects', slug);
+
+                if (!fs.existsSync(projectDir)) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: `### [MeowProject Bot] Project Not Found\n\nCould not find a project with slug \`${slug}\` in \`src/projects/\`. Please check the project slug.`
+                  });
+                  return;
+                }
+
+                // Parse translation languages from body (format: #### UK / #### EN / #### DE / #### PL / #### BE / #### KZ)
+                const langRegex = /####\s+([A-Z]{2})\s*\n([\s\S]*?)(?=(?:####\s+[A-Z]{2}|$))/gi;
+                let match;
+                const submittedTranslations = {};
+                while ((match = langRegex.exec(body)) !== null) {
+                  const langCode = match[1].toLowerCase();
+                  const descText = match[2].trim();
+                  if (descText.length >= 20) {
+                    submittedTranslations[langCode] = descText;
+                  }
+                }
+
+                const detectedCodes = Object.keys(submittedTranslations);
+                if (detectedCodes.length === 0) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: `### [MeowProject Bot] Translation Template Needed\n\nTo submit translations, please structure your description using language headers like:\n\n\`\`\`markdown\n#### EN\nYour English description here (at least 20 chars)...\n\n#### DE\nIhre deutsche Beschreibung hier...\n\`\`\``
+                  });
+                  return;
+                }
+
+                // If opened, label and create automated Pull Request
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  labels: ['i18n', 'automated-pr']
+                });
+
+                if (context.payload.action === 'opened') {
+                  // Write updated/created files
+                  const localesDir = path.join(projectDir, 'locales');
+                  if (!fs.existsSync(localesDir)) fs.mkdirSync(localesDir, { recursive: true });
+
+                  for (const [code, desc] of Object.entries(submittedTranslations)) {
+                    const filePath = path.join(localesDir, `${code}.json`);
+                    let existing = {
+                      tagline: '',
+                      description: desc,
+                      features: [],
+                      screenshotCaptions: []
+                    };
+                    if (fs.existsSync(filePath)) {
+                      try {
+                        const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+                        existing = { ...existing, ...parsed, description: desc };
+                      } catch (_) {}
+                    }
+                    fs.writeFileSync(filePath, JSON.stringify(existing, null, 2) + '\n', 'utf8');
+                  }
+
+                  // Git commit & PR creation
+                  const branchName = `i18n-${slug}-issue-${issue.number}`;
+                  const exec = require('child_process').execSync;
+                  exec(`git config user.name "github-actions[bot]"`);
+                  exec(`git config user.email "github-actions[bot]@users.noreply.github.com"`);
+                  exec(`git checkout -b ${branchName}`);
+                  exec(`git add src/projects/${slug}/locales/`);
+                  exec(`git commit -m "i18n: add/update ${detectedCodes.join(', ')} translation for ${slug} (#${issue.number})"`);
+                  exec(`git push origin ${branchName}`);
+
+                  const pr = await github.rest.pulls.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title: `i18n: ${slug} translations (${detectedCodes.join(', ')})`,
+                    head: branchName,
+                    base: 'main',
+                    body: `Automated PR generated from translation submission issue #${issue.number}.\n\nLanguages updated: \`${detectedCodes.join(', ')}\`\nCloses #${issue.number}`
+                  });
+
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: `### [MeowProject Bot] Automated PR Created!\n\nThank you for contributing translations for **${slug}**! 🎉\n\n- **Target Languages:** \`${detectedCodes.join(', ')}\`\n- **Pull Request:** #${pr.data.number} (${pr.data.html_url})\n\nOnce reviewed and merged, the site will automatically update!`
+                  });
+                }
+                return;
+              }
+
+              // -------------------------------------------------------------
+              // 2. New Project Submission Issue
+              // -------------------------------------------------------------
+              const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
+              const matchedPrefix = validPrefixes.find((p) => lowerTitle.startsWith(p));
+
+              if (!matchedPrefix) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`service: Name\`\n- \`website: Name\`\n- \`project: Name\``
+                });
+                return;
+              }
+
+              const typeLabel = matchedPrefix.replace(':', '');
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: [typeLabel, 'verified-submission']
+              });
+
+              if (context.payload.action === 'opened') {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `### [MeowProject Bot] Submission Verified (${matchedPrefix})\n\n- **Title Format:** Confirmed (\`${title}\`)\n- **Body Length:** ${body.length} characters (limit up to 2,000 chars)\n- **Community Reviews & Ratings:** Community members can leave feedback in comments below. Adding \`[rating](0-100)\` at the end (e.g. \`[rating](95)\`) is completely optional.`
+                });
+              }
+            }
