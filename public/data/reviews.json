@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T13:54:35.743Z",
+  "updatedAt": "2026-11-11T13:54:50.093Z",
   "projects": {
     "xmcl": {
       "issueNumber": 1,
@@ -59,36 +59,6 @@
           "issueNum": 1
         },
         {
-          "id": 6797706655,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797706655",
-          "issueNum": 1
-        },
-        {
-          "id": 6797707377,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797707377",
-          "issueNum": 1
-        },
-        {
-          "id": 6797708964,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797708964",
-          "issueNum": 1
-        },
-        {
           "id": 6797709419,
           "author": "github-actions[bot]",
           "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
@@ -99,13 +69,43 @@
           "issueNum": 1
         },
         {
-          "id": 6797710245,
+          "id": 6797712437,
           "author": "github-actions[bot]",
           "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
           "date": "2026-11-11",
           "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
           "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797710245",
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797712437",
+          "issueNum": 1
+        },
+        {
+          "id": 6797714148,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797714148",
+          "issueNum": 1
+        },
+        {
+          "id": 6797715503,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797715503",
+          "issueNum": 1
+        },
+        {
+          "id": 6797716327,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6797716327",
           "issueNum": 1
         }
       ]
@@ -115,7 +115,7 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/2",
       "averageRating": 100,
       "totalRatings": 1,
-      "commentsCount": 27,
+      "commentsCount": 31,
       "reviews": [
         {
           "id": 6791529463,
@@ -385,6 +385,46 @@
           "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
           "score": null,
           "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6797710061",
+          "issueNum": 2
+        },
+        {
+          "id": 6797712140,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6797712140",
+          "issueNum": 2
+        },
+        {
+          "id": 6797713884,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6797713884",
+          "issueNum": 2
+        },
+        {
+          "id": 6797715217,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6797715217",
+          "issueNum": 2
+        },
+        {
+          "id": 6797715986,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6797715986",
           "issueNum": 2
         }
       ]
