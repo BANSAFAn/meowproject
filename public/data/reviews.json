@@ -77,41 +77,10 @@
     "fluenlauncher": {
       "issueNumber": 6,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/6",
-      "averageRating": 95,
-      "totalRatings": 1,
-      "commentsCount": 3,
-      "reviews": [
-        {
-          "id": 6792209136,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Submission Verified (launcher:)\n\n- **Title Format:** Confirmed (`launcher: FluenLauncher`)\n- **Body Length:** 1119 characters (limit up to 2,000 chars)\n- **Community Reviews & Ratings:** Community members can leave feedback in comments below. Adding `[rating](0-100)` at the end (e.g. ``) is completely optional.",
-          "score": 95,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/6#issuecomment-6792209136",
-          "issueNum": 6
-        },
-        {
-          "id": 6792551962,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **FluenLauncher** to MeowProject!\n\n- **Project:** **FluenLauncher** (`launcher`)\n- **Country:** Asia\n- **Platforms:** Windows 10, Windows 11\n- **Pull Request:**  ([View Pull Request](branch `add-project-fluenlauncher-issue-6`))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | 123 chars | ✅ **Included in PR** |\n| 🇬🇧 **EN** (English) | 137 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | 138 chars | ✅ **Included in PR** |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (branch `add-project-fluenlauncher-issue-6`). Once merged into `main`, the project will automatically appear on the live website!",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/6#issuecomment-6792551962",
-          "issueNum": 6
-        },
-        {
-          "id": 6792633254,
-          "author": "github-actions[bot]",
-          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
-          "date": "2026-11-11",
-          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **FluenLauncher** to MeowProject!\n\n- **Project:** **FluenLauncher** (`launcher`)\n- **Country:** Asia\n- **Platforms:** Windows 10, Windows 11\n- **Pull Request:** #7 ([View Pull Request](https://github.com/BANSAFAn/meowproject/pull/7))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | 123 chars | ✅ **Included in PR** |\n| 🇬🇧 **EN** (English) | 137 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | 138 chars | ✅ **Included in PR** |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The Pull Request **#7** is open in the [Pull Requests](https://github.com/BANSAFAn/meowproject/pulls) tab. Click **\"Merge pull request\"** to approve and publish to the live site!",
-          "score": null,
-          "url": "https://github.com/BANSAFAn/meowproject/issues/6#issuecomment-6792633254",
-          "issueNum": 6
-        }
-      ]
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
     }
   }
 }

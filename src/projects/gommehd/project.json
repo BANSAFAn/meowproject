@@ -1,0 +1,31 @@
+{
+  "slug": "gommehd",
+  "name": "GommeHD.net",
+  "shortName": "GommeHD",
+  "category": "server",
+  "icon": "/projects/gommehd/icon.svg",
+  "country": "DE",
+  "developer": "GommeHD Network",
+  "license": "Лицензійний сервер",
+  "licenseRequired": true,
+  "platforms": [
+    "Java Edition 1.8 - 1.21+"
+  ],
+  "website": "https://www.gommehd.net",
+  "serverIp": "gommehd.net",
+  "serverOnline": "~4 000+ гравців",
+  "primaryLang": "Deutsch / English",
+  "sourceLinks": [],
+  "issueThreadNumber": 24,
+  "issueSearchTerm": "GommeHD",
+  "tags": [
+    "server",
+    "Minecraft Server",
+    "Німеччина",
+    "Ліцензія",
+    "BedWars",
+    "CityBuild",
+    "PvP"
+  ],
+  "screenshots": []
+}

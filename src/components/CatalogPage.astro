@@ -38,7 +38,7 @@ function getLangHref(targetLang: LangCode) {
   return targetLang === 'uk' ? '/' : `/${targetLang}/`;
 }
 
-const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'service', 'website', 'project'] as const;
+const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'] as const;
 
 const categoryCounts: Record<string, number> = Object.fromEntries(
   PREFIXES.map((c) => [c, PROJECTS.filter((p) => p.category === c).length]),
@@ -1777,6 +1777,193 @@ const jsonLdSchema = {
         }
       }
 
+      /* Custom Scrollbar - Retro-Technical Archival Aesthetic */
+      html {
+        scrollbar-color: var(--border-ink) var(--bg-desk);
+        scrollbar-width: thin;
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        background-color: var(--bg-desk);
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-desk);
+        border-left: 1px solid var(--border-ink);
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--accent-amber);
+        border-color: var(--accent-amber);
+      }
+
+      /* Server Hero Banner */
+      .server-hero-banner {
+        width: 100%;
+        background: var(--paper-sheet-subtle);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+        padding: 0.85rem 1rem;
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .server-ip-box {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+      }
+      .server-ip-label {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--ink-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .server-ip-code {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.95rem;
+        font-weight: 700;
+        background: var(--paper-sheet);
+        border: 1px solid var(--border-ink);
+        padding: 0.25rem 0.65rem;
+        color: var(--ink);
+        user-select: all;
+      }
+      .btn-copy-ip {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.76rem;
+        font-weight: 700;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        padding: 0.25rem 0.65rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--ink);
+        transition: transform 0.08s ease, background 0.15s ease;
+      }
+      .btn-copy-ip:hover {
+        background: var(--accent-amber);
+        color: #fff;
+        border-color: var(--border-ink);
+      }
+      .btn-copy-ip:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0 0 0;
+      }
+      .server-badges {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .stamp-online {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: rgba(46, 204, 113, 0.12);
+        color: #2ecc71;
+        border: 1px solid rgba(46, 204, 113, 0.35);
+        font-weight: 700;
+      }
+      .online-dot {
+        width: 8px;
+        height: 8px;
+        background: #2ecc71;
+        border-radius: 50%;
+        box-shadow: 0 0 6px #2ecc71;
+        animation: pulseOnline 2s infinite;
+      }
+      @keyframes pulseOnline {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+      }
+
+      /* Expenses View */
+      .expenses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+      }
+      .expense-card {
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 4px 4px 0 var(--shadow-hard);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .expense-card.active-goal {
+        border-color: var(--accent-crimson, #e74c3c);
+        box-shadow: 5px 5px 0 var(--shadow-hard);
+        background: var(--paper-sheet);
+      }
+      .expense-card.future {
+        opacity: 0.92;
+      }
+      .expense-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.85rem;
+      }
+      .expense-sum {
+        font-family: var(--font-mono, monospace);
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .expense-title {
+        font-size: 1.12rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        color: var(--ink);
+        line-height: 1.35;
+      }
+      .expense-desc {
+        font-size: 0.88rem;
+        line-height: 1.55;
+        color: var(--ink-muted);
+        margin: 0 0 1.25rem 0;
+        flex-grow: 1;
+      }
+      .expense-meta {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        border-top: 1px dashed var(--border-ink);
+        padding-top: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--ink-muted);
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .status-indicator-done {
+        color: #2ecc71;
+        font-weight: 700;
+      }
+      .status-indicator-active {
+        color: var(--accent-crimson, #e74c3c);
+        font-weight: 700;
+      }
+      .status-indicator-plan {
+        color: var(--accent-amber, #e67e22);
+        font-weight: 700;
+      }
+
       /* Device Gate Overlays (Mobile & Small Resolution Blocker) */
       .device-gate-backdrop {
         position: fixed;
@@ -2081,6 +2268,19 @@ const jsonLdSchema = {
               </svg>
               <span>{t.navSubmit}</span>
               <span class="folder-tab-badge">02</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="expenses"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+              <span>{t.navExpenses}</span>
+              <span class="folder-tab-badge">03</span>
             </button>
           </nav>
 
@@ -2498,6 +2698,38 @@ const jsonLdSchema = {
                         </span>
                       </div>
                     </div>
+
+                    {project.category === 'server' && project.serverIp && (
+                      <div class="server-hero-banner">
+                        <div class="server-ip-box">
+                          <span class="server-ip-label">{t.serverIpLabel}:</span>
+                          <code class="server-ip-code">{project.serverIp}</code>
+                          <button type="button" class="btn-copy-ip" data-copy-ip={project.serverIp} title={t.copyIpBtn}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span class="copy-text">{t.copyIpBtn}</span>
+                          </button>
+                        </div>
+                        <div class="server-badges">
+                          {project.serverOnline && (
+                            <span class="stamp stamp-online">
+                              <span class="online-dot"></span>
+                              {project.serverOnline}
+                            </span>
+                          )}
+                          <span class={`stamp ${project.licenseRequired ? 'stamp-alpha' : 'stamp-open'}`}>
+                            {project.licenseRequired ? t.serverLicenseRequired : t.serverNoLicenseRequired}
+                          </span>
+                          {project.primaryLang && (
+                            <span class="stamp">
+                              {t.serverPrimaryLang}: {project.primaryLang}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     <!-- Description -->
                     <div>
@@ -3164,6 +3396,71 @@ const jsonLdSchema = {
           </div>
         </section>
       </div>
+
+      <!-- =========================================================
+           VIEW 3 (TAB 03): DEDICATED "EXPENSES & TRANSPARENCY"
+           ========================================================= -->
+      <div id="view-expenses" class="tab-view-panel">
+        <section class="paper-sheet-box guide-sheet">
+          <div class="hero-kicker">FINANCIAL TRANSPARENCY // ROADMAP</div>
+          <h1 class="hero-title">{t.expensesTitle}</h1>
+          <p class="hero-subtitle">{t.expensesSubtitle}</p>
+
+          <div class="expenses-grid">
+            <!-- 1. Already Spent -->
+            <div class="expense-card done">
+              <div class="expense-card-top">
+                <span class="stamp stamp-open">01 // ПОКРИТО</span>
+                <span class="expense-sum">{t.spentAmount}</span>
+              </div>
+              <h3 class="expense-title">{t.spentLabel}</h3>
+              <p class="expense-desc">{t.spentDesc}</p>
+              <div class="expense-meta">
+                <span>Джерело: Власні кошти Baneronetwo</span>
+                <span class="status-indicator-done">Завершено</span>
+              </div>
+            </div>
+
+            <!-- 2. Next Goal (Open) -->
+            <div class="expense-card active-goal">
+              <div class="expense-card-top">
+                <span class="stamp stamp-alpha">02 // ЗБІР ВІДКРИТО</span>
+                <span class="expense-sum">{t.nextGoalAmount}</span>
+              </div>
+              <h3 class="expense-title">{t.nextGoalLabel}</h3>
+              <p class="expense-desc">{t.nextGoalDesc}</p>
+              <div class="expense-meta">
+                <span>Ціль: Домен на 1 рік</span>
+                <span class="status-indicator-active">Потрібна підтримка</span>
+              </div>
+              <a
+                href={MONOBANK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="paper-btn paper-btn-accent"
+                style="margin-top: 1rem; width: 100%; justify-content: center; text-decoration: none;"
+              >
+                <MonobankIcon size={16} />
+                <span>{t.monobankSupportBtn}</span>
+              </a>
+            </div>
+
+            <!-- 3. Future Goal (Translation Platform) -->
+            <div class="expense-card future">
+              <div class="expense-card-top">
+                <span class="stamp">03 // РОЗВИТОК</span>
+                <span class="expense-sum">ПЕРСПЕКТИВА</span>
+              </div>
+              <h3 class="expense-title">{t.futureGoalTitle}</h3>
+              <p class="expense-desc">{t.futureGoalDesc}</p>
+              <div class="expense-meta">
+                <span>Мета: Сервіс швидкого перекладу Minecraft українською</span>
+                <span class="status-indicator-plan">В планах</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <!-- Footer with Support Links (Monobank & YouTube) -->
@@ -3280,6 +3577,7 @@ const jsonLdSchema = {
           catalog: document.getElementById('view-catalog'),
           guide: document.getElementById('view-guide'),
           submit: document.getElementById('view-submit'),
+          expenses: document.getElementById('view-expenses'),
         };
         const filterBar = document.getElementById('catalog-filter-bar');
         const singleBackBar = document.getElementById('single-project-back-bar');
@@ -3353,6 +3651,24 @@ const jsonLdSchema = {
             updateSingleProjectView(null);
           });
         }
+
+        // Copy Server IP Handler
+        document.querySelectorAll('[data-copy-ip]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const ip = btn.getAttribute('data-copy-ip');
+            if (ip) {
+              try {
+                await navigator.clipboard.writeText(ip);
+                const txt = btn.querySelector('.copy-text');
+                if (txt) {
+                  const orig = txt.textContent;
+                  txt.textContent = 'Скопійовано!';
+                  setTimeout(() => { txt.textContent = orig; }, 2000);
+                }
+              } catch (_) {}
+            }
+          });
+        });
 
         // 3. Animated Tutorial Loop in Tab 02
         const animSteps = document.querySelectorAll('[data-anim-step]');

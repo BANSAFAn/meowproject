@@ -10,7 +10,7 @@ import { LANG_CODES, type LangCode } from '../i18n/translations';
  * Folders are discovered automatically, nothing has to be registered here.
  */
 
-export type ProjectCategory = 'launcher' | 'client' | 'modpack' | 'mod' | 'service' | 'website' | 'project';
+export type ProjectCategory = 'launcher' | 'client' | 'modpack' | 'mod' | 'server' | 'website' | 'project';
 export type SourceHost = 'github' | 'gitlab' | 'gitea' | 'sourceforge' | 'gitee' | 'cnb';
 
 export interface ProjectSourceLink {
@@ -31,6 +31,11 @@ export interface ProjectMeta {
   license: string;
   platforms: string[];
   website?: string;
+  /** Server-specific metadata */
+  serverIp?: string;
+  serverOnline?: string;
+  primaryLang?: string;
+  licenseRequired?: boolean;
   /** Empty array = proprietary / closed source */
   sourceLinks: ProjectSourceLink[];
   issueThreadNumber: number;

@@ -1,0 +1,33 @@
+{
+  "slug": "uacraft",
+  "name": "UACraft",
+  "shortName": "UACraft",
+  "category": "server",
+  "icon": "/projects/uacraft/icon.svg",
+  "country": "UA",
+  "developer": "UACraft Community",
+  "license": "Піратка + Ліцензія",
+  "licenseRequired": false,
+  "platforms": [
+    "Java Edition 1.20+",
+    "Bedrock"
+  ],
+  "website": "https://uacraft.com",
+  "serverIp": "play.uacraft.com",
+  "serverOnline": "~350+ гравців",
+  "primaryLang": "Українська",
+  "sourceLinks": [],
+  "issueThreadNumber": 23,
+  "issueSearchTerm": "UACraft",
+  "tags": [
+    "server",
+    "Minecraft Server",
+    "Україна",
+    "Українська",
+    "Піратка",
+    "Без ліцензії",
+    "Виживання",
+    "Міста"
+  ],
+  "screenshots": []
+}

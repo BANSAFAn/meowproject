@@ -152,6 +152,13 @@ async function compileReviews(issues, slugs, projectsDir) {
     const reviewsList = [];
 
     for (const c of comments) {
+      // Ignore bot comments!
+      const isBot = (c.user?.type === 'Bot') ||
+        (c.user?.login || '').includes('github-actions') ||
+        (c.user?.login || '').includes('[bot]') ||
+        (c.body || '').includes('[MeowProject Bot]');
+      if (isBot) continue;
+
       const rawBody = (c.body || '').trim();
       const match = rawBody.match(RATING_REGEX);
       let score = null;
@@ -239,14 +246,16 @@ async function handlePushOrDispatch() {
 
     const existing = issues.find(iss => {
       if (iss.pull_request) return false;
+      const isBotAuthor = (iss.user?.login || '').includes('github-actions') || iss.user?.type === 'Bot';
       const t = (iss.title || '').toLowerCase();
-      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase()) || iss.number === meta.issueThreadNumber;
+      const titleMatches = t === expectedTitle.toLowerCase() || t === meta.name.toLowerCase();
+      return isBotAuthor && (titleMatches || (meta.issueThreadNumber && iss.number === meta.issueThreadNumber));
     });
 
     let targetIssueNumber = existing ? existing.number : null;
 
     if (existing) {
-      appendSummary(`ℹ️ Issue already exists: #${existing.number} ([${existing.title}](${existing.html_url}))`);
+      appendSummary(`ℹ️ Official discussion issue already exists: #${existing.number} ([${existing.title}](${existing.html_url}))`);
       if (existing.state === 'closed') {
         appendSummary(`Reopening catalog discussion issue #${existing.number} for **${meta.name}**...`);
         await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${existing.number}`, {
@@ -256,7 +265,7 @@ async function handlePushOrDispatch() {
         });
       }
     } else {
-      appendSummary(`Creating discussion issue for **${meta.name}**...`);
+      appendSummary(`Creating official discussion issue for **${meta.name}**...`);
       let ukDesc = '';
       let enDesc = '';
       const ukPath = path.join(projectsDir, slug, 'locales', 'uk.json');
@@ -315,6 +324,25 @@ async function handlePushOrDispatch() {
         targetIssueNumber = createRes.data.number;
         issues.push(createRes.data);
         appendSummary(`✅ Created Issue #${targetIssueNumber}: [${expectedTitle}](${createRes.data.html_url})`);
+
+        // Close any old user proposal issue and link to this new official thread
+        try {
+          const userProposal = issues.find(i => !i.pull_request && (i.title || '').toLowerCase().includes(meta.name.toLowerCase()) && i.number !== targetIssueNumber);
+          if (userProposal) {
+            await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${userProposal.number}/comments`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                body: `### [MeowProject Bot] Project Accepted & Published to Catalog! 🎉\n\n**${meta.name}** has been accepted and merged into the live MeowProject catalog!\n\nThe official community discussion and reviews thread has been established here: #${targetIssueNumber}.\n\n*Closing this proposal issue as completed.*`
+              })
+            });
+            await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${userProposal.number}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ state: 'closed' })
+            });
+          }
+        } catch (_) {}
       } else {
         appendSummary(`❌ Failed to create issue for ${meta.name} (HTTP ${createRes.status}): ${JSON.stringify(createRes.data)}`);
       }
@@ -890,11 +918,11 @@ async function handleIssues(eventPayload) {
   }
 
   // 2. New Project Submission: prefix check
-  const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'service:', 'website:', 'project:'];
+  const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'server:', 'website:', 'project:'];
   const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
 
   if (!matchedPrefix) {
-    await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`service: Name\`\n- \`website: Name\`\n- \`project: Name\``);
+    await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`server: Name\`\n- \`website: Name\`\n- \`project: Name\``);
     return;
   }
 

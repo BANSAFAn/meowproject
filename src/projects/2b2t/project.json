@@ -1,0 +1,31 @@
+{
+  "slug": "2b2t",
+  "name": "2b2t (2builders2tools)",
+  "shortName": "2b2t",
+  "category": "server",
+  "icon": "/projects/2b2t/icon.svg",
+  "country": "US",
+  "developer": "Hausemaster",
+  "license": "Лицензійний сервер",
+  "licenseRequired": true,
+  "platforms": [
+    "Java Edition 1.20+"
+  ],
+  "website": "https://2b2t.org",
+  "serverIp": "2b2t.org",
+  "serverOnline": "~700 (Черга 500+)",
+  "primaryLang": "English / Global",
+  "sourceLinks": [],
+  "issueThreadNumber": 22,
+  "issueSearchTerm": "2b2t",
+  "tags": [
+    "server",
+    "Minecraft Server",
+    "2b2t",
+    "Ліцензія",
+    "Анархія",
+    "Vanilla",
+    "Oldest"
+  ],
+  "screenshots": []
+}

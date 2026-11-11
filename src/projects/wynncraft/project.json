@@ -1,0 +1,31 @@
+{
+  "slug": "wynncraft",
+  "name": "Wynncraft MMORPG",
+  "shortName": "Wynncraft",
+  "category": "server",
+  "icon": "/projects/wynncraft/icon.svg",
+  "country": "US",
+  "developer": "Wynncraft Team",
+  "license": "Лицензійний сервер",
+  "licenseRequired": true,
+  "platforms": [
+    "Java Edition 1.12.2 - 1.21+"
+  ],
+  "website": "https://wynncraft.com",
+  "serverIp": "play.wynncraft.com",
+  "serverOnline": "~3 500+ гравців",
+  "primaryLang": "English",
+  "sourceLinks": [],
+  "issueThreadNumber": 21,
+  "issueSearchTerm": "Wynncraft",
+  "tags": [
+    "server",
+    "Minecraft Server",
+    "Wynncraft",
+    "Ліцензія",
+    "MMORPG",
+    "Квести",
+    "RPG"
+  ],
+  "screenshots": []
+}

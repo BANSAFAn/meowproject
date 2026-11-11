@@ -1,0 +1,32 @@
+{
+  "slug": "kozakmc",
+  "name": "KozakMC",
+  "shortName": "KozakMC",
+  "category": "server",
+  "icon": "/projects/kozakmc/icon.svg",
+  "country": "UA",
+  "developer": "Kozak Team",
+  "license": "Піратка + Ліцензія",
+  "licenseRequired": false,
+  "platforms": [
+    "Java Edition 1.16.5 - 1.21+"
+  ],
+  "website": "https://kozakmc.org",
+  "serverIp": "mc.kozakmc.org",
+  "serverOnline": "~200+ гравців",
+  "primaryLang": "Українська",
+  "sourceLinks": [],
+  "issueThreadNumber": 28,
+  "issueSearchTerm": "KozakMC",
+  "tags": [
+    "server",
+    "Minecraft Server",
+    "Україна",
+    "Українська",
+    "Піратка",
+    "Без ліцензії",
+    "Анархія",
+    "Гриф"
+  ],
+  "screenshots": []
+}
