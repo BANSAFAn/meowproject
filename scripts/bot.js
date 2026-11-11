@@ -577,6 +577,37 @@ async function handleProjectSubmission(issue, matchedPrefix) {
       })
     });
 
+    if (!prRes.ok) {
+      appendSummary(`❌ Failed to create Pull Request (HTTP ${prRes.status}): ${JSON.stringify(prRes.data)}`);
+      
+      let errorNote = `**Помилка GitHub API (HTTP ${prRes.status}):** \`${JSON.stringify(prRes.data?.message || prRes.data)}\``;
+      if (prRes.status === 403) {
+        errorNote += `\n\n> ⚠️ **Потрібен дозвіл у налаштуваннях репозиторію**:\n> GitHub за замовчуванням блокує створення Pull Request через автоматизацію GitHub Actions.\n> **Як увімкнути за 10 секунд**:\n> 1. Перейдіть у вкладку **Settings** репозиторію -> **Actions** -> **General**\n> 2. Прокрутіть до розділу **Workflow permissions**\n> 3. Оберіть **"Read and write permissions"**\n> 4. Поставте галочку: ☑ **"Allow GitHub Actions to create and approve pull requests"**\n> 5. Натисніть **Save**! Після цього бот зможе самостійно відкривати PR без будь-яких ручних дій!`;
+      }
+
+      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          body: [
+            `### [MeowProject Bot] Гілку створено, але створення Pull Request заблоковано GitHub ⚠️`,
+            ``,
+            `- **Проєкт:** **${name}** (\`${category}\`)`,
+            `- **Гілка:** \`${branchName}\` (вже створена та завантажена в репозиторій)`,
+            ``,
+            `#### 🌐 Статус перевірки мов:`,
+            `| Мова | Символи | Статус |`,
+            `|:---|:---|:---|`,
+            ...langTableRows,
+            ``,
+            `---`,
+            errorNote
+          ].join('\n')
+        })
+      });
+      return;
+    }
+
     const prUrl = prRes.data?.html_url || `branch \`${branchName}\``;
     const prNumber = prRes.data?.number ? `#${prRes.data.number}` : '';
 
@@ -601,7 +632,7 @@ async function handleProjectSubmission(issue, matchedPrefix) {
           ...langTableRows,
           ``,
           `---`,
-          `> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (${prUrl}). Once merged into \`main\`, the project will automatically appear on the live website!`
+          `> 💡 **Next steps:** The Pull Request **${prNumber}** is open in the [Pull Requests](https://github.com/${GITHUB_REPOSITORY}/pulls) tab. Click **"Merge pull request"** to approve and publish to the live site!`
         ].join('\n')
       })
     });
