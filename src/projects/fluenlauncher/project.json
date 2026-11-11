@@ -1,0 +1,33 @@
+{
+  "slug": "fluenlauncher",
+  "name": "FluenLauncher",
+  "shortName": "FluenLauncher",
+  "category": "launcher",
+  "icon": "/projects/fluenlauncher/icon.png",
+  "country": "Asia",
+  "developer": "Github",
+  "license": "Open Source",
+  "platforms": [
+    "Windows 10",
+    "Windows 11"
+  ],
+  "website": "https://github.com/Xcube-Studio/Natsurainko.FluentLauncher",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/Xcube-Studio/Natsurainko.FluentLauncher"
+    }
+  ],
+  "issueThreadNumber": 6,
+  "issueSearchTerm": "FluenLauncher",
+  "tags": [
+    "launcher",
+    "Windows 10",
+    "Windows 11",
+    "Asia"
+  ],
+  "screenshots": [
+    "https://raw.githubusercontent.com/Xcube-Studio/Natsurainko.FluentLauncher/raw/main/docs/images/Hero_Image.png"
+  ]
+}
