@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T14:06:38.702Z",
+  "updatedAt": "2026-11-11T14:06:53.573Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -23,10 +23,21 @@
     "hmcl": {
       "issueNumber": 12,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/12",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 100,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6797985068,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "very fast launcher",
+          "score": 100,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/12#issuecomment-6797985068",
+          "issueNum": 12
+        }
+      ]
     },
     "atm9": {
       "issueNumber": 13,
