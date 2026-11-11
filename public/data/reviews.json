@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-11T09:45:56.986Z",
+  "updatedAt": "2026-11-11T09:48:07.978Z",
   "projects": {
     "xmcl": {
       "issueNumber": 1,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/1",
       "averageRating": 94,
       "totalRatings": 1,
-      "commentsCount": 1,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6791505843,
@@ -17,6 +17,16 @@
           "score": 94,
           "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6791505843",
           "issueNum": 1
+        },
+        {
+          "id": 6792554623,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2490 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/1#issuecomment-6792554623",
+          "issueNum": 1
         }
       ]
     },
@@ -25,7 +35,7 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/2",
       "averageRating": 100,
       "totalRatings": 1,
-      "commentsCount": 1,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6791529463,
@@ -36,6 +46,16 @@
           "score": 100,
           "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6791529463",
           "issueNum": 2
+        },
+        {
+          "id": 6792554430,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Description Required ❌\n\nCould not find a valid description in any supported language. Each description must have at least 20 characters (up to 2,000).\n\n#### 🌐 Current Verification Status:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 2253 chars | ⚠️ **Out of bounds** (20–2,000 chars required) |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\nPlease edit your issue description and add language headers like:\n```markdown\n### Description\n#### UK\nВаш опис українською мовою...\n\n#### EN\nYour description in English...\n```",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/2#issuecomment-6792554430",
+          "issueNum": 2
         }
       ]
     },
@@ -44,24 +64,57 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/3",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6792554193,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **All the Mods 9 (ATM9)** to MeowProject!\n\n- **Project:** **All the Mods 9 (ATM9)** (`modpack`)\n- **Country:** GLOBAL\n- **Platforms:** Windows\n- **Pull Request:**  ([View Pull Request](branch `add-project-all-the-mods-9-atm9-issue-3`))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 1782 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (branch `add-project-all-the-mods-9-atm9-issue-3`). Once merged into `main`, the project will automatically appear on the live website!",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/3#issuecomment-6792554193",
+          "issueNum": 3
+        }
+      ]
     },
     "sodium": {
       "issueNumber": 4,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/4",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6792553393,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **Sodium (Modrinth)** to MeowProject!\n\n- **Project:** **Sodium (Modrinth)** (`mod`)\n- **Country:** GLOBAL\n- **Platforms:** Windows\n- **Pull Request:**  ([View Pull Request](branch `add-project-sodium-modrinth-issue-4`))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 1760 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (branch `add-project-sodium-modrinth-issue-4`). Once merged into `main`, the project will automatically appear on the live website!",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/4#issuecomment-6792553393",
+          "issueNum": 4
+        }
+      ]
     },
     "lunarclient": {
       "issueNumber": 5,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/5",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6792552653,
+          "author": "github-actions[bot]",
+          "avatar": "https://avatars.githubusercontent.com/in/15368?v=4",
+          "date": "2026-11-11",
+          "body": "### [MeowProject Bot] Project Submission Analyzed & Pull Request Created! 🎉\n\nThank you for contributing **Lunar Client** to MeowProject!\n\n- **Project:** **Lunar Client** (`client`)\n- **Country:** GLOBAL\n- **Platforms:** Windows\n- **Pull Request:**  ([View Pull Request](branch `add-project-lunar-client-issue-5`))\n\n#### 🌐 Language Verification Breakdown:\n| Language | Length | Status |\n|:---|:---|:---|\n| 🇺🇦 **UK** (Українська) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇬🇧 **EN** (English) | 1709 chars | ✅ **Included in PR** |\n| 🇩🇪 **DE** (Deutsch) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇵🇱 **PL** (Polski) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇧🇾 **BE** (Беларуская) | — | ⚪ **Not provided** (can be added later via issue) |\n| 🇰🇿 **KK** (Қазақша) | — | ⚪ **Not provided** (can be added later via issue) |\n\n---\n> 💡 **Next steps:** The repository maintainer can review and merge the Pull Request (branch `add-project-lunar-client-issue-5`). Once merged into `main`, the project will automatically appear on the live website!",
+          "score": null,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/5#issuecomment-6792552653",
+          "issueNum": 5
+        }
+      ]
     }
   }
 }
