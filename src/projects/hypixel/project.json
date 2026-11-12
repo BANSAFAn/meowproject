@@ -1,31 +1,35 @@
-{
-  "slug": "hypixel",
-  "name": "Hypixel Network",
-  "shortName": "Hypixel",
-  "category": "server",
-  "icon": "/projects/hypixel/icon.png",
-  "country": "US",
-  "developer": "Hypixel Inc.",
-  "license": "Лицензійний сервер",
-  "licenseRequired": true,
-  "platforms": [
-    "Java Edition 1.8 - 1.21+"
-  ],
-  "website": "https://hypixel.net",
-  "serverIp": "mc.hypixel.net",
-  "serverOnline": "~45 000+ гравців",
-  "primaryLang": "English",
-  "sourceLinks": [],
-  "issueThreadNumber": 20,
-  "issueSearchTerm": "Hypixel",
-  "tags": [
-    "server",
-    "Minecraft Server",
-    "Hypixel",
-    "Ліцензія",
-    "BedWars",
-    "SkyBlock",
-    "Minigames"
-  ],
-  "screenshots": []
+﻿{
+    "slug":  "hypixel",
+    "name":  "Hypixel Network",
+    "shortName":  "Hypixel",
+    "category":  "server",
+    "icon":  "/projects/hypixel/icon.png",
+    "country":  "US",
+    "developer":  "Hypixel Inc.",
+    "license":  "Ліцензійний сервер",
+    "licenseRequired":  true,
+    "platforms":  [
+                      "Java Edition 1.8 - 1.21+"
+                  ],
+    "website":  "https://hypixel.net",
+    "serverIp":  "mc.hypixel.net",
+    "serverOnline":  "~15 200 онлайн",
+    "primaryLang":  "English",
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  20,
+    "issueSearchTerm":  "Hypixel",
+    "tags":  [
+                 "server",
+                 "Minecraft Server",
+                 "Hypixel",
+                 "Ліцензія",
+                 "BedWars",
+                 "SkyBlock",
+                 "Minigames"
+             ],
+    "screenshots":  [
+
+                    ]
 }

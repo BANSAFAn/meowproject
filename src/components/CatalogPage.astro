@@ -134,7 +134,7 @@ const jsonLdSchema = {
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; connect-src 'self' https://api.github.com https://api.mcstatus.io; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none';"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none';"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -607,7 +607,81 @@ const jsonLdSchema = {
         border: 1px solid currentColor;
       }
 
-      /* Flag Language Switcher */
+      /* Language Dropdown Selector */
+      .lang-selector-wrap {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .lang-select-box {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        padding: 0 0.5rem 0 0.45rem;
+        height: 30px;
+        transition: border-color 120ms ease;
+      }
+
+      .lang-select-box:hover {
+        border-color: var(--accent);
+      }
+
+      .lang-select-icon {
+        font-size: 0.85rem;
+        margin-right: 0.35rem;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .lang-dropdown-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background: transparent;
+        border: none;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink);
+        padding-right: 1.25rem;
+        cursor: pointer;
+        outline: none;
+      }
+
+      .lang-dropdown-select option {
+        background: var(--paper-sheet);
+        color: var(--ink);
+        font-family: var(--font-mono);
+      }
+
+      .lang-chevron {
+        position: absolute;
+        right: 0.35rem;
+        pointer-events: none;
+        color: var(--ink-faint);
+      }
+
+      /* Interactive License Stamp Button */
+      .stamp-license-btn {
+        cursor: pointer;
+        border: 1px solid currentColor;
+        font-family: inherit;
+        font-size: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+      }
+
+      .stamp-license-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.15);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+      }
+
+      /* Legacy Flag Bar fallback */
       .lang-bar {
         display: inline-flex;
         align-items: center;
@@ -2481,85 +2555,21 @@ const jsonLdSchema = {
             </button>
           </nav>
 
-          <!-- Language Switcher with Flag Icons Only -->
-          <div class="lang-bar" role="navigation" aria-label="Language Switcher">
-            <a
-              href={getLangHref('uk')}
-              class={`lang-flag-btn ${lang === 'uk' ? 'active' : ''}`}
-              title="Українська"
-              aria-label="Українська"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="8" fill="#0057B7" />
-                <rect y="8" width="24" height="8" fill="#FFD700" />
+          <!-- Language Selector Dropdown -->
+          <div class="lang-selector-wrap" role="navigation" aria-label="Language Selector">
+            <div class="lang-select-box">
+              <span class="lang-select-icon" aria-hidden="true">🌐</span>
+              <select id="header-lang-select" class="lang-dropdown-select" aria-label="Оберіть мову / Select Language">
+                {langList.map((l) => (
+                  <option value={l.code} selected={l.code === lang}>
+                    {l.short} — {l.label}
+                  </option>
+                ))}
+              </select>
+              <svg class="lang-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
-            </a>
-
-            <a
-              href={getLangHref('en')}
-              class={`lang-flag-btn ${lang === 'en' ? 'active' : ''}`}
-              title="English"
-              aria-label="English"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="16" fill="#012169" />
-                <path d="M0,0 L24,16 M24,0 L0,16" stroke="#FFF" stroke-width="3.2" />
-                <path d="M0,0 L24,16 M24,0 L0,16" stroke="#C8102E" stroke-width="1.6" />
-                <path d="M12,0 V16 M0,8 H24" stroke="#FFF" stroke-width="5" />
-                <path d="M12,0 V16 M0,8 H24" stroke="#C8102E" stroke-width="3" />
-              </svg>
-            </a>
-
-            <a
-              href={getLangHref('de')}
-              class={`lang-flag-btn ${lang === 'de' ? 'active' : ''}`}
-              title="Deutsch"
-              aria-label="Deutsch"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="5.33" fill="#000000" />
-                <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
-                <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
-              </svg>
-            </a>
-
-            <a
-              href={getLangHref('pl')}
-              class={`lang-flag-btn ${lang === 'pl' ? 'active' : ''}`}
-              title="Polski"
-              aria-label="Polski"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="8" fill="#FFFFFF" />
-                <rect y="8" width="24" height="8" fill="#DC143C" />
-              </svg>
-            </a>
-
-            <a
-              href={getLangHref('be')}
-              class={`lang-flag-btn ${lang === 'be' ? 'active' : ''}`}
-              title="Беларуская"
-              aria-label="Беларуская"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="5.33" fill="#FFFFFF" />
-                <rect y="5.33" width="24" height="5.33" fill="#D22730" />
-                <rect y="10.66" width="24" height="5.34" fill="#FFFFFF" />
-              </svg>
-            </a>
-
-            <a
-              href={getLangHref('kk')}
-              class={`lang-flag-btn ${lang === 'kk' ? 'active' : ''}`}
-              title="Қазақша"
-              aria-label="Қазақша"
-            >
-              <svg viewBox="0 0 24 16" aria-hidden="true">
-                <rect width="24" height="16" fill="#00AFCA" />
-                <circle cx="12" cy="8" r="3.6" fill="#FEC50C" />
-                <rect x="2" y="2" width="1.8" height="12" fill="#FEC50C" />
-              </svg>
-            </a>
+            </div>
           </div>
 
           <!-- Light / Dark Theme Switcher -->
@@ -2848,7 +2858,19 @@ const jsonLdSchema = {
                             </span>
                           )}
 
-                          <span class="stamp stamp-open">{project.license}</span>
+                          <button
+                            type="button"
+                            class="stamp stamp-open stamp-license-btn"
+                            data-open-license-modal
+                            data-license-name={project.license}
+                            title="Дізнатися умови ліцензії"
+                          >
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                              <rect x="3" y="11" width="18" height="11" rx="1"></rect>
+                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span>{project.license}</span>
+                          </button>
 
                           <!-- Verified Stamp (for audited / trusted projects) -->
                           {project.verified && (
@@ -2904,11 +2926,6 @@ const jsonLdSchema = {
                     <!-- Technical Metadata Strip -->
                     <div class="spec-table">
                       <div class="spec-cell">
-                        <span class="spec-key">{t.countryOrigin}</span>
-                        <span class="spec-val">{cName}</span>
-                      </div>
-
-                      <div class="spec-cell">
                         <span class="spec-key">{t.platformsLabel}</span>
                         <span class="spec-val">{project.platforms.join(' / ')}</span>
                       </div>
@@ -2942,15 +2959,21 @@ const jsonLdSchema = {
                           </button>
                         </div>
                         <div class="server-badges">
-                          {project.serverOnline && (
+                          {project.serverIp && (
                             <span class="stamp stamp-online" data-live-server-ip={project.serverIp}>
                               <span class="online-dot"></span>
-                              <span class="online-text">{project.serverOnline}</span>
+                              <span class="online-text">{project.serverOnline || 'Підключення...'}</span>
                             </span>
                           )}
-                          <span class={`stamp ${project.licenseRequired ? 'stamp-alpha' : 'stamp-open'}`}>
+                          <button
+                            type="button"
+                            class={`stamp ${project.licenseRequired ? 'stamp-alpha' : 'stamp-open'} stamp-license-btn`}
+                            data-open-license-modal
+                            data-license-name={project.licenseRequired ? 'Потрібна ліцензія' : 'Без ліцензії'}
+                            title="Дізнатися деталі доступу до сервера"
+                          >
                             {project.licenseRequired ? t.serverLicenseRequired : t.serverNoLicenseRequired}
-                          </span>
+                          </button>
                           {project.primaryLang && (
                             <span class="stamp">
                               {t.serverPrimaryLang}: {project.primaryLang}
@@ -3861,6 +3884,70 @@ const jsonLdSchema = {
       </div>
     </div>
 
+    <!-- License Information Modal -->
+    <div id="license-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div id="license-modal-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: rgba(52, 152, 219, 0.15); border: 1.5px solid #3498db; border-radius: 4px; color: #3498db;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="11" width="18" height="11" rx="1"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="license-modal-badge" class="stamp stamp-open" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;">GPL-3.0</span>
+                <span id="license-modal-type" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700;">Copyleft</span>
+              </div>
+              <h3 id="license-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.15rem; font-weight: 900; color: var(--ink);">GNU General Public License v3.0</h3>
+            </div>
+          </div>
+          <button type="button" id="license-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p id="license-modal-desc" style="font-size: 0.88rem; line-height: 1.55; margin-bottom: 1.2rem; color: var(--ink);">
+          Детальний опис умов та правил ліцензування.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          <!-- Permissions -->
+          <div style="background: rgba(46, 204, 113, 0.08); border: 1.5px solid #2ecc71; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #27ae60; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Що дозволено:</span>
+            </div>
+            <ul id="license-modal-permissions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+
+          <!-- Requirements -->
+          <div style="background: rgba(52, 152, 219, 0.08); border: 1.5px solid #3498db; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #2980b9; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Що вимагається:</span>
+            </div>
+            <ul id="license-modal-conditions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+
+          <!-- Limitations -->
+          <div style="background: rgba(231, 76, 60, 0.08); border: 1.5px solid #e74c3c; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #c0392b; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+              <span>Обмеження / Заборони:</span>
+            </div>
+            <ul id="license-modal-limitations" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+        </div>
+
+        <div style="background: var(--paper); border: 1px dashed var(--border-ink); padding: 0.6rem 0.85rem; font-size: 0.76rem; color: var(--ink-faint); display: flex; justify-content: space-between; align-items: center;">
+          <span>Довідка підготовлена MeowProject на основі відкритих стандартів OSI.</span>
+          <span style="font-weight: 700; color: var(--ink);">Правова інформація</span>
+        </div>
+      </div>
+    </div>
+
     <script
       is:inline
       define:vars={{
@@ -3903,6 +3990,17 @@ const jsonLdSchema = {
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('meow_theme', next);
+          });
+        }
+
+        // Header Language Select Dropdown
+        const headerLangSelect = document.getElementById('header-lang-select');
+        if (headerLangSelect && !headerLangSelect.dataset.bound) {
+          headerLangSelect.dataset.bound = '1';
+          headerLangSelect.addEventListener('change', (e) => {
+            const targetCode = e.target.value;
+            const targetHref = targetCode === 'uk' ? '/' : `/${targetCode}/`;
+            window.location.href = targetHref;
           });
         }
 
@@ -4474,6 +4572,242 @@ const jsonLdSchema = {
         bindGenericModal('verified-modal', 'verified-close', '[data-open-verified-modal]');
         bindGenericModal('privacy-modal', 'privacy-close', '#open-privacy-btn');
         bindGenericModal('terms-modal', 'terms-close', '#open-terms-btn');
+
+        // Dynamic License Modal Controller
+        const licenseModal = document.getElementById('license-modal');
+        const licenseClose = document.getElementById('license-modal-close');
+        const licenseBadge = document.getElementById('license-modal-badge');
+        const licenseType = document.getElementById('license-modal-type');
+        const licenseTitle = document.getElementById('license-modal-title');
+        const licenseDesc = document.getElementById('license-modal-desc');
+        const licensePerms = document.getElementById('license-modal-permissions');
+        const licenseConds = document.getElementById('license-modal-conditions');
+        const licenseLimits = document.getElementById('license-modal-limitations');
+
+        const LICENSE_DB = {
+          'gpl-3.0': {
+            badge: 'GPL-3.0',
+            type: 'Сильний копілефт (Copyleft)',
+            title: 'GNU General Public License v3.0',
+            desc: 'Вільна копілефт-ліцензія. Дозволяє вільно використовувати, вивчати, модифікувати та поширювати код, але зобов’язує відкривати вихідний код будь-яких форків і похідних робіт під цією ж ліцензією GPL-3.0.',
+            permissions: [
+              'Комерційне використання (дозволено для комерційних цілей)',
+              'Модифікація вихідного коду без обмежень',
+              'Поширення оригінальних або змінених копій',
+              'Патентні права надаються безкоштовно'
+            ],
+            conditions: [
+              'Обов’язкове відкриття вихідного коду (Disclose source)',
+              'Та сама ліцензія GPL-3.0 для будь-яких похідних проектів',
+              'Збереження всіх повідомлень про копірайт та авторів',
+              'Фіксація та опис внесених змін у файлах коду'
+            ],
+            limitations: [
+              'Відсутність гарантій працездатності (As is)',
+              'Автори не несуть юридичної чи фінансової відповідальності',
+              'Не надає прав на використання торгових марок чи логотипів'
+            ]
+          },
+          'mit': {
+            badge: 'MIT',
+            type: 'Пермісивна (Вільна)',
+            title: 'MIT License',
+            desc: 'Ультра-лаконічна та максимально ліберальна вільна ліцензія. Дозволяє робити з кодом практично все, включаючи використання у комерційних та закритих пропрієтарних проектах, за єдиної умови збереження рядка копірайту автора.',
+            permissions: [
+              'Комерційне використання без відрахувань',
+              'Модифікація коду на власний розсуд',
+              'Поширення, копіювання та субліцензування коду',
+              'Включення у закриті комерційні програми'
+            ],
+            conditions: [
+              'Збереження тексту ліцензії MIT та копірайту автора у всіх копіях'
+            ],
+            limitations: [
+              'Програмне забезпечення надається «як є», без жодних гарантій',
+              'Автори не несуть відповідальності за можливі збитки'
+            ]
+          },
+          'apache-2.0': {
+            badge: 'Apache-2.0',
+            type: 'Пермісивна з патентами',
+            title: 'Apache License 2.0',
+            desc: 'Гнучка пермісивна ліцензія від Apache Software Foundation. Надає широкі права на використання коду та містить чітке положення про безоплатну передачу патентних прав від учасників розробки.',
+            permissions: [
+              'Комерційне та приватне використання',
+              'Модифікація та створення похідних робіт',
+              'Поширення коду та субліцензування',
+              'Патентна ліцензія від авторів'
+            ],
+            conditions: [
+              'Збереження тексту ліцензії та копірайту',
+              'Зазначення списку змін у змінених файлах',
+              'Збереження файлу NOTICE при наявності'
+            ],
+            limitations: [
+              'Не надає прав на торговельні марки та логотипи',
+              'Відсутність гарантій та відповідальності авторів'
+            ]
+          },
+          'lgpl-3.0': {
+            badge: 'LGPL-3.0',
+            type: 'Мʼякий копілефт (Library)',
+            title: 'GNU Lesser General Public License v3.0',
+            desc: 'Дозволяє динамічно підключати бібліотеку до закритих або комерційних програм без необхідності відкривати код основної програми, проте вимагає відкриття змін до самої бібліотеки.',
+            permissions: [
+              'Використання у закритому софті через динамічне лінкування',
+              'Модифікація коду самої бібліотеки',
+              'Комерційне використання та розповсюдження'
+            ],
+            conditions: [
+              'Відкриття коду будь-яких змін до самої бібліотеки під LGPL',
+              'Збереження копірайтів та тексту ліцензії',
+              'Користувач повинен мати змогу замінити версію бібліотеки'
+            ],
+            limitations: [
+              'Відсутність гарантій та відповідальності'
+            ]
+          },
+          'polyform shield 1.0.0': {
+            badge: 'PolyForm Shield',
+            type: 'Source-Available (Захист від хмарних клонів)',
+            title: 'PolyForm Shield License 1.0.0',
+            desc: 'Ліцензія з відкритим кодом, яка захищає розробника від недобросовісної конкуренції. Дозволяє вільно використовувати, вивчати та покращувати код, але забороняє перепродавати програму як конкуруючий комерційний хмарний сервіс.',
+            permissions: [
+              'Вільне персональне та внутрішнє використання',
+              'Вивчення та модифікація вихідного коду',
+              'Виправлення помилок та некомерційні форки'
+            ],
+            conditions: [
+              'Збереження оригінального копірайту та умов ліцензії'
+            ],
+            limitations: [
+              'Заборонено створювати прямий конкуруючий комерційний сервіс',
+              'Відсутність гарантій'
+            ]
+          },
+          'proprietary': {
+            badge: 'Proprietary',
+            type: 'Захищено авторським правом',
+            title: 'Пропрієтарне ПЗ / Всі права захищено',
+            desc: 'Продукт є інтелектуальною власністю розробника. Вихідний код закритий або надається лише для ознайомлення. Будь-які модифікації, декомпіляція чи несанкціоноване поширення суворо заборонені.',
+            permissions: [
+              'Запуск та використання програми кінцевим користувачем згідно з EULA'
+            ],
+            conditions: [
+              'Дотримання правил користувацької угоди (EULA)',
+              'Завантаження лише з офіційних сайтів'
+            ],
+            limitations: [
+              'Заборонено декомпілювати, змінювати або зламувати продукт',
+              'Заборонено поширення сторонніх збірок',
+              'Заборонено комерційне перепродавання'
+            ]
+          },
+          'потрібна ліцензія': {
+            badge: 'Офіційна ліцензія',
+            type: 'Minecraft Java Edition',
+            title: 'Сервер вимагає ліцензійний акаунт Mojang / Microsoft',
+            desc: 'Для входу на цей сервер обовʼязково потрібен придбаний ліцензійний обліковий запис Minecraft Java Edition (minecraft.net або Xbox Game Pass).',
+            permissions: [
+              'Офіційна синхронізація скінів та плащів',
+              'Захист облікового запису через Microsoft 2FA',
+              'Повний доступ до всіх режимів сервера'
+            ],
+            conditions: [
+              'Вхід через лаунчер з офіційною авторизацією Microsoft',
+              'Дотримання правил поведінки та спільноти сервера'
+            ],
+            limitations: [
+              'Вхід з піратських або неофіційних лаунчерів неможливий',
+              'Бан за порушення правил поширюється на ліцензійний UUID'
+            ]
+          },
+          'без ліцензії': {
+            badge: 'Ліцензія + Піратка',
+            type: 'Вільний доступ для всіх',
+            title: 'Сервер доступний для ліцензійних і безліцензійних лаунчерів',
+            desc: 'Сервер працює в режимі online-mode=false або має власний авторизаційний шлюз (наприклад /register /login або лаунчер спільноти). Грати можуть усі охочі.',
+            permissions: [
+              'Вільний вхід з будь-якого лаунчера без обов’язкової покупки гри',
+              'Реєстрація пароля всередині гри'
+            ],
+            conditions: [
+              'Встановлення надійного пароля через /register',
+              'Дотримання правил сервера'
+            ],
+            limitations: [
+              'Офіційні скіни Mojang можуть вимагати спеціальних плагінів (/skin)',
+              'Гравець самостійно відповідає за безпеку свого ігрового пароля'
+            ]
+          }
+        };
+
+        function openLicenseModal(licenseKey) {
+          if (!licenseModal) return;
+          const raw = (licenseKey || '').toLowerCase().trim();
+          let data = LICENSE_DB[raw];
+          if (!data) {
+            if (raw.includes('gpl')) data = LICENSE_DB['gpl-3.0'];
+            else if (raw.includes('mit')) data = LICENSE_DB['mit'];
+            else if (raw.includes('apache')) data = LICENSE_DB['apache-2.0'];
+            else if (raw.includes('shield') || raw.includes('polyform')) data = LICENSE_DB['polyform shield 1.0.0'];
+            else if (raw.includes('потрібна') || raw.includes('ліцензійний')) data = LICENSE_DB['потрібна ліцензія'];
+            else if (raw.includes('без') || raw.includes('піратка')) data = LICENSE_DB['без ліцензії'];
+            else if (raw.includes('proprietary') || raw.includes('rights reserved') || raw.includes('захищено')) data = LICENSE_DB['proprietary'];
+            else {
+              data = {
+                badge: licenseKey || 'License',
+                type: 'Авторські умови',
+                title: licenseKey || 'Ліцензійна угода',
+                desc: 'Проект поширюється на особливих авторських або комбінованих умовах. Детальний юридичний текст доступний на офіційному сайті або в репозиторії.',
+                permissions: ['Використання згідно з інструкцією автора'],
+                conditions: ['Збереження інформації про розробника'],
+                limitations: ['Регулюється правилами правовласника']
+              };
+            }
+          }
+
+          if (licenseBadge) licenseBadge.textContent = data.badge;
+          if (licenseType) licenseType.textContent = data.type;
+          if (licenseTitle) licenseTitle.textContent = data.title;
+          if (licenseDesc) licenseDesc.textContent = data.desc;
+
+          if (licensePerms) {
+            licensePerms.innerHTML = data.permissions.map((p) => `<li style="margin-bottom: 0.25rem;">${p}</li>`).join('');
+          }
+          if (licenseConds) {
+            licenseConds.innerHTML = data.conditions.map((c) => `<li style="margin-bottom: 0.25rem;">${c}</li>`).join('');
+          }
+          if (licenseLimits) {
+            licenseLimits.innerHTML = data.limitations.map((l) => `<li style="margin-bottom: 0.25rem;">${l}</li>`).join('');
+          }
+
+          licenseModal.classList.add('open');
+          licenseModal.setAttribute('aria-hidden', 'false');
+        }
+
+        document.querySelectorAll('[data-open-license-modal]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lic = btn.getAttribute('data-license-name');
+            openLicenseModal(lic);
+          });
+        });
+
+        if (licenseClose) {
+          licenseClose.addEventListener('click', () => {
+            licenseModal.classList.remove('open');
+            licenseModal.setAttribute('aria-hidden', 'true');
+          });
+        }
+        if (licenseModal) {
+          licenseModal.addEventListener('click', (e) => {
+            if (e.target === licenseModal) {
+              licenseModal.classList.remove('open');
+              licenseModal.setAttribute('aria-hidden', 'true');
+            }
+          });
+        }
 
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {

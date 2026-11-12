@@ -1,0 +1,35 @@
+﻿{
+    "slug":  "pika-network",
+    "name":  "PikaNetwork",
+    "shortName":  "PikaNetwork",
+    "category":  "server",
+    "icon":  "/projects/pika-network/icon.png",
+    "country":  "GLOBAL",
+    "developer":  "PikaNetwork Team",
+    "license":  "Ліцензія + Піратка",
+    "platforms":  [
+                      "Java",
+                      "Bedrock"
+                  ],
+    "website":  "https://pika-network.net",
+    "serverIp":  "play.pika-network.net",
+    "serverOnline":  "~2 340 онлайн",
+    "primaryLang":  "English",
+    "licenseRequired":  false,
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  25,
+    "issueSearchTerm":  "PikaNetwork",
+    "tags":  [
+                 "server",
+                 "BedWars",
+                 "SkyWars",
+                 "OpSkyBlock",
+                 "Lifesteal",
+                 "No-License"
+             ],
+    "screenshots":  [
+
+                    ]
+}

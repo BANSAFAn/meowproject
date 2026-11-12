@@ -1,31 +1,35 @@
-{
-  "slug": "minehut",
-  "name": "Minehut Network",
-  "shortName": "Minehut",
-  "category": "server",
-  "icon": "/projects/minehut/icon.png",
-  "country": "US",
-  "developer": "Super League Gaming",
-  "license": "Лицензія + Піратка",
-  "licenseRequired": false,
-  "platforms": [
-    "Java Edition 1.20+",
-    "Bedrock"
-  ],
-  "website": "https://minehut.com",
-  "serverIp": "minehut.com",
-  "serverOnline": "~8 000+ гравців",
-  "primaryLang": "English / Global",
-  "sourceLinks": [],
-  "issueThreadNumber": 23,
-  "issueSearchTerm": "Minehut",
-  "tags": [
-    "server",
-    "Minecraft Server",
-    "Minehut",
-    "Хостинг",
-    "Без ліцензії",
-    "Hub"
-  ],
-  "screenshots": []
+﻿{
+    "slug":  "minehut",
+    "name":  "Minehut Network",
+    "shortName":  "Minehut",
+    "category":  "server",
+    "icon":  "/projects/minehut/icon.png",
+    "country":  "US",
+    "developer":  "Super League Gaming",
+    "license":  "Ліцензія + Піратка",
+    "licenseRequired":  false,
+    "platforms":  [
+                      "Java Edition 1.20+",
+                      "Bedrock"
+                  ],
+    "website":  "https://minehut.com",
+    "serverIp":  "minehut.com",
+    "serverOnline":  "~2 400 онлайн",
+    "primaryLang":  "English / Global",
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  23,
+    "issueSearchTerm":  "Minehut",
+    "tags":  [
+                 "server",
+                 "Minecraft Server",
+                 "Minehut",
+                 "Хостинг",
+                 "Без ліцензії",
+                 "Hub"
+             ],
+    "screenshots":  [
+
+                    ]
 }

@@ -1,31 +1,35 @@
-{
-  "slug": "mcc-island",
-  "name": "MCC Island",
-  "shortName": "MCCI",
-  "category": "server",
-  "icon": "/projects/mcc-island/icon.png",
-  "country": "GB",
-  "developer": "The Noxcrew",
-  "license": "Лицензійний сервер",
-  "licenseRequired": true,
-  "platforms": [
-    "Java Edition 1.20+"
-  ],
-  "website": "https://mccisland.net",
-  "serverIp": "play.mccisland.net",
-  "serverOnline": "~2 100+ гравців",
-  "primaryLang": "English",
-  "sourceLinks": [],
-  "issueThreadNumber": 22,
-  "issueSearchTerm": "MCCI",
-  "tags": [
-    "server",
-    "Minecraft Server",
-    "MCC",
-    "Noxcrew",
-    "Ліцензія",
-    "Minigames",
-    "Championship"
-  ],
-  "screenshots": []
+﻿{
+    "slug":  "mcc-island",
+    "name":  "MCC Island",
+    "shortName":  "MCCI",
+    "category":  "server",
+    "icon":  "/projects/mcc-island/icon.png",
+    "country":  "GB",
+    "developer":  "The Noxcrew",
+    "license":  "Ліцензійний сервер",
+    "licenseRequired":  true,
+    "platforms":  [
+                      "Java Edition 1.20+"
+                  ],
+    "website":  "https://mccisland.net",
+    "serverIp":  "play.mccisland.net",
+    "serverOnline":  "~140 онлайн",
+    "primaryLang":  "English",
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  22,
+    "issueSearchTerm":  "MCCI",
+    "tags":  [
+                 "server",
+                 "Minecraft Server",
+                 "MCC",
+                 "Noxcrew",
+                 "Ліцензія",
+                 "Minigames",
+                 "Championship"
+             ],
+    "screenshots":  [
+
+                    ]
 }

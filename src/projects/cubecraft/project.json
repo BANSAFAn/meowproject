@@ -1,0 +1,35 @@
+﻿{
+    "slug":  "cubecraft",
+    "name":  "CubeCraft Games",
+    "shortName":  "CubeCraft",
+    "category":  "server",
+    "icon":  "/projects/cubecraft/icon.png",
+    "country":  "GLOBAL",
+    "developer":  "CubeCraft Games",
+    "license":  "Ліцензійний сервер",
+    "platforms":  [
+                      "Java",
+                      "Bedrock"
+                  ],
+    "website":  "https://www.cubecraft.net",
+    "serverIp":  "play.cubecraft.net",
+    "serverOnline":  "~480 онлайн",
+    "primaryLang":  "English",
+    "licenseRequired":  true,
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  24,
+    "issueSearchTerm":  "CubeCraft",
+    "tags":  [
+                 "server",
+                 "Java",
+                 "Bedrock",
+                 "Minigames",
+                 "SkyWars",
+                 "EggWars"
+             ],
+    "screenshots":  [
+
+                    ]
+}

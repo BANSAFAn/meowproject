@@ -1,30 +1,34 @@
-{
-  "slug": "complex-gaming",
-  "name": "Complex Gaming",
-  "shortName": "Complex",
-  "category": "server",
-  "icon": "/projects/complex-gaming/icon.png",
-  "country": "US",
-  "developer": "Complex Gaming Network",
-  "license": "Лицензійний сервер",
-  "licenseRequired": true,
-  "platforms": [
-    "Java Edition 1.12 - 1.21+"
-  ],
-  "website": "https://mc-complex.com",
-  "serverIp": "hub.mc-complex.com",
-  "serverOnline": "~2 800+ гравців",
-  "primaryLang": "English",
-  "sourceLinks": [],
-  "issueThreadNumber": 17,
-  "issueSearchTerm": "Complex",
-  "tags": [
-    "server",
-    "Minecraft Server",
-    "Pixelmon",
-    "Skyblock",
-    "Survival",
-    "Ліцензія"
-  ],
-  "screenshots": []
+﻿{
+    "slug":  "complex-gaming",
+    "name":  "Complex Gaming",
+    "shortName":  "Complex",
+    "category":  "server",
+    "icon":  "/projects/complex-gaming/icon.png",
+    "country":  "US",
+    "developer":  "Complex Gaming Network",
+    "license":  "Ліцензійний сервер",
+    "licenseRequired":  true,
+    "platforms":  [
+                      "Java Edition 1.12 - 1.21+"
+                  ],
+    "website":  "https://mc-complex.com",
+    "serverIp":  "hub.mc-complex.com",
+    "serverOnline":  "~1 120 онлайн",
+    "primaryLang":  "English",
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  17,
+    "issueSearchTerm":  "Complex",
+    "tags":  [
+                 "server",
+                 "Minecraft Server",
+                 "Pixelmon",
+                 "Skyblock",
+                 "Survival",
+                 "Ліцензія"
+             ],
+    "screenshots":  [
+
+                    ]
 }

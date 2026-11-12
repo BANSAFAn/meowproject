@@ -1,32 +1,36 @@
-{
-  "slug": "donutsmp",
-  "name": "DonutSMP",
-  "shortName": "DonutSMP",
-  "category": "server",
-  "icon": "/projects/donutsmp/icon.png",
-  "country": "US",
-  "developer": "DrDonut & Team",
-  "license": "Лицензійний сервер",
-  "licenseRequired": true,
-  "platforms": [
-    "Java Edition 1.20+",
-    "Bedrock"
-  ],
-  "website": "https://donutsmp.net",
-  "serverIp": "donutsmp.net",
-  "serverOnline": "~6 500+ гравців",
-  "primaryLang": "English",
-  "sourceLinks": [],
-  "issueThreadNumber": 18,
-  "issueSearchTerm": "DonutSMP",
-  "tags": [
-    "server",
-    "Minecraft Server",
-    "Hardcore",
-    "SMP",
-    "Ліцензія",
-    "PvP",
-    "Lifesteal"
-  ],
-  "screenshots": []
+﻿{
+    "slug":  "donutsmp",
+    "name":  "DonutSMP",
+    "shortName":  "DonutSMP",
+    "category":  "server",
+    "icon":  "/projects/donutsmp/icon.png",
+    "country":  "US",
+    "developer":  "DrDonut \u0026 Team",
+    "license":  "Ліцензійний сервер",
+    "licenseRequired":  true,
+    "platforms":  [
+                      "Java Edition 1.20+",
+                      "Bedrock"
+                  ],
+    "website":  "https://donutsmp.net",
+    "serverIp":  "donutsmp.net",
+    "serverOnline":  "~9 900 онлайн",
+    "primaryLang":  "English",
+    "sourceLinks":  [
+
+                    ],
+    "issueThreadNumber":  18,
+    "issueSearchTerm":  "DonutSMP",
+    "tags":  [
+                 "server",
+                 "Minecraft Server",
+                 "Hardcore",
+                 "SMP",
+                 "Ліцензія",
+                 "PvP",
+                 "Lifesteal"
+             ],
+    "screenshots":  [
+
+                    ]
 }
