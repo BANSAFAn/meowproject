@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T11:24:55.003Z",
+  "updatedAt": "2026-11-12T11:27:03.305Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -144,10 +144,21 @@
     "mcc-island": {
       "issueNumber": 22,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 100,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6822315810,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-12",
+          "body": "міні ігри, стиль і головне цікавість дуже чудова",
+          "score": 100,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/22#issuecomment-6822315810",
+          "issueNum": 22
+        }
+      ]
     },
     "minehut": {
       "issueNumber": 23,
