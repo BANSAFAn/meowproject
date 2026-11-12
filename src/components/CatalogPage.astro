@@ -18,6 +18,7 @@ import {
 import { ClientRouter } from 'astro:transitions';
 import MonobankIcon from './icons/MonobankIcon.astro';
 import YoutubeIcon from './icons/YoutubeIcon.astro';
+import reviewsData from '../../public/data/reviews.json';
 
 interface Props {
   lang: LangCode;
@@ -1101,29 +1102,126 @@ const jsonLdSchema = {
 
       /* Tags Bar */
       .tags-filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.4rem;
         border-top: 1px dashed var(--rule-line);
         padding-top: 0.75rem;
         margin-top: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .tags-header-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .tags-title-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
       }
 
       .tags-bar-title {
         font-family: var(--font-mono);
-        font-size: 0.74rem;
+        font-size: 0.76rem;
         font-weight: 800;
         color: var(--accent);
         text-transform: uppercase;
-        margin-right: 0.2rem;
       }
 
-      .tags-pills-row {
+      .tags-counter {
+        font-size: 0.72rem;
+        color: var(--ink-faint);
+      }
+
+      .tag-search-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .tag-search-input {
+        background: var(--paper-card);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 600;
+        padding: 0.3rem 0.65rem;
+        border-radius: 3px;
+        outline: none;
+        width: 170px;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        box-sizing: border-box;
+      }
+
+      .tag-search-input:focus {
+        border-color: var(--accent);
+      }
+
+      .active-tag-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: var(--accent);
+        color: #000;
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 800;
+        padding: 0.2rem 0.6rem;
+        border-radius: 3px;
+        border: 1px solid var(--border-ink);
+      }
+
+      .btn-toggle-all-tags {
+        background: var(--paper-inset);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.28rem 0.65rem;
+        cursor: pointer;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        transition: transform 100ms ease, background 100ms ease;
+      }
+
+      .btn-toggle-all-tags:hover {
+        background: var(--paper-card);
+        transform: translateY(-1px);
+      }
+
+      .tags-scroll-container {
         display: flex;
         flex-wrap: wrap;
         gap: 0.35rem;
-        flex: 1;
+        width: 100%;
+        transition: max-height 300ms ease;
+      }
+
+      .tags-scroll-container.collapsed {
+        max-height: 38px;
+        overflow: hidden;
+      }
+
+      .tags-scroll-container.expanded {
+        max-height: 280px;
+        overflow-y: auto;
+        padding-right: 0.3rem;
+      }
+
+      .tags-empty-search {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        color: var(--ink-faint);
+        padding: 0.2rem 0;
       }
 
       .tag-filter-btn {
@@ -1136,6 +1234,7 @@ const jsonLdSchema = {
         padding: 0.2rem 0.55rem;
         cursor: pointer;
         transition: transform 100ms ease, background 100ms ease, color 100ms ease;
+        white-space: nowrap;
       }
 
       .tag-filter-btn:hover {
@@ -1152,14 +1251,15 @@ const jsonLdSchema = {
       }
 
       .btn-clear-tag {
-        background: rgba(231, 76, 60, 0.15);
+        background: rgba(231, 76, 60, 0.2);
         border: 1px solid #e74c3c;
         color: #e74c3c;
         font-family: var(--font-mono);
-        font-size: 0.73rem;
-        font-weight: 700;
-        padding: 0.2rem 0.5rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 0.1rem 0.4rem;
         cursor: pointer;
+        border-radius: 2px;
       }
 
       /* Clickable tag pill on cards */
@@ -1178,6 +1278,107 @@ const jsonLdSchema = {
         background: var(--accent);
         color: #000;
         transform: translateY(-1px);
+      }
+
+      /* Clickable Country Stamp & Map Tag */
+      .stamp-country-clickable {
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid var(--border-ink);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.6rem;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        transition: transform 100ms ease, border-color 100ms ease, background 100ms ease;
+      }
+
+      .stamp-country-clickable:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+        background: var(--paper-inset);
+      }
+
+      .country-map-tag {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--accent);
+        background: rgba(255, 174, 0, 0.12);
+        border: 1px solid var(--accent);
+        padding: 1px 5px;
+        border-radius: 3px;
+        margin-left: 0.25rem;
+      }
+
+      /* World Map Modal */
+      .world-map-stage-wrapper {
+        position: relative;
+        background: radial-gradient(circle at center, #141a24 0%, #080a0f 100%);
+        border: 1.5px solid var(--border-ink);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0.75rem 0;
+        box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.75);
+      }
+
+      .world-vector-map {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .map-continent {
+        fill: rgba(255, 255, 255, 0.08);
+        stroke: rgba(255, 255, 255, 0.25);
+        stroke-width: 1.4;
+        cursor: pointer;
+        transition: fill 200ms ease, stroke 200ms ease, filter 200ms ease;
+      }
+
+      .map-continent:hover {
+        fill: rgba(255, 174, 0, 0.3) !important;
+        stroke: var(--accent) !important;
+      }
+
+      .map-continent.highlighted {
+        fill: var(--accent) !important;
+        fill-opacity: 0.85 !important;
+        stroke: #ffffff !important;
+        stroke-width: 2.2 !important;
+        filter: drop-shadow(0 0 14px rgba(255, 174, 0, 0.85));
+      }
+
+      .world-map-status-box {
+        background: rgba(255, 174, 0, 0.08);
+        border: 1.5px solid var(--accent);
+        border-radius: 4px;
+        padding: 0.65rem 0.9rem;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        color: #fff;
+        line-height: 1.5;
+        margin-bottom: 0.65rem;
+      }
+
+      .world-map-bottom-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        border-top: 1px dashed rgba(255, 255, 255, 0.15);
+        padding-top: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .world-map-quick-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
       }
 
       /* Video Player Component */
@@ -2893,7 +3094,7 @@ const jsonLdSchema = {
               aria-expanded="false"
               aria-label="Оберіть мову інтерфейсу"
             >
-              <span class="lang-current-flag">{flagEmojis[lang] || '🌐'}</span>
+              <span class="lang-current-globe" aria-hidden="true">🌐</span>
               <span class="lang-current-code">{currentLangMeta.short}</span>
               <span class="lang-current-sep">—</span>
               <span class="lang-current-name">{currentLangMeta.label}</span>
@@ -2912,7 +3113,6 @@ const jsonLdSchema = {
                     role="option"
                     aria-selected={isActive ? 'true' : 'false'}
                   >
-                    <span class="item-flag">{flagEmojis[l.code] || '🌐'}</span>
                     <span class="item-code">{l.short}</span>
                     <span class="item-sep">—</span>
                     <span class="item-label">{l.label}</span>
@@ -3109,18 +3309,50 @@ const jsonLdSchema = {
 
           <!-- Interactive Tags Bar -->
           <div class="tags-filter-bar" id="tags-filter-bar">
-            <span class="tags-bar-title">{t.tagsLabel}</span>
-            <div class="tags-pills-row" id="tags-pills-container">
+            <div class="tags-header-line">
+              <div class="tags-title-group">
+                <span class="tags-bar-title">{t.tagsLabel}</span>
+                <span class="tags-counter mono">({allUniqueTags.length})</span>
+              </div>
+
+              <!-- Quick Tag Search -->
+              <div class="tag-search-wrapper">
+                <input
+                  type="text"
+                  id="tag-filter-search"
+                  class="tag-search-input"
+                  placeholder={t.tagSearchPlaceholder}
+                  aria-label="Пошук по тегам"
+                />
+              </div>
+
+              <!-- Active Tag Indicator & Clear Button -->
+              <div id="active-tag-chip" class="active-tag-chip" style="display: none;">
+                <span class="active-tag-name" id="active-tag-display"></span>
+                <button type="button" id="btn-clear-tag" class="btn-clear-tag" title={t.clearTagBtn}>
+                  ✕
+                </button>
+              </div>
+
+              <!-- Expand / Collapse All Tags Button -->
+              <button type="button" id="btn-toggle-all-tags" class="btn-toggle-all-tags">
+                <span id="toggle-tags-label">{t.showAllTags}</span>
+                <span class="toggle-tags-arrow" id="toggle-tags-arrow">▼</span>
+              </button>
+            </div>
+
+            <!-- Tags Container (collapsible / scrollable) -->
+            <div class="tags-scroll-container collapsed" id="tags-scroll-container">
               <button type="button" class="tag-filter-btn active" data-tag="all">{t.allTagsLabel}</button>
-              {allUniqueTags.slice(0, 16).map((tag) => (
+              {allUniqueTags.map((tag) => (
                 <button type="button" class="tag-filter-btn" data-tag={tag}>
                   #{tag}
                 </button>
               ))}
+              <div id="tags-empty-search" class="tags-empty-search" style="display: none;">
+                Не знайдено тегів за запитом
+              </div>
             </div>
-            <button type="button" id="btn-clear-tag" class="btn-clear-tag" style="display: none;" title={t.clearTagBtn}>
-              {t.clearTagBtn}
-            </button>
           </div>
         </section>
 
@@ -3156,6 +3388,7 @@ const jsonLdSchema = {
               const desc = hasTranslation ? loc.description : '';
               const tagline = hasTranslation ? loc.tagline : (project.locales.en?.tagline || project.locales.uk?.tagline);
               const features = hasTranslation ? loc.features : (project.locales.en?.features || project.locales.uk?.features || []);
+              const initialScore = (reviewsData as any)?.projects?.[project.slug]?.averageRating || 0;
               const primaryProjectLink = project.primaryLink;
               const primaryLinkLabel = project.website ? t.officialSite : t.fallbackProjectLink;
               const cName = projectCountry(project.country);
@@ -3168,17 +3401,18 @@ const jsonLdSchema = {
                   id={`project-${project.slug}`}
                   class="project-dossier"
                   data-project-card={project.slug}
+                  data-project-slug={project.slug}
                   data-category={project.category}
                   data-tags={project.tags.join(',').toLowerCase()}
                   data-project-name={project.name}
                   data-project-index={index}
-                  data-project-score="0"
+                  data-project-score={initialScore}
                   data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
                   style={initialProjectSlug && project.slug !== initialProjectSlug ? 'display: none;' : ''}
                 >
                   <!-- Dossier Index Bar -->
                   <div class="dossier-top-bar">
-                    <span>ENTRY {String(index + 1).padStart(2, '0')} // {project.category.toUpperCase()}</span>
+                    <span>// {project.category.toUpperCase()}</span>
                     <span data-rating-top-badge={project.slug}></span>
                   </div>
 
@@ -3191,8 +3425,15 @@ const jsonLdSchema = {
 
                       <div>
                         <div class="dossier-stamps">
-                          <!-- Country Stamp -->
-                          <span class="stamp stamp-country" title={`${t.countryOrigin}: ${cName}`}>
+                          <!-- Country Stamp (Clickable to open interactive world map) -->
+                          <button
+                            type="button"
+                            class="stamp stamp-country stamp-country-clickable"
+                            data-open-world-map
+                            data-country-code={cCode}
+                            data-country-name={cName}
+                            title={`Показати ${cName} на інтерактивній карті світу`}
+                          >
                             {cCode === 'CN' && (
                               <svg width="14" height="10" viewBox="0 0 30 20" aria-hidden="true">
                                 <rect width="30" height="20" fill="#DE2910" />
@@ -3219,8 +3460,9 @@ const jsonLdSchema = {
                                 <line x1="4" y1="22" x2="4" y2="15"></line>
                               </svg>
                             )}
-                            {t.countryOrigin}: {cName}{cCode !== 'GLOBAL' ? ` (${cCode})` : ''}
-                          </span>
+                            <span>{t.countryOrigin}: {cName}</span>
+                            <span class="country-map-tag">🗺️ Карта</span>
+                          </button>
 
                           <!-- Clickable source code badges (all mirrors) right next to Country -->
                           {project.isOpenSource ? (
@@ -3318,9 +3560,19 @@ const jsonLdSchema = {
                         type="button"
                         class="paper-btn paper-btn-outline"
                         data-open-suggest-edit
-                        data-project-slug={project.slug}
-                        data-project-name={project.name}
-                        data-project-cat={project.category}
+                        data-suggest-slug={project.slug}
+                        data-suggest-name={project.name}
+                        data-suggest-cat={project.category}
+                        data-suggest-country={project.country}
+                        data-suggest-license={project.license}
+                        data-suggest-is-open={project.isOpenSource ? 'yes' : 'no'}
+                        data-suggest-repo={project.sourceLinks?.[0]?.url || ''}
+                        data-suggest-website={project.website || ''}
+                        data-suggest-platforms={project.platforms.join(', ')}
+                        data-suggest-tags={project.tags.join(', ')}
+                        data-suggest-server-ip={project.serverIp || ''}
+                        data-suggest-desc-uk={project.locales.uk?.description || ''}
+                        data-suggest-desc-en={project.locales.en?.description || ''}
                         title={t.suggestChangesBtn}
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -4416,7 +4668,7 @@ const jsonLdSchema = {
 
     <!-- Suggest Edit / Update Project Modal -->
     <div id="suggest-edit-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 620px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+      <div class="lightbox-frame" style="max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
             <span class="mono" style="font-size: 0.75rem; color: var(--accent); font-weight: 800;">[COMMUNITY CONTRIBUTION]</span>
@@ -4435,27 +4687,88 @@ const jsonLdSchema = {
 
         <form id="suggest-edit-form">
           <input type="hidden" id="suggest-project-slug" value="" />
-          <input type="hidden" id="suggest-project-name" value="" />
-          <input type="hidden" id="suggest-project-cat" value="" />
 
-          <div class="suggest-form-field">
-            <label for="suggest-desc-uk">{t.suggestDescUkLabel}</label>
-            <textarea id="suggest-desc-uk" class="suggest-form-textarea" placeholder="Оновлений або покращений опис українською (мін. 20 символів)..."></textarea>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
+            <div class="suggest-form-field">
+              <label for="suggest-name">Назва проєкту *</label>
+              <input type="text" id="suggest-name" class="suggest-form-input" required />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-category">Категорія проєкту *</label>
+              <select id="suggest-category" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="launcher">Лаунчер (launcher)</option>
+                <option value="client">Клієнт (client)</option>
+                <option value="modpack">Модпак (modpack)</option>
+                <option value="mod">Мод (mod)</option>
+                <option value="server">Сервер (server)</option>
+                <option value="website">Вебсайт (website)</option>
+                <option value="project">Проєкт (project)</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-country">Країна або регіон *</label>
+              <input type="text" id="suggest-country" class="suggest-form-input" placeholder="Global, Ukraine, China, USA, Europe..." />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-license">Ліцензія *</label>
+              <input type="text" id="suggest-license" class="suggest-form-input" placeholder="MIT, GPL-3.0, BSD-3-Clause, Proprietary..." />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-is-open-source">Тип вихідного коду</label>
+              <select id="suggest-is-open-source" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="yes">Так — Відкритий вихідний код (Open Source)</option>
+                <option value="no">Ні — Пропрієтарний / Закритий код (Closed)</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-repo-url">Посилання на репозиторій коду</label>
+              <input type="url" id="suggest-repo-url" class="suggest-form-input" placeholder="https://github.com/owner/repo" />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-website">Офіційний сайт</label>
+              <input type="url" id="suggest-website" class="suggest-form-input" placeholder="https://project.org" />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-platforms">Платформи (через кому)</label>
+              <input type="text" id="suggest-platforms" class="suggest-form-input" placeholder="Windows 10, Windows 11, Linux, macOS" />
+            </div>
           </div>
 
-          <div class="suggest-form-field">
-            <label for="suggest-desc-en">{t.suggestDescEnLabel}</label>
-            <textarea id="suggest-desc-en" class="suggest-form-textarea" placeholder="Updated English description (min 20 chars)..."></textarea>
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-tags">Теги проєкту (через кому)</label>
+            <input type="text" id="suggest-tags" class="suggest-form-input" placeholder="Optimization, Fabric, Shaders, Performance" />
           </div>
 
-          <div class="suggest-form-field">
-            <label for="suggest-screenshots">{t.suggestScreenshotsLabel}</label>
-            <textarea id="suggest-screenshots" class="suggest-form-textarea" style="min-height: 60px;" placeholder="https://example.com/screen1.png&#10;https://example.com/screen2.png"></textarea>
-          </div>
-
-          <div class="suggest-form-field" id="suggest-server-ip-field" style="display: none;">
+          <div class="suggest-form-field" id="suggest-server-ip-field" style="display: none; margin-top: 0.75rem;">
             <label for="suggest-server-ip">{t.suggestServerIpLabel}</label>
             <input type="text" id="suggest-server-ip" class="suggest-form-input" placeholder="play.server.com" />
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-screenshots">{t.suggestScreenshotsLabel}</label>
+            <textarea id="suggest-screenshots" class="suggest-form-textarea" style="min-height: 55px;" placeholder="https://example.com/screen1.png&#10;https://example.com/screen2.png"></textarea>
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-desc-uk">{t.suggestDescUkLabel}</label>
+            <textarea id="suggest-desc-uk" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Опис проєкту українською мовою..."></textarea>
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-desc-en">{t.suggestDescEnLabel}</label>
+            <textarea id="suggest-desc-en" class="suggest-form-textarea" style="min-height: 65px;" placeholder="English description..."></textarea>
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-notes">Примітка автора правки / Джерело</label>
+            <textarea id="suggest-notes" class="suggest-form-textarea" style="min-height: 45px;" placeholder="Коротко вкажіть, що саме та чому ви змінюєте..."></textarea>
           </div>
 
           <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.6rem;">
@@ -4467,6 +4780,86 @@ const jsonLdSchema = {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Interactive World Map Modal -->
+    <div id="world-map-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 900px; width: 95vw; background: #0c0f14; border: 2px solid var(--border-ink); padding: 1.5rem; color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; border-bottom: 1.5px solid rgba(255,255,255,0.15); padding-bottom: 0.6rem;">
+          <div>
+            <div class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800; letter-spacing: 0.08em;">
+              [GEOGRAPHIC REGION RADAR // КАРТА ПОХОДЖЕННЯ]
+            </div>
+            <h3 id="world-map-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.25rem; font-weight: 900; color: #fff;">
+              Географічне походження проєкту
+            </h3>
+          </div>
+          <button type="button" id="world-map-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            ✕ Закрити [ESC]
+          </button>
+        </div>
+
+        <!-- Dynamic Status Banner -->
+        <div id="world-map-status-banner" class="world-map-status-box">
+          <!-- Filled dynamically by JS -->
+        </div>
+
+        <!-- Interactive Vector SVG World Map -->
+        <div class="world-map-stage-wrapper">
+          <svg id="world-map-svg" viewBox="0 0 1000 500" class="world-vector-map" aria-label="Інтерактивна карта світу">
+            <!-- Grid Lines -->
+            <g stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3">
+              <line x1="0" y1="125" x2="1000" y2="125" />
+              <line x1="0" y1="250" x2="1000" y2="250" />
+              <line x1="0" y1="375" x2="1000" y2="375" />
+              <line x1="250" y1="0" x2="250" y2="500" />
+              <line x1="500" y1="0" x2="500" y2="500" />
+              <line x1="750" y1="0" x2="750" y2="500" />
+            </g>
+
+            <!-- Continents -->
+            <g id="world-continents-layer">
+              <!-- North America -->
+              <path class="map-continent" id="continent-north-america" data-region="north-america" data-name="Північна Америка"
+                d="M 80,95 L 125,75 L 160,65 L 210,60 L 260,75 L 265,105 L 290,135 L 270,165 L 295,190 L 270,210 L 250,230 L 235,260 L 225,280 L 215,270 L 195,240 L 180,225 L 140,215 L 120,185 L 105,155 L 75,120 Z M 330,45 L 390,35 L 415,65 L 380,95 L 340,90 Z" />
+
+              <!-- South America -->
+              <path class="map-continent" id="continent-south-america" data-region="south-america" data-name="Південна Америка"
+                d="M 235,265 L 270,260 L 305,275 L 345,305 L 350,345 L 320,385 L 290,430 L 270,480 L 255,475 L 258,420 L 245,370 L 230,320 L 225,285 Z" />
+
+              <!-- Europe -->
+              <path class="map-continent" id="continent-europe" data-region="europe" data-name="Європа"
+                d="M 460,180 L 480,140 L 475,100 L 510,70 L 530,65 L 545,95 L 535,120 L 570,125 L 590,145 L 575,175 L 540,180 L 515,195 L 485,195 L 470,190 Z M 445,130 L 460,115 L 470,135 L 455,150 Z" />
+
+              <!-- Africa -->
+              <path class="map-continent" id="continent-africa" data-region="africa" data-name="Африка"
+                d="M 470,195 L 525,195 L 580,220 L 610,260 L 600,290 L 565,340 L 535,395 L 505,400 L 480,360 L 465,300 L 450,260 L 440,220 Z M 615,335 L 635,330 L 630,375 L 615,370 Z" />
+
+              <!-- Asia -->
+              <path class="map-continent" id="continent-asia" data-region="asia" data-name="Азія"
+                d="M 590,145 L 650,80 L 730,60 L 820,65 L 890,95 L 870,140 L 810,160 L 845,210 L 815,250 L 780,270 L 740,260 L 710,215 L 670,220 L 630,240 L 600,210 L 585,175 Z M 870,155 L 895,160 L 885,195 L 865,185 Z" />
+
+              <!-- Oceania -->
+              <path class="map-continent" id="continent-oceania" data-region="oceania" data-name="Океанія / Австралія"
+                d="M 780,320 L 840,310 L 890,335 L 880,390 L 840,415 L 780,385 L 760,350 Z M 910,405 L 935,400 L 925,435 L 905,430 Z" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Legend and region switcher -->
+        <div class="world-map-bottom-bar">
+          <div style="font-size: 0.78rem; color: #8b949e;">
+            💡 Клацніть на будь-який континент на карті для підсвічування та фільтрування проєктів
+          </div>
+          <div class="world-map-quick-buttons">
+            <button type="button" class="paper-btn" data-select-region="europe">Європа</button>
+            <button type="button" class="paper-btn" data-select-region="asia">Азія</button>
+            <button type="button" class="paper-btn" data-select-region="north-america">Пн. Америка</button>
+            <button type="button" class="paper-btn" data-select-region="africa">Африка</button>
+            <button type="button" class="paper-btn" data-select-region="global">Глобальні (Усі)</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -5043,14 +5436,63 @@ const jsonLdSchema = {
           }
         }
 
+        const tagSearchInput = document.getElementById('tag-filter-search');
+        const tagToggleBtn = document.getElementById('btn-toggle-all-tags');
+        const tagsContainer = document.getElementById('tags-scroll-container');
+        const toggleTagsLabel = document.getElementById('toggle-tags-label');
+        const toggleTagsArrow = document.getElementById('toggle-tags-arrow');
+        const activeTagChip = document.getElementById('active-tag-chip');
+        const activeTagDisplay = document.getElementById('active-tag-display');
+        const tagsEmptySearch = document.getElementById('tags-empty-search');
+
+        if (tagToggleBtn && tagsContainer) {
+          tagToggleBtn.addEventListener('click', () => {
+            const isCollapsed = tagsContainer.classList.contains('collapsed');
+            tagsContainer.classList.toggle('collapsed', !isCollapsed);
+            tagsContainer.classList.toggle('expanded', isCollapsed);
+            if (toggleTagsLabel) toggleTagsLabel.textContent = isCollapsed ? '▲ Згорнути' : '▼ Всі теги';
+            if (toggleTagsArrow) toggleTagsArrow.textContent = isCollapsed ? '▲' : '▼';
+          });
+        }
+
+        if (tagSearchInput && tagsContainer) {
+          tagSearchInput.addEventListener('input', () => {
+            const q = tagSearchInput.value.trim().toLowerCase();
+            tagsContainer.classList.remove('collapsed');
+            tagsContainer.classList.add('expanded');
+            if (toggleTagsLabel) toggleTagsLabel.textContent = '▲ Згорнути';
+            if (toggleTagsArrow) toggleTagsArrow.textContent = '▲';
+
+            let visibleCount = 0;
+            document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
+              const tag = (btn.getAttribute('data-tag') || '').toLowerCase();
+              if (tag === 'all') {
+                btn.style.display = q ? 'none' : '';
+                return;
+              }
+              const matches = !q || tag.includes(q);
+              btn.style.display = matches ? '' : 'none';
+              if (matches) visibleCount++;
+            });
+            if (tagsEmptySearch) {
+              tagsEmptySearch.style.display = visibleCount === 0 && q ? 'block' : 'none';
+            }
+          });
+        }
+
         function setActiveTag(tag) {
           activeTag = (tag || 'all').toLowerCase();
           document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
             const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
             btn.classList.toggle('active', btnTag === activeTag);
           });
-          if (tagClearBtn) {
-            tagClearBtn.style.display = activeTag === 'all' ? 'none' : 'inline-block';
+          if (activeTagChip && activeTagDisplay) {
+            if (activeTag !== 'all') {
+              activeTagDisplay.textContent = `#${activeTag}`;
+              activeTagChip.style.display = 'inline-flex';
+            } else {
+              activeTagChip.style.display = 'none';
+            }
           }
           filterProjects();
         }
@@ -5596,7 +6038,7 @@ const jsonLdSchema = {
               if (ratingStampEl) ratingStampEl.style.display = '';
               if (ratingTopBadgeEl) ratingTopBadgeEl.textContent = scoreText;
 
-              const cardEl = document.querySelector(`[data-project-slug="${slug}"]`);
+              const cardEl = document.querySelector(`[data-project-card="${slug}"], [data-project-slug="${slug}"]`);
               if (cardEl) {
                 cardEl.dataset.projectScore = String(avg);
               }
@@ -5703,6 +6145,10 @@ const jsonLdSchema = {
               });
             }
           }
+
+          if (sortSelect && sortSelect.value === 'rating-desc') {
+            applySort();
+          }
         }
 
         loadRealReviews();
@@ -5779,16 +6225,24 @@ const jsonLdSchema = {
         const suggestCancel = document.getElementById('btn-cancel-suggest');
         const suggestForm = document.getElementById('suggest-edit-form');
         const suggestTitle = document.getElementById('suggest-modal-title');
-        const suggestSlugInput = document.getElementById('suggest-project-slug');
-        const suggestNameInput = document.getElementById('suggest-project-name');
-        const suggestCatInput = document.getElementById('suggest-project-cat');
         const suggestServerIpField = document.getElementById('suggest-server-ip-field');
 
-        function openSuggestEditModal(slug, name, cat) {
+        function openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn) {
           if (!suggestModal) return;
-          if (suggestSlugInput) suggestSlugInput.value = slug || '';
-          if (suggestNameInput) suggestNameInput.value = name || '';
-          if (suggestCatInput) suggestCatInput.value = cat || '';
+          if (document.getElementById('suggest-project-slug')) document.getElementById('suggest-project-slug').value = slug || '';
+          if (document.getElementById('suggest-name')) document.getElementById('suggest-name').value = name || '';
+          if (document.getElementById('suggest-category')) document.getElementById('suggest-category').value = cat || 'launcher';
+          if (document.getElementById('suggest-country')) document.getElementById('suggest-country').value = country || '';
+          if (document.getElementById('suggest-license')) document.getElementById('suggest-license').value = license || '';
+          if (document.getElementById('suggest-is-open-source')) document.getElementById('suggest-is-open-source').value = isOpen || 'yes';
+          if (document.getElementById('suggest-repo-url')) document.getElementById('suggest-repo-url').value = repoUrl || '';
+          if (document.getElementById('suggest-website')) document.getElementById('suggest-website').value = website || '';
+          if (document.getElementById('suggest-platforms')) document.getElementById('suggest-platforms').value = platforms || '';
+          if (document.getElementById('suggest-tags')) document.getElementById('suggest-tags').value = tags || '';
+          if (document.getElementById('suggest-server-ip')) document.getElementById('suggest-server-ip').value = serverIp || '';
+          if (document.getElementById('suggest-desc-uk')) document.getElementById('suggest-desc-uk').value = descUk || '';
+          if (document.getElementById('suggest-desc-en')) document.getElementById('suggest-desc-en').value = descEn || '';
+
           if (suggestTitle) {
             suggestTitle.textContent = `Доповнити або змінити: ${name || slug}`;
           }
@@ -5812,7 +6266,17 @@ const jsonLdSchema = {
             const slug = btn.getAttribute('data-suggest-slug');
             const name = btn.getAttribute('data-suggest-name');
             const cat = btn.getAttribute('data-suggest-cat');
-            openSuggestEditModal(slug, name, cat);
+            const country = btn.getAttribute('data-suggest-country');
+            const license = btn.getAttribute('data-suggest-license');
+            const isOpen = btn.getAttribute('data-suggest-is-open');
+            const repoUrl = btn.getAttribute('data-suggest-repo');
+            const website = btn.getAttribute('data-suggest-website');
+            const platforms = btn.getAttribute('data-suggest-platforms');
+            const tags = btn.getAttribute('data-suggest-tags');
+            const serverIp = btn.getAttribute('data-suggest-server-ip');
+            const descUk = btn.getAttribute('data-suggest-desc-uk');
+            const descEn = btn.getAttribute('data-suggest-desc-en');
+            openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn);
           });
         });
 
@@ -5827,33 +6291,138 @@ const jsonLdSchema = {
         if (suggestForm) {
           suggestForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const slug = (suggestSlugInput ? suggestSlugInput.value : '').trim();
-            const name = (suggestNameInput ? suggestNameInput.value : '').trim();
+            const slug = (document.getElementById('suggest-project-slug')?.value || '').trim();
+            const name = (document.getElementById('suggest-name')?.value || '').trim();
+            const cat = (document.getElementById('suggest-category')?.value || '').trim();
+            const country = (document.getElementById('suggest-country')?.value || '').trim();
+            const license = (document.getElementById('suggest-license')?.value || '').trim();
+            const isOpen = (document.getElementById('suggest-is-open-source')?.value || '').trim();
+            const repoUrl = (document.getElementById('suggest-repo-url')?.value || '').trim();
+            const website = (document.getElementById('suggest-website')?.value || '').trim();
+            const platforms = (document.getElementById('suggest-platforms')?.value || '').trim();
+            const tags = (document.getElementById('suggest-tags')?.value || '').trim();
+            const serverIp = (document.getElementById('suggest-server-ip')?.value || '').trim();
+            const screens = (document.getElementById('suggest-screenshots')?.value || '').trim();
             const descUk = (document.getElementById('suggest-desc-uk')?.value || '').trim();
             const descEn = (document.getElementById('suggest-desc-en')?.value || '').trim();
-            const screens = (document.getElementById('suggest-screenshots')?.value || '').trim();
-            const serverIp = (document.getElementById('suggest-server-ip')?.value || '').trim();
+            const notes = (document.getElementById('suggest-notes')?.value || '').trim();
 
             if (!slug) return;
 
-            let body = `### Description\n\n`;
-            if (descUk) {
-              body += `#### UK\n${descUk}\n\n`;
+            let body = `### Project Name\n${name}\n\n`;
+            body += `### Category\n${cat}\n\n`;
+            if (country) body += `### Country\n${country}\n\n`;
+            if (license) body += `### License\n${license}\n\n`;
+            body += `### Open Source\n${isOpen === 'yes' ? 'Так' : 'Ні'}\n\n`;
+            if (repoUrl) body += `### Repository URL\n${repoUrl}\n\n`;
+            if (website) body += `### Website\n${website}\n\n`;
+            if (platforms) body += `### Platforms\n${platforms}\n\n`;
+            if (tags) body += `### Tags\n${tags}\n\n`;
+            if (cat === 'server' && serverIp) body += `### Server IP\n\`${serverIp}\`\n\n`;
+            if (screens) body += `### Screenshots\n${screens}\n\n`;
+            if (descUk || descEn) {
+              body += `### Description\n\n`;
+              if (descUk) body += `#### UK\n${descUk}\n\n`;
+              if (descEn) body += `#### EN\n${descEn}\n\n`;
             }
-            if (descEn) {
-              body += `#### EN\n${descEn}\n\n`;
-            }
-            if (screens) {
-              body += `### Screenshots\n${screens}\n\n`;
-            }
-            if (serverIp) {
-              body += `### Server IP\n\`${serverIp}\`\n\n`;
-            }
+            if (notes) body += `### Notes\n${notes}\n\n`;
 
             const title = `[update: ${slug}] ${name || slug}`;
             const issueUrl = `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
             window.open(issueUrl, '_blank');
             closeSuggestEditModal();
+          });
+        }
+
+        // 11. Interactive World Map Radar & Region Locator
+        const worldMapModal = document.getElementById('world-map-modal');
+        const worldMapClose = document.getElementById('world-map-modal-close');
+        const worldMapStatusBanner = document.getElementById('world-map-status-banner');
+        const worldMapModalTitle = document.getElementById('world-map-modal-title');
+        const mapContinents = document.querySelectorAll('.map-continent');
+
+        const REGION_DESCRIPTIONS = {
+          'global': '🌐 ГЛОБАЛЬНИЙ ПРОЄКТ (МІЖНАРОДНА КОМАНДА) — проєкт розробляється міжнародною спільнотою без привʼязки до однієї країни. Континентів не заповнено.',
+          'europe': '🇪🇺 РЕГІОН: ЄВРОПА — підсвічено європейський континент (проєкти з України, Німеччини, Великої Британії, Польщі тощо).',
+          'asia': '🌏 РЕГІОН: АЗІЯ — підсвічено азійський континент (проєкти з Китаю, Японії, Казахстану тощо).',
+          'north-america': '🌎 РЕГІОН: ПІВНІЧНА АМЕРИКА — підсвічено континент Північна Америка (проєкти зі США, Канади).',
+          'south-america': '🌎 РЕГІОН: ПІВДЕННА АМЕРИКА — підсвічено Південну Америку.',
+          'africa': '🌍 РЕГІОН: АФРИКА — підсвічено континент Африка.',
+          'oceania': '🌏 РЕГІОН: ОКЕАНІЯ / АВСТРАЛІЯ — підсвічено Океанію та Австралію.'
+        };
+
+        const COUNTRY_TO_REGION = {
+          'cn': 'asia', 'china': 'asia', 'asia': 'asia', 'jp': 'asia', 'kr': 'asia', 'kz': 'asia', 'in': 'asia', 'tw': 'asia', 'hk': 'asia', 'sg': 'asia',
+          'de': 'europe', 'gb': 'europe', 'uk': 'europe', 'ua': 'europe', 'pl': 'europe', 'fr': 'europe', 'it': 'europe', 'es': 'europe', 'nl': 'europe', 'be': 'europe', 'ch': 'europe', 'at': 'europe', 'se': 'europe', 'no': 'europe', 'fi': 'europe', 'cz': 'europe', 'sk': 'europe', 'eu': 'europe', 'europe': 'europe', 'europa': 'europe', 'європа': 'europe',
+          'us': 'north-america', 'usa': 'north-america', 'ca': 'north-america', 'canada': 'north-america', 'mx': 'north-america', 'north-america': 'north-america', 'сша': 'north-america',
+          'br': 'south-america', 'ar': 'south-america', 'south-america': 'south-america',
+          'africa': 'africa', 'африка': 'africa',
+          'au': 'oceania', 'nz': 'oceania', 'oceania': 'oceania', 'australia': 'oceania',
+          'global': 'global', '001': 'global', 'світ': 'global', 'world': 'global'
+        };
+
+        function highlightWorldRegion(regionKey, countryDisplayName) {
+          const reg = (regionKey || 'global').toLowerCase().trim();
+          mapContinents.forEach((c) => {
+            const cReg = c.getAttribute('data-region');
+            c.classList.toggle('highlighted', reg !== 'global' && cReg === reg);
+          });
+
+          if (worldMapModalTitle) {
+            worldMapModalTitle.textContent = countryDisplayName
+              ? `Географія: ${countryDisplayName}`
+              : 'Географічне походження проєкту';
+          }
+
+          if (worldMapStatusBanner) {
+            worldMapStatusBanner.textContent = REGION_DESCRIPTIONS[reg] || REGION_DESCRIPTIONS['global'];
+          }
+        }
+
+        function openWorldMap(countryCode, countryDisplayName) {
+          if (!worldMapModal) return;
+          const reg = COUNTRY_TO_REGION[(countryCode || '').toLowerCase()] || 'global';
+          highlightWorldRegion(reg, countryDisplayName);
+          worldMapModal.classList.add('open');
+          worldMapModal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeWorldMap() {
+          if (worldMapModal) {
+            worldMapModal.classList.remove('open');
+            worldMapModal.setAttribute('aria-hidden', 'true');
+          }
+        }
+
+        document.querySelectorAll('[data-open-world-map]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const cCode = btn.getAttribute('data-country-code');
+            const cName = btn.getAttribute('data-country-name');
+            openWorldMap(cCode, cName);
+          });
+        });
+
+        mapContinents.forEach((c) => {
+          c.addEventListener('click', () => {
+            const reg = c.getAttribute('data-region');
+            const name = c.getAttribute('data-name');
+            highlightWorldRegion(reg, name);
+          });
+        });
+
+        document.querySelectorAll('[data-select-region]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const reg = btn.getAttribute('data-select-region');
+            highlightWorldRegion(reg, btn.textContent);
+          });
+        });
+
+        if (worldMapClose) worldMapClose.addEventListener('click', closeWorldMap);
+        if (worldMapModal) {
+          worldMapModal.addEventListener('click', (e) => {
+            if (e.target === worldMapModal) closeWorldMap();
           });
         }
 

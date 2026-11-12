@@ -1046,6 +1046,55 @@ async function handleIssues(eventPayload) {
       const projectJsonPath = path.join(projectDir, 'project.json');
       const meta = readJsonFile(projectJsonPath);
 
+      // Extract updated metadata fields
+      const newName = extractSection(body, 'Project Name');
+      if (newName) meta.name = newName;
+
+      const newCat = extractSection(body, 'Category');
+      if (newCat && ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'].includes(newCat.toLowerCase())) {
+        meta.category = newCat.toLowerCase();
+      }
+
+      const newCountry = extractSection(body, 'Country');
+      if (newCountry) meta.country = newCountry;
+
+      const newLic = extractSection(body, 'License');
+      if (newLic) meta.license = newLic;
+
+      const newIsOpen = extractSection(body, 'Open Source');
+      if (newIsOpen) {
+        meta.isOpenSource = /yes|так|true|1/i.test(newIsOpen);
+      }
+
+      const newRepo = extractSection(body, 'Repository URL');
+      if (newRepo && /^https?:\/\//i.test(newRepo)) {
+        const host = newRepo.includes('gitlab.com') ? 'gitlab' :
+                     newRepo.includes('gitee.com') ? 'gitee' :
+                     newRepo.includes('gitcode.com') ? 'gitcode' :
+                     newRepo.includes('cnb.cool') ? 'cnb' : 'github';
+        meta.sourceLinks = [{ host, label: host.toUpperCase(), url: newRepo }];
+        meta.isOpenSource = true;
+      } else if (newRepo && /none|відсутній|немає|proprietary|closed/i.test(newRepo)) {
+        meta.sourceLinks = [];
+        meta.isOpenSource = false;
+      }
+
+      const newWebsite = extractSection(body, 'Website');
+      if (newWebsite && /^https?:\/\//i.test(newWebsite)) meta.website = newWebsite;
+
+      const newPlatforms = extractSection(body, 'Platforms');
+      if (newPlatforms) {
+        meta.platforms = newPlatforms.split(',').map(s => s.trim()).filter(Boolean);
+      }
+
+      const newTags = extractSection(body, 'Tags');
+      if (newTags) {
+        meta.tags = newTags.split(',').map(s => s.replace(/^#/, '').trim()).filter(Boolean);
+      }
+
+      const newIp = extractSection(body, 'Server IP');
+      if (newIp) meta.serverIp = newIp;
+
       // Extract new screenshots if provided
       const newScreenshotsRaw = extractSection(body, 'Screenshots');
       const publicDir = path.resolve('public/projects', slug);
