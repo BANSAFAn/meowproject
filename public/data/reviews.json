@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T12:10:35.279Z",
+  "updatedAt": "2026-11-12T13:06:55.126Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -101,6 +101,14 @@
     "donutsmp": {
       "issueNumber": 18,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/18",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "fabulously-optimized": {
+      "issueNumber": 28,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/28",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
