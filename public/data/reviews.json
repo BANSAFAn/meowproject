@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T11:27:03.305Z",
+  "updatedAt": "2026-11-12T12:03:20.906Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -90,6 +90,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "cubecraft": {
+      "issueNumber": 25,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "donutsmp": {
       "issueNumber": 18,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/18",
@@ -133,14 +141,6 @@
       "commentsCount": 0,
       "reviews": []
     },
-    "kozakmc": {
-      "issueNumber": 21,
-      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/21",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
-    },
     "mcc-island": {
       "issueNumber": 22,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
@@ -168,9 +168,9 @@
       "commentsCount": 0,
       "reviews": []
     },
-    "uacraft": {
-      "issueNumber": 23,
-      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+    "pika-network": {
+      "issueNumber": 25,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
