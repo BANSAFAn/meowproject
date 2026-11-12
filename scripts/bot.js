@@ -598,7 +598,9 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   const parsedDescriptions = {};
   let lMatch;
   while ((lMatch = langRegex.exec(descSection)) !== null) {
-    const code = lMatch[1].toLowerCase();
+    let code = lMatch[1].toLowerCase();
+    if (code === 'kz') code = 'kk';
+    if (code === 'by') code = 'be';
     parsedDescriptions[code] = lMatch[2].trim();
   }
 
@@ -1121,7 +1123,9 @@ async function handleIssues(eventPayload) {
       let lMatch;
       const localesDir = path.join(projectDir, 'locales');
       while ((lMatch = langRegex.exec(descSection)) !== null) {
-        const code = lMatch[1].toLowerCase();
+        let code = lMatch[1].toLowerCase();
+        if (code === 'kz') code = 'kk';
+        if (code === 'by') code = 'be';
         const text = lMatch[2].trim();
         if (text.length >= 20) {
           const locFile = path.join(localesDir, `${code}.json`);

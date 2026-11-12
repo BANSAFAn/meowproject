@@ -1314,198 +1314,94 @@ const jsonLdSchema = {
         margin-left: 0.25rem;
       }
 
-      /* World Map Modal */
-      .world-map-stage-wrapper {
-        position: relative;
-        background: radial-gradient(circle at center, #141a24 0%, #080a0f 100%);
-        border: 1.5px solid var(--border-ink);
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 0.75rem 0;
-        box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.75);
-      }
-
-      .world-vector-map {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-
-      .map-continent {
-        fill: rgba(255, 255, 255, 0.08);
-        stroke: rgba(255, 255, 255, 0.25);
-        stroke-width: 1.4;
-        cursor: pointer;
-        transition: fill 200ms ease, stroke 200ms ease, filter 200ms ease;
-      }
-
-      .map-continent:hover {
-        fill: rgba(255, 174, 0, 0.3) !important;
-        stroke: var(--accent) !important;
-      }
-
-      .map-continent.highlighted {
-        fill: var(--accent) !important;
-        fill-opacity: 0.85 !important;
-        stroke: #ffffff !important;
-        stroke-width: 2.2 !important;
-        filter: drop-shadow(0 0 14px rgba(255, 174, 0, 0.85));
-      }
-
-      .world-map-status-box {
-        background: rgba(255, 174, 0, 0.08);
-        border: 1.5px solid var(--accent);
-        border-radius: 4px;
-        padding: 0.65rem 0.9rem;
-        font-family: var(--font-mono);
-        font-size: 0.82rem;
-        color: #fff;
-        line-height: 1.5;
-        margin-bottom: 0.65rem;
-      }
-
-      .world-map-bottom-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        border-top: 1px dashed rgba(255, 255, 255, 0.15);
-        padding-top: 0.75rem;
-        margin-top: 0.5rem;
-      }
-
-      .world-map-quick-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-      }
-
-      /* Video Player Component */
-      .video-player-container {
-        background: #0d0f12;
+      /* Step-by-Step Text Guide (Clean Retro Box) */
+      .simple-guide-box {
+        background: var(--paper-sheet);
         border: 2px solid var(--border-ink);
         box-shadow: 6px 6px 0 var(--shadow-hard);
-        margin-bottom: 2rem;
-        overflow: hidden;
+        margin-bottom: 2.25rem;
+        padding: 1.5rem;
       }
 
-      .video-top-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #161a22;
-        border-bottom: 1.5px solid var(--border-ink);
-        padding: 0.5rem 0.9rem;
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
+      .guide-steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
       }
 
-      .video-rec-indicator {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        color: #ff4757;
-        font-weight: 800;
-        letter-spacing: 0.05em;
-      }
-
-      .video-rec-dot {
-        width: 10px;
-        height: 10px;
-        background: #ff4757;
-        border-radius: 50%;
-        animation: recBlink 1s infinite alternate;
-      }
-
-      @keyframes recBlink {
-        from { opacity: 0.2; }
-        to { opacity: 1; }
-      }
-
-      .video-screen-stage {
-        position: relative;
-        min-height: 290px;
-        background: #080a0d;
-        color: #c9d1d9;
-        padding: 1.75rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size: 100% 3px, 6px 100%;
-      }
-
-      .video-scene {
-        display: none;
-        animation: sceneFade 250ms ease-in-out;
-      }
-
-      .video-scene.active {
-        display: block;
-      }
-
-      @keyframes sceneFade {
-        from { opacity: 0; transform: translateY(4px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      .video-controls-bar {
-        background: #161a22;
-        border-top: 1.5px solid var(--border-ink);
-        padding: 0.75rem 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-      }
-
-      .video-scrubber-track {
-        position: relative;
-        width: 100%;
-        height: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid var(--border-ink);
+      .guide-step-card {
+        background: var(--paper);
+        border: 1.5px solid var(--border-ink);
+        padding: 1rem;
         border-radius: 4px;
-        overflow: hidden;
-      }
-
-      .video-scrubber-fill {
-        height: 100%;
-        width: 25%;
-        background: var(--accent);
-        transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .video-buttons-row {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 0.5rem;
       }
 
-      .video-step-tabs {
+      .guide-step-num {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 900;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .guide-step-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .guide-step-desc {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--ink-muted);
+      }
+
+      /* Multilingual Tabs in Suggest Modal */
+      .suggest-lang-tabs {
         display: flex;
         flex-wrap: wrap;
         gap: 0.35rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 1.5px solid var(--border-ink);
+        padding-bottom: 0.5rem;
       }
 
-      .video-step-btn {
-        background: #21262d;
-        color: #8b949e;
+      .suggest-lang-tab-btn {
+        background: var(--paper);
         border: 1px solid var(--border-ink);
+        color: var(--ink-muted);
         font-family: var(--font-mono);
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        padding: 0.25rem 0.6rem;
+        padding: 0.3rem 0.65rem;
         cursor: pointer;
-        transition: background 120ms ease, color 120ms ease;
+        border-radius: 3px;
+        transition: all 120ms ease;
       }
 
-      .video-step-btn.active {
+      .suggest-lang-tab-btn:hover {
+        background: var(--paper-hover);
+        color: var(--ink);
+      }
+
+      .suggest-lang-tab-btn.active {
         background: var(--accent);
         color: #000;
-        font-weight: 800;
+        border-color: var(--accent);
+        font-weight: 900;
+      }
+
+      .suggest-lang-pane {
+        display: none;
+      }
+
+      .suggest-lang-pane.active {
+        display: block;
       }
 
       /* Suggest Edit Modal */
@@ -3425,15 +3321,8 @@ const jsonLdSchema = {
 
                       <div>
                         <div class="dossier-stamps">
-                          <!-- Country Stamp (Clickable to open interactive world map) -->
-                          <button
-                            type="button"
-                            class="stamp stamp-country stamp-country-clickable"
-                            data-open-world-map
-                            data-country-code={cCode}
-                            data-country-name={cName}
-                            title={`Показати ${cName} на інтерактивній карті світу`}
-                          >
+                          <!-- Country Stamp -->
+                          <span class="stamp stamp-country" title={`${t.countryOrigin}: ${cName}`}>
                             {cCode === 'CN' && (
                               <svg width="14" height="10" viewBox="0 0 30 20" aria-hidden="true">
                                 <rect width="30" height="20" fill="#DE2910" />
@@ -3447,6 +3336,28 @@ const jsonLdSchema = {
                                 <rect width="13" height="10.8" fill="#3C3B6E" />
                               </svg>
                             )}
+                            {cCode === 'DE' && (
+                              <svg width="14" height="10" viewBox="0 0 5 3" aria-hidden="true">
+                                <rect width="5" height="1" y="0" fill="#000" />
+                                <rect width="5" height="1" y="1" fill="#D00" />
+                                <rect width="5" height="1" y="2" fill="#FFCE00" />
+                              </svg>
+                            )}
+                            {cCode === 'GB' && (
+                              <svg width="14" height="10" viewBox="0 0 60 30" aria-hidden="true">
+                                <rect width="60" height="30" fill="#012169" />
+                                <path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6" />
+                                <path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="3" />
+                                <path d="M30 0 v30 M0 15 h60" stroke="#fff" stroke-width="10" />
+                                <path d="M30 0 v30 M0 15 h60" stroke="#C8102E" stroke-width="6" />
+                              </svg>
+                            )}
+                            {cCode === 'UA' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="1" y="0" fill="#0057B7" />
+                                <rect width="3" height="1" y="1" fill="#FFDD00" />
+                              </svg>
+                            )}
                             {cCode === 'GLOBAL' && (
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -3454,15 +3365,14 @@ const jsonLdSchema = {
                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                               </svg>
                             )}
-                            {!['CN', 'US', 'GLOBAL'].includes(cCode) && (
+                            {!['CN', 'US', 'DE', 'GB', 'UA', 'GLOBAL'].includes(cCode) && (
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
                                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
                                 <line x1="4" y1="22" x2="4" y2="15"></line>
                               </svg>
                             )}
                             <span>{t.countryOrigin}: {cName}</span>
-                            <span class="country-map-tag">🗺️ Карта</span>
-                          </button>
+                          </span>
 
                           <!-- Clickable source code badges (all mirrors) right next to Country -->
                           {project.isOpenSource ? (
@@ -3573,6 +3483,10 @@ const jsonLdSchema = {
                         data-suggest-server-ip={project.serverIp || ''}
                         data-suggest-desc-uk={project.locales.uk?.description || ''}
                         data-suggest-desc-en={project.locales.en?.description || ''}
+                        data-suggest-desc-de={project.locales.de?.description || ''}
+                        data-suggest-desc-pl={project.locales.pl?.description || ''}
+                        data-suggest-desc-be={project.locales.be?.description || ''}
+                        data-suggest-desc-kk={project.locales.kk?.description || ''}
                         title={t.suggestChangesBtn}
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -3759,17 +3673,12 @@ const jsonLdSchema = {
                       data-search-term={project.issueSearchTerm}
                     >
                       <div class="reviews-top">
-                        <div>
-                          <span class="section-title">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            {t.reviewsTitle}
-                          </span>
-                          <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 0.2rem;">
-                            {t.reviewsSubtitle}
-                          </p>
-                        </div>
+                        <span class="section-title">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                          </svg>
+                          {t.reviewsTitle}
+                        </span>
 
                         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                           <a
@@ -3800,18 +3709,6 @@ const jsonLdSchema = {
                             {t.writeReviewBtn}
                           </a>
                         </div>
-                      </div>
-
-                      <div class="bot-note-strip">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink: 0; margin-top: 2px;">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="12" y1="16" x2="12" y2="12"></line>
-                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                        <span>
-                          {t.reviewsBotNotice}
-                          <span class="soft-hint">{t.ratingHint}</span>
-                        </span>
                       </div>
 
                       <div class="real-reviews-container" data-reviews-list>
@@ -3936,114 +3833,42 @@ const jsonLdSchema = {
           <h1 class="hero-title">{t.submitTabTitle}</h1>
           <p class="hero-subtitle">{t.submitTabSubtitle}</p>
 
-          <!-- Interactive Video-Format Walkthrough Player -->
-          <div class="video-player-container" id="video-player">
-            <div class="video-top-header">
-              <div class="video-rec-indicator">
-                <span class="video-rec-dot"></span>
-                <span>REC ● LIVE DEMO</span>
-              </div>
-              <div class="mono" style="color: var(--accent); font-weight: 800;">
-                {t.videoDemoTitle} // 1080p 60FPS
-              </div>
-              <div class="mono" style="color: var(--ink-faint);" id="video-timecode">
-                00:15 / 00:40
-              </div>
+          <!-- Step-by-Step Text Guide (Clean Retro Box) -->
+          <div class="simple-guide-box">
+            <div style="display: flex; align-items: center; gap: 0.6rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--accent);">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <h2 style="font-size: 1.15rem; font-weight: 900; margin: 0; color: var(--ink);">
+                {t.guideSimpleTitle || 'Покрокова інструкція: від заповнення до публікації на сайті'}
+              </h2>
             </div>
 
-            <!-- Video Screen Viewport with Dynamic Scenes -->
-            <div class="video-screen-stage" id="video-stage">
-              <!-- Scene 01: Заповнення форми -->
-              <div class="video-scene active" data-video-scene="0">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
-                  <span class="mono" style="color: #f1c40f; font-weight: 800;">[SCENE 01 / 04] // ЗАПОВНЕННЯ ФОРМИ ПОДАЧІ</span>
-                  <span class="stamp stamp-alpha">ACTION: INPUT</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.45); border: 1.5px solid rgba(255,255,255,0.15); padding: 1rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.6;">
-                  <div style="color: #7ee787;">&gt; input.category = <span style="color: #79c0ff;">"modpack"</span>;</div>
-                  <div style="color: #7ee787;">&gt; input.name = <span style="color: #ffa657;">"Fabulously Optimized"</span>;</div>
-                  <div style="color: #7ee787;">&gt; input.website = <span style="color: #79c0ff;">"https://download.fo"</span>;</div>
-                  <div style="color: #7ee787;">&gt; input.desc_uk = <span style="color: #ffa657;">"Гарна графіка, висока продуктивність та знайомі функції..."</span>;</div>
-                  <div style="margin-top: 0.5rem; color: #8b949e; display: flex; align-items: center; gap: 0.4rem;">
-                    <span class="pulse-dot"></span>
-                    <span>Користувач заповнює дані українською та англійською мовами...</span>
-                  </div>
-                </div>
+            <div class="guide-steps-grid">
+              <div class="guide-step-card">
+                <span class="guide-step-num">КРОК 01</span>
+                <span class="guide-step-title">{t.guideStep1Title || 'Заповнення форми'}</span>
+                <p class="guide-step-desc">{t.guideStep1Desc || 'Оберіть категорію проєкту (launcher, mod, server тощо), введіть назву, сайт і опис українською або іншими мовами.'}</p>
               </div>
 
-              <!-- Scene 02: Миттєва перевірка -->
-              <div class="video-scene" data-video-scene="1">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
-                  <span class="mono" style="color: #2ecc71; font-weight: 800;">[SCENE 02 / 04] // АВТОМАТИЧНА ВАЛІДАЦІЯ ЧЕКЛИСТА</span>
-                  <span class="stamp stamp-verified">STATUS: ALL PASS</span>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.6rem; font-family: var(--font-mono); font-size: 0.8rem;">
-                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
-                    ✓ [1] Посилання валідне (HTTPS)
-                  </div>
-                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
-                    ✓ [2] Іконка доступна (.png / .svg)
-                  </div>
-                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
-                    ✓ [3] Вихідний код перевірено (GitHub)
-                  </div>
-                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
-                    ✓ [4] Опис відповідає лімітам
-                  </div>
-                </div>
+              <div class="guide-step-card">
+                <span class="guide-step-num">КРОК 02</span>
+                <span class="guide-step-title">{t.guideStep2Title || 'Автоматична валідація'}</span>
+                <p class="guide-step-desc">{t.guideStep2Desc || 'Форма автоматично перевіряє правильність посилань, формат логотипу та описи перед відправкою.'}</p>
               </div>
 
-              <!-- Scene 03: Відправка на GitHub -->
-              <div class="video-scene" data-video-scene="2">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
-                  <span class="mono" style="color: #3498db; font-weight: 800;">[SCENE 03 / 04] // СТВОРЕННЯ ЗАЯВКИ НА GITHUB</span>
-                  <span class="stamp stamp-open">TRIGGER: ISSUE</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15); padding: 0.9rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem;">
-                  <div style="color: #58a6ff; font-weight: 800; margin-bottom: 0.4rem;">
-                    GitHub Issue #26: modpack: Fabulously Optimized
-                  </div>
-                  <div style="color: #8b949e; line-height: 1.5;">
-                    Натисканням однієї кнопки система передає всі готові дані у форму GitHub Issue. Заявка автоматично отримує теги <span style="color: #e3b341;">modpack</span> та <span style="color: #238636;">verified-submission</span>.
-                  </div>
-                </div>
+              <div class="guide-step-card">
+                <span class="guide-step-num">КРОК 03</span>
+                <span class="guide-step-title">{t.guideStep3Title || 'Створення заявки на GitHub'}</span>
+                <p class="guide-step-desc">{t.guideStep3Desc || 'Натисніть кнопку переходу — система відкриє повністю готову заявку на GitHub з усіма заповненими даними.'}</p>
               </div>
 
-              <!-- Scene 04: GitHub Bot публікує на сайті -->
-              <div class="video-scene" data-video-scene="3">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
-                  <span class="mono" style="color: #e67e22; font-weight: 800;">[SCENE 04 / 04] // ПУБЛІКАЦІЯ GITHUB-БОТОМ</span>
-                  <span class="stamp stamp-verified">RESULT: LIVE</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15); padding: 0.9rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.5;">
-                  <div style="color: #2ecc71;">🤖 [Bot] Завантажено іконку та скріншоти у високій якості.</div>
-                  <div style="color: #2ecc71;">🤖 [Bot] Створено гілку add-project-fabulously-optimized-issue-26.</div>
-                  <div style="color: #58a6ff;">🎉 [PR] Pull Request обʼєднано з гілкою main.</div>
-                  <div style="color: #f1c40f; font-weight: 800; margin-top: 0.35rem;">✨ Проєкт миттєво зʼявляється на meowlab.pp.ua!</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Video Player Controls -->
-            <div class="video-controls-bar">
-              <div class="video-scrubber-track" id="video-scrubber">
-                <div class="video-scrubber-fill" id="video-scrubber-progress"></div>
-              </div>
-              <div class="video-buttons-row">
-                <div style="display: flex; align-items: center; gap: 0.6rem;">
-                  <button type="button" class="paper-btn" id="btn-video-play-toggle" style="padding: 0.25rem 0.65rem; font-size: 0.78rem;">
-                    ⏸ Пауза
-                  </button>
-                  <span id="video-step-desc-ticker" class="mono" style="font-size: 0.78rem; color: var(--ink);">
-                    Крок 01: Заповнення форми проєкту
-                  </span>
-                </div>
-                <div class="video-step-tabs">
-                  <button type="button" class="video-step-btn active" data-video-step-btn="0">01: Введення</button>
-                  <button type="button" class="video-step-btn" data-video-step-btn="1">02: Валідація</button>
-                  <button type="button" class="video-step-btn" data-video-step-btn="2">03: Відправка</button>
-                  <button type="button" class="video-step-btn" data-video-step-btn="3">04: Публікація</button>
-                </div>
+              <div class="guide-step-card">
+                <span class="guide-step-num">КРОК 04</span>
+                <span class="guide-step-title">{t.guideStep4Title || 'Публікація ботом'}</span>
+                <p class="guide-step-desc">{t.guideStep4Desc || 'GitHub-бот перевіряє дані, автоматично створює Pull Request, і після підтвердження проєкт зʼявляється на сайті!'}</p>
               </div>
             </div>
           </div>
@@ -4757,13 +4582,40 @@ const jsonLdSchema = {
           </div>
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
-            <label for="suggest-desc-uk">{t.suggestDescUkLabel}</label>
-            <textarea id="suggest-desc-uk" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Опис проєкту українською мовою..."></textarea>
-          </div>
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span>Описи проєкту різними мовами (доповнення та переклади):</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 700;">[6 МОВ]</span>
+            </label>
 
-          <div class="suggest-form-field" style="margin-top: 0.75rem;">
-            <label for="suggest-desc-en">{t.suggestDescEnLabel}</label>
-            <textarea id="suggest-desc-en" class="suggest-form-textarea" style="min-height: 65px;" placeholder="English description..."></textarea>
+            <!-- Language Switcher Tabs -->
+            <div class="suggest-lang-tabs" id="suggest-lang-tabs">
+              <button type="button" class="suggest-lang-tab-btn active" data-suggest-tab="uk">UK (Українська)</button>
+              <button type="button" class="suggest-lang-tab-btn" data-suggest-tab="en">EN (English)</button>
+              <button type="button" class="suggest-lang-tab-btn" data-suggest-tab="de">DE (Deutsch)</button>
+              <button type="button" class="suggest-lang-tab-btn" data-suggest-tab="pl">PL (Polski)</button>
+              <button type="button" class="suggest-lang-tab-btn" data-suggest-tab="be">BE (Беларуская)</button>
+              <button type="button" class="suggest-lang-tab-btn" data-suggest-tab="kk">KK (Қазақша)</button>
+            </div>
+
+            <!-- Tab Panes -->
+            <div class="suggest-lang-pane active" id="suggest-pane-uk">
+              <textarea id="suggest-desc-uk" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Опис проєкту українською мовою..."></textarea>
+            </div>
+            <div class="suggest-lang-pane" id="suggest-pane-en">
+              <textarea id="suggest-desc-en" class="suggest-form-textarea" style="min-height: 65px;" placeholder="English description..."></textarea>
+            </div>
+            <div class="suggest-lang-pane" id="suggest-pane-de">
+              <textarea id="suggest-desc-de" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Deutsche Beschreibung..."></textarea>
+            </div>
+            <div class="suggest-lang-pane" id="suggest-pane-pl">
+              <textarea id="suggest-desc-pl" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Opis w języku polskim..."></textarea>
+            </div>
+            <div class="suggest-lang-pane" id="suggest-pane-be">
+              <textarea id="suggest-desc-be" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Апісанне праекта на беларускай мове..."></textarea>
+            </div>
+            <div class="suggest-lang-pane" id="suggest-pane-kk">
+              <textarea id="suggest-desc-kk" class="suggest-form-textarea" style="min-height: 65px;" placeholder="Жобаның қазақ тіліндегі сипаттамасы..."></textarea>
+            </div>
           </div>
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
@@ -4780,86 +4632,6 @@ const jsonLdSchema = {
             </button>
           </div>
         </form>
-      </div>
-    </div>
-
-    <!-- Interactive World Map Modal -->
-    <div id="world-map-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 900px; width: 95vw; background: #0c0f14; border: 2px solid var(--border-ink); padding: 1.5rem; color: #fff;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; border-bottom: 1.5px solid rgba(255,255,255,0.15); padding-bottom: 0.6rem;">
-          <div>
-            <div class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800; letter-spacing: 0.08em;">
-              [GEOGRAPHIC REGION RADAR // КАРТА ПОХОДЖЕННЯ]
-            </div>
-            <h3 id="world-map-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.25rem; font-weight: 900; color: #fff;">
-              Географічне походження проєкту
-            </h3>
-          </div>
-          <button type="button" id="world-map-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
-            ✕ Закрити [ESC]
-          </button>
-        </div>
-
-        <!-- Dynamic Status Banner -->
-        <div id="world-map-status-banner" class="world-map-status-box">
-          <!-- Filled dynamically by JS -->
-        </div>
-
-        <!-- Interactive Vector SVG World Map -->
-        <div class="world-map-stage-wrapper">
-          <svg id="world-map-svg" viewBox="0 0 1000 500" class="world-vector-map" aria-label="Інтерактивна карта світу">
-            <!-- Grid Lines -->
-            <g stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3">
-              <line x1="0" y1="125" x2="1000" y2="125" />
-              <line x1="0" y1="250" x2="1000" y2="250" />
-              <line x1="0" y1="375" x2="1000" y2="375" />
-              <line x1="250" y1="0" x2="250" y2="500" />
-              <line x1="500" y1="0" x2="500" y2="500" />
-              <line x1="750" y1="0" x2="750" y2="500" />
-            </g>
-
-            <!-- Continents -->
-            <g id="world-continents-layer">
-              <!-- North America -->
-              <path class="map-continent" id="continent-north-america" data-region="north-america" data-name="Північна Америка"
-                d="M 80,95 L 125,75 L 160,65 L 210,60 L 260,75 L 265,105 L 290,135 L 270,165 L 295,190 L 270,210 L 250,230 L 235,260 L 225,280 L 215,270 L 195,240 L 180,225 L 140,215 L 120,185 L 105,155 L 75,120 Z M 330,45 L 390,35 L 415,65 L 380,95 L 340,90 Z" />
-
-              <!-- South America -->
-              <path class="map-continent" id="continent-south-america" data-region="south-america" data-name="Південна Америка"
-                d="M 235,265 L 270,260 L 305,275 L 345,305 L 350,345 L 320,385 L 290,430 L 270,480 L 255,475 L 258,420 L 245,370 L 230,320 L 225,285 Z" />
-
-              <!-- Europe -->
-              <path class="map-continent" id="continent-europe" data-region="europe" data-name="Європа"
-                d="M 460,180 L 480,140 L 475,100 L 510,70 L 530,65 L 545,95 L 535,120 L 570,125 L 590,145 L 575,175 L 540,180 L 515,195 L 485,195 L 470,190 Z M 445,130 L 460,115 L 470,135 L 455,150 Z" />
-
-              <!-- Africa -->
-              <path class="map-continent" id="continent-africa" data-region="africa" data-name="Африка"
-                d="M 470,195 L 525,195 L 580,220 L 610,260 L 600,290 L 565,340 L 535,395 L 505,400 L 480,360 L 465,300 L 450,260 L 440,220 Z M 615,335 L 635,330 L 630,375 L 615,370 Z" />
-
-              <!-- Asia -->
-              <path class="map-continent" id="continent-asia" data-region="asia" data-name="Азія"
-                d="M 590,145 L 650,80 L 730,60 L 820,65 L 890,95 L 870,140 L 810,160 L 845,210 L 815,250 L 780,270 L 740,260 L 710,215 L 670,220 L 630,240 L 600,210 L 585,175 Z M 870,155 L 895,160 L 885,195 L 865,185 Z" />
-
-              <!-- Oceania -->
-              <path class="map-continent" id="continent-oceania" data-region="oceania" data-name="Океанія / Австралія"
-                d="M 780,320 L 840,310 L 890,335 L 880,390 L 840,415 L 780,385 L 760,350 Z M 910,405 L 935,400 L 925,435 L 905,430 Z" />
-            </g>
-          </svg>
-        </div>
-
-        <!-- Legend and region switcher -->
-        <div class="world-map-bottom-bar">
-          <div style="font-size: 0.78rem; color: #8b949e;">
-            💡 Клацніть на будь-який континент на карті для підсвічування та фільтрування проєктів
-          </div>
-          <div class="world-map-quick-buttons">
-            <button type="button" class="paper-btn" data-select-region="europe">Європа</button>
-            <button type="button" class="paper-btn" data-select-region="asia">Азія</button>
-            <button type="button" class="paper-btn" data-select-region="north-america">Пн. Америка</button>
-            <button type="button" class="paper-btn" data-select-region="africa">Африка</button>
-            <button type="button" class="paper-btn" data-select-region="global">Глобальні (Усі)</button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -5527,8 +5299,8 @@ const jsonLdSchema = {
           const projectCards = Array.from(document.querySelectorAll('[data-project-card]'));
           projectCards.sort((a, b) => {
             if (mode === 'rating-desc') {
-              const scoreA = Number(a.dataset.projectScore || 0);
-              const scoreB = Number(b.dataset.projectScore || 0);
+              const scoreA = Number(a.getAttribute('data-project-score') || a.dataset.projectScore || 0);
+              const scoreB = Number(b.getAttribute('data-project-score') || b.dataset.projectScore || 0);
               if (scoreB !== scoreA) return scoreB - scoreA;
               return Number(a.dataset.projectIndex || 0) - Number(b.dataset.projectIndex || 0);
             }
@@ -5537,7 +5309,7 @@ const jsonLdSchema = {
               const nameB = (b.dataset.projectName || '').toLowerCase();
               return nameA.localeCompare(nameB);
             }
-            if (mode === 'newest-desc') {
+            if (mode === 'newest-desc' || mode === 'updated-desc') {
               return Number(b.dataset.projectIndex || 0) - Number(a.dataset.projectIndex || 0);
             }
             // featured / default
@@ -5554,6 +5326,44 @@ const jsonLdSchema = {
           searchInput.addEventListener('input', filterProjects);
         }
 
+        function updateVisibleTagsForCategory(cat) {
+          const categoryTags = new Set();
+          cards.forEach((card) => {
+            const cardCat = card.getAttribute('data-category');
+            if (cat === 'all' || cardCat === cat) {
+              const rawTags = card.getAttribute('data-tags') || '';
+              rawTags.split(',').forEach((t) => {
+                const trimmed = t.trim().toLowerCase();
+                if (trimmed) categoryTags.add(trimmed);
+              });
+            }
+          });
+
+          let visibleTagsCount = 0;
+          document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
+            const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
+            if (btnTag === 'all') {
+              btn.style.display = '';
+              return;
+            }
+            if (categoryTags.has(btnTag)) {
+              btn.style.display = '';
+              visibleTagsCount++;
+            } else {
+              btn.style.display = 'none';
+            }
+          });
+
+          const counter = document.querySelector('.tags-counter');
+          if (counter) {
+            counter.textContent = `(${visibleTagsCount})`;
+          }
+
+          if (activeTag !== 'all' && !categoryTags.has(activeTag)) {
+            setActiveTag('all');
+          }
+        }
+
         tabButtons.forEach((btn) => {
           btn.addEventListener('click', (e) => {
             if (!window.location.pathname.includes('/project/')) {
@@ -5563,10 +5373,14 @@ const jsonLdSchema = {
               activeCategory = btn.getAttribute('data-category') || 'all';
               const href = btn.getAttribute('href');
               if (href) history.pushState(null, '', href);
+              updateVisibleTagsForCategory(activeCategory);
               filterProjects();
             }
           });
         });
+
+        // Initialize category tags
+        updateVisibleTagsForCategory(activeCategory);
 
         // 7. Lightbox
         const modal = document.getElementById('lightbox-modal');
@@ -6041,6 +5855,7 @@ const jsonLdSchema = {
               const cardEl = document.querySelector(`[data-project-card="${slug}"], [data-project-slug="${slug}"]`);
               if (cardEl) {
                 cardEl.dataset.projectScore = String(avg);
+                cardEl.setAttribute('data-project-score', String(avg));
               }
             }
 
@@ -6153,73 +5968,7 @@ const jsonLdSchema = {
 
         loadRealReviews();
 
-        // 9. Interactive Video Walkthrough Player Simulator
-        const videoScenes = document.querySelectorAll('[data-video-scene]');
-        const videoTabs = document.querySelectorAll('[data-video-step-btn]');
-        const videoPlayToggle = document.getElementById('btn-video-play-toggle');
-        const videoScrubberProgress = document.getElementById('video-scrubber-progress');
-        const videoTimecode = document.getElementById('video-timecode');
-        const videoDescTicker = document.getElementById('video-step-desc-ticker');
-
-        const stepDescriptions = [
-          'Крок 01: Заповнення форми проєкту — назва, посилання, описи та перевірка полів',
-          'Крок 02: Миттєва автоматична валідація — чеклист із 4 пунктів стає повністю зеленим',
-          'Крок 03: Відправка на GitHub — відкриття структурованої заявки з готовим шаблоном',
-          'Крок 04: Публікація GitHub-ботом — перевірка PR та миттєва поява проєкту в каталозі'
-        ];
-
-        let currentVideoStep = 0;
-        let isVideoPlaying = true;
-        let videoInterval = null;
-
-        function setVideoStep(idx) {
-          currentVideoStep = (idx + 4) % 4;
-          videoScenes.forEach((s) => {
-            const sceneIdx = Number(s.getAttribute('data-video-scene'));
-            s.classList.toggle('active', sceneIdx === currentVideoStep);
-          });
-          videoTabs.forEach((tab) => {
-            const tabIdx = Number(tab.getAttribute('data-video-step-btn'));
-            tab.classList.toggle('active', tabIdx === currentVideoStep);
-          });
-          if (videoScrubberProgress) {
-            videoScrubberProgress.style.width = `${(currentVideoStep + 1) * 25}%`;
-          }
-          if (videoTimecode) {
-            const seconds = (currentVideoStep + 1) * 10;
-            videoTimecode.textContent = `00:${String(seconds).padStart(2, '0')} / 00:40`;
-          }
-          if (videoDescTicker) {
-            videoDescTicker.textContent = stepDescriptions[currentVideoStep] || '';
-          }
-        }
-
-        function startVideoTimer() {
-          if (videoInterval) clearInterval(videoInterval);
-          videoInterval = setInterval(() => {
-            if (isVideoPlaying) {
-              setVideoStep(currentVideoStep + 1);
-            }
-          }, 4500);
-        }
-
-        if (videoTabs.length) {
-          videoTabs.forEach((tab) => {
-            tab.addEventListener('click', () => {
-              const idx = Number(tab.getAttribute('data-video-step-btn'));
-              setVideoStep(idx);
-            });
-          });
-          if (videoPlayToggle) {
-            videoPlayToggle.addEventListener('click', () => {
-              isVideoPlaying = !isVideoPlaying;
-              videoPlayToggle.textContent = isVideoPlaying ? '⏸ Пауза' : '▶ Відтворити';
-            });
-          }
-          startVideoTimer();
-        }
-
-        // 10. Suggest Edit / Update Flow
+        // 9. Suggest Edit / Update Flow (Multilingual 6 Languages)
         const suggestModal = document.getElementById('suggest-edit-modal');
         const suggestClose = document.getElementById('suggest-modal-close');
         const suggestCancel = document.getElementById('btn-cancel-suggest');
@@ -6227,7 +5976,21 @@ const jsonLdSchema = {
         const suggestTitle = document.getElementById('suggest-modal-title');
         const suggestServerIpField = document.getElementById('suggest-server-ip-field');
 
-        function openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn) {
+        // Multilingual Tab Switcher in Suggest Modal
+        const suggestLangTabs = document.querySelectorAll('[data-suggest-tab]');
+        if (suggestLangTabs.length) {
+          suggestLangTabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+              const targetLang = tab.getAttribute('data-suggest-tab');
+              suggestLangTabs.forEach((t) => t.classList.toggle('active', t === tab));
+              document.querySelectorAll('.suggest-lang-pane').forEach((pane) => {
+                pane.classList.toggle('active', pane.id === `suggest-pane-${targetLang}`);
+              });
+            });
+          });
+        }
+
+        function openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn, descDe, descPl, descBe, descKk) {
           if (!suggestModal) return;
           if (document.getElementById('suggest-project-slug')) document.getElementById('suggest-project-slug').value = slug || '';
           if (document.getElementById('suggest-name')) document.getElementById('suggest-name').value = name || '';
@@ -6242,6 +6005,10 @@ const jsonLdSchema = {
           if (document.getElementById('suggest-server-ip')) document.getElementById('suggest-server-ip').value = serverIp || '';
           if (document.getElementById('suggest-desc-uk')) document.getElementById('suggest-desc-uk').value = descUk || '';
           if (document.getElementById('suggest-desc-en')) document.getElementById('suggest-desc-en').value = descEn || '';
+          if (document.getElementById('suggest-desc-de')) document.getElementById('suggest-desc-de').value = descDe || '';
+          if (document.getElementById('suggest-desc-pl')) document.getElementById('suggest-desc-pl').value = descPl || '';
+          if (document.getElementById('suggest-desc-be')) document.getElementById('suggest-desc-be').value = descBe || '';
+          if (document.getElementById('suggest-desc-kk')) document.getElementById('suggest-desc-kk').value = descKk || '';
 
           if (suggestTitle) {
             suggestTitle.textContent = `Доповнити або змінити: ${name || slug}`;
@@ -6274,9 +6041,13 @@ const jsonLdSchema = {
             const platforms = btn.getAttribute('data-suggest-platforms');
             const tags = btn.getAttribute('data-suggest-tags');
             const serverIp = btn.getAttribute('data-suggest-server-ip');
-            const descUk = btn.getAttribute('data-suggest-desc-uk');
-            const descEn = btn.getAttribute('data-suggest-desc-en');
-            openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn);
+            const descUk = btn.getAttribute('data-suggest-desc-uk') || '';
+            const descEn = btn.getAttribute('data-suggest-desc-en') || '';
+            const descDe = btn.getAttribute('data-suggest-desc-de') || '';
+            const descPl = btn.getAttribute('data-suggest-desc-pl') || '';
+            const descBe = btn.getAttribute('data-suggest-desc-be') || '';
+            const descKk = btn.getAttribute('data-suggest-desc-kk') || '';
+            openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, descUk, descEn, descDe, descPl, descBe, descKk);
           });
         });
 
@@ -6305,6 +6076,10 @@ const jsonLdSchema = {
             const screens = (document.getElementById('suggest-screenshots')?.value || '').trim();
             const descUk = (document.getElementById('suggest-desc-uk')?.value || '').trim();
             const descEn = (document.getElementById('suggest-desc-en')?.value || '').trim();
+            const descDe = (document.getElementById('suggest-desc-de')?.value || '').trim();
+            const descPl = (document.getElementById('suggest-desc-pl')?.value || '').trim();
+            const descBe = (document.getElementById('suggest-desc-be')?.value || '').trim();
+            const descKk = (document.getElementById('suggest-desc-kk')?.value || '').trim();
             const notes = (document.getElementById('suggest-notes')?.value || '').trim();
 
             if (!slug) return;
@@ -6320,10 +6095,14 @@ const jsonLdSchema = {
             if (tags) body += `### Tags\n${tags}\n\n`;
             if (cat === 'server' && serverIp) body += `### Server IP\n\`${serverIp}\`\n\n`;
             if (screens) body += `### Screenshots\n${screens}\n\n`;
-            if (descUk || descEn) {
+            if (descUk || descEn || descDe || descPl || descBe || descKk) {
               body += `### Description\n\n`;
               if (descUk) body += `#### UK\n${descUk}\n\n`;
               if (descEn) body += `#### EN\n${descEn}\n\n`;
+              if (descDe) body += `#### DE\n${descDe}\n\n`;
+              if (descPl) body += `#### PL\n${descPl}\n\n`;
+              if (descBe) body += `#### BE\n${descBe}\n\n`;
+              if (descKk) body += `#### KK\n${descKk}\n\n`;
             }
             if (notes) body += `### Notes\n${notes}\n\n`;
 
@@ -6331,98 +6110,6 @@ const jsonLdSchema = {
             const issueUrl = `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
             window.open(issueUrl, '_blank');
             closeSuggestEditModal();
-          });
-        }
-
-        // 11. Interactive World Map Radar & Region Locator
-        const worldMapModal = document.getElementById('world-map-modal');
-        const worldMapClose = document.getElementById('world-map-modal-close');
-        const worldMapStatusBanner = document.getElementById('world-map-status-banner');
-        const worldMapModalTitle = document.getElementById('world-map-modal-title');
-        const mapContinents = document.querySelectorAll('.map-continent');
-
-        const REGION_DESCRIPTIONS = {
-          'global': '🌐 ГЛОБАЛЬНИЙ ПРОЄКТ (МІЖНАРОДНА КОМАНДА) — проєкт розробляється міжнародною спільнотою без привʼязки до однієї країни. Континентів не заповнено.',
-          'europe': '🇪🇺 РЕГІОН: ЄВРОПА — підсвічено європейський континент (проєкти з України, Німеччини, Великої Британії, Польщі тощо).',
-          'asia': '🌏 РЕГІОН: АЗІЯ — підсвічено азійський континент (проєкти з Китаю, Японії, Казахстану тощо).',
-          'north-america': '🌎 РЕГІОН: ПІВНІЧНА АМЕРИКА — підсвічено континент Північна Америка (проєкти зі США, Канади).',
-          'south-america': '🌎 РЕГІОН: ПІВДЕННА АМЕРИКА — підсвічено Південну Америку.',
-          'africa': '🌍 РЕГІОН: АФРИКА — підсвічено континент Африка.',
-          'oceania': '🌏 РЕГІОН: ОКЕАНІЯ / АВСТРАЛІЯ — підсвічено Океанію та Австралію.'
-        };
-
-        const COUNTRY_TO_REGION = {
-          'cn': 'asia', 'china': 'asia', 'asia': 'asia', 'jp': 'asia', 'kr': 'asia', 'kz': 'asia', 'in': 'asia', 'tw': 'asia', 'hk': 'asia', 'sg': 'asia',
-          'de': 'europe', 'gb': 'europe', 'uk': 'europe', 'ua': 'europe', 'pl': 'europe', 'fr': 'europe', 'it': 'europe', 'es': 'europe', 'nl': 'europe', 'be': 'europe', 'ch': 'europe', 'at': 'europe', 'se': 'europe', 'no': 'europe', 'fi': 'europe', 'cz': 'europe', 'sk': 'europe', 'eu': 'europe', 'europe': 'europe', 'europa': 'europe', 'європа': 'europe',
-          'us': 'north-america', 'usa': 'north-america', 'ca': 'north-america', 'canada': 'north-america', 'mx': 'north-america', 'north-america': 'north-america', 'сша': 'north-america',
-          'br': 'south-america', 'ar': 'south-america', 'south-america': 'south-america',
-          'africa': 'africa', 'африка': 'africa',
-          'au': 'oceania', 'nz': 'oceania', 'oceania': 'oceania', 'australia': 'oceania',
-          'global': 'global', '001': 'global', 'світ': 'global', 'world': 'global'
-        };
-
-        function highlightWorldRegion(regionKey, countryDisplayName) {
-          const reg = (regionKey || 'global').toLowerCase().trim();
-          mapContinents.forEach((c) => {
-            const cReg = c.getAttribute('data-region');
-            c.classList.toggle('highlighted', reg !== 'global' && cReg === reg);
-          });
-
-          if (worldMapModalTitle) {
-            worldMapModalTitle.textContent = countryDisplayName
-              ? `Географія: ${countryDisplayName}`
-              : 'Географічне походження проєкту';
-          }
-
-          if (worldMapStatusBanner) {
-            worldMapStatusBanner.textContent = REGION_DESCRIPTIONS[reg] || REGION_DESCRIPTIONS['global'];
-          }
-        }
-
-        function openWorldMap(countryCode, countryDisplayName) {
-          if (!worldMapModal) return;
-          const reg = COUNTRY_TO_REGION[(countryCode || '').toLowerCase()] || 'global';
-          highlightWorldRegion(reg, countryDisplayName);
-          worldMapModal.classList.add('open');
-          worldMapModal.setAttribute('aria-hidden', 'false');
-        }
-
-        function closeWorldMap() {
-          if (worldMapModal) {
-            worldMapModal.classList.remove('open');
-            worldMapModal.setAttribute('aria-hidden', 'true');
-          }
-        }
-
-        document.querySelectorAll('[data-open-world-map]').forEach((btn) => {
-          btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const cCode = btn.getAttribute('data-country-code');
-            const cName = btn.getAttribute('data-country-name');
-            openWorldMap(cCode, cName);
-          });
-        });
-
-        mapContinents.forEach((c) => {
-          c.addEventListener('click', () => {
-            const reg = c.getAttribute('data-region');
-            const name = c.getAttribute('data-name');
-            highlightWorldRegion(reg, name);
-          });
-        });
-
-        document.querySelectorAll('[data-select-region]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const reg = btn.getAttribute('data-select-region');
-            highlightWorldRegion(reg, btn.textContent);
-          });
-        });
-
-        if (worldMapClose) worldMapClose.addEventListener('click', closeWorldMap);
-        if (worldMapModal) {
-          worldMapModal.addEventListener('click', (e) => {
-            if (e.target === worldMapModal) closeWorldMap();
           });
         }
 
