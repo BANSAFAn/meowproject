@@ -34,6 +34,11 @@ const LABEL_DEFINITIONS = {
   'i18n': { name: '🌍 i18n', color: '0075ca', description: 'Localization and translations' },
 };
 
+function readJsonFile(filePath) {
+  const raw = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '').trim();
+  return JSON.parse(raw);
+}
+
 function getCategoryLabelName(category) {
   return LABEL_DEFINITIONS[category]?.name || category;
 }
@@ -178,7 +183,7 @@ async function compileReviews(issues, slugs, projectsDir) {
 
   for (const slug of slugs) {
     const metaPath = path.join(projectsDir, slug, 'project.json');
-    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    const meta = readJsonFile(metaPath);
 
     const issue = (meta.issueThreadNumber && issues.find(iss => !iss.pull_request && iss.number === meta.issueThreadNumber)) ||
       issues.find(iss => {
@@ -316,7 +321,7 @@ async function handlePushOrDispatch() {
 
   for (const slug of slugs) {
     const metaPath = path.join(projectsDir, slug, 'project.json');
-    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    const meta = readJsonFile(metaPath);
     const expectedTitle = `${meta.category}: ${meta.name}`;
 
     const existing = issues.find(iss => {
@@ -346,10 +351,10 @@ async function handlePushOrDispatch() {
       const ukPath = path.join(projectsDir, slug, 'locales', 'uk.json');
       const enPath = path.join(projectsDir, slug, 'locales', 'en.json');
       if (fs.existsSync(ukPath)) {
-        try { ukDesc = JSON.parse(fs.readFileSync(ukPath, 'utf8')).description || ''; } catch (_) {}
+        try { ukDesc = readJsonFile(ukPath).description || ''; } catch (_) {}
       }
       if (fs.existsSync(enPath)) {
-        try { enDesc = JSON.parse(fs.readFileSync(enPath, 'utf8')).description || ''; } catch (_) {}
+        try { enDesc = readJsonFile(enPath).description || ''; } catch (_) {}
       }
 
       const issueBody = [
@@ -903,7 +908,7 @@ async function handleIssues(eventPayload) {
       for (const d of dirs) {
         const pj = path.join(projectsDir, d, 'project.json');
         if (fs.existsSync(pj)) {
-          const num = JSON.parse(fs.readFileSync(pj, 'utf8')).issueThreadNumber;
+          const num = readJsonFile(pj).issueThreadNumber;
           if (num) catalogThreadNumbers.push(num);
         }
       }
@@ -962,7 +967,7 @@ async function handleIssues(eventPayload) {
         };
         if (fs.existsSync(filePath)) {
           try {
-            const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            const parsed = readJsonFile(filePath);
             existing = { ...existing, ...parsed, description: desc };
           } catch (_) {}
         }
@@ -1024,7 +1029,7 @@ async function main() {
   let eventPayload = {};
   if (GITHUB_EVENT_PATH && fs.existsSync(GITHUB_EVENT_PATH)) {
     try {
-      eventPayload = JSON.parse(fs.readFileSync(GITHUB_EVENT_PATH, 'utf8'));
+      eventPayload = readJsonFile(GITHUB_EVENT_PATH);
     } catch (_) {}
   }
 
