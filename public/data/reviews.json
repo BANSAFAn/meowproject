@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T11:14:47.032Z",
+  "updatedAt": "2026-11-12T11:24:55.003Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -101,10 +101,21 @@
     "fluenlauncher": {
       "issueNumber": 19,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/19",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 80,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6822271226,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-12",
+          "body": "Жаль що пійшов на покой....упс точніше в архів",
+          "score": 80,
+          "url": "https://github.com/BANSAFAn/meowproject/issues/19#issuecomment-6822271226",
+          "issueNum": 19
+        }
+      ]
     },
     "gommehd": {
       "issueNumber": 20,
