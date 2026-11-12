@@ -11,6 +11,7 @@ import { LANG_CODES, type LangCode } from '../i18n/translations';
  */
 
 export type ProjectCategory = 'launcher' | 'client' | 'modpack' | 'mod' | 'server' | 'website' | 'project';
+export const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'] as const;
 export type SourceHost = 'github' | 'gitlab' | 'gitea' | 'sourceforge' | 'gitee' | 'cnb';
 
 export interface ProjectSourceLink {

@@ -21,9 +21,11 @@ import YoutubeIcon from './icons/YoutubeIcon.astro';
 
 interface Props {
   lang: LangCode;
+  initialProjectSlug?: string;
+  initialCategory?: string;
 }
 
-const { lang } = Astro.props;
+const { lang, initialProjectSlug, initialCategory } = Astro.props;
 const t = UI_TRANSLATIONS[lang];
 const langList = Object.values(LANGUAGES);
 const currentLangMeta = LANGUAGES[lang];
@@ -38,11 +40,34 @@ function getLangHref(targetLang: LangCode) {
   return targetLang === 'uk' ? '/' : `/${targetLang}/`;
 }
 
+function getProjectHref(targetLang: LangCode, slug: string) {
+  return targetLang === 'uk' ? `/project/${slug}/` : `/${targetLang}/project/${slug}/`;
+}
+
+function getCategoryHref(targetLang: LangCode, category: string) {
+  return targetLang === 'uk' ? `/category/${category}/` : `/${targetLang}/category/${category}/`;
+}
+
 const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'] as const;
 
 const categoryCounts: Record<string, number> = Object.fromEntries(
   PREFIXES.map((c) => [c, PROJECTS.filter((p) => p.category === c).length]),
 );
+
+const selectedProject = initialProjectSlug
+  ? PROJECTS.find((p) => p.slug === initialProjectSlug)
+  : undefined;
+
+let pageTitle = t.metaTitle;
+let pageDescription = t.metaDescription;
+
+if (selectedProject) {
+  const pTagline = selectedProject.locales[lang]?.tagline || selectedProject.name;
+  pageTitle = `${selectedProject.name} — MeowProject | ${currentLangMeta.name}`;
+  pageDescription = `${selectedProject.name}: ${pTagline} (${selectedProject.platforms.join(', ')}). ${t.openDirectorySub}`;
+} else if (initialCategory && initialCategory !== 'all') {
+  pageTitle = `${initialCategory.toUpperCase()} — MeowProject | ${currentLangMeta.name}`;
+}
 
 const SOURCE_HOSTS = [
   { value: 'github', label: 'GitHub', domains: 'github.com' },
@@ -58,7 +83,11 @@ const acceptedCountries = acceptedCountryValues();
 const projectCountry = (code: string) => countryName(code, lang, t.countryGlobal);
 
 const siteOrigin = Astro.url?.origin || 'https://meowproject.pages.dev';
-const canonicalUrl = `${siteOrigin}${getLangHref(lang)}`;
+const canonicalUrl = selectedProject
+  ? `${siteOrigin}${getProjectHref(lang, selectedProject.slug)}`
+  : initialCategory && initialCategory !== 'all'
+    ? `${siteOrigin}${getCategoryHref(lang, initialCategory)}`
+    : `${siteOrigin}${getLangHref(lang)}`;
 
 const jsonLdSchema = {
   '@context': 'https://schema.org',
@@ -70,7 +99,7 @@ const jsonLdSchema = {
       alternateName: t.metaTitle,
       url: canonicalUrl,
       inLanguage: lang,
-      description: t.metaDescription,
+      description: pageDescription,
       publisher: {
         '@type': 'Person',
         name: 'Baneronetwo',
@@ -90,7 +119,7 @@ const jsonLdSchema = {
           operatingSystem: p.platforms.join(', '),
           url: p.primaryLink,
           image: `${siteOrigin}${p.icon}`,
-          description: p.locales[lang].tagline,
+          description: p.locales[lang]?.tagline || p.name,
           license: p.license,
         },
       })),
@@ -105,14 +134,14 @@ const jsonLdSchema = {
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; connect-src 'self' https://api.github.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none';"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; connect-src 'self' https://api.github.com https://api.mcstatus.io; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'none';"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>{t.metaTitle}</title>
-    <meta name="description" content={t.metaDescription} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
     <meta name="keywords" content={t.metaKeywords} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonicalUrl} />
@@ -946,6 +975,16 @@ const jsonLdSchema = {
         margin-bottom: 0.45rem;
       }
 
+      .dossier-title-link {
+        color: inherit;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .dossier-title-link:hover .dossier-title {
+        color: var(--accent);
+      }
+
       .dossier-title {
         font-size: 1.45rem;
         font-weight: 900;
@@ -1461,7 +1500,6 @@ const jsonLdSchema = {
       }
 
       .paper-input,
-      .paper-select,
       .paper-textarea {
         width: 100%;
         height: 42px;
@@ -1471,6 +1509,52 @@ const jsonLdSchema = {
         border: 1.5px solid var(--border-ink);
         font-family: inherit;
         font-size: 0.88rem;
+      }
+
+      .paper-select {
+        width: 100%;
+        height: 42px;
+        padding: 0.55rem 2.2rem 0.55rem 0.75rem;
+        background-color: var(--paper-sheet);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        font-family: var(--font-mono, monospace);
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d97706' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 14px 14px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      }
+
+      .paper-select:hover {
+        border-color: var(--accent);
+        box-shadow: 3px 3px 0 var(--shadow-hard);
+      }
+
+      .paper-select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.35);
+      }
+
+      .paper-select option {
+        background-color: #1a1918;
+        color: #f7f4ec;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.9rem;
+        padding: 0.65rem 0.75rem;
+      }
+
+      html[data-theme='light'] .paper-select option {
+        background-color: #f7f4ec;
+        color: #181615;
       }
 
       .paper-textarea {
@@ -1982,6 +2066,52 @@ const jsonLdSchema = {
       }
       .expense-card.future {
         opacity: 0.92;
+      }
+      .fund-progress-box {
+        margin: 0.85rem 0;
+        background: var(--paper-inset);
+        border: 1px dashed var(--border-ink);
+        padding: 0.65rem 0.85rem;
+      }
+      .fund-progress-meta {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.82rem;
+        margin-bottom: 0.4rem;
+      }
+      .fund-progress-collected {
+        font-weight: 800;
+        color: #2ecc71;
+      }
+      .fund-progress-target {
+        color: var(--ink-muted);
+      }
+      .fund-progress-track {
+        width: 100%;
+        height: 10px;
+        background: var(--bg-desk);
+        border: 1.5px solid var(--border-ink);
+        position: relative;
+        overflow: hidden;
+      }
+      .fund-progress-fill {
+        height: 100%;
+        background: #2ecc71;
+        border-right: 1.5px solid var(--border-ink);
+        transition: width 0.3s ease;
+      }
+      .fund-progress-hint {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.74rem;
+        color: var(--ink-muted);
+        margin-top: 0.35rem;
+      }
+      .fund-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
       }
       .expense-card-top {
         display: flex;
@@ -2574,13 +2704,21 @@ const jsonLdSchema = {
           </div>
 
           <div class="index-tabs" role="tablist">
-            <button type="button" class="tab-btn active" data-category="all">
+            <a
+              href={getLangHref(lang)}
+              class={`tab-btn ${!initialCategory || initialCategory === 'all' ? 'active' : ''}`}
+              data-category="all"
+            >
               [ {t.catAll}: {PROJECTS.length} ]
-            </button>
+            </a>
             {PREFIXES.map((cat) => (
-              <button type="button" class="tab-btn" data-category={cat}>
+              <a
+                href={getCategoryHref(lang, cat)}
+                class={`tab-btn ${initialCategory === cat ? 'active' : ''}`}
+                data-category={cat}
+              >
                 [ {cat}: {categoryCounts[cat]} ]
-              </button>
+              </a>
             ))}
           </div>
         </section>
@@ -2588,15 +2726,20 @@ const jsonLdSchema = {
         <!-- Dedicated Single-Project Mode Banner (shown when viewing a single project's full tab) -->
         <div
           id="single-project-back-bar"
-          style="display: none; margin-bottom: 1.5rem;"
+          style={initialProjectSlug ? 'margin-bottom: 1.5rem;' : 'display: none; margin-bottom: 1.5rem;'}
         >
-          <button
-            type="button"
+          <a
+            href={initialCategory ? getCategoryHref(lang, initialCategory) : getLangHref(lang)}
             id="btn-exit-single-project"
             class="paper-btn paper-btn-ink"
+            style="text-decoration: none;"
           >
-            {t.backToCatalogBtn}
-          </button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>{t.backToCatalogBtn}</span>
+          </a>
         </div>
 
         <div id="empty-filter-state" class="reviews-status-box" style="display: none; margin-bottom: 2rem;">
@@ -2626,6 +2769,7 @@ const jsonLdSchema = {
                   data-project-card={project.slug}
                   data-category={project.category}
                   data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
+                  style={initialProjectSlug && project.slug !== initialProjectSlug ? 'display: none;' : ''}
                 >
                   <!-- Dossier Index Bar -->
                   <div class="dossier-top-bar">
@@ -2731,7 +2875,9 @@ const jsonLdSchema = {
                           </span>
                         </div>
 
-                        <h2 class="dossier-title">{project.name}</h2>
+                        <a href={getProjectHref(lang, project.slug)} class="dossier-title-link">
+                          <h2 class="dossier-title">{project.name}</h2>
+                        </a>
                         <p class="dossier-tagline">{tagline}</p>
                       </div>
                     </div>
@@ -2940,18 +3086,18 @@ const jsonLdSchema = {
                         </div>
 
                         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                          <button
-                            type="button"
+                          <a
+                            href={getProjectHref(lang, project.slug)}
                             class="paper-btn"
                             data-open-single-project={project.slug}
-                            style="padding: 0.45rem 0.85rem; font-size: 0.8rem; display: none;"
+                            style="padding: 0.45rem 0.85rem; font-size: 0.8rem; text-decoration: none;"
                           >
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                               <rect x="3" y="3" width="18" height="18" rx="2"></rect>
                               <line x1="9" y1="3" x2="9" y2="21"></line>
                             </svg>
                             <span data-open-single-label={project.slug}>{t.openFullProjectTabBtn}</span>
-                          </button>
+                          </a>
 
                           <a
                             href={reviewUrl}
@@ -3154,10 +3300,10 @@ const jsonLdSchema = {
               <div>
                 <span class="pulse-dot"></span>
                 <span id="anim-terminal-text">
-                  [BOT CHECK] Title format: "launcher: XMCL" | Rating tag: "[rating](95)" | Anti-XSS: OK
+                  [КРОК 01] Обираєте категорію (launcher, mod, server тощо), вказуєте назву та заповнюєте опис мовами спільноти
                 </span>
               </div>
-              <span class="mono" style="opacity: 0.75;">AUTO-LOOP TUTORIAL</span>
+              <span class="mono" style="opacity: 0.85; color: var(--accent);">ПОКРОКОВИЙ ПОСІБНИК</span>
             </div>
           </div>
 
@@ -3512,20 +3658,48 @@ const jsonLdSchema = {
               </div>
               <h3 class="expense-title">{t.nextGoalLabel}</h3>
               <p class="expense-desc">{t.nextGoalDesc}</p>
+
+              <!-- Progress Bar Box -->
+              <div class="fund-progress-box">
+                <div class="fund-progress-meta">
+                  <span class="fund-progress-collected">Зібрано: 694 ₴ (34.7%)</span>
+                  <span class="fund-progress-target">Ціль: 2 000 ₴</span>
+                </div>
+                <div class="fund-progress-track">
+                  <div class="fund-progress-fill" style="width: 34.7%;"></div>
+                </div>
+                <div class="fund-progress-hint">
+                  Разом: Monobank Банка + YouTube Спонсорство
+                </div>
+              </div>
+
               <div class="expense-meta">
                 <span>Ціль: Домен на 1 рік</span>
                 <span class="status-indicator-active">Потрібна підтримка</span>
               </div>
-              <a
-                href={MONOBANK_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="paper-btn paper-btn-accent"
-                style="margin-top: 1rem; width: 100%; justify-content: center; text-decoration: none;"
-              >
-                <MonobankIcon size={16} />
-                <span>{t.monobankSupportBtn}</span>
-              </a>
+
+              <div class="fund-actions">
+                <a
+                  href={MONOBANK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn paper-btn-accent"
+                  style="width: 100%; justify-content: center; text-decoration: none;"
+                >
+                  <MonobankIcon size={16} />
+                  <span>{t.monobankSupportBtn}</span>
+                </a>
+                <a
+                  href={YOUTUBE_JOIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn"
+                  style="width: 100%; justify-content: center; text-decoration: none;"
+                >
+                  <YoutubeIcon size={16} />
+                  <span>{t.supportYoutube}</span>
+                </a>
+              </div>
             </div>
 
             <!-- 3. Future Goal (Translation Platform) -->
@@ -3699,6 +3873,8 @@ const jsonLdSchema = {
         openTabLabel: t.openFullProjectTabBtn,
         uiLang: lang,
         acceptedCountries,
+        initialSlug: initialProjectSlug || null,
+        initialCat: initialCategory || 'all',
       }}
     >
       // Anti-XSS & Script Sanitizer Function
@@ -3741,7 +3917,7 @@ const jsonLdSchema = {
         const filterBar = document.getElementById('catalog-filter-bar');
         const singleBackBar = document.getElementById('single-project-back-bar');
         const exitSingleBtn = document.getElementById('btn-exit-single-project');
-        let singleProjectSlug = null;
+        let singleProjectSlug = initialSlug;
 
         function updateSingleProjectView(slug) {
           singleProjectSlug = slug;
@@ -3798,15 +3974,25 @@ const jsonLdSchema = {
         });
 
         document.querySelectorAll('[data-open-single-project]').forEach((btn) => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
             const slug = btn.getAttribute('data-open-single-project');
-            updateSingleProjectView(slug);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (slug && !window.location.pathname.includes('/project/')) {
+              e.preventDefault();
+              const targetUrl = btn.getAttribute('href');
+              if (targetUrl) history.pushState(null, '', targetUrl);
+              updateSingleProjectView(slug);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
           });
         });
 
         if (exitSingleBtn) {
-          exitSingleBtn.addEventListener('click', () => {
+          exitSingleBtn.addEventListener('click', (e) => {
+            if (window.location.pathname.includes('/project/')) {
+              return;
+            }
+            e.preventDefault();
+            history.pushState(null, '', exitSingleBtn.getAttribute('href') || '/');
             updateSingleProjectView(null);
           });
         }
@@ -3858,10 +4044,10 @@ const jsonLdSchema = {
         const animCounter = document.getElementById('anim-step-counter');
         const animTerminal = document.getElementById('anim-terminal-text');
         const terminalLines = [
-          '[STEP 01] Prefix: "launcher: XMCL" | "modpack: ATM9" | "mod: Sodium" | "client: Lunar Client" | langs: UA EN DE PL BY KZ',
-          '[STEP 02] Validator: country exists? | repo domain == platform? | icon .svg/.png/.jpg | screenshots .png/.jpg | Anti-XSS',
-          '[STEP 03] Validation PASSED -> Opening pre-filled GitHub Issue / Pull Request link...',
-          '[STEP 04] GitHub Bot: verified prefix, opened the discussion thread for comments',
+          '[КРОК 01] Обираєте категорію (launcher, mod, server тощо), вказуєте назву та заповнюєте опис мовами спільноти',
+          '[КРОК 02] Валідатор перевіряє правильність посилання, платформу коду та формати логотипу (.svg, .png, .jpg)',
+          '[КРОК 03] Натискаєте кнопку переходу -> на GitHub відкривається повністю сформована та готова заявка',
+          '[КРОК 04] GitHub-бот перевіряє заявку, створює Pull Request і проєкт зʼявляється наживо в каталозі MeowProject',
         ];
         let currentAnimStep = 0;
 
@@ -4211,11 +4397,16 @@ const jsonLdSchema = {
         }
 
         tabButtons.forEach((btn) => {
-          btn.addEventListener('click', () => {
-            tabButtons.forEach((b) => b.classList.remove('active'));
-            btn.classList.add('active');
-            activeCategory = btn.getAttribute('data-category') || 'all';
-            filterProjects();
+          btn.addEventListener('click', (e) => {
+            if (!window.location.pathname.includes('/project/')) {
+              e.preventDefault();
+              tabButtons.forEach((b) => b.classList.remove('active'));
+              btn.classList.add('active');
+              activeCategory = btn.getAttribute('data-category') || 'all';
+              const href = btn.getAttribute('href');
+              if (href) history.pushState(null, '', href);
+              filterProjects();
+            }
           });
         });
 
@@ -4366,8 +4557,7 @@ const jsonLdSchema = {
               const matchingIssues = allIssues.filter(
                 (iss) =>
                   !iss.pull_request &&
-                  (iss.number === issueNumber ||
-                    (iss.title && iss.title.toLowerCase().includes(searchTerm)))
+                  (issueNumber ? iss.number === issueNumber : (iss.title && iss.title.toLowerCase().includes(searchTerm)))
               );
 
               if (matchingIssues.length > 0 && reviewBtn) {
@@ -4387,6 +4577,14 @@ const jsonLdSchema = {
                         collectedItems.length = 0;
                         ratings.length = 0;
                         comments.forEach((c) => {
+                          const authorLogin = (c.user?.login || '').toLowerCase();
+                          const isBot =
+                            authorLogin.includes('[bot]') ||
+                            authorLogin.includes('github-actions') ||
+                            c.user?.type === 'Bot' ||
+                            (c.body || '').includes('[MeowProject Bot]');
+                          if (isBot) return;
+
                           const rawBody = sanitizePlainText(c.body || '');
                           const match = rawBody.match(ratingRegex);
                           let score = null;

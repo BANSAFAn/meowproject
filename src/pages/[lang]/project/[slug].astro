@@ -1,0 +1,27 @@
+---
+import CatalogPage from '../../../components/CatalogPage.astro';
+import { LANGUAGES, type LangCode } from '../../../i18n/translations';
+import { PROJECTS } from '../../../data/projects';
+
+export function getStaticPaths() {
+  const paths: { params: { lang: LangCode; slug: string }; props: { lang: LangCode; slug: string } }[] = [];
+  (Object.keys(LANGUAGES) as LangCode[]).forEach((lang) => {
+    PROJECTS.forEach((p) => {
+      paths.push({
+        params: { lang, slug: p.slug },
+        props: { lang, slug: p.slug },
+      });
+    });
+  });
+  return paths;
+}
+
+interface Props {
+  lang: LangCode;
+  slug: string;
+}
+
+const { lang, slug } = Astro.props;
+---
+
+<CatalogPage lang={lang} initialProjectSlug={slug} />

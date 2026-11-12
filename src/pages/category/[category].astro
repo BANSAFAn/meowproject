@@ -1,0 +1,19 @@
+---
+import CatalogPage from '../../components/CatalogPage.astro';
+import { PREFIXES } from '../../data/projects';
+
+export function getStaticPaths() {
+  return PREFIXES.map((category) => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+interface Props {
+  category: string;
+}
+
+const { category } = Astro.props;
+---
+
+<CatalogPage lang="uk" initialCategory={category} />

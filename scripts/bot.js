@@ -20,6 +20,64 @@ const LANG_METADATA = {
   kk: { flag: '🇰🇿', name: 'Қазақша' }
 };
 
+const LABEL_DEFINITIONS = {
+  'launcher': { name: '🚀 launcher', color: 'd93f0b', description: 'Minecraft Game Launchers' },
+  'modpack': { name: '📦 modpack', color: 'b60205', description: 'Modpacks and bundle distributions' },
+  'mod': { name: '🧩 mod', color: '8250df', description: 'Mods and optimizations' },
+  'client': { name: '⚡ client', color: 'bf8700', description: 'Custom game clients' },
+  'server': { name: '🌐 server', color: '0969da', description: 'Minecraft Multiplayer Servers' },
+  'website': { name: '🔗 website', color: '1f883d', description: 'Web tools and directories' },
+  'project': { name: '⭐ project', color: 'e3b341', description: 'General Minecraft community projects' },
+  'discussion': { name: '💬 discussion', color: '7057ff', description: 'Official community review thread' },
+  'verified-submission': { name: '🛡️ verified-submission', color: '238636', description: 'Verified submission by MeowProject bot' },
+  'automated-pr': { name: '🤖 automated-pr', color: '6e7781', description: 'Automated workflow processing' },
+  'i18n': { name: '🌍 i18n', color: '0075ca', description: 'Localization and translations' },
+};
+
+function getCategoryLabelName(category) {
+  return LABEL_DEFINITIONS[category]?.name || category;
+}
+
+async function ensureRepositoryLabels() {
+  if (!GITHUB_TOKEN || !GITHUB_REPOSITORY) return;
+  appendSummary('### 🏷️ Ensuring colorful GitHub labels with emojis');
+  try {
+    const { ok, data: existingLabels } = await githubApi(`/repos/${GITHUB_REPOSITORY}/labels?per_page=100`);
+    if (!ok || !Array.isArray(existingLabels)) return;
+
+    for (const [key, def] of Object.entries(LABEL_DEFINITIONS)) {
+      const exactMatch = existingLabels.find(l => l.name === def.name);
+      const oldMatch = existingLabels.find(l => l.name.toLowerCase() === key.toLowerCase() || l.name.toLowerCase().endsWith(key.toLowerCase()));
+
+      if (exactMatch) {
+        if (exactMatch.color !== def.color || exactMatch.description !== def.description) {
+          await githubApi(`/repos/${GITHUB_REPOSITORY}/labels/${encodeURIComponent(def.name)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ color: def.color, description: def.description })
+          });
+        }
+      } else if (oldMatch) {
+        appendSummary(`Renaming label "${oldMatch.name}" -> "${def.name}" (#${def.color})`);
+        await githubApi(`/repos/${GITHUB_REPOSITORY}/labels/${encodeURIComponent(oldMatch.name)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ new_name: def.name, color: def.color, description: def.description })
+        });
+      } else {
+        appendSummary(`Creating label "${def.name}" (#${def.color})`);
+        await githubApi(`/repos/${GITHUB_REPOSITORY}/labels`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: def.name, color: def.color, description: def.description })
+        });
+      }
+    }
+  } catch (err) {
+    console.error('Error ensuring repository labels:', err.message);
+  }
+}
+
 function appendSummary(text) {
   console.log(text);
   if (STEP_SUMMARY_PATH && fs.existsSync(path.dirname(STEP_SUMMARY_PATH))) {
@@ -122,11 +180,12 @@ async function compileReviews(issues, slugs, projectsDir) {
     const metaPath = path.join(projectsDir, slug, 'project.json');
     const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
 
-    const issue = issues.find(iss => {
-      if (iss.pull_request) return false;
-      const t = (iss.title || '').toLowerCase();
-      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase()) || iss.number === meta.issueThreadNumber;
-    });
+    const issue = (meta.issueThreadNumber && issues.find(iss => !iss.pull_request && iss.number === meta.issueThreadNumber)) ||
+      issues.find(iss => {
+        if (iss.pull_request) return false;
+        const t = (iss.title || '').toLowerCase();
+        return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase());
+      });
 
     if (!issue) {
       reviewsData.projects[slug] = {
@@ -225,6 +284,22 @@ async function handlePushOrDispatch() {
 
   appendSummary(`Found ${issues.length} existing issues in repository.`);
 
+  // Ensure repository labels are colorful and have emojis!
+  await ensureRepositoryLabels();
+
+  // Close legacy proposal issue #6 if open
+  try {
+    const issue6 = issues.find(i => i.number === 6 && i.state === 'open');
+    if (issue6) {
+      appendSummary('Closing legacy proposal issue #6 in favor of official discussion #19...');
+      await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/6`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ state: 'closed' })
+      });
+    }
+  } catch (_) {}
+
   const preferredOrder = ['xmcl', 'hmcl', 'atm9', 'sodium', 'lunarclient'];
   const allFolders = fs.readdirSync(projectsDir).filter(f => {
     return fs.statSync(path.join(projectsDir, f)).isDirectory() && fs.existsSync(path.join(projectsDir, f, 'project.json'));
@@ -305,7 +380,11 @@ async function handlePushOrDispatch() {
         body: JSON.stringify({
           title: expectedTitle,
           body: issueBody,
-          labels: [meta.category, 'verified-submission', 'discussion']
+          labels: [
+            getCategoryLabelName(meta.category),
+            LABEL_DEFINITIONS['verified-submission'].name,
+            LABEL_DEFINITIONS['discussion'].name
+          ]
         })
       });
 
