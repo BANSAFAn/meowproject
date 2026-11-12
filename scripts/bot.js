@@ -761,6 +761,30 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     fs.writeFileSync(localeFile, JSON.stringify(localeContent, null, 2) + '\n', 'utf8');
   }
 
+  // 3. GitHub License & Developer Probing
+  let detectedLicense = 'Open Source';
+  let detectedDeveloper = sourceLinks[0]?.label || 'Community';
+
+  const ghRepoLink = sourceLinks.find(s => (s.url || '').includes('github.com'));
+  if (ghRepoLink) {
+    const m = ghRepoLink.url.match(/github\.com\/([^\/]+)\/([^\/]+)/i);
+    if (m) {
+      try {
+        const ghRepoRes = await githubApi(`/repos/${m[1]}/${m[2]}`);
+        if (ghRepoRes.ok && ghRepoRes.data) {
+          if (ghRepoRes.data.license?.spdx_id && ghRepoRes.data.license.spdx_id !== 'NOASSERTION') {
+            detectedLicense = ghRepoRes.data.license.spdx_id;
+          } else if (ghRepoRes.data.license?.name) {
+            detectedLicense = ghRepoRes.data.license.name;
+          }
+          if (ghRepoRes.data.owner?.login && (!detectedDeveloper || detectedDeveloper.toLowerCase() === 'github' || detectedDeveloper === 'Community')) {
+            detectedDeveloper = ghRepoRes.data.owner.login;
+          }
+        }
+      } catch (_) {}
+    }
+  }
+
   // Write project.json
   const projectJsonPath = path.join(projectDir, 'project.json');
   const projectMeta = {
@@ -770,8 +794,8 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     category,
     icon: iconFinal,
     country,
-    developer: sourceLinks[0]?.label || 'Community',
-    license: 'Open Source',
+    developer: detectedDeveloper,
+    license: detectedLicense,
     platforms,
     website: website || sourceLinks[0]?.url || '',
     sourceLinks,
@@ -1001,7 +1025,101 @@ async function handleIssues(eventPayload) {
     return;
   }
 
-  // 2. New Project Submission: prefix check
+  // 2. Project Update / Enhancement Proposal: [update: <slug>]
+  const updateMatch = lowerTitle.match(/^(?:\[update:\s*([a-z0-9_-]+)\]|update:\s*([a-z0-9_-]+))/i);
+  if (updateMatch) {
+    const slug = (updateMatch[1] || updateMatch[2]).toLowerCase().trim();
+    const projectDir = path.resolve('src/projects', slug);
+
+    if (!fs.existsSync(projectDir)) {
+      await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Project Not Found ❌\n\nCould not find project with slug \`${slug}\` in the catalog. Please verify the slug in the title.`);
+      return;
+    }
+
+    await githubApi(`/repos/${GITHUB_REPOSITORY}/issues/${issue.number}/labels`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ labels: ['update', 'automated-pr'] })
+    });
+
+    if (action === 'opened' || action === 'edited') {
+      const projectJsonPath = path.join(projectDir, 'project.json');
+      const meta = readJsonFile(projectJsonPath);
+
+      // Extract new screenshots if provided
+      const newScreenshotsRaw = extractSection(body, 'Screenshots');
+      const publicDir = path.resolve('public/projects', slug);
+      if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+
+      if (newScreenshotsRaw) {
+        const lines = newScreenshotsRaw.split('\n').map(s => s.replace(/^[-*]\s*/, '').trim()).filter(s => /^https?:\/\//i.test(s));
+        let idx = (meta.screenshots || []).length + 1;
+        for (const sUrl of lines) {
+          const ext = sUrl.endsWith('.webp') ? '.webp' : '.png';
+          const localPath = path.join(publicDir, `screen-${idx}${ext}`);
+          const ok = await downloadImage(sUrl, localPath);
+          if (ok) {
+            if (!meta.screenshots) meta.screenshots = [];
+            meta.screenshots.push(`/projects/${slug}/screen-${idx}${ext}`);
+            idx++;
+          }
+        }
+      }
+
+      // Extract updated descriptions
+      const descSection = extractSection(body, 'Description') || body;
+      const langRegex = /(?:^|\n)####\s+([A-Za-z]{2})\s*\n([\s\S]*?)(?=\n####\s+[A-Za-z]{2}|$)/gi;
+      let lMatch;
+      const localesDir = path.join(projectDir, 'locales');
+      while ((lMatch = langRegex.exec(descSection)) !== null) {
+        const code = lMatch[1].toLowerCase();
+        const text = lMatch[2].trim();
+        if (text.length >= 20) {
+          const locFile = path.join(localesDir, `${code}.json`);
+          let loc = { tagline: meta.name, description: text, features: [], screenshotCaptions: [] };
+          if (fs.existsSync(locFile)) {
+            try { loc = { ...readJsonFile(locFile), description: text }; } catch (_) {}
+          }
+          fs.writeFileSync(locFile, JSON.stringify(loc, null, 2) + '\n', 'utf8');
+        }
+      }
+
+      // Extract server updates
+      const newIp = extractSection(body, 'Server IP');
+      if (newIp) meta.serverIp = newIp;
+      const newWebsite = extractSection(body, 'Website');
+      if (newWebsite && /^https?:\/\//i.test(newWebsite)) meta.website = newWebsite;
+
+      fs.writeFileSync(projectJsonPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
+
+      // Create branch and PR
+      const branchName = `update-${slug}-issue-${issue.number}`;
+      execSync('git config user.name "github-actions[bot]"');
+      execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+      execSync(`git checkout -B ${branchName}`);
+      execSync(`git add src/projects/${slug}/ public/projects/${slug}/`);
+      execSync(`git commit -m "feat(catalog): propose updates for ${slug} (#${issue.number})"`);
+      execSync(`git push origin ${branchName} --force`);
+
+      const prRes = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: `feat(catalog): update project ${slug} (#${issue.number})`,
+          head: branchName,
+          base: 'main',
+          body: `Automated PR generated from project update proposal issue #${issue.number} for **${meta.name}**.\n\nCloses #${issue.number}`
+        })
+      });
+
+      const prUrl = prRes.data ? prRes.data.html_url : `branch ${branchName}`;
+      await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Automated Update PR Created! 🎉\n\nThank you for submitting updates for **${meta.name}**!\n\n- **Pull Request:** ${prUrl}\n\nThe repository administrator will review the changes before merging!`);
+      execSync('git checkout main');
+    }
+    return;
+  }
+
+  // 3. New Project Submission: prefix check
   const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'server:', 'website:', 'project:'];
   const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
 

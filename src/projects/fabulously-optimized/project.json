@@ -5,8 +5,8 @@
   "category": "modpack",
   "icon": "/projects/fabulously-optimized/icon.png",
   "country": "Global",
-  "developer": "Github",
-  "license": "Open Source",
+  "developer": "Fabulously Optimized Team",
+  "license": "BSD-3-Clause",
   "platforms": [
     "ALL"
   ],
@@ -22,8 +22,11 @@
   "issueSearchTerm": "Fabulously Optimized",
   "tags": [
     "modpack",
-    "ALL",
-    "Global"
+    "Optimization",
+    "Fabric",
+    "Graphics",
+    "Performance",
+    "Shaders"
   ],
   "screenshots": [
     "/projects/fabulously-optimized/screen-1.png",

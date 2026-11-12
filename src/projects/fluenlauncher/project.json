@@ -6,7 +6,7 @@
   "icon": "/projects/fluenlauncher/icon.png",
   "country": "Asia",
   "developer": "Github",
-  "license": "Open Source",
+  "license": "MIT",
   "platforms": [
     "Windows 10",
     "Windows 11"

@@ -62,6 +62,10 @@ const categoryCounts: Record<string, number> = Object.fromEntries(
   PREFIXES.map((c) => [c, PROJECTS.filter((p) => p.category === c).length]),
 );
 
+const allUniqueTags = Array.from(
+  new Set(PROJECTS.flatMap((p) => p.tags || []))
+).filter(Boolean);
+
 const selectedProject = initialProjectSlug
   ? PROJECTS.find((p) => p.slug === initialProjectSlug)
   : undefined;
@@ -999,16 +1003,67 @@ const jsonLdSchema = {
         font-weight: 700;
       }
 
-      /* Filter & Index Tabs */
+      /* Filter, Sort & Index Tabs */
       .filter-bar {
         margin-bottom: 2rem;
         padding: 1.1rem 1.35rem;
       }
 
+      .filter-toolbar-top {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 0.9rem;
+        flex-wrap: wrap;
+      }
+
       .search-box {
         position: relative;
-        width: 100%;
-        margin-bottom: 0.9rem;
+        flex: 1;
+        min-width: 220px;
+      }
+
+      .catalog-sort-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex-shrink: 0;
+      }
+
+      .sort-label {
+        font-family: var(--font-mono);
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--ink-faint);
+        text-transform: uppercase;
+      }
+
+      .sort-select-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .sort-dropdown-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background: var(--paper-card);
+        color: var(--ink);
+        border: 1.5px solid var(--border-ink);
+        padding: 0.5rem 1.6rem 0.5rem 0.65rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 var(--shadow-hard);
+        outline: none;
+      }
+
+      .sort-chevron {
+        position: absolute;
+        right: 0.5rem;
+        pointer-events: none;
+        color: var(--ink-faint);
       }
 
       .search-icon {
@@ -1028,6 +1083,7 @@ const jsonLdSchema = {
         border: 1.5px solid var(--border-ink);
         font-family: inherit;
         font-size: 0.88rem;
+        box-sizing: border-box;
       }
 
       .search-input:focus {
@@ -1041,6 +1097,249 @@ const jsonLdSchema = {
         gap: 0.4rem;
         border-top: 1px dashed var(--rule-line);
         padding-top: 0.9rem;
+      }
+
+      /* Tags Bar */
+      .tags-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        border-top: 1px dashed var(--rule-line);
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+      }
+
+      .tags-bar-title {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-right: 0.2rem;
+      }
+
+      .tags-pills-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        flex: 1;
+      }
+
+      .tag-filter-btn {
+        background: var(--paper-card);
+        color: var(--ink-muted);
+        border: 1px solid var(--border-ink);
+        font-family: var(--font-mono);
+        font-size: 0.73rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        cursor: pointer;
+        transition: transform 100ms ease, background 100ms ease, color 100ms ease;
+      }
+
+      .tag-filter-btn:hover {
+        background: var(--paper-inset);
+        color: var(--ink);
+        transform: translateY(-1px);
+      }
+
+      .tag-filter-btn.active {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+        font-weight: 800;
+      }
+
+      .btn-clear-tag {
+        background: rgba(231, 76, 60, 0.15);
+        border: 1px solid #e74c3c;
+        color: #e74c3c;
+        font-family: var(--font-mono);
+        font-size: 0.73rem;
+        font-weight: 700;
+        padding: 0.2rem 0.5rem;
+        cursor: pointer;
+      }
+
+      /* Clickable tag pill on cards */
+      .tag-item-clickable {
+        background: transparent;
+        border: 1px solid currentColor;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        cursor: pointer;
+        padding: 0.1rem 0.4rem;
+        transition: transform 100ms ease, background 100ms ease, color 100ms ease;
+      }
+
+      .tag-item-clickable:hover {
+        background: var(--accent);
+        color: #000;
+        transform: translateY(-1px);
+      }
+
+      /* Video Player Component */
+      .video-player-container {
+        background: #0d0f12;
+        border: 2px solid var(--border-ink);
+        box-shadow: 6px 6px 0 var(--shadow-hard);
+        margin-bottom: 2rem;
+        overflow: hidden;
+      }
+
+      .video-top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #161a22;
+        border-bottom: 1.5px solid var(--border-ink);
+        padding: 0.5rem 0.9rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+      }
+
+      .video-rec-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: #ff4757;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+      }
+
+      .video-rec-dot {
+        width: 10px;
+        height: 10px;
+        background: #ff4757;
+        border-radius: 50%;
+        animation: recBlink 1s infinite alternate;
+      }
+
+      @keyframes recBlink {
+        from { opacity: 0.2; }
+        to { opacity: 1; }
+      }
+
+      .video-screen-stage {
+        position: relative;
+        min-height: 290px;
+        background: #080a0d;
+        color: #c9d1d9;
+        padding: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size: 100% 3px, 6px 100%;
+      }
+
+      .video-scene {
+        display: none;
+        animation: sceneFade 250ms ease-in-out;
+      }
+
+      .video-scene.active {
+        display: block;
+      }
+
+      @keyframes sceneFade {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .video-controls-bar {
+        background: #161a22;
+        border-top: 1.5px solid var(--border-ink);
+        padding: 0.75rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .video-scrubber-track {
+        position: relative;
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-ink);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .video-scrubber-fill {
+        height: 100%;
+        width: 25%;
+        background: var(--accent);
+        transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .video-buttons-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .video-step-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+
+      .video-step-btn {
+        background: #21262d;
+        color: #8b949e;
+        border: 1px solid var(--border-ink);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.25rem 0.6rem;
+        cursor: pointer;
+        transition: background 120ms ease, color 120ms ease;
+      }
+
+      .video-step-btn.active {
+        background: var(--accent);
+        color: #000;
+        font-weight: 800;
+      }
+
+      /* Suggest Edit Modal */
+      .suggest-form-field {
+        margin-bottom: 0.85rem;
+      }
+      .suggest-form-field label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        color: var(--ink);
+      }
+      .suggest-form-input {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.84rem;
+        box-sizing: border-box;
+      }
+      .suggest-form-textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 0.5rem 0.75rem;
+        background: var(--paper-sheet);
+        border: 1.5px solid var(--border-ink);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.84rem;
+        resize: vertical;
+        box-sizing: border-box;
       }
 
       .tab-btn {
@@ -2756,19 +3055,37 @@ const jsonLdSchema = {
           </div>
         </section>
 
-        <!-- Filter & Index Tabs (Removed the "Test No Screenshots" checkbox!) -->
+        <!-- Filter, Sort & Index Tabs -->
         <section id="catalog-filter-bar" class="paper-sheet-box filter-bar">
-          <div class="search-box">
-            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input
-              type="search"
-              id="project-search"
-              class="search-input"
-              placeholder={t.searchPlaceholder}
-            />
+          <div class="filter-toolbar-top">
+            <div class="search-box">
+              <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="search"
+                id="project-search"
+                class="search-input"
+                placeholder={t.searchPlaceholder}
+              />
+            </div>
+
+            <div class="catalog-sort-box">
+              <label for="catalog-sort-select" class="sort-label">{t.sortLabel}</label>
+              <div class="sort-select-wrapper">
+                <select id="catalog-sort-select" class="sort-dropdown-select" aria-label={t.sortLabel}>
+                  <option value="featured">{t.sortFeatured}</option>
+                  <option value="rating-desc">{t.sortRating}</option>
+                  <option value="updated-desc">{t.sortUpdated}</option>
+                  <option value="newest-desc">{t.sortNewest}</option>
+                  <option value="name-asc">{t.sortName}</option>
+                </select>
+                <svg class="sort-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div class="index-tabs" role="tablist">
@@ -2788,6 +3105,22 @@ const jsonLdSchema = {
                 [ {cat}: {categoryCounts[cat]} ]
               </a>
             ))}
+          </div>
+
+          <!-- Interactive Tags Bar -->
+          <div class="tags-filter-bar" id="tags-filter-bar">
+            <span class="tags-bar-title">{t.tagsLabel}</span>
+            <div class="tags-pills-row" id="tags-pills-container">
+              <button type="button" class="tag-filter-btn active" data-tag="all">{t.allTagsLabel}</button>
+              {allUniqueTags.slice(0, 16).map((tag) => (
+                <button type="button" class="tag-filter-btn" data-tag={tag}>
+                  #{tag}
+                </button>
+              ))}
+            </div>
+            <button type="button" id="btn-clear-tag" class="btn-clear-tag" style="display: none;" title={t.clearTagBtn}>
+              {t.clearTagBtn}
+            </button>
           </div>
         </section>
 
@@ -2836,6 +3169,10 @@ const jsonLdSchema = {
                   class="project-dossier"
                   data-project-card={project.slug}
                   data-category={project.category}
+                  data-tags={project.tags.join(',').toLowerCase()}
+                  data-project-name={project.name}
+                  data-project-index={index}
+                  data-project-score="0"
                   data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
                   style={initialProjectSlug && project.slug !== initialProjectSlug ? 'display: none;' : ''}
                 >
@@ -2976,6 +3313,22 @@ const jsonLdSchema = {
                         </svg>
                         {primaryLinkLabel}
                       </a>
+
+                      <button
+                        type="button"
+                        class="paper-btn paper-btn-outline"
+                        data-open-suggest-edit
+                        data-project-slug={project.slug}
+                        data-project-name={project.name}
+                        data-project-cat={project.category}
+                        title={t.suggestChangesBtn}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        <span>{t.suggestChangesBtn}</span>
+                      </button>
                     </div>
                   </div>
 
@@ -3219,7 +3572,7 @@ const jsonLdSchema = {
                     <!-- Tags -->
                     <div class="tags-strip">
                       {project.tags.map((tag) => (
-                        <span class="tag-item">#{tag}</span>
+                        <button type="button" class="tag-item tag-item-clickable" data-click-tag={tag} title={`Фільтрувати за тегом #${tag}`}>#{tag}</button>
                       ))}
                     </div>
                   </div>
@@ -3331,60 +3684,115 @@ const jsonLdSchema = {
           <h1 class="hero-title">{t.submitTabTitle}</h1>
           <p class="hero-subtitle">{t.submitTabSubtitle}</p>
 
-          <!-- Interactive Animated Tutorial Stage -->
-          <div class="anim-stage-box">
-            <div class="section-head" style="margin-bottom: 0.75rem;">
-              <span class="section-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
-                {t.animTitle}
-              </span>
-              <span class="stamp" id="anim-step-counter">STEP 01 / 04</span>
-            </div>
-
-            <div class="anim-progress-track">
-              <div class="anim-progress-fill" id="anim-progress-bar"></div>
-            </div>
-
-            <div class="anim-steps-grid">
-              <div class="anim-step-card active" data-anim-step="0">
-                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
-                  {t.animStep1Label}
-                </div>
-                <p style="font-size: 0.83rem;">{t.animStep1Text}</p>
+          <!-- Interactive Video-Format Walkthrough Player -->
+          <div class="video-player-container" id="video-player">
+            <div class="video-top-header">
+              <div class="video-rec-indicator">
+                <span class="video-rec-dot"></span>
+                <span>REC ● LIVE DEMO</span>
               </div>
-
-              <div class="anim-step-card" data-anim-step="1">
-                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
-                  {t.animStep2Label}
-                </div>
-                <p style="font-size: 0.83rem;">{t.animStep2Text}</p>
+              <div class="mono" style="color: var(--accent); font-weight: 800;">
+                {t.videoDemoTitle} // 1080p 60FPS
               </div>
-
-              <div class="anim-step-card" data-anim-step="2">
-                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
-                  {t.animStep3Label}
-                </div>
-                <p style="font-size: 0.83rem;">{t.animStep3Text}</p>
-              </div>
-
-              <div class="anim-step-card" data-anim-step="3">
-                <div class="mono" style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 0.35rem;">
-                  {t.animStep4Label}
-                </div>
-                <p style="font-size: 0.83rem;">{t.animStep4Text}</p>
+              <div class="mono" style="color: var(--ink-faint);" id="video-timecode">
+                00:15 / 00:40
               </div>
             </div>
 
-            <div class="anim-terminal-preview">
-              <div>
-                <span class="pulse-dot"></span>
-                <span id="anim-terminal-text">
-                  [КРОК 01] Обираєте категорію (launcher, mod, server тощо), вказуєте назву та заповнюєте опис мовами спільноти
-                </span>
+            <!-- Video Screen Viewport with Dynamic Scenes -->
+            <div class="video-screen-stage" id="video-stage">
+              <!-- Scene 01: Заповнення форми -->
+              <div class="video-scene active" data-video-scene="0">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
+                  <span class="mono" style="color: #f1c40f; font-weight: 800;">[SCENE 01 / 04] // ЗАПОВНЕННЯ ФОРМИ ПОДАЧІ</span>
+                  <span class="stamp stamp-alpha">ACTION: INPUT</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.45); border: 1.5px solid rgba(255,255,255,0.15); padding: 1rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.6;">
+                  <div style="color: #7ee787;">&gt; input.category = <span style="color: #79c0ff;">"modpack"</span>;</div>
+                  <div style="color: #7ee787;">&gt; input.name = <span style="color: #ffa657;">"Fabulously Optimized"</span>;</div>
+                  <div style="color: #7ee787;">&gt; input.website = <span style="color: #79c0ff;">"https://download.fo"</span>;</div>
+                  <div style="color: #7ee787;">&gt; input.desc_uk = <span style="color: #ffa657;">"Гарна графіка, висока продуктивність та знайомі функції..."</span>;</div>
+                  <div style="margin-top: 0.5rem; color: #8b949e; display: flex; align-items: center; gap: 0.4rem;">
+                    <span class="pulse-dot"></span>
+                    <span>Користувач заповнює дані українською та англійською мовами...</span>
+                  </div>
+                </div>
               </div>
-              <span class="mono" style="opacity: 0.85; color: var(--accent);">ПОКРОКОВИЙ ПОСІБНИК</span>
+
+              <!-- Scene 02: Миттєва перевірка -->
+              <div class="video-scene" data-video-scene="1">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
+                  <span class="mono" style="color: #2ecc71; font-weight: 800;">[SCENE 02 / 04] // АВТОМАТИЧНА ВАЛІДАЦІЯ ЧЕКЛИСТА</span>
+                  <span class="stamp stamp-verified">STATUS: ALL PASS</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.6rem; font-family: var(--font-mono); font-size: 0.8rem;">
+                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
+                    ✓ [1] Посилання валідне (HTTPS)
+                  </div>
+                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
+                    ✓ [2] Іконка доступна (.png / .svg)
+                  </div>
+                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
+                    ✓ [3] Вихідний код перевірено (GitHub)
+                  </div>
+                  <div style="background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; padding: 0.6rem; border-radius: 4px; color: #2ecc71;">
+                    ✓ [4] Опис відповідає лімітам
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scene 03: Відправка на GitHub -->
+              <div class="video-scene" data-video-scene="2">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
+                  <span class="mono" style="color: #3498db; font-weight: 800;">[SCENE 03 / 04] // СТВОРЕННЯ ЗАЯВКИ НА GITHUB</span>
+                  <span class="stamp stamp-open">TRIGGER: ISSUE</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15); padding: 0.9rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem;">
+                  <div style="color: #58a6ff; font-weight: 800; margin-bottom: 0.4rem;">
+                    GitHub Issue #26: modpack: Fabulously Optimized
+                  </div>
+                  <div style="color: #8b949e; line-height: 1.5;">
+                    Натисканням однієї кнопки система передає всі готові дані у форму GitHub Issue. Заявка автоматично отримує теги <span style="color: #e3b341;">modpack</span> та <span style="color: #238636;">verified-submission</span>.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scene 04: GitHub Bot публікує на сайті -->
+              <div class="video-scene" data-video-scene="3">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 0.5rem;">
+                  <span class="mono" style="color: #e67e22; font-weight: 800;">[SCENE 04 / 04] // ПУБЛІКАЦІЯ GITHUB-БОТОМ</span>
+                  <span class="stamp stamp-verified">RESULT: LIVE</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15); padding: 0.9rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.5;">
+                  <div style="color: #2ecc71;">🤖 [Bot] Завантажено іконку та скріншоти у високій якості.</div>
+                  <div style="color: #2ecc71;">🤖 [Bot] Створено гілку add-project-fabulously-optimized-issue-26.</div>
+                  <div style="color: #58a6ff;">🎉 [PR] Pull Request обʼєднано з гілкою main.</div>
+                  <div style="color: #f1c40f; font-weight: 800; margin-top: 0.35rem;">✨ Проєкт миттєво зʼявляється на meowlab.pp.ua!</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video Player Controls -->
+            <div class="video-controls-bar">
+              <div class="video-scrubber-track" id="video-scrubber">
+                <div class="video-scrubber-fill" id="video-scrubber-progress"></div>
+              </div>
+              <div class="video-buttons-row">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                  <button type="button" class="paper-btn" id="btn-video-play-toggle" style="padding: 0.25rem 0.65rem; font-size: 0.78rem;">
+                    ⏸ Пауза
+                  </button>
+                  <span id="video-step-desc-ticker" class="mono" style="font-size: 0.78rem; color: var(--ink);">
+                    Крок 01: Заповнення форми проєкту
+                  </span>
+                </div>
+                <div class="video-step-tabs">
+                  <button type="button" class="video-step-btn active" data-video-step-btn="0">01: Введення</button>
+                  <button type="button" class="video-step-btn" data-video-step-btn="1">02: Валідація</button>
+                  <button type="button" class="video-step-btn" data-video-step-btn="2">03: Відправка</button>
+                  <button type="button" class="video-step-btn" data-video-step-btn="3">04: Публікація</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -4006,6 +4414,62 @@ const jsonLdSchema = {
       </div>
     </div>
 
+    <!-- Suggest Edit / Update Project Modal -->
+    <div id="suggest-edit-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 620px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.75rem; color: var(--accent); font-weight: 800;">[COMMUNITY CONTRIBUTION]</span>
+            <h3 id="suggest-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.15rem; font-weight: 900; color: var(--ink);">
+              {t.suggestModalTitle}
+            </h3>
+          </div>
+          <button type="button" id="suggest-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p style="font-size: 0.88rem; line-height: 1.55; margin-bottom: 1.1rem; color: var(--ink);">
+          {t.suggestModalDesc}
+        </p>
+
+        <form id="suggest-edit-form">
+          <input type="hidden" id="suggest-project-slug" value="" />
+          <input type="hidden" id="suggest-project-name" value="" />
+          <input type="hidden" id="suggest-project-cat" value="" />
+
+          <div class="suggest-form-field">
+            <label for="suggest-desc-uk">{t.suggestDescUkLabel}</label>
+            <textarea id="suggest-desc-uk" class="suggest-form-textarea" placeholder="Оновлений або покращений опис українською (мін. 20 символів)..."></textarea>
+          </div>
+
+          <div class="suggest-form-field">
+            <label for="suggest-desc-en">{t.suggestDescEnLabel}</label>
+            <textarea id="suggest-desc-en" class="suggest-form-textarea" placeholder="Updated English description (min 20 chars)..."></textarea>
+          </div>
+
+          <div class="suggest-form-field">
+            <label for="suggest-screenshots">{t.suggestScreenshotsLabel}</label>
+            <textarea id="suggest-screenshots" class="suggest-form-textarea" style="min-height: 60px;" placeholder="https://example.com/screen1.png&#10;https://example.com/screen2.png"></textarea>
+          </div>
+
+          <div class="suggest-form-field" id="suggest-server-ip-field" style="display: none;">
+            <label for="suggest-server-ip">{t.suggestServerIpLabel}</label>
+            <input type="text" id="suggest-server-ip" class="suggest-form-input" placeholder="play.server.com" />
+          </div>
+
+          <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.6rem;">
+            <button type="button" id="btn-cancel-suggest" class="paper-btn">
+              Скасувати
+            </button>
+            <button type="submit" class="paper-btn paper-btn-ink" style="font-weight: 800;">
+              🚀 {t.suggestSubmitBtn}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script
       is:inline
       define:vars={{
@@ -4543,12 +5007,15 @@ const jsonLdSchema = {
         });
         validateSubmissionForm();
 
-        // 6. Category & Search Filtering
+        // 6. Category, Search & Tag Filtering
         const searchInput = document.getElementById('project-search');
         const tabButtons = document.querySelectorAll('.tab-btn');
         const cards = document.querySelectorAll('.project-dossier');
         const emptyState = document.getElementById('empty-filter-state');
+        const sortSelect = document.getElementById('catalog-sort-select');
+        const tagClearBtn = document.getElementById('btn-clear-tag');
         let activeCategory = 'all';
+        let activeTag = 'all';
 
         function filterProjects() {
           if (singleProjectSlug) return;
@@ -4557,9 +5024,14 @@ const jsonLdSchema = {
           cards.forEach((card) => {
             const cat = card.getAttribute('data-category');
             const hay = card.getAttribute('data-search') || '';
+            const rawTags = card.getAttribute('data-tags') || '';
+            const cardTags = rawTags.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
+
             const okCat = activeCategory === 'all' || cat === activeCategory;
             const okQuery = !q || hay.includes(q);
-            if (okCat && okQuery) {
+            const okTag = activeTag === 'all' || cardTags.includes(activeTag);
+
+            if (okCat && okQuery && okTag) {
               card.style.display = '';
               shown++;
             } else {
@@ -4569,6 +5041,71 @@ const jsonLdSchema = {
           if (emptyState) {
             emptyState.style.display = shown === 0 ? 'block' : 'none';
           }
+        }
+
+        function setActiveTag(tag) {
+          activeTag = (tag || 'all').toLowerCase();
+          document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
+            const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
+            btn.classList.toggle('active', btnTag === activeTag);
+          });
+          if (tagClearBtn) {
+            tagClearBtn.style.display = activeTag === 'all' ? 'none' : 'inline-block';
+          }
+          filterProjects();
+        }
+
+        document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const tag = btn.getAttribute('data-tag') || 'all';
+            setActiveTag(tag);
+          });
+        });
+
+        document.querySelectorAll('.tag-item-clickable').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const tag = btn.getAttribute('data-click-tag');
+            if (tag) setActiveTag(tag);
+          });
+        });
+
+        if (tagClearBtn) {
+          tagClearBtn.addEventListener('click', () => {
+            setActiveTag('all');
+          });
+        }
+
+        // Catalog Sorting
+        function applySort() {
+          const mode = sortSelect ? sortSelect.value : 'featured';
+          const container = document.querySelector('.projects-stack');
+          if (!container) return;
+          const projectCards = Array.from(document.querySelectorAll('[data-project-card]'));
+          projectCards.sort((a, b) => {
+            if (mode === 'rating-desc') {
+              const scoreA = Number(a.dataset.projectScore || 0);
+              const scoreB = Number(b.dataset.projectScore || 0);
+              if (scoreB !== scoreA) return scoreB - scoreA;
+              return Number(a.dataset.projectIndex || 0) - Number(b.dataset.projectIndex || 0);
+            }
+            if (mode === 'name-asc') {
+              const nameA = (a.dataset.projectName || '').toLowerCase();
+              const nameB = (b.dataset.projectName || '').toLowerCase();
+              return nameA.localeCompare(nameB);
+            }
+            if (mode === 'newest-desc') {
+              return Number(b.dataset.projectIndex || 0) - Number(a.dataset.projectIndex || 0);
+            }
+            // featured / default
+            return Number(a.dataset.projectIndex || 0) - Number(b.dataset.projectIndex || 0);
+          });
+          projectCards.forEach((c) => container.appendChild(c));
+        }
+
+        if (sortSelect) {
+          sortSelect.addEventListener('change', applySort);
         }
 
         if (searchInput) {
@@ -4748,6 +5285,26 @@ const jsonLdSchema = {
               'Відсутність гарантій та відповідальності'
             ]
           },
+          'bsd-3-clause': {
+            badge: 'BSD-3-Clause',
+            type: 'Пермісивна (Вільна)',
+            title: 'BSD 3-Clause "New" or "Revised" License',
+            desc: 'Вільна пермісивна ліцензія. Дозволяє необмежене використання, зміну та поширення коду як у відкритих, так і у закритих комерційних продуктах за умови збереження повідомлення про копірайт і заборони використання імені автора у рекламі без згоди.',
+            permissions: [
+              'Комерційне використання без відрахувань',
+              'Модифікація вихідного коду на власний розсуд',
+              'Поширення та субліцензування коду',
+              'Приватне використання'
+            ],
+            conditions: [
+              'Збереження тексту ліцензії BSD та копірайту автора',
+              'Збереження списку умов та відмови від відповідальності'
+            ],
+            limitations: [
+              'Заборонено використовувати імʼя автора або розробників для реклами без згоди',
+              'Відсутність будь-яких гарантій та відповідальності'
+            ]
+          },
           'polyform shield 1.0.0': {
             badge: 'PolyForm Shield',
             type: 'Source-Available (Захист від хмарних клонів)',
@@ -4830,6 +5387,7 @@ const jsonLdSchema = {
           if (!data) {
             if (raw.includes('gpl')) data = LICENSE_DB['gpl-3.0'];
             else if (raw.includes('mit')) data = LICENSE_DB['mit'];
+            else if (raw.includes('bsd')) data = LICENSE_DB['bsd-3-clause'];
             else if (raw.includes('apache')) data = LICENSE_DB['apache-2.0'];
             else if (raw.includes('shield') || raw.includes('polyform')) data = LICENSE_DB['polyform shield 1.0.0'];
             else if (raw.includes('потрібна') || raw.includes('ліцензійний')) data = LICENSE_DB['потрібна ліцензія'];
@@ -5037,6 +5595,11 @@ const jsonLdSchema = {
               if (ratingValueEl) ratingValueEl.textContent = scoreText;
               if (ratingStampEl) ratingStampEl.style.display = '';
               if (ratingTopBadgeEl) ratingTopBadgeEl.textContent = scoreText;
+
+              const cardEl = document.querySelector(`[data-project-slug="${slug}"]`);
+              if (cardEl) {
+                cardEl.dataset.projectScore = String(avg);
+              }
             }
 
             // Dedicated project tab appears only when there are more than 2 comments
@@ -5143,6 +5706,156 @@ const jsonLdSchema = {
         }
 
         loadRealReviews();
+
+        // 9. Interactive Video Walkthrough Player Simulator
+        const videoScenes = document.querySelectorAll('[data-video-scene]');
+        const videoTabs = document.querySelectorAll('[data-video-step-btn]');
+        const videoPlayToggle = document.getElementById('btn-video-play-toggle');
+        const videoScrubberProgress = document.getElementById('video-scrubber-progress');
+        const videoTimecode = document.getElementById('video-timecode');
+        const videoDescTicker = document.getElementById('video-step-desc-ticker');
+
+        const stepDescriptions = [
+          'Крок 01: Заповнення форми проєкту — назва, посилання, описи та перевірка полів',
+          'Крок 02: Миттєва автоматична валідація — чеклист із 4 пунктів стає повністю зеленим',
+          'Крок 03: Відправка на GitHub — відкриття структурованої заявки з готовим шаблоном',
+          'Крок 04: Публікація GitHub-ботом — перевірка PR та миттєва поява проєкту в каталозі'
+        ];
+
+        let currentVideoStep = 0;
+        let isVideoPlaying = true;
+        let videoInterval = null;
+
+        function setVideoStep(idx) {
+          currentVideoStep = (idx + 4) % 4;
+          videoScenes.forEach((s) => {
+            const sceneIdx = Number(s.getAttribute('data-video-scene'));
+            s.classList.toggle('active', sceneIdx === currentVideoStep);
+          });
+          videoTabs.forEach((tab) => {
+            const tabIdx = Number(tab.getAttribute('data-video-step-btn'));
+            tab.classList.toggle('active', tabIdx === currentVideoStep);
+          });
+          if (videoScrubberProgress) {
+            videoScrubberProgress.style.width = `${(currentVideoStep + 1) * 25}%`;
+          }
+          if (videoTimecode) {
+            const seconds = (currentVideoStep + 1) * 10;
+            videoTimecode.textContent = `00:${String(seconds).padStart(2, '0')} / 00:40`;
+          }
+          if (videoDescTicker) {
+            videoDescTicker.textContent = stepDescriptions[currentVideoStep] || '';
+          }
+        }
+
+        function startVideoTimer() {
+          if (videoInterval) clearInterval(videoInterval);
+          videoInterval = setInterval(() => {
+            if (isVideoPlaying) {
+              setVideoStep(currentVideoStep + 1);
+            }
+          }, 4500);
+        }
+
+        if (videoTabs.length) {
+          videoTabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+              const idx = Number(tab.getAttribute('data-video-step-btn'));
+              setVideoStep(idx);
+            });
+          });
+          if (videoPlayToggle) {
+            videoPlayToggle.addEventListener('click', () => {
+              isVideoPlaying = !isVideoPlaying;
+              videoPlayToggle.textContent = isVideoPlaying ? '⏸ Пауза' : '▶ Відтворити';
+            });
+          }
+          startVideoTimer();
+        }
+
+        // 10. Suggest Edit / Update Flow
+        const suggestModal = document.getElementById('suggest-edit-modal');
+        const suggestClose = document.getElementById('suggest-modal-close');
+        const suggestCancel = document.getElementById('btn-cancel-suggest');
+        const suggestForm = document.getElementById('suggest-edit-form');
+        const suggestTitle = document.getElementById('suggest-modal-title');
+        const suggestSlugInput = document.getElementById('suggest-project-slug');
+        const suggestNameInput = document.getElementById('suggest-project-name');
+        const suggestCatInput = document.getElementById('suggest-project-cat');
+        const suggestServerIpField = document.getElementById('suggest-server-ip-field');
+
+        function openSuggestEditModal(slug, name, cat) {
+          if (!suggestModal) return;
+          if (suggestSlugInput) suggestSlugInput.value = slug || '';
+          if (suggestNameInput) suggestNameInput.value = name || '';
+          if (suggestCatInput) suggestCatInput.value = cat || '';
+          if (suggestTitle) {
+            suggestTitle.textContent = `Доповнити або змінити: ${name || slug}`;
+          }
+          if (suggestServerIpField) {
+            suggestServerIpField.style.display = cat === 'server' ? 'block' : 'none';
+          }
+          suggestModal.classList.add('open');
+          suggestModal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeSuggestEditModal() {
+          if (suggestModal) {
+            suggestModal.classList.remove('open');
+            suggestModal.setAttribute('aria-hidden', 'true');
+          }
+        }
+
+        document.querySelectorAll('[data-open-suggest-edit]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const slug = btn.getAttribute('data-suggest-slug');
+            const name = btn.getAttribute('data-suggest-name');
+            const cat = btn.getAttribute('data-suggest-cat');
+            openSuggestEditModal(slug, name, cat);
+          });
+        });
+
+        if (suggestClose) suggestClose.addEventListener('click', closeSuggestEditModal);
+        if (suggestCancel) suggestCancel.addEventListener('click', closeSuggestEditModal);
+        if (suggestModal) {
+          suggestModal.addEventListener('click', (e) => {
+            if (e.target === suggestModal) closeSuggestEditModal();
+          });
+        }
+
+        if (suggestForm) {
+          suggestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const slug = (suggestSlugInput ? suggestSlugInput.value : '').trim();
+            const name = (suggestNameInput ? suggestNameInput.value : '').trim();
+            const descUk = (document.getElementById('suggest-desc-uk')?.value || '').trim();
+            const descEn = (document.getElementById('suggest-desc-en')?.value || '').trim();
+            const screens = (document.getElementById('suggest-screenshots')?.value || '').trim();
+            const serverIp = (document.getElementById('suggest-server-ip')?.value || '').trim();
+
+            if (!slug) return;
+
+            let body = `### Description\n\n`;
+            if (descUk) {
+              body += `#### UK\n${descUk}\n\n`;
+            }
+            if (descEn) {
+              body += `#### EN\n${descEn}\n\n`;
+            }
+            if (screens) {
+              body += `### Screenshots\n${screens}\n\n`;
+            }
+            if (serverIp) {
+              body += `### Server IP\n\`${serverIp}\`\n\n`;
+            }
+
+            const title = `[update: ${slug}] ${name || slug}`;
+            const issueUrl = `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+            window.open(issueUrl, '_blank');
+            closeSuggestEditModal();
+          });
+        }
 
         // Check device and window resolution
         function checkDeviceAndResolution() {
