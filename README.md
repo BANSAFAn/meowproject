@@ -10,3 +10,5 @@
 ```
 
 > Сайт ще сирий (рання розробка, постійно оновлюється).
+
+![MeowProject Global Alpha](./public/banner-alpha.jpg)
