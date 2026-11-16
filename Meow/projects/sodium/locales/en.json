@@ -1,0 +1,15 @@
+{
+  "tagline": "The flagship Modrinth optimization mod that modernizes Minecraft’s rendering engine for massive FPS gains",
+  "description": "Sodium is a powerful rendering optimization mod for Minecraft (supporting Fabric, NeoForge, and Quilt) developed by CaffeineMC and hosted as the #1 most downloaded mod on Modrinth. By completely replacing Minecraft’s legacy chunk rendering pipeline with modern multi-threaded OpenGL techniques, Sodium delivers 2x–4x higher frame rates while eliminating frame spikes and lag stutters.\n\nSodium maintains complete visual parity with vanilla Minecraft, introduces a clean redesigned Video Settings screen, and works seamlessly alongside the wider ecosystem including Iris Shaders and Lithium.",
+  "features": [
+    "200%–400% FPS boost powered by a modern chunk rendering pipeline",
+    "Drastic reduction in frame-time spikes and chunk loading stutters",
+    "Redesigned Video Settings UI with faithful vanilla visual quality",
+    "Available on Modrinth for Fabric, NeoForge, and Quilt with source on GitHub"
+  ],
+  "screenshotCaptions": [
+    "High FPS chunk rendering performance with Sodium enabled",
+    "Sodium redesigned in-game Video Settings interface",
+    "Smooth rendering at high render distances in Minecraft"
+  ]
+}

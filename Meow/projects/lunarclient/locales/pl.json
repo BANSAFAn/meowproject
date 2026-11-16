@@ -1,0 +1,15 @@
+{
+  "tagline": "Popularny klient Minecraft typu „wszystko w jednym” z ponad 65 wbudowanymi modami i optymalizacją FPS",
+  "description": "Lunar Client to popularny, własnościowy klient Minecraft tworzony przez amerykańską firmę Moonsworth, LLC na systemy Windows, macOS oraz Linux. Oferuje instalację jednym kliknięciem, obsługę wszystkich głównych wersji gry, ponad 65 wbudowanych modyfikacji HUD/PvP oraz wsparcie dla modów Fabric.",
+  "features": [
+    "Ponad 65 wbudowanych modów konfigurowanych bezpośrednio w grze",
+    "Obsługa wszystkich głównych wersji Minecraft (1.7, 1.8.9, 1.16–1.21+)",
+    "Możliwość ładowania własnych modów Fabric na nowszych wersjach",
+    "Wieloplatformowy instalator na Windows, macOS i Linux"
+  ],
+  "screenshotCaptions": [
+    "Główne okno launchera Lunar Client z wyborem wersji",
+    "Menu wbudowanych modów i personalizacji HUD w Lunar Client",
+    "Personalizacja wizualna i motywy w Lunar Client"
+  ]
+}

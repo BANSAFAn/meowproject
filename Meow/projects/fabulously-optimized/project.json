@@ -1,0 +1,36 @@
+{
+  "slug": "fabulously-optimized",
+  "name": "Fabulously Optimized",
+  "shortName": "Fabulously Optimized",
+  "category": "modpack",
+  "icon": "/projects/fabulously-optimized/icon.png",
+  "country": "Global",
+  "developer": "Fabulously Optimized Team",
+  "license": "BSD-3-Clause",
+  "platforms": [
+    "ALL"
+  ],
+  "website": "https://download.fo",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/Fabulously-Optimized/fabulously-optimized/"
+    }
+  ],
+  "issueThreadNumber": 28,
+  "issueSearchTerm": "Fabulously Optimized",
+  "tags": [
+    "modpack",
+    "Optimization",
+    "Fabric",
+    "Graphics",
+    "Performance",
+    "Shaders"
+  ],
+  "screenshots": [
+    "/projects/fabulously-optimized/screen-1.png",
+    "/projects/fabulously-optimized/screen-2.png",
+    "/projects/fabulously-optimized/screen-3.png"
+  ]
+}

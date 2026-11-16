@@ -1,0 +1,95 @@
+name: "Submit Project / Додати проєкт"
+description: "Submit a project (launcher: name, modpack: name, mod: name, client: name, project: name) with automated bot validation"
+title: "project: "
+labels: ["project-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Submission Guidelines (MeowProject Archive)
+        1. **Issue Title** must start with a valid lowercase type prefix and colon:
+           - `launcher: Name`
+           - `modpack: Name`
+           - `mod: Name`
+           - `client: Name`
+           - `service: Name`
+           - `website: Name`
+           - `project: Name`
+        2. **Website / Link:** Provide the official site (or repository / project page if no website).
+        3. **Languages & Description:** You can provide descriptions in any language (Ukrainian, English, German, Polish, Belarusian, Kazakh, or any other).
+  - type: dropdown
+    id: prefix
+    attributes:
+      label: "Project Type Prefix"
+      options:
+        - "launcher"
+        - "modpack"
+        - "mod"
+        - "client"
+        - "service"
+        - "website"
+        - "project"
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: "Project Name"
+      placeholder: "e.g. Prism Launcher, Sodium, or Lunar Client"
+    validations:
+      required: true
+  - type: input
+    id: country
+    attributes:
+      label: "Country of Origin or Region"
+      placeholder: "e.g. Ukraine, USA, Germany, China, Global, Europe, Asia, Africa"
+    validations:
+      required: true
+  - type: input
+    id: website
+    attributes:
+      label: "Website Link (or Repo / fallback page if no site)"
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: dropdown
+    id: source_host
+    attributes:
+      label: "Source Code Platform"
+      options:
+        - "github"
+        - "gitlab"
+        - "gitea"
+        - "sourceforge"
+        - "gitee"
+        - "cnb"
+        - "proprietary (Closed source)"
+    validations:
+      required: true
+  - type: input
+    id: source_url
+    attributes:
+      label: "Source Code Repository URL (if open source)"
+      placeholder: "https://github.com/org/repo"
+  - type: input
+    id: icon
+    attributes:
+      label: "Icon URL (optional, .svg, .png, or .jpg)"
+      placeholder: "https://example.com/logo.svg"
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots (direct .png or .jpg URLs, leave blank if none)"
+      placeholder: "https://example.com/screen1.png"
+  - type: textarea
+    id: description
+    attributes:
+      label: "Project Description (in one or multiple languages)"
+      placeholder: |
+        #### EN
+        English description here...
+
+        #### UK
+        Український опис тут...
+    validations:
+      required: true

@@ -1,0 +1,231 @@
+{
+  "updatedAt": "2026-11-16T07:17:51.119Z",
+  "projects": {
+    "xmcl": {
+      "issueNumber": 11,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/11",
+      "averageRating": 98,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6797979650,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "good launcher",
+          "score": 98,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/11#issuecomment-6797979650",
+          "issueNum": 11
+        }
+      ]
+    },
+    "hmcl": {
+      "issueNumber": 12,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/12",
+      "averageRating": 100,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6797985068,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "very fast launcher",
+          "score": 100,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/12#issuecomment-6797985068",
+          "issueNum": 12
+        }
+      ]
+    },
+    "atm9": {
+      "issueNumber": 13,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/13",
+      "averageRating": 94,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6805703550,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-11",
+          "body": "ну норм зборка",
+          "score": 94,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/13#issuecomment-6805703550",
+          "issueNum": 13
+        }
+      ]
+    },
+    "sodium": {
+      "issueNumber": 14,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/14",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "lunarclient": {
+      "issueNumber": 15,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/15",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "2b2t": {
+      "issueNumber": 16,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/16",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "complex-gaming": {
+      "issueNumber": 17,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/17",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "cubecraft": {
+      "issueNumber": 25,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "donutsmp": {
+      "issueNumber": 18,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/18",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "fabulously-optimized": {
+      "issueNumber": 28,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/28",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6900909684,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-15",
+          "body": "Зараз граю на цьому модпаці і скажу ідеально",
+          "score": null,
+          "reactions": {
+            "+1": 1
+          },
+          "url": "https://github.com/BANSAFAn/meowproject/issues/28#issuecomment-6900909684",
+          "issueNum": 28
+        }
+      ]
+    },
+    "fluenlauncher": {
+      "issueNumber": 19,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/19",
+      "averageRating": 80,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6822271226,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-12",
+          "body": "Жаль що пійшов на покой....упс точніше в архів",
+          "score": 80,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/19#issuecomment-6822271226",
+          "issueNum": 19
+        }
+      ]
+    },
+    "gommehd": {
+      "issueNumber": 20,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "hypixel": {
+      "issueNumber": 20,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "mcc-island": {
+      "issueNumber": 22,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
+      "averageRating": 100,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 6822315810,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-12",
+          "body": "міні ігри, стиль і головне цікавість дуже чудова",
+          "score": 100,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/22#issuecomment-6822315810",
+          "issueNum": 22
+        }
+      ]
+    },
+    "minehut": {
+      "issueNumber": 23,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "pika-network": {
+      "issueNumber": 25,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "prismlauncher": {
+      "issueNumber": 29,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/29",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "sklauncher": {
+      "issueNumber": 30,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/30",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "wynncraft": {
+      "issueNumber": 31,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/31",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    }
+  }
+}

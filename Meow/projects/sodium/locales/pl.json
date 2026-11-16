@@ -1,0 +1,15 @@
+{
+  "tagline": "Najpopularniejszy mod optymalizacyjny z Modrinth, przepisujący silnik renderowania dla ogromnego wzrostu FPS",
+  "description": "Sodium to potężny mod optymalizacyjny dla Minecrafta (Fabric, NeoForge, Quilt) od zespołu CaffeineMC, będący najchętniej pobieranym projektem na Modrinth. Całkowicie zastępuje domyślny system renderowania chunków nowoczesnym potokiem OpenGL, zwiększając liczbę klatek na sekundę (FPS) nawet kilkukrotnie i eliminując przycięcia.",
+  "features": [
+    "Wzrost FPS o 200–400% dzięki nowoczesnemu renderowaniu chunków",
+    "Eliminacja mikroprzycięć podczas ładowania świata",
+    "Przeprojektowane menu ustawień graficznych wierne stylowi Vanilla",
+    "Dostępny na Modrinth dla Fabric, NeoForge oraz Quilt"
+  ],
+  "screenshotCaptions": [
+    "Wysoka wydajność renderowania i FPS z modem Sodium",
+    "Odświeżony interfejs ustawień wideo Sodium w grze",
+    "Płynne renderowanie przy dużym dystansie widzenia"
+  ]
+}

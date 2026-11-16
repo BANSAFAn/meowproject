@@ -1,0 +1,41 @@
+{
+  "slug": "prismlauncher",
+  "category": "launcher",
+  "name": "Prism Launcher",
+  "shortName": "Prism",
+  "icon": "/projects/prismlauncher/prism-logo.svg",
+  "website": "https://prismlauncher.org/",
+  "country": "global",
+  "isOpenSource": true,
+  "license": "GPL-3.0",
+  "developer": "PrismLauncher",
+  "verified": true,
+  "issueSearchTerm": "Prism Launcher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/PrismLauncher/PrismLauncher"
+    }
+  ],
+  "tags": [
+    "Minecraft Launcher",
+    "Open Source",
+    "Cross-Platform",
+    "Modrinth",
+    "CurseForge",
+    "GPL-3.0",
+    "Qt"
+  ],
+  "screenshots": [
+    "/projects/prismlauncher/screen-1.png",
+    "/projects/prismlauncher/screen-2.png",
+    "/projects/prismlauncher/screen-3.png"
+  ],
+  "issueThreadNumber": 29
+}

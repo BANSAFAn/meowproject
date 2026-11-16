@@ -1,0 +1,10 @@
+{
+  "tagline": "Lightweight open-source Minecraft launcher with isolated instances, Modrinth and CurseForge support",
+  "description": "Prism Launcher is a popular free, open-source (GPL-3.0) Minecraft launcher focused on clean instance management, direct modpack/mod installation from Modrinth and CurseForge, and flexible Java configuration across Windows, macOS, and Linux.",
+  "features": [
+    "100% open-source (GPL-3.0) on GitHub",
+    "Built-in Modrinth & CurseForge mod, shader, and resource pack manager",
+    "Isolated game instances and automatic Java runtime management"
+  ],
+  "screenshotCaptions": []
+}

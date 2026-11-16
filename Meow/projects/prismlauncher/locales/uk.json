@@ -1,0 +1,14 @@
+{
+  "tagline": "Легкий open-source лаунчер Minecraft із підтримкою інстансів, Modrinth і CurseForge",
+  "description": "Prism Launcher — популярний безкоштовний лаунчер Minecraft з відкритим вихідним кодом під ліцензією GPL-3.0 (форк PolyMC/MultiMC). Дозволяє ізолювати збірки в окремих інстансах, встановлювати моди та модпаки напряму з Modrinth і CurseForge, а також гнучко керувати версіями Java.",
+  "features": [
+    "Повністю відкритий вихідний код (GPL-3.0) на GitHub",
+    "Вбудований менеджер модів, шейдерів і ресурспаків (Modrinth / CurseForge)",
+    "Ізольовані інстанси та просте перемикання версій Java"
+  ],
+  "screenshotCaptions": [
+    "Головне вікно Prism Launcher зі списком інстансів",
+    "Встановлення модпаків із Modrinth, CurseForge, FTB, Technic та ATLauncher",
+    "Оновлення встановлених модпаків в один клік"
+  ]
+}

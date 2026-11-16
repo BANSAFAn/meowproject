@@ -1,0 +1,9 @@
+{
+  "tagline": "Proprietary Minecraft launcher flagged as DANGEROUS (virus/malware warning)",
+  "description": "SKlauncher is a closed-source Minecraft launcher with reported evidence of dangerous/malicious behavior. Use is strongly discouraged for security reasons.",
+  "features": [
+    "Closed-source proprietary software",
+    "Active security warning report (click DANGEROUS badge for evidence)"
+  ],
+  "screenshotCaptions": []
+}

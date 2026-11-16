@@ -1,0 +1,19 @@
+{
+  "name": "meowproject",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "deploy": "npm run build && npx wrangler deploy",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.160.0"
+  }
+}

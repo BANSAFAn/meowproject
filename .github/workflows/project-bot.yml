@@ -1,0 +1,43 @@
+name: MeowProject Issue & PR Automation Bot
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited, deleted]
+  discussion:
+    types: [created, edited, deleted, answered, unanswered]
+  discussion_comment:
+    types: [created, edited, deleted]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  discussions: read
+
+jobs:
+  handle_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run MeowProject Bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: node uhahahahahaah/bot.js

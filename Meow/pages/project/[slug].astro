@@ -1,0 +1,19 @@
+---
+import CatalogPage from '../../components/CatalogPage.astro';
+import { PROJECTS } from '../../data/projects';
+
+export function getStaticPaths() {
+  return PROJECTS.map((p) => ({
+    params: { slug: p.slug },
+    props: { slug: p.slug },
+  }));
+}
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<CatalogPage lang="uk" initialProjectSlug={slug} />

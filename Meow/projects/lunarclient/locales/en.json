@@ -1,0 +1,15 @@
+{
+  "tagline": "Popular all-in-one Minecraft client for PvP and survival featuring 65+ built-in mods and boosted frames",
+  "description": "Lunar Client is a widely used proprietary all-in-one Minecraft client developed by Moonsworth, LLC (USA). Featuring a single-click installation across Windows, macOS, and Linux, it supports every major Minecraft version from classic PvP releases (1.7, 1.8.9) to the latest modern updates.\n\nIt ships with over 65 built-in, customizable mods (including Keystrokes, Armor Status, ReplayMod, Waypoints, Crosshair, and HUD editors) accessible from a unified in-game menu, alongside native Fabric mod loading support and frame rate optimizations.",
+  "features": [
+    "Over 65 built-in mods configurable directly from a unified in-game HUD editor",
+    "Supports all major Minecraft versions (1.7, 1.8.9, 1.16–1.21+) in a single install",
+    "Ability to load custom Fabric mods on modern game versions",
+    "Cross-platform standalone launcher for Windows, macOS, and Linux"
+  ],
+  "screenshotCaptions": [
+    "Lunar Client launcher main window and version selector",
+    "Lunar Client in-game mod menu and HUD customization",
+    "Visual customization and cosmetic showcase in Lunar Client"
+  ]
+}

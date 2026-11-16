@@ -1,0 +1,43 @@
+{
+  "slug": "sklauncher",
+  "category": "launcher",
+  "name": "SKlauncher",
+  "shortName": "SKlauncher",
+  "icon": "/projects/sklauncher/icon.webp",
+  "website": "https://skmedix.pl/",
+  "country": "PL",
+  "isOpenSource": false,
+  "license": "Proprietary",
+  "developer": "skmedix",
+  "verified": false,
+  "issueSearchTerm": "SKlauncher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [],
+  "dangerReport": {
+    "reportedAt": "2026-11-15",
+    "reasonType": "malware",
+    "summary": "Небезпечний та потенційно вірусний лаунчер із закритим вихідним кодом. Зафіксовано докази шкідливої/підозрілої поведінки.",
+    "evidenceMarkdown": "### Попередження безпеки\n\nПроєкт **SKlauncher** позначено як **НЕБЕЗПЕЧНИЙ** через ризик шкідливого/вірусного ПЗ та закритий вихідний код.\n\n- Відео-доказ на каналі: https://youtu.be/gqi8E_IojWs\n\nРекомендуємо не встановлювати цей лаунчер і користуватися перевіреними open-source альтернативами (наприклад, **Prism Launcher**, **XMCL** або **HMCL**).",
+    "evidenceLinks": [
+      "https://youtu.be/gqi8E_IojWs"
+    ],
+    "issueNumber": 0,
+    "reportedBy": "BANSAFAn"
+  },
+  "tags": [
+    "Minecraft Launcher",
+    "Proprietary",
+    "Danger",
+    "Virus Warning"
+  ],
+  "screenshots": [
+    "/projects/sklauncher/screen-1.webp",
+    "/projects/sklauncher/screen-2.webp",
+    "/projects/sklauncher/screen-3.webp"
+  ],
+  "issueThreadNumber": 30
+}

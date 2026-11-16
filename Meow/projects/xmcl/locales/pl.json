@@ -1,0 +1,16 @@
+{
+  "tagline": "Nowoczesny, otwartoźródłowy launcher Minecraft ze wsparciem dla Steam Deck, Gamepadów, Flathub i inteligentnym zarządzaniem dyskiem",
+  "description": "X Minecraft Launcher (XMCL) to nowoczesny, wieloplatformowy launcher o otwartym kodzie źródłowym, tworzony przez chiński zespół Voxelum. Wszystkie mody, paczki zasobów, shadery i biblioteki są przechowywane w jednym centralnym magazynie i dowiązywane do poszczególnych instancji za pomocą dowiązań twardych (hardlinks) lub symbolicznych (symlinks).\n\nXMCL jest oficjalnie dostępny w repozytorium Flathub, posiada pełne wsparcie dla konsoli Steam Deck oraz obsługę kontrolerów (Gamepad). Automatycznie instaluje Vanilla, Forge, NeoForge, Fabric, Quilt i OptiFine wraz z Javą, pobiera mody z Modrinth i CurseForge oraz oferuje grę P2P (WebRTC).",
+  "features": [
+    "Pełne wsparcie dla Steam Deck, obsługa Gamepadów oraz oficjalny pakiet Flathub",
+    "Oszczędność dysku dzięki Hardlinkom / Symlinkom między instancjami",
+    "Bezpośrednie pobieranie modów i modpacków z Modrinth oraz CurseForge",
+    "Wbudowany tryb wieloosobowy P2P (XMCL Together) i automatyczna instalacja Java"
+  ],
+  "screenshotCaptions": [
+    "Główny ekran XMCL ze szczegółowym panelem instancji",
+    "Tworzenie instancji i wybór modloadera (Fabric, Forge, NeoForge, Quilt)",
+    "Wbudowany katalog modpacków z Modrinth i CurseForge",
+    "Lokalny menedżer modów z grupowaniem i szybką aktualizacją"
+  ]
+}

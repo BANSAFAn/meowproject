@@ -1,0 +1,14 @@
+{
+  "tagline": "Flagship kitchen-sink CurseForge modpack with 400+ mods, extensive quests, and custom ATM Star & Gregstar endgame",
+  "description": "All the Mods 9 (ATM9) is one of the most popular flagship modpacks on CurseForge (with over 13 million downloads) built for Minecraft 1.20.1 by the ATMTeam. It brings together over 400 carefully curated tech, magic, exploration, automation, and building mods alongside custom configuration scripts for stability.\n\nATM9 features a massive guided questbook and a true custom endgame: players progress through dozens of deep tech and magic trees to craft the iconic ATM Star, or take on the ultimate engineering challenge of the Gregstar.",
+  "features": [
+    "Over 400 curated mods with custom recipes and performance tuning for 1.20.1",
+    "Comprehensive step-by-step questbook guiding beginners and veterans alike",
+    "True custom endgame: craft the ATM Star and take on the Gregstar challenge",
+    "Open configuration repository and active issue tracker on GitHub"
+  ],
+  "screenshotCaptions": [
+    "Official All the Mods 9 (ATM9) modpack banner and world",
+    "All the Mods 9 community and multiplayer server banner"
+  ]
+}
