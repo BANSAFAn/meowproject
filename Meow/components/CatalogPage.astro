@@ -112,15 +112,17 @@ const singleRecList = selectedProject
   ? allRecSorted.filter((p) => p.slug !== selectedProject.slug && p.category === selectedProject.category).slice(0, 5)
   : [];
 
+const brandDisplay = lang === 'uk' ? 'МяуЛаб' : 'MeowLab';
+
 let pageTitle = t.metaTitle;
 let pageDescription = t.metaDescription;
 
 if (selectedProject) {
   const pTagline = selectedProject.locales[lang]?.tagline || selectedProject.name;
-  pageTitle = `${selectedProject.name} — MeowProject | ${currentLangMeta.name}`;
+  pageTitle = `${selectedProject.name} — ${brandDisplay} | ${currentLangMeta.name}`;
   pageDescription = `${selectedProject.name}: ${pTagline} (${selectedProject.platforms.join(', ')}). ${t.openDirectorySub}`;
 } else if (initialCategory && initialCategory !== 'all') {
-  pageTitle = `${initialCategory.toUpperCase()} — MeowProject | ${currentLangMeta.name}`;
+  pageTitle = `${initialCategory.toUpperCase()} — ${brandDisplay} | ${currentLangMeta.name}`;
 }
 
 const SOURCE_HOSTS = [
@@ -4268,8 +4270,8 @@ const jsonLdSchema = {
       <div class="container header-inner">
         <div class="header-top-row">
           <a href={getLangHref(lang)} class="brand" data-switch-view="catalog">
-            <img src="/favicon.svg" alt="MeowProject" class="brand-icon" width="38" height="38" />
-            <span class="brand-title">MeowProject</span>
+            <img src="/favicon.svg" alt={brandDisplay} class="brand-icon" width="38" height="38" />
+            <span class="brand-title">{brandDisplay}</span>
           </a>
 
           <div class="header-utilities">
@@ -6389,8 +6391,8 @@ const jsonLdSchema = {
         <div class="footer-legal-grid">
           <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <div class="brand" data-switch-view="catalog">
-              <img src="/favicon.svg" alt="MeowProject" width="28" height="28" />
-              <span class="brand-title" style="font-size: 1.05rem;">MeowProject</span>
+              <img src="/favicon.svg" alt={brandDisplay} width="28" height="28" />
+              <span class="brand-title" style="font-size: 1.05rem;">{brandDisplay}</span>
             </div>
             <p style="font-size: 0.84rem; color: var(--ink-muted); line-height: 1.55;">{t.footerAbout}</p>
             <p style="font-size: 0.8rem; font-weight: 700; color: var(--ink);">{t.footerAlphaNote}</p>
@@ -7984,8 +7986,27 @@ const jsonLdSchema = {
             counter.textContent = `(${visibleTagsCount})`;
           }
 
-          if (activeTag !== 'all' && !categoryTags.has(activeTag)) {
-            setActiveTag('all');
+          const removed = [];
+          Array.from(activeTags).forEach((t) => {
+            if (!categoryTags.has(t)) {
+              activeTags.delete(t);
+              removed.push(t);
+            }
+          });
+          if (removed.length > 0) {
+            document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
+              const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
+              btn.classList.toggle('active', btnTag === 'all' ? activeTags.size === 0 : activeTags.has(btnTag));
+            });
+            if (activeTagChip && activeTagDisplay) {
+              if (activeTags.size > 0) {
+                activeTagDisplay.textContent = Array.from(activeTags).map((t) => `#${t}`).join(' + ');
+                activeTagChip.style.display = 'inline-flex';
+              } else {
+                activeTagChip.style.display = 'none';
+              }
+            }
+            filterProjects();
           }
         }
 

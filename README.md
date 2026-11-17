@@ -1,4 +1,4 @@
-# MeowProject
+# MeowLab (МяуЛаб)
 
 Це просто сайт.
 
