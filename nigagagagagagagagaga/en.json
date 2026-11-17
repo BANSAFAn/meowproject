@@ -263,5 +263,9 @@
   "reportMarkdownLabel": "Detailed Explanation & Evidence (Markdown, any language, up to 20,000 chars) *",
   "reportMarkdownPlaceholder": "Describe in detail what happened, add analysis links, screenshots ![photo](url), or code snippets...",
   "reportLinksLabel": "Evidence / Photo Links (one URL per line)",
-  "reportSubmitBtn": "Submit Report on GitHub (Issue → PR)"
+  "reportSubmitBtn": "Submit Report on GitHub (Issue → PR)",
+  "bsodTitle": "You.....why did you go in there ?",
+  "bsodSubtitle": "Your browser encountered a critical level of curiosity via the meowlab command and needs to restart.",
+  "bsodProgressLabel": "collecting purr-memory dumps",
+  "bsodExitBtn": "Press ESC or click here to recover"
 }

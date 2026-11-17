@@ -265,5 +265,9 @@
   "reportMarkdownPlaceholder": "Beschreibe detailliert, was passiert ist, füge Analyse-Links, Screenshots ![foto](url) oder Code-Ausschnitte hinzu...",
   "reportLinksLabel": "Beweis- / Foto-Links (eine URL pro Zeile)",
   "reportSubmitBtn": "Meldung auf GitHub erstellen (Issue → PR)",
-  "suggestCaptionsLabel": "Bildbeschreibungen / Untertitel (eine pro Zeile):"
+  "suggestCaptionsLabel": "Bildbeschreibungen / Untertitel (eine pro Zeile):",
+  "bsodTitle": "Du.....warum bist du da reingegangen ?",
+  "bsodSubtitle": "Dein Browser ist durch den Befehl meowlab auf ein kritisches Maß an Neugier gestoßen und muss neu gestartet werden.",
+  "bsodProgressLabel": "Sammeln von Schnurr-Speicherabbildern",
+  "bsodExitBtn": "Drücke ESC oder klicke hier zum Wiederherstellen"
 }

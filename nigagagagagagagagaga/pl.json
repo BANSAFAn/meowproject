@@ -265,5 +265,9 @@
   "reportMarkdownPlaceholder": "Opisz szczegółowo, co się stało, dodaj linki do analizy, zrzuty ekranu ![foto](url) lub fragmenty kodu...",
   "reportLinksLabel": "Linki do dowodów / zdjęć (po jednym URL w linii)",
   "reportSubmitBtn": "Wyślij zgłoszenie na GitHub (Issue → PR)",
-  "suggestCaptionsLabel": "Opisy / podpisy do zrzutów ekranu (po jednym w linii):"
+  "suggestCaptionsLabel": "Opisy / podpisy do zrzutów ekranu (po jednym w linii):",
+  "bsodTitle": "Ty.....po co tam wlazłeś ?",
+  "bsodSubtitle": "Twoja przeglądarka napotkała krytyczny poziom ciekawości przez komendę meowlab i wymaga ponownego uruchomienia.",
+  "bsodProgressLabel": "zbieranie zrzutów pamięci mruczenia",
+  "bsodExitBtn": "Naciśnij ESC lub kliknij tutaj, aby wrócić"
 }

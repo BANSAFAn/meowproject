@@ -166,9 +166,19 @@ const jsonLdSchema = {
 <html lang={lang} data-theme="light">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      if (
+        location.protocol === 'http:' &&
+        location.hostname !== 'localhost' &&
+        location.hostname !== '127.0.0.1' &&
+        !location.hostname.endsWith('.local')
+      ) {
+        location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+      }
+    </script>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none';"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -1744,6 +1754,125 @@ const jsonLdSchema = {
         font-size: 0.82rem;
         color: var(--ink-muted);
         display: none;
+      }
+
+      /* Console Easter Egg: Blue Screen of Death (meowlab) */
+      #meow-bsod-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background: #0078d7;
+        color: #ffffff;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        overflow: hidden;
+      }
+      #meow-bsod-overlay.is-active {
+        display: flex;
+        animation: bsodGlitchIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      #meow-bsod-overlay::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.04) 0px,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+        animation: bsodScanline 6s linear infinite;
+      }
+      .meow-bsod-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 780px;
+        width: 100%;
+        animation: bsodContentIn 0.55s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      .meow-bsod-face {
+        font-size: clamp(4.5rem, 10vw, 7.5rem);
+        font-weight: 300;
+        line-height: 1;
+        margin-bottom: 1.4rem;
+      }
+      .meow-bsod-title {
+        font-size: clamp(1.5rem, 3.2vw, 2.35rem);
+        font-weight: 600;
+        line-height: 1.25;
+        margin-bottom: 0.85rem;
+      }
+      .meow-bsod-sub {
+        font-size: clamp(1rem, 1.8vw, 1.22rem);
+        line-height: 1.5;
+        opacity: 0.92;
+        margin-bottom: 1.6rem;
+      }
+      .meow-bsod-progress {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      .meow-bsod-code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.9rem;
+        opacity: 0.85;
+        margin-bottom: 2rem;
+      }
+      .meow-bsod-exit {
+        background: rgba(255, 255, 255, 0.14);
+        color: #ffffff;
+        border: 1.5px solid rgba(255, 255, 255, 0.65);
+        padding: 0.55rem 1.05rem;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      .meow-bsod-exit:hover {
+        background: rgba(255, 255, 255, 0.28);
+        transform: translateY(-1px);
+      }
+      @keyframes bsodGlitchIn {
+        0% {
+          opacity: 0;
+          transform: scale(1.06) skewX(3deg);
+          filter: contrast(2) hue-rotate(40deg);
+        }
+        35% {
+          opacity: 1;
+          transform: scale(0.99) skewX(-2deg);
+          filter: contrast(1.4);
+        }
+        65% {
+          transform: scale(1.005) skewX(0.6deg);
+          filter: none;
+        }
+        100% {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes bsodContentIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes bsodScanline {
+        from { background-position: 0 0; }
+        to { background-position: 0 100%; }
       }
 
       /* Strict Architectural Footer */
@@ -6217,7 +6346,7 @@ const jsonLdSchema = {
           });
         });
 
-        // DevTools Console Cat (print once per session)
+        // DevTools Console Cat + `meowlab` BSOD command (print once per session)
         if (!window.__meowConsoleCatPrinted) {
           window.__meowConsoleCatPrinted = true;
           try {
@@ -6225,6 +6354,57 @@ const jsonLdSchema = {
               '%c  /\\_/\\  \n ( o.o ) \n  > ^ <   MeowProject — Meow!',
               'color: #f59e0b; font-weight: bold; font-family: monospace; font-size: 13px; line-height: 1.3;'
             );
+          } catch (_) {}
+        }
+
+        function triggerMeowBsod() {
+          const overlay = document.getElementById('meow-bsod-overlay');
+          const pctEl = document.getElementById('meow-bsod-pct');
+          if (!overlay) return;
+          overlay.classList.add('is-active');
+          overlay.setAttribute('aria-hidden', 'false');
+          if (window.__meowBsodTimer) clearInterval(window.__meowBsodTimer);
+          let pct = 0;
+          if (pctEl) pctEl.textContent = '0%';
+          window.__meowBsodTimer = setInterval(() => {
+            pct = Math.min(100, pct + Math.floor(Math.random() * 14) + 5);
+            if (pctEl) pctEl.textContent = pct + '%';
+            if (pct >= 100) {
+              clearInterval(window.__meowBsodTimer);
+              window.__meowBsodTimer = null;
+            }
+          }, 140);
+        }
+
+        function closeMeowBsod() {
+          const overlay = document.getElementById('meow-bsod-overlay');
+          if (!overlay) return;
+          overlay.classList.remove('is-active');
+          overlay.setAttribute('aria-hidden', 'true');
+          if (window.__meowBsodTimer) {
+            clearInterval(window.__meowBsodTimer);
+            window.__meowBsodTimer = null;
+          }
+        }
+
+        const bsodExitBtn = document.getElementById('meow-bsod-exit');
+        if (bsodExitBtn && bsodExitBtn.dataset.bsodBound !== '1') {
+          bsodExitBtn.dataset.bsodBound = '1';
+          bsodExitBtn.addEventListener('click', closeMeowBsod);
+        }
+        if (!window.__meowBsodEscBound) {
+          window.__meowBsodEscBound = true;
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMeowBsod();
+          });
+          try {
+            Object.defineProperty(window, 'meowlab', {
+              configurable: true,
+              get() {
+                triggerMeowBsod();
+                return 'CRITICAL_MEOWLAB_CURIOSITY_BSOD';
+              },
+            });
           } catch (_) {}
         }
 
@@ -8002,6 +8182,23 @@ const jsonLdSchema = {
         </svg>
         <span>{t.floatingDockTop}</span>
       </button>
+    </div>
+
+    <div id="meow-bsod-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">
+      <div class="meow-bsod-inner">
+        <div class="meow-bsod-face">:(</div>
+        <div class="meow-bsod-title">{t.bsodTitle}</div>
+        <div class="meow-bsod-sub">{t.bsodSubtitle}</div>
+        <div class="meow-bsod-progress">
+          <span id="meow-bsod-pct">0%</span> — {t.bsodProgressLabel}
+        </div>
+        <div class="meow-bsod-code">
+          Stop code: MEOWLAB_CRITICAL_CURIOSITY_EXCEPTION
+        </div>
+        <button type="button" id="meow-bsod-exit" class="meow-bsod-exit">
+          {t.bsodExitBtn}
+        </button>
+      </div>
     </div>
 
     <script defer src="/hentai/secret.txt.js"></script>
