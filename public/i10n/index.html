@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>i10n MeowLab — Сайт у розробці</title>
+    <meta name="description" content="i10n MeowLab — платформа локалізації Minecraft-проєктів. Сайт поки в розробці." />
+    <style>
+      :root {
+        --bg: #0b0f17;
+        --panel: rgba(16, 22, 34, 0.88);
+        --border: rgba(148, 163, 184, 0.22);
+        --border-strong: rgba(56, 189, 248, 0.45);
+        --ink: #f1f5f9;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+        --accent-2: #a78bfa;
+        --amber: #f59e0b;
+        --green: #34d399;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
+        overflow-x: hidden;
+      }
+
+      body {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 1.5rem;
+      }
+
+      /* Background blueprint grid */
+      .i18n-grid-bg {
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+        background-size: 42px 42px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Moving i18n key sliders in background */
+      .i18n-marquee-wall {
+        position: fixed;
+        inset: -10% -5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        gap: 1.15rem;
+        transform: rotate(-4deg);
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.48;
+      }
+
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 1rem;
+        will-change: transform;
+      }
+
+      .marquee-track.dir-left {
+        animation: slideLeft 46s linear infinite;
+      }
+
+      .marquee-track.dir-right {
+        animation: slideRight 52s linear infinite;
+      }
+
+      .marquee-track.slow {
+        animation-duration: 66s;
+        opacity: 0.72;
+      }
+
+      .i18n-token {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.42rem 0.78rem;
+        border: 1px solid rgba(56, 189, 248, 0.18);
+        background: rgba(15, 23, 42, 0.78);
+        border-radius: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.78rem;
+        white-space: nowrap;
+        color: var(--muted);
+      }
+
+      .i18n-token .k {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .i18n-token .eq {
+        color: #475569;
+      }
+
+      .i18n-token .v {
+        color: #cbd5e1;
+      }
+
+      .i18n-token .loc {
+        font-size: 0.68rem;
+        padding: 0.08rem 0.34rem;
+        border-radius: 4px;
+        background: rgba(167, 139, 250, 0.16);
+        color: var(--accent-2);
+        font-weight: 800;
+      }
+
+      @keyframes slideLeft {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      @keyframes slideRight {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(0); }
+      }
+
+      /* Center Studio Card */
+      .center-stage {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 720px;
+        background: var(--panel);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1.5px solid var(--border-strong);
+        border-radius: 14px;
+        padding: 2rem;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+        animation: cardEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes cardEnter {
+        from { opacity: 0; transform: translateY(18px) scale(0.98); }
+        to { opacity: 1; transform: none; }
+      }
+
+      .stage-top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1.35rem;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.34rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        background: rgba(245, 158, 11, 0.12);
+        color: var(--amber);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--amber);
+        animation: pulseDot 1.6s ease-in-out infinite;
+      }
+
+      @keyframes pulseDot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.75); }
+      }
+
+      .lang-switcher {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+
+      .lang-pill {
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.75);
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 800;
+        padding: 0.28rem 0.56rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .lang-pill:hover {
+        border-color: var(--accent);
+        color: var(--ink);
+      }
+
+      .lang-pill.active {
+        background: var(--accent);
+        color: #08101c;
+        border-color: var(--accent);
+      }
+
+      .hero-title {
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        font-weight: 900;
+        line-height: 1.15;
+        margin-bottom: 0.65rem;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-sub {
+        color: var(--muted);
+        font-size: 0.96rem;
+        line-height: 1.6;
+        margin-bottom: 1.4rem;
+      }
+
+      /* Interactive translation key slider box */
+      .key-slider-box {
+        border: 1px solid var(--border);
+        background: rgba(9, 13, 22, 0.85);
+        border-radius: 10px;
+        padding: 1rem 1.1rem;
+        margin-bottom: 1.4rem;
+      }
+
+      .key-slider-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.65rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.76rem;
+        color: var(--muted);
+      }
+
+      .key-range {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+        margin-bottom: 0.75rem;
+      }
+
+      .key-preview-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.84rem;
+        padding: 0.55rem 0.75rem;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 6px;
+      }
+
+      .key-preview-line .kp-key { color: var(--accent); font-weight: 700; }
+      .key-preview-line .kp-arrow { color: #64748b; }
+      .key-preview-line .kp-val { color: var(--green); font-weight: 600; }
+
+      /* Locale progress bars */
+      .progress-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.65rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .prog-item {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.55rem 0.7rem;
+      }
+
+      .prog-meta {
+        display: flex;
+        justify-content: space-between;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+
+      .prog-bar {
+        height: 6px;
+        background: rgba(148, 163, 184, 0.16);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .prog-fill {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 999px;
+      }
+
+      .actions-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+        gap: 0.7rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.68rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.9);
+        color: var(--ink);
+        transition: all 0.16s ease;
+      }
+
+      .btn:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+
+      .btn-accent {
+        background: var(--amber);
+        color: #111827;
+        border-color: var(--amber);
+      }
+
+      .btn-accent:hover {
+        border-color: #fbbf24;
+        filter: brightness(1.06);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #08101c;
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="i18n-grid-bg" aria-hidden="true"></div>
+    <div class="i18n-marquee-wall" id="marquee-wall" aria-hidden="true"></div>
+
+    <main class="center-stage">
+      <div class="stage-top">
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          <span id="ui-badge">i10n.meowlab // У РОЗРОБЦІ</span>
+        </span>
+        <div class="lang-switcher" role="group" aria-label="Language">
+          <button type="button" class="lang-pill active" data-lang="uk">UA</button>
+          <button type="button" class="lang-pill" data-lang="en">EN</button>
+          <button type="button" class="lang-pill" data-lang="pl">PL</button>
+          <button type="button" class="lang-pill" data-lang="de">DE</button>
+          <button type="button" class="lang-pill" data-lang="be">BY</button>
+          <button type="button" class="lang-pill" data-lang="kk">KZ</button>
+        </div>
+      </div>
+
+      <h1 class="hero-title" id="ui-title">Сайт поки в розробці</h1>
+      <p class="hero-sub" id="ui-sub">
+        Це окремий модуль локалізації <strong>i10n MeowLab</strong> — платформа для спільного перекладу Minecraft-лаунчерів, модів і документації. Проєкт фінансується людьми, тож підтримка допоможе швидше запустити повну версію.
+      </p>
+
+      <div class="key-slider-box">
+        <div class="key-slider-head">
+          <span id="ui-slider-label">Слайдер ключів перекладу (live preview)</span>
+          <span id="ui-slider-index">1 / 6</span>
+        </div>
+        <input type="range" min="0" max="5" value="0" class="key-range" id="key-range-slider" aria-label="Translation key slider" />
+        <div class="key-preview-line">
+          <span class="kp-key" id="kp-key">site.status</span>
+          <span class="kp-arrow">→</span>
+          <span class="kp-val" id="kp-val">"Сайт поки в розробці"</span>
+        </div>
+      </div>
+
+      <div class="progress-grid">
+        <div class="prog-item">
+          <div class="prog-meta"><span>uk_UA</span><span>100%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 100%; background: var(--green);"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-meta"><span>en_US</span><span>100%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 100%; background: var(--green);"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-meta"><span>pl_PL</span><span>84%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 84%;"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-meta"><span>de_DE</span><span>82%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 82%;"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-meta"><span>be_BY</span><span>79%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 79%; background: var(--accent-2);"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-meta"><span>kk_KZ</span><span>76%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width: 76%; background: var(--accent-2);"></div></div>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <a href="https://send.monobank.ua/jar/7cQ5hJtFDy" target="_blank" rel="noopener noreferrer" class="btn btn-accent" id="ui-mono">
+          Monobank Банка
+        </a>
+        <a href="https://www.youtube.com/@Baneronetwo/join" target="_blank" rel="noopener noreferrer" class="btn" id="ui-yt">
+          YouTube Спонсорство
+        </a>
+        <a href="https://meowlab.pp.ua/" class="btn btn-primary" id="ui-back">
+          ← MeowLab Каталог
+        </a>
+        <a href="https://github.com/BANSAFAn/i10n-meowlab-" target="_blank" rel="noopener noreferrer" class="btn">
+          GitHub i10n ↗
+        </a>
+      </div>
+    </main>
+
+    <script>
+      const BG_KEYS = [
+        { k: 'site.status', v: 'У розробці', loc: 'UA' },
+        { k: 'i10n.engine.ready', v: 'Translation Memory v1', loc: 'EN' },
+        { k: 'launcher.prism.name', v: 'Prism Launcher', loc: 'EN' },
+        { k: 'catalog.filter.license', v: 'MIT / GPL-3.0', loc: 'PL' },
+        { k: 'security.badge.danger', v: 'НЕБЕЗПЕЧНИЙ', loc: 'UA' },
+        { k: 'community.funding', v: 'Фінансується людьми', loc: 'UA' },
+        { k: 'mod.sodium.tagline', v: 'Optimierung der Engine', loc: 'DE' },
+        { k: 'archive.badge', v: 'АРХІВ // ARCHIVED', loc: 'UA' },
+        { k: 'server.online.count', v: '{players} онлайн', loc: 'BE' },
+        { k: 'i18n.plural.keys', v: '{n} аударма кілті', loc: 'KZ' },
+        { k: 'bot.author.name', v: 'meowblin[bot]', loc: 'GIT' },
+        { k: 'console.bsod.cmd', v: 'meowlab', loc: 'SYS' }
+      ];
+
+      const wall = document.getElementById('marquee-wall');
+      if (wall) {
+        const rows = [
+          { dir: 'dir-left', slow: false, offset: 0 },
+          { dir: 'dir-right', slow: true, offset: 3 },
+          { dir: 'dir-left', slow: true, offset: 6 },
+          { dir: 'dir-right', slow: false, offset: 2 },
+          { dir: 'dir-left', slow: false, offset: 5 },
+          { dir: 'dir-right', slow: true, offset: 8 }
+        ];
+        rows.forEach((row) => {
+          const track = document.createElement('div');
+          track.className = `marquee-track ${row.dir}${row.slow ? ' slow' : ''}`;
+          const items = [...BG_KEYS.slice(row.offset), ...BG_KEYS.slice(0, row.offset)];
+          const doubled = [...items, ...items];
+          track.innerHTML = doubled
+            .map(
+              (item) =>
+                `<span class="i18n-token"><span class="loc">${item.loc}</span><span class="k">${item.k}</span><span class="eq">=</span><span class="v">"${item.v}"</span></span>`
+            )
+            .join('');
+          wall.appendChild(track);
+        });
+      }
+
+      const UI = {
+        uk: {
+          badge: 'i10n.meowlab // У РОЗРОБЦІ',
+          title: 'Сайт поки в розробці',
+          sub: 'Це окремий модуль локалізації <strong>i10n MeowLab</strong> — платформа для спільного перекладу Minecraft-лаунчерів, модів і документації. Проєкт фінансується людьми, тож підтримка допоможе швидше запустити повну версію.',
+          slider: 'Слайдер ключів перекладу (live preview)',
+          mono: 'Monobank Банка',
+          yt: 'YouTube Спонсорство',
+          back: '← MeowLab Каталог',
+          samples: [
+            ['site.status', '"Сайт поки в розробці"'],
+            ['funding.model', '"Фінансується людьми"'],
+            ['catalog.tag.archived', '"Проєкт закинутий в архів :("'],
+            ['i10n.goal', '"Єдиний переклад Minecraft українською"'],
+            ['bot.sync', '"Автоматичний PR через meowblin"'],
+            ['console.easter_egg', '"Ти.....навіщо туди поліз ?"']
+          ]
+        },
+        en: {
+          badge: 'i10n.meowlab // IN DEVELOPMENT',
+          title: 'Site is currently in development',
+          sub: 'This is the dedicated <strong>i10n MeowLab</strong> localization module — a community platform to translate Minecraft launchers, mods, and docs. Funded by people; your support speeds up the launch.',
+          slider: 'Translation key slider (live preview)',
+          mono: 'Monobank Jar',
+          yt: 'YouTube Membership',
+          back: '← MeowLab Catalog',
+          samples: [
+            ['site.status', '"Site is currently in development"'],
+            ['funding.model', '"Funded by the community"'],
+            ['catalog.tag.archived', '"Archived & unmaintained :("'],
+            ['i10n.goal', '"Unified Minecraft localization hub"'],
+            ['bot.sync', '"Automated PR via meowblin"'],
+            ['console.easter_egg', '"You.....why did you go in there ?"']
+          ]
+        },
+        pl: {
+          badge: 'i10n.meowlab // W BUDOWIE',
+          title: 'Strona jest jeszcze w budowie',
+          sub: 'To osobny moduł lokalizacji <strong>i10n MeowLab</strong> — platforma do tłumaczenia launcherów i modów Minecrafta. Projekt finansowany przez ludzi — wsparcie przyspieszy start.',
+          slider: 'Suwak kluczy tłumaczeń (podgląd)',
+          mono: 'Monobank Słoik',
+          yt: 'Wspieranie YouTube',
+          back: '← Katalog MeowLab',
+          samples: [
+            ['site.status', '"Strona jest jeszcze w budowie"'],
+            ['funding.model', '"Finansowane przez ludzi"'],
+            ['catalog.tag.archived', '"Projekt zarchiwizowany :("'],
+            ['i10n.goal', '"Centrum tłumaczeń Minecrafta"'],
+            ['bot.sync', '"Automatyczny PR przez meowblin"'],
+            ['console.easter_egg', '"Ty.....po co tam wlazłeś ?"']
+          ]
+        },
+        de: {
+          badge: 'i10n.meowlab // IN ENTWICKLUNG',
+          title: 'Website befindet sich noch im Aufbau',
+          sub: 'Dies ist das Lokalisierungsmodul <strong>i10n MeowLab</strong> für Minecraft-Launcher, Mods und Dokumentationen. Von der Community finanziert — Unterstützung beschleunigt den Start.',
+          slider: 'Übersetzungsschlüssel-Slider (Vorschau)',
+          mono: 'Monobank Spendentopf',
+          yt: 'YouTube-Mitgliedschaft',
+          back: '← MeowLab Katalog',
+          samples: [
+            ['site.status', '"Website noch in Entwicklung"'],
+            ['funding.model', '"Finanziert von der Community"'],
+            ['catalog.tag.archived', '"Projekt archiviert :("'],
+            ['i10n.goal', '"Zentrale Minecraft-Übersetzungen"'],
+            ['bot.sync', '"Automatischer PR über meowblin"'],
+            ['console.easter_egg', '"Du.....warum bist du da reingegangen ?"']
+          ]
+        },
+        be: {
+          badge: 'i10n.meowlab // У РАСПРАЦОЎЦЫ',
+          title: 'Сайт пакуль у распрацоўцы',
+          sub: 'Гэта асобны модуль лакалізацыі <strong>i10n MeowLab</strong> — платформа для перакладу лаўнчараў і модаў Minecraft. Праект фінансуецца людзьмі, таму падтрымка паскорыць запуск.',
+          slider: 'Слайдар ключоў перакладу (прагляд)',
+          mono: 'Monobank Банка',
+          yt: 'YouTube Спонсарства',
+          back: '← Каталог MeowLab',
+          samples: [
+            ['site.status', '"Сайт пакуль у распрацоўцы"'],
+            ['funding.model', '"Фінансуецца людзьмі"'],
+            ['catalog.tag.archived', '"Праект закінуты ў архіў :("'],
+            ['i10n.goal', '"Адзіны цэнтр перакладу Minecraft"'],
+            ['bot.sync', '"Аўтаматычны PR праз meowblin"'],
+            ['console.easter_egg', '"Ты.....навошта туды палез ?"']
+          ]
+        },
+        kk: {
+          badge: 'i10n.meowlab // ӘЗІРЛЕНУДЕ',
+          title: 'Сайт әзірлену үстінде',
+          sub: 'Бұл Minecraft лаунчерлері мен модтарын аударуға арналған <strong>i10n MeowLab</strong> модулі. Жобаны адамдар қаржыландырады, қолдау іске қосуды жеделдетеді.',
+          slider: 'Аударма кілттерінің слайдері',
+          mono: 'Monobank Банка',
+          yt: 'YouTube Демеушілік',
+          back: '← MeowLab Каталогы',
+          samples: [
+            ['site.status', '"Сайт әзірлену үстінде"'],
+            ['funding.model', '"Адамдар қаржыландырады"'],
+            ['catalog.tag.archived', '"Жоба мұрағатқа жіберілді :("'],
+            ['i10n.goal', '"Minecraft аударма орталығы"'],
+            ['bot.sync', '"meowblin арқылы автоматты PR"'],
+            ['console.easter_egg', '"Сен.....ол жаққа неге кірдің ?"']
+          ]
+        }
+      };
+
+      let currentLang = 'uk';
+      const slider = document.getElementById('key-range-slider');
+      const kpKey = document.getElementById('kp-key');
+      const kpVal = document.getElementById('kp-val');
+      const sliderIdx = document.getElementById('ui-slider-index');
+
+      function updateSliderPreview() {
+        const idx = Number(slider.value || 0);
+        const list = UI[currentLang].samples;
+        const pair = list[idx] || list[0];
+        kpKey.textContent = pair[0];
+        kpVal.textContent = pair[1];
+        sliderIdx.textContent = `${idx + 1} / ${list.length}`;
+      }
+
+      function applyLang(lang) {
+        currentLang = UI[lang] ? lang : 'uk';
+        const d = UI[currentLang];
+        document.getElementById('ui-badge').textContent = d.badge;
+        document.getElementById('ui-title').textContent = d.title;
+        document.getElementById('ui-sub').innerHTML = d.sub;
+        document.getElementById('ui-slider-label').textContent = d.slider;
+        document.getElementById('ui-mono').textContent = d.mono;
+        document.getElementById('ui-yt').textContent = d.yt;
+        document.getElementById('ui-back').textContent = d.back;
+        document.querySelectorAll('.lang-pill').forEach((btn) => {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+        });
+        updateSliderPreview();
+      }
+
+      slider.addEventListener('input', updateSliderPreview);
+      document.querySelectorAll('.lang-pill').forEach((btn) => {
+        btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
+      });
+      applyLang('uk');
+    </script>
+  </body>
+</html>

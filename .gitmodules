@@ -1,0 +1,3 @@
+[submodule "i10n"]
+	path = i10n
+	url = https://github.com/BANSAFAn/i10n-meowlab-.git
