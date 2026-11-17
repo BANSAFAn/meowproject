@@ -1,0 +1,17 @@
+{
+  "tagline": "Авторизація Microsoft Account, LittleSkin та офлайн-профілі",
+  "description": "CLegendary Launcher — сучасний, швидкий і модульний кросплатформний лаунчер Minecraft на базі Avalonia UI для Windows, Linux і macOS.\n\nОсновні можливості:\n• Повна підтримка Vanilla, Fabric, Forge, NeoForge та Quilt.\n• Вбудований менеджер модпаків і модів із підтримкою CurseForge та локальних архівів.\n• Гра з друзями (P2P) через тунелі e4mc для ванілі та збірок без налаштування портів.\n• Історичні версії BetaCraft (Pre-Classic, Classic, Indev, Infdev, Alpha, Beta) з ізольованими папками й автовизначенням Java.\n• Мультиакаунти: Microsoft (OAuth), LittleSkin та офлайн-профілі.\n• Автоматичні бекапи світів, аналіз краш-логів за допомогою ШІ-асистента, живий каталог серверів і Discord Rich Presence.",
+  "features": [
+    "Авторизація Microsoft Account, LittleSkin та офлайн-профілі",
+    "Підтримуванні лоудери Forge, Fabric, Quilt, NeoForge, OptiFine та інші.",
+    "Моди та збірки інтеграція з Modrinth і CurseForge, пошук модів та створення власних збірок",
+    "P2P-мультиплеєр можливість грати з друзями",
+    "Підтримка історичних версій Minecraft",
+    "Резервне копіювання світів Minecraft",
+    "Аналіз ігрових помилок за допомогою ШІ"
+  ],
+  "screenshotCaptions": [
+    "Головне вікно лаунчера,",
+    "Завантажувальне вікно лаунчера"
+  ]
+}
