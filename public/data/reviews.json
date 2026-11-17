@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-17T19:42:52.235Z",
+  "updatedAt": "2026-11-17T19:43:49.786Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -136,7 +136,7 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/19",
       "averageRating": 80,
       "totalRatings": 1,
-      "commentsCount": 2,
+      "commentsCount": 3,
       "reviews": [
         {
           "id": 6822271226,
@@ -158,6 +158,17 @@
           "score": null,
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/19#issuecomment-6958925147",
+          "issueNum": 19
+        },
+        {
+          "id": 6958952650,
+          "author": "BANSAFAn",
+          "avatar": "https://avatars.githubusercontent.com/u/86590991?v=4",
+          "date": "2026-11-17",
+          "body": "А в мене ще 3 PR на нього залишилось :3",
+          "score": null,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/19#issuecomment-6958952650",
           "issueNum": 19
         }
       ]
