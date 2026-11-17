@@ -1823,22 +1823,6 @@ const jsonLdSchema = {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 0.9rem;
         opacity: 0.85;
-        margin-bottom: 2rem;
-      }
-      .meow-bsod-exit {
-        background: rgba(255, 255, 255, 0.14);
-        color: #ffffff;
-        border: 1.5px solid rgba(255, 255, 255, 0.65);
-        padding: 0.55rem 1.05rem;
-        font-family: inherit;
-        font-size: 0.9rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background 0.15s ease, transform 0.15s ease;
-      }
-      .meow-bsod-exit:hover {
-        background: rgba(255, 255, 255, 0.28);
-        transform: translateY(-1px);
       }
       @keyframes bsodGlitchIn {
         0% {
@@ -6376,27 +6360,8 @@ const jsonLdSchema = {
           }, 140);
         }
 
-        function closeMeowBsod() {
-          const overlay = document.getElementById('meow-bsod-overlay');
-          if (!overlay) return;
-          overlay.classList.remove('is-active');
-          overlay.setAttribute('aria-hidden', 'true');
-          if (window.__meowBsodTimer) {
-            clearInterval(window.__meowBsodTimer);
-            window.__meowBsodTimer = null;
-          }
-        }
-
-        const bsodExitBtn = document.getElementById('meow-bsod-exit');
-        if (bsodExitBtn && bsodExitBtn.dataset.bsodBound !== '1') {
-          bsodExitBtn.dataset.bsodBound = '1';
-          bsodExitBtn.addEventListener('click', closeMeowBsod);
-        }
-        if (!window.__meowBsodEscBound) {
-          window.__meowBsodEscBound = true;
-          document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeMeowBsod();
-          });
+        if (!window.__meowBsodBound) {
+          window.__meowBsodBound = true;
           try {
             Object.defineProperty(window, 'meowlab', {
               configurable: true,
@@ -8195,9 +8160,6 @@ const jsonLdSchema = {
         <div class="meow-bsod-code">
           Stop code: MEOWLAB_CRITICAL_CURIOSITY_EXCEPTION
         </div>
-        <button type="button" id="meow-bsod-exit" class="meow-bsod-exit">
-          {t.bsodExitBtn}
-        </button>
       </div>
     </div>
 
