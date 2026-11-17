@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-17T19:04:03.205Z",
+  "updatedAt": "2026-11-17T19:18:33.081Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -151,9 +151,25 @@
         }
       ]
     },
+    "gilealauncher": {
+      "issueNumber": 32,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/32",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "gommehd": {
       "issueNumber": 20,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "grubielauncher": {
+      "issueNumber": 33,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/33",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -190,6 +206,14 @@
     "minehut": {
       "issueNumber": 23,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "multimc": {
+      "issueNumber": 34,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/34",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
