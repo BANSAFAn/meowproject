@@ -1,0 +1,11 @@
+{
+  "tagline": "Український open-source лаунчер Minecraft із Modrinth, CurseForge, голосовим чатом і спільною грою.",
+  "description": "GrubieLauncher — сучасний український лаунчер із відкритим кодом (GPL-3.0) для Windows, macOS і Linux. Підтримує моди та модпаки з CurseForge й Modrinth, завантажувачі Forge, NeoForge, Fabric, Quilt і старі версії, аналіз крашів, систему друзів, голосовий чат і спільну гру.",
+  "features": [
+    "Підтримка Modrinth та CurseForge в один клік",
+    "Forge, NeoForge, Fabric, Quilt та legacy-завантажувачі",
+    "Аналіз крашів, друзі, голосовий чат і спільна гра",
+    "Кросплатформність: Windows, macOS і Linux"
+  ],
+  "screenshotCaptions": []
+}

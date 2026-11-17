@@ -1,0 +1,10 @@
+{
+  "tagline": "Класічны open-source лаўнчар Minecraft з ізаляванымі інстансамі.",
+  "description": "MultiMC — кастамны лаўнчар з адкрытым зыходным кодам для кіравання некалькімі ізаляванымі зборкамі Minecraft.",
+  "features": [
+    "Ізаляваныя інстансы",
+    "Менеджар модаў і Java",
+    "Windows, macOS і Linux"
+  ],
+  "screenshotCaptions": []
+}

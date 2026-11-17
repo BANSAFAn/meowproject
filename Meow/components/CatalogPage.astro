@@ -32,6 +32,21 @@ interface Props {
 }
 
 const { lang, initialProjectSlug, initialCategory } = Astro.props;
+
+const activeRecPool = initialCategory && initialCategory !== 'all'
+  ? PROJECTS.filter((p) => p.category === initialCategory && !p.dangerReport)
+  : PROJECTS.filter((p) => !p.dangerReport);
+
+const recommendedList = [...activeRecPool]
+  .sort((a, b) => {
+    const scoreA = (reviewsData as any)?.projects?.[a.slug]?.averageRating || 0;
+    const scoreB = (reviewsData as any)?.projects?.[b.slug]?.averageRating || 0;
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    if (Boolean(b.verified) !== Boolean(a.verified)) return b.verified ? 1 : -1;
+    if (Boolean(b.sponsor) !== Boolean(a.sponsor)) return b.sponsor ? 1 : -1;
+    return a.name.localeCompare(b.name);
+  })
+  .slice(0, 5);
 const t = UI_TRANSLATIONS[lang];
 const langList = Object.values(LANGUAGES);
 const currentLangMeta = LANGUAGES[lang];
@@ -1858,8 +1873,75 @@ const jsonLdSchema = {
       .catalog-sidebar-left,
       .catalog-sidebar-right {
         position: sticky;
-        top: 1.15rem;
+        top: 7.4rem;
+        max-height: calc(100vh - 8.4rem);
+        overflow-y: auto;
         padding: 0.9rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-muted) transparent;
+      }
+      .catalog-sidebar-left::-webkit-scrollbar,
+      .catalog-sidebar-right::-webkit-scrollbar {
+        width: 5px;
+      }
+      .catalog-sidebar-left::-webkit-scrollbar-thumb,
+      .catalog-sidebar-right::-webkit-scrollbar-thumb {
+        background: var(--border-muted);
+      }
+      .sidebar-recommended-box {
+        margin-top: 1.05rem;
+        padding-top: 0.85rem;
+        border-top: 1px dashed var(--border-muted);
+      }
+      .rec-mini-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.42rem;
+      }
+      .rec-mini-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.42rem 0.52rem;
+        border: 1px solid var(--border-muted);
+        background: var(--paper-inset);
+        text-decoration: none;
+        color: var(--ink);
+        transition: border-color 0.14s ease, background 0.14s ease, transform 0.14s ease;
+      }
+      .rec-mini-item:hover {
+        border-color: var(--accent);
+        background: var(--paper-hover);
+        transform: translateX(2px);
+      }
+      .rec-mini-icon {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .rec-mini-name {
+        font-size: 0.78rem;
+        font-weight: 800;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        min-width: 0;
+      }
+      .rec-mini-ver {
+        color: #22c55e;
+        flex-shrink: 0;
+        display: inline-flex;
+      }
+      .rec-mini-score {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.7rem;
+        font-weight: 900;
+        padding: 0.06rem 0.32rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        flex-shrink: 0;
       }
       .sidebar-section-title {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -1902,13 +1984,15 @@ const jsonLdSchema = {
         max-width: none;
       }
       .catalog-sidebar-right .tags-scroll-container {
-        max-height: 460px;
+        max-height: calc(100vh - 15.5rem);
         overflow-y: auto;
         padding-right: 0.25rem;
         margin-top: 0.55rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-muted) transparent;
       }
       .catalog-sidebar-right .tags-scroll-container.collapsed {
-        max-height: 460px;
+        max-height: calc(100vh - 15.5rem);
       }
       .catalog-sidebar-right .btn-toggle-all-tags {
         display: none;
@@ -4366,6 +4450,36 @@ const jsonLdSchema = {
                 </a>
               ))}
             </div>
+
+            {recommendedList.length > 0 && (
+              <div class="sidebar-recommended-box">
+                <div class="sidebar-section-title" style="margin-bottom: 0.5rem;">
+                  <span>{t.recommendedSidebarTitle}</span>
+                  <span>★</span>
+                </div>
+                <div class="rec-mini-list">
+                  {recommendedList.map((rec) => {
+                    const recScore = (reviewsData as any)?.projects?.[rec.slug]?.averageRating || 0;
+                    return (
+                      <a href={getProjectHref(lang, rec.slug)} class="rec-mini-item" title={rec.name}>
+                        <img src={rec.icon} alt="" class="rec-mini-icon" width="22" height="22" loading="lazy" />
+                        <span class="rec-mini-name">{rec.shortName || rec.name}</span>
+                        {rec.verified && (
+                          <span class="rec-mini-ver" title={t.verifiedBadge}>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                              <path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm-1 9.5L4.5 8l1.2-1.2L7 8.1l3.3-3.3L11.5 6 7 10.5z"></path>
+                            </svg>
+                          </span>
+                        )}
+                        {recScore > 0 && (
+                          <span class="rec-mini-score">{recScore}</span>
+                        )}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </aside>
 
           <div class="catalog-main-col">
@@ -4487,7 +4601,7 @@ const jsonLdSchema = {
 
                 <div
           id="single-project-back-bar"
-          style={initialProjectSlug ? 'margin-bottom: 1.5rem;' : 'display: none; margin-bottom: 1.5rem;'}
+          style={initialProjectSlug ? 'margin-top: 1.35rem; margin-bottom: 1.5rem;' : 'display: none; margin-top: 1.35rem; margin-bottom: 1.5rem;'}
         >
           <a
             href={initialCategory ? getCategoryHref(lang, initialCategory) : getLangHref(lang)}
@@ -4498,7 +4612,7 @@ const jsonLdSchema = {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
               <polygon points="7,2 1,8 7,14 7,10 15,10 15,6 7,6" />
             </svg>
-            <span>{t.backToCatalogBtn}</span>
+            <span>{String(t.backToCatalogBtn || '').replace(/^\s*←\s*/, '')}</span>
           </a>
         </div>
 
@@ -4702,6 +4816,15 @@ const jsonLdSchema = {
                               </svg>
                               <span>{t.verifiedBadge}</span>
                             </button>
+                          )}
+
+                          {project.sponsor && (
+                            <span class="stamp stamp-alpha">
+                              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <polygon points="8,1 10,6 15,6 11,9.5 12.5,15 8,11.5 3.5,15 5,9.5 1,6 6,6"></polygon>
+                              </svg>
+                              <span>{t.sponsorBadgeLabel}</span>
+                            </span>
                           )}
 
                           {(project.archived || (project.tags || []).includes('Архів')) && (
@@ -6390,6 +6513,22 @@ const jsonLdSchema = {
           </div>
         </form>
       </div>
+    </div>
+
+    <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockSearch}>
+      <button type="button" id="dock-search-btn" class="floating-dock-btn" title={t.floatingDockSearch}>
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="2" y="2" width="8" height="8" />
+          <line x1="10" y1="10" x2="14.5" y2="14.5" />
+        </svg>
+        <span>{t.floatingDockSearch}</span>
+      </button>
+      <button type="button" id="dock-top-btn" class="floating-dock-btn" title={t.floatingDockTop}>
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <polygon points="8,2 14,9 10,9 10,14 6,14 6,9 2,9" />
+        </svg>
+        <span>{t.floatingDockTop}</span>
+      </button>
     </div>
 
     <script
@@ -8513,21 +8652,6 @@ const jsonLdSchema = {
       setupPage();
       document.addEventListener('astro:after-swap', setupPage);
     </script>
-    <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockSearch}>
-      <button type="button" id="dock-search-btn" class="floating-dock-btn" title={t.floatingDockSearch}>
-        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <rect x="2" y="2" width="8" height="8" />
-          <line x1="10" y1="10" x2="14.5" y2="14.5" />
-        </svg>
-        <span>{t.floatingDockSearch}</span>
-      </button>
-      <button type="button" id="dock-top-btn" class="floating-dock-btn" title={t.floatingDockTop}>
-        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <polygon points="8,2 14,9 10,9 10,14 6,14 6,9 2,9" />
-        </svg>
-        <span>{t.floatingDockTop}</span>
-      </button>
-    </div>
 
     <div id="meow-bsod-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">
       <div class="meow-bsod-inner">

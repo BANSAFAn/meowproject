@@ -280,5 +280,7 @@
   "i10nStatusBadge": "ӘЗІРЛЕНУДЕ // ҚАРЖЫЛАНДЫРУ ҚАЖЕТ",
   "i10nDonateTitle": "i10n іске қосылуын қолдау және жеделдету",
   "heroToCatalogBtn": "Каталогқа өту ↓",
-  "categoriesSidebarTitle": "САНАТТАР"
+  "categoriesSidebarTitle": "САНАТТАР",
+  "recommendedSidebarTitle": "ҰСЫНЫЛАТЫНДАР",
+  "sponsorBadgeLabel": "ДЕМЕУШІ"
 }

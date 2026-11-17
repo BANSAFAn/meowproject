@@ -1,0 +1,11 @@
+{
+  "tagline": "Ukrainian open-source Minecraft launcher with Modrinth, CurseForge, crash analysis, and play-together.",
+  "description": "GrubieLauncher is a modern open-source (GPL-3.0) Minecraft launcher for Windows, macOS, and Linux featuring CurseForge and Modrinth mods/modpacks, Forge, NeoForge, Fabric, Quilt, crash analysis, friends, voice chat, and play-together.",
+  "features": [
+    "CurseForge & Modrinth mods and modpacks",
+    "Forge, NeoForge, Fabric, Quilt & legacy loaders",
+    "Crash analysis, friends, voice chat & play-together",
+    "Cross-platform: Windows, macOS, Linux"
+  ],
+  "screenshotCaptions": []
+}

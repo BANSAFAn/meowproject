@@ -1,0 +1,11 @@
+{
+  "tagline": "Classic open-source custom Minecraft launcher for managing multiple isolated instances.",
+  "description": "MultiMC is a custom open-source launcher for Minecraft focused on predictability, long-term stability, and simplicity. Easily manage multiple isolated game instances, mods, resource packs, and Java settings.",
+  "features": [
+    "Isolated instances for separate versions and modpacks",
+    "Built-in mod, world, and resource pack management",
+    "Integrated Java version management and crash logs",
+    "Cross-platform: Windows, macOS, and Linux"
+  ],
+  "screenshotCaptions": []
+}

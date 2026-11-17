@@ -1,0 +1,36 @@
+{
+  "slug": "grubielauncher",
+  "category": "launcher",
+  "name": "GrubieLauncher",
+  "shortName": "GrubieLauncher",
+  "icon": "/projects/grubielauncher/icon.png",
+  "website": "https://grubielauncher.com/",
+  "country": "UA",
+  "isOpenSource": true,
+  "license": "GPL-3.0",
+  "developer": "MOJI6416",
+  "verified": true,
+  "issueSearchTerm": "GrubieLauncher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/MOJI6416/grubielauncher"
+    }
+  ],
+  "tags": [
+    "Minecraft Launcher",
+    "Open Source",
+    "Cross-Platform",
+    "Modrinth",
+    "CurseForge",
+    "GPL-3.0",
+    "Україна"
+  ],
+  "screenshots": []
+}

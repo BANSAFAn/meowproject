@@ -40,6 +40,7 @@ export interface ProjectMeta {
   developer: string;
   license: string;
   archived?: boolean;
+  sponsor?: boolean;
   platforms: string[];
   website?: string;
   /** Server-specific metadata */

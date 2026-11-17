@@ -1,0 +1,12 @@
+{
+  "tagline": "Хуткі ўкраінскі open-source лаўнчар Minecraft (MIT) з Modrinth і CurseForge.",
+  "description": "GileaLauncher ад каманды TensaCraft — сучасны лаўнчар з адкрытым кодам (MIT) для Windows, Linux і macOS з падтрымкай Modrinth, CurseForge, Forge, NeoForge, Fabric і Quilt.",
+  "features": [
+    "Windows, Linux і macOS",
+    "Modrinth і CurseForge",
+    "Акаўнты Microsoft і афлайн (MIT)"
+  ],
+  "screenshotCaptions": [
+    "Галоўны інтэрфейс GileaLauncher"
+  ]
+}

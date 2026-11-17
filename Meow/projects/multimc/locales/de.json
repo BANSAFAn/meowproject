@@ -1,0 +1,10 @@
+{
+  "tagline": "Klassischer Open-Source-Minecraft-Launcher für mehrere isolierte Instanzen.",
+  "description": "MultiMC ist ein benutzerdefinierter Open-Source-Launcher für Minecraft mit Fokus auf Stabilität, Vorhersagbarkeit und Einfachheit.",
+  "features": [
+    "Isolierte Instanzen für verschiedene Versionen",
+    "Integrierte Mod- und Java-Verwaltung",
+    "Für Windows, macOS und Linux"
+  ],
+  "screenshotCaptions": []
+}

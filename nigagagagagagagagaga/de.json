@@ -280,5 +280,7 @@
   "i10nStatusBadge": "IN ENTWICKLUNG // FINANZIERUNG BENÖTIGT",
   "i10nDonateTitle": "Unterstützen & Start von i10n beschleunigen",
   "heroToCatalogBtn": "Zum Katalog ↓",
-  "categoriesSidebarTitle": "KATEGORIEN"
+  "categoriesSidebarTitle": "KATEGORIEN",
+  "recommendedSidebarTitle": "EMPFOHLEN",
+  "sponsorBadgeLabel": "SPONSOR"
 }

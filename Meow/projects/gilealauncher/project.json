@@ -1,0 +1,40 @@
+{
+  "slug": "gilealauncher",
+  "category": "launcher",
+  "name": "GileaLauncher",
+  "shortName": "GileaLauncher",
+  "icon": "/projects/gilealauncher/icon.png",
+  "website": "https://github.com/TensaCraft/GileaLauncher/releases/latest",
+  "country": "UA",
+  "isOpenSource": true,
+  "license": "MIT",
+  "developer": "TensaCraft",
+  "verified": true,
+  "sponsor": true,
+  "issueSearchTerm": "GileaLauncher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/TensaCraft/GileaLauncher"
+    }
+  ],
+  "tags": [
+    "Minecraft Launcher",
+    "Open Source",
+    "Cross-Platform",
+    "Modrinth",
+    "CurseForge",
+    "MIT",
+    "Україна",
+    "Спонсор"
+  ],
+  "screenshots": [
+    "/projects/gilealauncher/screen-1.jpg"
+  ]
+}

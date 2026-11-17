@@ -1,0 +1,10 @@
+{
+  "tagline": "Ukraiński open-source launcher Minecraft z Modrinth, CurseForge, czatem głosowym i wspólną grą.",
+  "description": "GrubieLauncher to nowoczesny launcher (GPL-3.0) na Windows, macOS i Linux z obsługą Modrinth, CurseForge, analizą błędów, znajomymi i wspólną grą.",
+  "features": [
+    "Modrinth i CurseForge",
+    "Analiza crashy, znajomi i czat głosowy",
+    "Windows, macOS i Linux"
+  ],
+  "screenshotCaptions": []
+}

@@ -1,0 +1,12 @@
+{
+  "tagline": "Modrinth және CurseForge қолдауы бар жылдам украиналық ашық Minecraft лаунчері (MIT).",
+  "description": "TensaCraft ұсынған GileaLauncher — Windows, Linux және macOS жүйелеріне арналған жылдам, заманауи ашық (MIT) Minecraft лаунчері.",
+  "features": [
+    "Windows, Linux және macOS",
+    "Modrinth және CurseForge",
+    "Forge, NeoForge, Fabric, Quilt"
+  ],
+  "screenshotCaptions": [
+    "GileaLauncher интерфейсі"
+  ]
+}

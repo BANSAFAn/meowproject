@@ -280,5 +280,7 @@
   "i10nStatusBadge": "У РАСПРАЦОЎЦЫ // ПАТРЭБНА ФІНАНСАВАННЕ",
   "i10nDonateTitle": "Падтрымаць і паскорыць запуск i10n",
   "heroToCatalogBtn": "Да каталога ↓",
-  "categoriesSidebarTitle": "КАТЭГОРЫІ"
+  "categoriesSidebarTitle": "КАТЭГОРЫІ",
+  "recommendedSidebarTitle": "РЭКАМЕНДАЦЫІ",
+  "sponsorBadgeLabel": "СПОНСАР"
 }

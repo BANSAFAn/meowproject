@@ -1,0 +1,34 @@
+{
+  "slug": "multimc",
+  "category": "launcher",
+  "name": "MultiMC",
+  "shortName": "MultiMC",
+  "icon": "/projects/multimc/icon.png",
+  "website": "https://multimc.org/",
+  "country": "US",
+  "isOpenSource": true,
+  "license": "Apache-2.0",
+  "developer": "MultiMC",
+  "verified": true,
+  "issueSearchTerm": "MultiMC",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/MultiMC/Launcher"
+    }
+  ],
+  "tags": [
+    "Minecraft Launcher",
+    "Open Source",
+    "Cross-Platform",
+    "Apache-2.0",
+    "Instances"
+  ],
+  "screenshots": []
+}

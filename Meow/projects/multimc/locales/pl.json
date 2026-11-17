@@ -1,0 +1,10 @@
+{
+  "tagline": "Klasyczny open-source launcher Minecraft do zarządzania wieloma instancjami.",
+  "description": "MultiMC to niestandardowy launcher Minecraft o otwartym kodzie, stawiający na stabilność i przejrzystość.",
+  "features": [
+    "Izolowane instancje gry",
+    "Zarządzanie modami i wersjami Java",
+    "Wsparcie Windows, macOS i Linux"
+  ],
+  "screenshotCaptions": []
+}

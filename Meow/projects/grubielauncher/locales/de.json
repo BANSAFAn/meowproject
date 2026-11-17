@@ -1,0 +1,10 @@
+{
+  "tagline": "Ukrainischer Open-Source-Minecraft-Launcher mit Modrinth, CurseForge, Crash-Analyse und Voice-Chat.",
+  "description": "GrubieLauncher ist ein moderner Open-Source-Launcher (GPL-3.0) für Windows, macOS und Linux mit Modrinth/CurseForge, Freunden, Voice-Chat und Play-Together.",
+  "features": [
+    "Modrinth & CurseForge Support",
+    "Crash-Analyse & Play-Together",
+    "Windows, macOS und Linux"
+  ],
+  "screenshotCaptions": []
+}

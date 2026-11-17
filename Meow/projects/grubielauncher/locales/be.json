@@ -1,0 +1,10 @@
+{
+  "tagline": "Украінскі open-source лаўнчар Minecraft з Modrinth, CurseForge і сумеснай гульнёй.",
+  "description": "GrubieLauncher — сучасны лаўнчар з адкрытым кодам (GPL-3.0) для Windows, macOS і Linux з падтрымкай Modrinth, CurseForge, аналізам крашаў і галасавым чатам.",
+  "features": [
+    "Modrinth і CurseForge",
+    "Аналіз крашаў, сябры і галасавы чат",
+    "Windows, macOS і Linux"
+  ],
+  "screenshotCaptions": []
+}

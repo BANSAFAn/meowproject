@@ -278,5 +278,7 @@
   "i10nStatusBadge": "У РОЗРОБЦІ // ПОТРІБНЕ ФІНАНСУВАННЯ",
   "i10nDonateTitle": "Підтримати та пришвидшити запуск i10n",
   "heroToCatalogBtn": "До каталогу ↓",
-  "categoriesSidebarTitle": "КАТЕГОРІЇ"
+  "categoriesSidebarTitle": "КАТЕГОРІЇ",
+  "recommendedSidebarTitle": "РЕКОМЕНДАЦІЇ",
+  "sponsorBadgeLabel": "СПОНСОР"
 }

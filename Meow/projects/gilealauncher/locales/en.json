@@ -1,0 +1,13 @@
+{
+  "tagline": "Fast, modern Ukrainian open-source Minecraft launcher (MIT) with Modrinth & CurseForge support.",
+  "description": "GileaLauncher by TensaCraft is a fast, modern open-source (MIT) Minecraft launcher for Windows, Linux, and macOS supporting Modrinth and CurseForge modpacks and mods, Forge, NeoForge, Fabric and Quilt, plus Microsoft and offline accounts.",
+  "features": [
+    "Fast modern UI for Windows, Linux, and macOS",
+    "Modrinth and CurseForge modpacks & mods",
+    "Forge, NeoForge, Fabric, and Quilt support",
+    "Microsoft and offline accounts (MIT License)"
+  ],
+  "screenshotCaptions": [
+    "GileaLauncher main interface"
+  ]
+}
