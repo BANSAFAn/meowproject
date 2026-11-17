@@ -33,11 +33,8 @@ interface Props {
 
 const { lang, initialProjectSlug, initialCategory } = Astro.props;
 
-const activeRecPool = initialCategory && initialCategory !== 'all'
-  ? PROJECTS.filter((p) => p.category === initialCategory && !p.dangerReport)
-  : PROJECTS.filter((p) => !p.dangerReport);
-
-const recommendedList = [...activeRecPool]
+const allRecSorted = [...PROJECTS]
+  .filter((p) => !p.dangerReport)
   .sort((a, b) => {
     const scoreA = (reviewsData as any)?.projects?.[a.slug]?.averageRating || 0;
     const scoreB = (reviewsData as any)?.projects?.[b.slug]?.averageRating || 0;
@@ -45,8 +42,14 @@ const recommendedList = [...activeRecPool]
     if (Boolean(b.verified) !== Boolean(a.verified)) return b.verified ? 1 : -1;
     if (Boolean(b.sponsor) !== Boolean(a.sponsor)) return b.sponsor ? 1 : -1;
     return a.name.localeCompare(b.name);
-  })
-  .slice(0, 5);
+  });
+
+const initialRecSet = new Set(
+  allRecSorted
+    .filter((p) => !initialCategory || initialCategory === 'all' || p.category === initialCategory)
+    .slice(0, 5)
+    .map((p) => p.slug)
+);
 const t = UI_TRANSLATIONS[lang];
 const langList = Object.values(LANGUAGES);
 const currentLangMeta = LANGUAGES[lang];
@@ -1864,6 +1867,9 @@ const jsonLdSchema = {
           max-width: 1480px;
         }
       }
+      main.container {
+        padding-top: 1.5rem;
+      }
       .catalog-workspace {
         display: grid;
         grid-template-columns: 225px minmax(0, 1fr) 265px;
@@ -1873,8 +1879,8 @@ const jsonLdSchema = {
       .catalog-sidebar-left,
       .catalog-sidebar-right {
         position: sticky;
-        top: 7.4rem;
-        max-height: calc(100vh - 8.4rem);
+        top: 9.2rem;
+        max-height: calc(100vh - 10.4rem);
         overflow-y: auto;
         padding: 0.9rem;
         scrollbar-width: thin;
@@ -4538,17 +4544,26 @@ const jsonLdSchema = {
               ))}
             </div>
 
-            {recommendedList.length > 0 && (
-              <div class="sidebar-recommended-box">
+            {allRecSorted.length > 0 && (
+              <div class="sidebar-recommended-box" id="sidebar-recommended-box">
                 <div class="sidebar-section-title" style="margin-bottom: 0.5rem;">
                   <span>{t.recommendedSidebarTitle}</span>
                   <span>★</span>
                 </div>
                 <div class="rec-mini-list">
-                  {recommendedList.map((rec) => {
+                  {allRecSorted.map((rec) => {
                     const recScore = (reviewsData as any)?.projects?.[rec.slug]?.averageRating || 0;
+                    const isInitRec = initialRecSet.has(rec.slug);
                     return (
-                      <a href={getProjectHref(lang, rec.slug)} class="rec-mini-item" title={rec.name}>
+                      <a
+                        href={getProjectHref(lang, rec.slug)}
+                        class="rec-mini-item"
+                        data-rec-item={rec.slug}
+                        data-rec-cat={rec.category}
+                        data-rec-tags={rec.tags.join(',').toLowerCase()}
+                        style={isInitRec ? '' : 'display: none;'}
+                        title={rec.name}
+                      >
                         <img src={rec.icon} alt="" class="rec-mini-icon" width="22" height="22" loading="lazy" />
                         <span class="rec-mini-name">{rec.shortName || rec.name}</span>
                         {rec.verified && (
@@ -4709,7 +4724,10 @@ const jsonLdSchema = {
 
                 <section class="projects-stack" aria-label="Projects Directory">
           {
-            [...PROJECTS].sort((a, b) => (b.sponsor ? 1 : 0) - (a.sponsor ? 1 : 0)).map((project, index) => {
+            (selectedProject
+              ? [selectedProject]
+              : [...PROJECTS].sort((a, b) => (b.sponsor ? 1 : 0) - (a.sponsor ? 1 : 0))
+            ).map((project, index) => {
               const loc = project.locales[lang];
               const hasTranslation = project.availableLangs.includes(lang);
               const desc = hasTranslation ? loc.description : '';
@@ -6445,24 +6463,29 @@ const jsonLdSchema = {
     </div>
 
         <div id="terms-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 620px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.65rem;">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800;">[LEGAL // TERMS OF USE]</span>
-            <h3 style="margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 900;">{t.termsModalTitle}</h3>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // TERMS OF USE]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.termsModalTitle}</h3>
           </div>
           <button type="button" id="terms-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
             {t.closeModal} [ESC]
           </button>
         </div>
-        <div style="font-size: 0.9rem; line-height: 1.65; color: var(--ink);">
-          <p style="margin-bottom: 0.8rem;">{t.termsModalText}</p>
-          <p style="margin-bottom: 0.8rem;">
-            <strong>Вміст каталогу:</strong> Описи, посилання та медіа-матеріали публікуються у довідкових цілях для підтримки Minecraft-спільноти. Усі майнові та немайнові права на програмні продукти належать їхнім правовласникам.
-          </p>
-          <p style="margin: 0;">
-            <strong>Оскарження та видалення:</strong> Законний правовласник має право вимагати актуалізації або видалення запису шляхом подання офіційного запиту через GitHub Issues.
-          </p>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">01 // Відкрита ліцензія та статус Global Alpha</div>
+            <p class="legal-clause-body">{t.termsModalText}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">02 // Вміст каталогу та права авторів</div>
+            <p class="legal-clause-body">Описи, посилання та медіа-матеріали публікуються у довідкових цілях для спільноти Minecraft. Усі майнові та авторські права на програмні продукти належать їхнім розробникам.</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">03 // Оскарження та зв’язок</div>
+            <p class="legal-clause-body">Законний правовласник може подати запит на оновлення або видалення запису через GitHub Issues, Discord (discord.com/invite/FEyMjn3mtA) або на baneronetwo@memeware.net.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -7434,10 +7457,30 @@ const jsonLdSchema = {
         const sortSelect = document.getElementById('catalog-sort-select');
         const tagClearBtn = document.getElementById('btn-clear-tag');
         let activeCategory = (typeof initialCat !== 'undefined' && initialCat) ? initialCat : 'all';
-        let activeTag = 'all';
+        const activeTags = new Set();
 
         const licenseSelect = document.getElementById('catalog-license-select');
         const verifiedSelect = document.getElementById('catalog-verified-select');
+
+        function updateSidebarRecommendations() {
+          const recItems = Array.from(document.querySelectorAll('[data-rec-item]'));
+          if (recItems.length === 0) return;
+          let recShown = 0;
+          recItems.forEach((item) => {
+            const rCat = item.getAttribute('data-rec-cat') || '';
+            const rTags = (item.getAttribute('data-rec-tags') || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+            const okCat = activeCategory === 'all' || rCat === activeCategory;
+            const okTags = activeTags.size === 0 || Array.from(activeTags).every((t) => rTags.includes(t));
+            if (okCat && okTags && recShown < 5) {
+              item.style.display = '';
+              recShown++;
+            } else {
+              item.style.display = 'none';
+            }
+          });
+          const recBox = document.getElementById('sidebar-recommended-box');
+          if (recBox) recBox.style.display = recShown > 0 ? '' : 'none';
+        }
 
         function filterProjects() {
           if (singleProjectSlug) return;
@@ -7457,7 +7500,7 @@ const jsonLdSchema = {
 
             const okCat = activeCategory === 'all' || cat === activeCategory;
             const okQuery = !q || hay.includes(q);
-            const okTag = activeTag === 'all' || cardTags.includes(activeTag);
+            const okTag = activeTags.size === 0 || Array.from(activeTags).every((t) => cardTags.includes(t));
 
             let okLic = true;
             if (licMode === 'permissive') {
@@ -7483,6 +7526,7 @@ const jsonLdSchema = {
           if (emptyState) {
             emptyState.style.display = shown === 0 ? 'block' : 'none';
           }
+          updateSidebarRecommendations();
         }
 
         if (licenseSelect) licenseSelect.addEventListener('change', filterProjects);
@@ -7533,14 +7577,25 @@ const jsonLdSchema = {
         }
 
         function setActiveTag(tag) {
-          activeTag = (tag || 'all').toLowerCase();
+          const norm = (tag || 'all').toLowerCase();
+          if (norm === 'all') {
+            activeTags.clear();
+          } else if (activeTags.has(norm)) {
+            activeTags.delete(norm);
+          } else {
+            activeTags.add(norm);
+          }
           document.querySelectorAll('.tag-filter-btn').forEach((btn) => {
             const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
-            btn.classList.toggle('active', btnTag === activeTag);
+            if (btnTag === 'all') {
+              btn.classList.toggle('active', activeTags.size === 0);
+            } else {
+              btn.classList.toggle('active', activeTags.has(btnTag));
+            }
           });
           if (activeTagChip && activeTagDisplay) {
-            if (activeTag !== 'all') {
-              activeTagDisplay.textContent = `#${activeTag}`;
+            if (activeTags.size > 0) {
+              activeTagDisplay.textContent = Array.from(activeTags).map((t) => `#${t}`).join(' + ');
               activeTagChip.style.display = 'inline-flex';
             } else {
               activeTagChip.style.display = 'none';
