@@ -282,5 +282,17 @@
   "heroToCatalogBtn": "Zum Katalog ↓",
   "categoriesSidebarTitle": "KATEGORIEN",
   "recommendedSidebarTitle": "EMPFOHLEN",
-  "sponsorBadgeLabel": "SPONSOR"
+  "sponsorBadgeLabel": "SPONSOR",
+  "sponsorModalTitle": "MEOWLAB PROJEKT-SPONSOR",
+  "sponsorModalDesc": "Dieser Sponsor hat das Projekt finanziell unterstützt — dank solcher Beiträge bleibt MeowLab online und werbefrei. Jedes andere Projekt kann ebenfalls Sponsor werden!",
+  "sponsorBecomeBtn": "Sponsor werden (Kontakt)",
+  "forkLabel": "FORK",
+  "newsBtn": "Neuigkeiten",
+  "newsModalTitle": "MeowLab Neuigkeiten",
+  "newsAlphaBadge": "JETZT LIVE // GLOBAL ALPHA",
+  "newsAlphaTitle": "MeowProject (MeowLab) Global Alpha ist jetzt live!",
+  "newsAlphaDesc": "Wir haben die öffentliche Global Alpha für Community-Tests geöffnet! Teste Filter, reiche Projekte ein und teile Ideen in den Diskussionen.",
+  "contactTitle": "Kontakt zum Autor",
+  "liveNowLabel": "Jetzt online",
+  "liveGoalLabel": "Ziel"
 }

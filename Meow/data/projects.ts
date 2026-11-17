@@ -41,6 +41,11 @@ export interface ProjectMeta {
   license: string;
   archived?: boolean;
   sponsor?: boolean;
+  forkOf?: {
+    name: string;
+    slug?: string;
+    url: string;
+  };
   platforms: string[];
   website?: string;
   /** Server-specific metadata */

@@ -8,6 +8,11 @@
   "country": "global",
   "isOpenSource": true,
   "license": "GPL-3.0",
+  "forkOf": {
+    "name": "MultiMC",
+    "slug": "multimc",
+    "url": "https://github.com/MultiMC/Launcher"
+  },
   "developer": "PrismLauncher",
   "verified": true,
   "issueSearchTerm": "Prism Launcher",

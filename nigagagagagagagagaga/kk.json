@@ -282,5 +282,17 @@
   "heroToCatalogBtn": "Каталогқа өту ↓",
   "categoriesSidebarTitle": "САНАТТАР",
   "recommendedSidebarTitle": "ҰСЫНЫЛАТЫНДАР",
-  "sponsorBadgeLabel": "ДЕМЕУШІ"
+  "sponsorBadgeLabel": "ДЕМЕУШІ",
+  "sponsorModalTitle": "MEOWLAB ЖОБАСЫНЫҢ ДЕМЕУШІСІ",
+  "sponsorModalDesc": "Бұл демеуші жобаға қаржылай қолдау көрсетті — осындай үлестердің арқасында MeowLab сайты жұмыс істейді және жарнамасыз қалады. Кез келген басқа жоба да демеуші бола алады!",
+  "sponsorBecomeBtn": "Демеуші болу (Байланысу)",
+  "forkLabel": "ФОРК",
+  "newsBtn": "Жаңалықтар",
+  "newsModalTitle": "MeowLab сайт жаңалықтары",
+  "newsAlphaBadge": "ҚАЗІР // GLOBAL ALPHA",
+  "newsAlphaTitle": "MeowProject (MeowLab) Global Alpha нұсқасы ашылды!",
+  "newsAlphaDesc": "Біз жалпы тестілеуге арналған Global Alpha нұсқасын аштық! Сүзгілерді тексеріңіз, жобалар қосыңыз және Талқылауларда идеяларыңызбен бөлісіңіз.",
+  "contactTitle": "Автормен байланыс",
+  "liveNowLabel": "Қазір сайтта",
+  "liveGoalLabel": "Мақсат"
 }

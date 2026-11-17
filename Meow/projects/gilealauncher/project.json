@@ -3,7 +3,7 @@
   "category": "launcher",
   "name": "GileaLauncher",
   "shortName": "GileaLauncher",
-  "icon": "/projects/gilealauncher/icon.png",
+  "icon": "/projects/gilealauncher/app-icon.png",
   "website": "https://github.com/TensaCraft/GileaLauncher/releases/latest",
   "country": "UA",
   "isOpenSource": true,

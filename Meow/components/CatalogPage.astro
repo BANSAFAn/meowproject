@@ -2039,6 +2039,75 @@ const jsonLdSchema = {
         }
       }
 
+      /* Hover motion for cards, tags, and meta */
+      .project-dossier {
+        transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+      .project-dossier:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      .tag-item-clickable,
+      .tag-filter-btn {
+        transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+      }
+      .tag-item-clickable:hover,
+      .tag-filter-btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--accent);
+      }
+      .hero-meta-item {
+        transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+      }
+      .hero-meta-item:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      .stamp-sponsor-btn {
+        cursor: pointer;
+        transition: transform 0.14s ease, filter 0.14s ease;
+      }
+      .stamp-sponsor-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.12);
+      }
+      .stamp-fork {
+        background: rgba(56, 189, 248, 0.12);
+        color: #38bdf8;
+        border-color: #38bdf8;
+        text-decoration: none;
+        transition: transform 0.14s ease, background-color 0.14s ease;
+      }
+      .stamp-fork:hover {
+        background: rgba(56, 189, 248, 0.24);
+        transform: translateY(-1px);
+      }
+      .legal-clauses-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .legal-clause-card {
+        background: var(--paper-inset);
+        border: 1.5px solid var(--border-muted);
+        border-left: 4px solid var(--accent);
+        padding: 0.85rem 1rem;
+      }
+      .legal-clause-head {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.76rem;
+        font-weight: 900;
+        color: var(--accent);
+        margin-bottom: 0.35rem;
+        text-transform: uppercase;
+      }
+      .legal-clause-body {
+        font-size: 0.86rem;
+        line-height: 1.55;
+        color: var(--ink);
+        margin: 0;
+      }
+
       /* Dedicated Single Project Page Mode */
       #view-catalog.is-single-project-page .hero-wrap,
       #view-catalog.is-single-project-page .catalog-sidebar-left,
@@ -4129,11 +4198,14 @@ const jsonLdSchema = {
                 aria-expanded="false"
                 aria-label="Оберіть мову інтерфейсу"
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                  <rect x="1.5" y="1.5" width="13" height="13"></rect>
-                  <line x1="1.5" y1="8" x2="14.5" y2="8"></line>
-                  <line x1="8" y1="1.5" x2="8" y2="14.5"></line>
-                </svg>
+                <span class="lang-flag-svg" style="display:inline-flex;align-items:center;" aria-hidden="true">
+                  {lang === 'uk' && <svg width="16" height="11" viewBox="0 0 3 2"><rect width="3" height="1" y="0" fill="#0057B7"/><rect width="3" height="1" y="1" fill="#FFDD00"/></svg>}
+                  {lang === 'en' && <svg width="16" height="11" viewBox="0 0 60 30"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="3"/><path d="M30 0 v30 M0 15 h60" stroke="#fff" stroke-width="10"/><path d="M30 0 v30 M0 15 h60" stroke="#C8102E" stroke-width="6"/></svg>}
+                  {lang === 'de' && <svg width="16" height="11" viewBox="0 0 5 3"><rect width="5" height="1" y="0" fill="#000"/><rect width="5" height="1" y="1" fill="#D00"/><rect width="5" height="1" y="2" fill="#FFCE00"/></svg>}
+                  {lang === 'pl' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="8" fill="#FFF"/><rect y="8" width="24" height="8" fill="#DC143C"/></svg>}
+                  {lang === 'be' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#FFF"/><rect y="5.33" width="24" height="5.33" fill="#D22730"/><rect y="10.66" width="24" height="5.34" fill="#FFF"/></svg>}
+                  {lang === 'kk' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="16" fill="#00AFCA"/><circle cx="12" cy="8" r="3.6" fill="#FEC50C"/><rect x="2" y="2" width="1.8" height="12" fill="#FEC50C"/></svg>}
+                </span>
                 <span class="lang-current-code">{currentLangMeta.short}</span>
                 <span class="lang-current-sep">—</span>
                 <span class="lang-current-name">{currentLangMeta.label}</span>
@@ -4152,6 +4224,14 @@ const jsonLdSchema = {
                       role="option"
                       aria-selected={isActive ? 'true' : 'false'}
                     >
+                      <span class="lang-flag-svg" style="display:inline-flex;align-items:center;" aria-hidden="true">
+                        {l.code === 'uk' && <svg width="16" height="11" viewBox="0 0 3 2"><rect width="3" height="1" y="0" fill="#0057B7"/><rect width="3" height="1" y="1" fill="#FFDD00"/></svg>}
+                        {l.code === 'en' && <svg width="16" height="11" viewBox="0 0 60 30"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="3"/><path d="M30 0 v30 M0 15 h60" stroke="#fff" stroke-width="10"/><path d="M30 0 v30 M0 15 h60" stroke="#C8102E" stroke-width="6"/></svg>}
+                        {l.code === 'de' && <svg width="16" height="11" viewBox="0 0 5 3"><rect width="5" height="1" y="0" fill="#000"/><rect width="5" height="1" y="1" fill="#D00"/><rect width="5" height="1" y="2" fill="#FFCE00"/></svg>}
+                        {l.code === 'pl' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="8" fill="#FFF"/><rect y="8" width="24" height="8" fill="#DC143C"/></svg>}
+                        {l.code === 'be' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#FFF"/><rect y="5.33" width="24" height="5.33" fill="#D22730"/><rect y="10.66" width="24" height="5.34" fill="#FFF"/></svg>}
+                        {l.code === 'kk' && <svg width="16" height="11" viewBox="0 0 24 16"><rect width="24" height="16" fill="#00AFCA"/><circle cx="12" cy="8" r="3.6" fill="#FEC50C"/><rect x="2" y="2" width="1.8" height="12" fill="#FEC50C"/></svg>}
+                      </span>
                       <span class="item-code">{l.short}</span>
                       <span class="item-sep">—</span>
                       <span class="item-label">{l.label}</span>
@@ -4188,7 +4268,7 @@ const jsonLdSchema = {
               id="open-roadmap-btn"
               class="paper-btn"
               style="padding: 0.42rem 0.78rem; font-size: 0.8rem; font-weight: 700;"
-              title={t.roadmapBtnTitle}
+              title={t.newsModalTitle}
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                 <rect x="1" y="2" width="14" height="2" />
@@ -4196,7 +4276,7 @@ const jsonLdSchema = {
                 <rect x="1" y="12" width="6" height="2" />
                 <polygon points="12,7 16,10 12,13" />
               </svg>
-              <span>{t.roadmapBtn}</span>
+              <span>{t.newsBtn}</span>
             </button>
 
             <button
@@ -4419,6 +4499,13 @@ const jsonLdSchema = {
                   </svg>
                   <span>Strict CSP · Anti-XSS</span>
                 </div>
+
+                <div class="hero-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="#22c55e" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5" />
+                  </svg>
+                  <span>{t.liveNowLabel}: <strong id="live-visitors-count">1</strong> · {t.liveGoalLabel}: <strong id="live-visitors-goal">200</strong></span>
+                </div>
               </div>
             </div>
           </div>
@@ -4622,7 +4709,7 @@ const jsonLdSchema = {
 
                 <section class="projects-stack" aria-label="Projects Directory">
           {
-            PROJECTS.map((project, index) => {
+            [...PROJECTS].sort((a, b) => (b.sponsor ? 1 : 0) - (a.sponsor ? 1 : 0)).map((project, index) => {
               const loc = project.locales[lang];
               const hasTranslation = project.availableLangs.includes(lang);
               const desc = hasTranslation ? loc.description : '';
@@ -4651,6 +4738,7 @@ const jsonLdSchema = {
                   data-opensource={project.isOpenSource ? 'true' : 'false'}
                   data-verified={project.verified ? 'true' : 'false'}
                   data-danger={project.dangerReport ? 'true' : 'false'}
+                  data-sponsor={project.sponsor ? 'true' : 'false'}
                   data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
                   style={initialProjectSlug && project.slug !== initialProjectSlug ? 'display: none;' : ''}
                 >
@@ -4819,12 +4907,27 @@ const jsonLdSchema = {
                           )}
 
                           {project.sponsor && (
-                            <span class="stamp stamp-alpha">
+                            <button
+                              type="button"
+                              class="stamp stamp-alpha stamp-sponsor-btn"
+                              data-open-sponsor-modal
+                              data-sponsor-name={project.name}
+                            >
                               <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                                 <polygon points="8,1 10,6 15,6 11,9.5 12.5,15 8,11.5 3.5,15 5,9.5 1,6 6,6"></polygon>
                               </svg>
                               <span>{t.sponsorBadgeLabel}</span>
-                            </span>
+                            </button>
+                          )}
+
+                          {project.forkOf && (
+                            <a
+                              href={project.forkOf.slug ? getProjectHref(lang, project.forkOf.slug) : project.forkOf.url}
+                              class="stamp stamp-fork"
+                              title={`${t.forkLabel}: ${project.forkOf.name}`}
+                            >
+                              <span>{t.forkLabel}: {project.forkOf.name} ↗</span>
+                            </a>
                           )}
 
                           {(project.archived || (project.tags || []).includes('Архів')) && (
@@ -6131,6 +6234,19 @@ const jsonLdSchema = {
                 <YoutubeIcon size={15} />
                 {t.supportYoutube}
               </a>
+
+              <div class="footer-col-title" style="margin-top: 0.75rem;">{t.contactTitle}</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; width: 100%;">
+                <a href="https://discord.com/invite/FEyMjn3mtA" target="_blank" rel="noopener noreferrer" class="paper-btn" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;">
+                  Discord ↗
+                </a>
+                <a href="mailto:baneronetwo@memeware.net" class="paper-btn" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;">
+                  baneronetwo@memeware.net
+                </a>
+                <a href={`${SITE_REPO_URL}/issues`} target="_blank" rel="noopener noreferrer" class="paper-btn" style="font-size: 0.78rem; padding: 0.35rem 0.65rem;">
+                  GitHub Issues ↗
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -6208,54 +6324,63 @@ const jsonLdSchema = {
     </div>
 
         <div id="privacy-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 620px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.65rem;">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800;">[LEGAL // PRIVACY POLICY]</span>
-            <h3 style="margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 900;">{t.privacyModalTitle}</h3>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // PRIVACY POLICY]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.privacyModalTitle}</h3>
           </div>
           <button type="button" id="privacy-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
             {t.closeModal} [ESC]
           </button>
         </div>
-        <div style="font-size: 0.9rem; line-height: 1.65; color: var(--ink);">
-          <p style="margin-bottom: 0.8rem;">{t.privacyModalText}</p>
-          <p style="margin-bottom: 0.8rem;">
-            <strong>Технічні журнали та Cloudflare / GitHub:</strong> Інфраструктура доставки контенту (CDN та GitHub Pages / Cloudflare) може обробляти технічні HTTP-заголовки відповідно до власних регламентів безпеки та захисту від DDoS-атак.
-          </p>
-          <p style="margin: 0;">
-            <strong>Зовнішній моніторинг:</strong> Статус серверів запитується напряму з клієнта через публічний API mcstatus.io без передачі ідентифікаторів облікових записів.
-          </p>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">01 // Загальні положення</div>
+            <p class="legal-clause-body">{t.privacyModalText}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">02 // Cloudflare &amp; GitHub CDN</div>
+            <p class="legal-clause-body">Інфраструктура доставки контенту (Cloudflare / GitHub) може обробляти технічні HTTP-заголовки виключно для захисту від DDoS-атак і забезпечення HTTPS.</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">03 // Зовнішні запити статусу</div>
+            <p class="legal-clause-body">Статус Minecraft-серверів запитується напряму з браузера через публічний API mcstatus.io без передачі персональних ідентифікаторів.</p>
+          </div>
         </div>
       </div>
     </div>
 
         <div id="confidentiality-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 620px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.65rem;">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800;">[LEGAL // CONFIDENTIALITY]</span>
-            <h3 style="margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 900;">{t.confidentialityModalTitle || 'РЕГЛАМЕНТ КОНФІДЕНЦІЙНОСТІ'}</h3>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // CONFIDENTIALITY]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.confidentialityModalTitle || 'РЕГЛАМЕНТ КОНФІДЕНЦІЙНОСТІ'}</h3>
           </div>
           <button type="button" id="confidentiality-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
             {t.closeModal} [ESC]
           </button>
         </div>
-        <div style="font-size: 0.9rem; line-height: 1.65; color: var(--ink);">
-          <p style="margin-bottom: 0.8rem;">{t.confidentialityModalText || 'Усі звернення через GitHub Issues є публічними. Не публікуйте паролі, приватні ключі чи персональні документи третіх осіб.'}</p>
-          <p style="margin: 0;">
-            <strong>Захист викривачів та спільноти:</strong> При подачі скарги на небезпечне ПЗ обовʼязково перевіряйте, щоб скріншоти та логи не містили ваших особистих токенів авторизації або конфіденційних даних.
-          </p>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">01 // Публічність GitHub Issues</div>
+            <p class="legal-clause-body">{t.confidentialityModalText || 'Усі звернення через GitHub Issues є публічними. Не публікуйте паролі, приватні ключі чи персональні документи третіх осіб.'}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">02 // Захист викривачів та доказів</div>
+            <p class="legal-clause-body">При подачі скарги на небезпечне ПЗ обовʼязково перевіряйте, щоб скріншоти та логи не містили ваших особистих токенів авторизації або конфіденційних даних.</p>
+          </div>
         </div>
       </div>
     </div>
 
         <div id="roadmap-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 600px; padding: 1.5rem; background: var(--paper-sheet);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.65rem;">
+      <div class="lightbox-frame" style="max-width: 660px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.65rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 800;">[ROADMAP // UPCOMING]</span>
-            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">Майбутні речі на сайті</h3>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[NEWS // GLOBAL ALPHA]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.newsModalTitle}</h3>
           </div>
           <button type="button" id="roadmap-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
             {t.closeModal} [ESC]
@@ -6263,25 +6388,58 @@ const jsonLdSchema = {
         </div>
 
         <div class="roadmap-list">
-          <div class="roadmap-item">
-            <div class="roadmap-item-head">
-              <strong style="font-size: 0.96rem;">Форум онлайн</strong>
-              <span class="stamp stamp-amber">У ПЛАНАХ</span>
+          <div class="roadmap-item" style="border-left: 4px solid var(--accent);">
+            <div class="roadmap-item-head" style="margin-bottom: 0.6rem;">
+              <strong style="font-size: 1rem;">{t.newsAlphaTitle}</strong>
+              <span class="stamp stamp-alpha">{t.newsAlphaBadge}</span>
             </div>
-            <p style="font-size: 0.85rem; color: var(--ink-muted); margin: 0;">
-              Інтерактивний форум спільноти для живих обговорень, гайдів, пошуку гравців та технічної допомоги по Minecraft-проєктах.
+            <img src="/banner-alpha.jpg" alt="MeowProject Global Alpha" style="width: 100%; height: auto; border: 1.5px solid var(--border-ink); margin-bottom: 0.75rem; display: block;" loading="lazy" />
+            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.55; margin: 0;">
+              {t.newsAlphaDesc}
             </p>
           </div>
 
           <div class="roadmap-item">
             <div class="roadmap-item-head">
-              <strong style="font-size: 0.96rem;">Підключення окремих дзеркал (GitLab, SourceForge, Gitea, CNB)</strong>
+              <strong style="font-size: 0.94rem;">Підключення дзеркал (GitLab, SourceForge, Gitea, CNB)</strong>
               <span class="stamp stamp-open">В РОЗРОБЦІ</span>
             </div>
-            <p style="font-size: 0.85rem; color: var(--ink-muted); margin: 0;">
-              Автоматичне підтягування ліцензій, релізів, скріншотів та метаданих вихідного коду не лише з GitHub, а й з GitLab, SourceForge, Gitea та CNB.
-            </p>
           </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-item-head">
+              <strong style="font-size: 0.94rem;">Форум онлайн та інтерактивний центр i10n</strong>
+              <span class="stamp stamp-amber">У ПЛАНАХ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sponsor-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 560px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.65rem;">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[SPONSOR // PARTNER]</span>
+            <h3 id="sponsor-modal-title" style="margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 900;">{t.sponsorModalTitle}</h3>
+          </div>
+          <button type="button" id="sponsor-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 1.15rem;">
+          {t.sponsorModalDesc}
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
+          <a href="https://discord.com/invite/FEyMjn3mtA" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent">
+            Discord ↗
+          </a>
+          <a href="mailto:baneronetwo@memeware.net" class="paper-btn">
+            baneronetwo@memeware.net
+          </a>
+          <a href={`${SITE_REPO_URL}/issues`} target="_blank" rel="noopener noreferrer" class="paper-btn">
+            GitHub Issues ↗
+          </a>
         </div>
       </div>
     </div>
@@ -7434,7 +7592,10 @@ const jsonLdSchema = {
             if (mode === 'newest-desc' || mode === 'updated-desc') {
               return Number(b.dataset.projectIndex || 0) - Number(a.dataset.projectIndex || 0);
             }
-            // featured / default
+            // featured / default: sponsors first
+            const spA = a.getAttribute('data-sponsor') === 'true' ? 1 : 0;
+            const spB = b.getAttribute('data-sponsor') === 'true' ? 1 : 0;
+            if (spB !== spA) return spB - spA;
             return Number(a.dataset.projectIndex || 0) - Number(b.dataset.projectIndex || 0);
           });
           projectCards.forEach((c) => container.appendChild(c));
@@ -7572,6 +7733,54 @@ const jsonLdSchema = {
         bindGenericModal('confidentiality-modal', 'confidentiality-close', '#open-confidentiality-btn');
         bindGenericModal('roadmap-modal', 'roadmap-close', '#open-roadmap-btn');
         bindGenericModal('terms-modal', 'terms-close', '#open-terms-btn');
+
+        const sponsorModal = document.getElementById('sponsor-modal');
+        const sponsorModalClose = document.getElementById('sponsor-modal-close');
+        const sponsorModalTitle = document.getElementById('sponsor-modal-title');
+        if (sponsorModal) {
+          document.querySelectorAll('[data-open-sponsor-modal]').forEach((btn) => {
+            if (btn.dataset.spBound === '1') return;
+            btn.dataset.spBound = '1';
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const pName = btn.getAttribute('data-sponsor-name') || '';
+              if (sponsorModalTitle && pName) {
+                sponsorModalTitle.textContent = `${pName} — ${sponsorModalTitle.textContent.split('—').pop().trim()}`;
+              }
+              sponsorModal.classList.add('open');
+              sponsorModal.setAttribute('aria-hidden', 'false');
+            });
+          });
+          if (sponsorModalClose && sponsorModalClose.dataset.spCloseBound !== '1') {
+            sponsorModalClose.dataset.spCloseBound = '1';
+            sponsorModalClose.addEventListener('click', () => {
+              sponsorModal.classList.remove('open');
+              sponsorModal.setAttribute('aria-hidden', 'true');
+            });
+          }
+          if (sponsorModal.dataset.spBackdropBound !== '1') {
+            sponsorModal.dataset.spBackdropBound = '1';
+            sponsorModal.addEventListener('click', (e) => {
+              if (e.target === sponsorModal) {
+                sponsorModal.classList.remove('open');
+                sponsorModal.setAttribute('aria-hidden', 'true');
+              }
+            });
+          }
+        }
+
+        // Live online estimate & auto-stepping milestone goal (200 -> 300 -> 400...)
+        const liveCountEl = document.getElementById('live-visitors-count');
+        const liveGoalEl = document.getElementById('live-visitors-goal');
+        if (liveCountEl && liveGoalEl) {
+          const updateLiveGoal = (count) => {
+            const nextGoal = Math.max(200, (Math.floor(count / 100) + 1) * 100);
+            liveCountEl.textContent = String(count);
+            liveGoalEl.textContent = String(nextGoal);
+          };
+          const base = Number(localStorage.getItem('meow_live_est') || 1);
+          updateLiveGoal(Math.max(1, base));
+        }
 
         // Dynamic License Modal Controller
         const licenseModal = document.getElementById('license-modal');

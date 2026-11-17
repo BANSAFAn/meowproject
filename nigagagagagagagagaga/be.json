@@ -282,5 +282,17 @@
   "heroToCatalogBtn": "Да каталога ↓",
   "categoriesSidebarTitle": "КАТЭГОРЫІ",
   "recommendedSidebarTitle": "РЭКАМЕНДАЦЫІ",
-  "sponsorBadgeLabel": "СПОНСАР"
+  "sponsorBadgeLabel": "СПОНСАР",
+  "sponsorModalTitle": "СПОНСАР ПРАЕКТА MEOWLAB",
+  "sponsorModalDesc": "Гэты спонсар аказаў фінансавую падтрымку праекту — дзякуючы яго ўнёску сайт MeowLab працуе і застаецца без рэкламы. Любы іншы праект таксама можа стаць спонсарам!",
+  "sponsorBecomeBtn": "Стаць спонсарам (звязацца)",
+  "forkLabel": "ФОРК",
+  "newsBtn": "Навіны",
+  "newsModalTitle": "Навіны сайта MeowLab",
+  "newsAlphaBadge": "ЗАРАЗ // GLOBAL ALPHA",
+  "newsAlphaTitle": "Адкрыта Global Alpha версія MeowProject (MeowLab)!",
+  "newsAlphaDesc": "Мы адкрылі публічную Global Alpha версію каталога для тэставання! Запрашаем тэставаць фільтры, дадаваць праекты і пісаць ідэі ў Абмеркаваннях.",
+  "contactTitle": "Сувязь з аўтарам",
+  "liveNowLabel": "Зараз на сайце",
+  "liveGoalLabel": "Мэта"
 }
