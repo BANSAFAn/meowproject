@@ -4,7 +4,7 @@
   "metaKeywords": "Minecraft Launcher, XMCL, HMCL, Lunar Client, Sodium, All the Mods 9, Minecraft Mods, Modpacks, MeowProject, Baneronetwo",
   "alphaBadge": "Alpha-Version",
   "alphaTooltip": "Dieses Projekt befindet sich in der Alpha-Entwicklung",
-  "sponsoredBy": "Finanziert & betrieben von Baneronetwo",
+  "sponsoredBy": "Finanziert von der Community",
   "noAuthBadge": "Keine Anmeldung · Komplett Offen",
   "supportLabel": "Projekt unterstützen:",
   "supportMonobank": "Monobank Jar",
@@ -58,7 +58,7 @@
   "reviewsEmpty": "Noch keine echten Kommentare in GitHub Issues vorhanden.",
   "verifiedViaGithub": "GitHub Issue",
   "footerAbout": "Offenes Verzeichnis für Minecraft-Projekte, Launcher, Mods und Webdienste.",
-  "footerAlphaNote": "Status: Alpha-Version. Finanziert auf Rechnung von Baneronetwo.",
+  "footerAlphaNote": "Status: Alpha-Version. Finanziert von Menschen und der Community.",
   "footerNoAuthNote": "Keine Autorisierung erforderlich, geschützt gegen Skriptausführung (CSP) und komplett offen.",
   "footerSourceLink": "Website-Quellcode",
   "emptyFilterResult": "Noch keine Einträge in dieser Kategorie.",
@@ -269,5 +269,14 @@
   "bsodTitle": "Du.....warum bist du da reingegangen ?",
   "bsodSubtitle": "Dein Browser ist durch den Befehl meowlab auf ein kritisches Maß an Neugier gestoßen und muss neu gestartet werden.",
   "bsodProgressLabel": "Sammeln von Schnurr-Speicherabbildern",
-  "bsodExitBtn": "Drücke ESC oder klicke hier zum Wiederherstellen"
+  "bsodExitBtn": "Drücke ESC oder klicke hier zum Wiederherstellen",
+  "fundedByCommunitySource": "Quelle: Von der Community finanziert",
+  "archivedBadgeLabel": "ARCHIV",
+  "archivedTooltip": "Dieses Projekt wurde archiviert — es wird leider nicht mehr weiterentwickelt :(",
+  "navI10n": "i10n",
+  "i10nKicker": "LOKALISIERUNG // IN ENTWICKLUNG",
+  "i10nTitle": "Der Tab i10n befindet sich in Entwicklung",
+  "i10nSubtitle": "Hier entsteht ein zentraler Bereich für Übersetzungen von Launchern, Mods und Modpacks. Das Projekt wird von Menschen finanziert – Unterstützung beschleunigt die Entwicklung.",
+  "i10nStatusBadge": "IN ENTWICKLUNG // FINANZIERUNG BENÖTIGT",
+  "i10nDonateTitle": "Unterstützen & Start von i10n beschleunigen"
 }

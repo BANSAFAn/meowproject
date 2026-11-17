@@ -1824,6 +1824,12 @@ const jsonLdSchema = {
         font-size: 0.9rem;
         opacity: 0.85;
       }
+      .stamp-archived {
+        background: rgba(148, 163, 184, 0.14);
+        color: var(--ink-muted);
+        border-color: var(--ink-muted);
+        cursor: help;
+      }
       @keyframes bsodGlitchIn {
         0% {
           opacity: 0;
@@ -4065,6 +4071,18 @@ const jsonLdSchema = {
               <span>{t.navDiscussions}</span>
               <span class="folder-tab-badge">05</span>
             </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="i10n"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M1 2h6v2H5.2c.4 1.4 1.1 2.7 2 3.7l1.3-1.3 1.1 1.1-1.3 1.3c.7.6 1.5 1.1 2.4 1.4l-.6 1.5c-1.1-.4-2.1-1-3-1.8-.9.8-2 1.4-3.1 1.8l-.6-1.5c.9-.3 1.8-.8 2.5-1.4-.9-1-1.6-2.3-2-3.8H1V2zm9.5 3h2l2.8 9h-1.8l-.6-2h-2.8l-.6 2H7.7l2.8-9zm.2 5.5h1.6l-.8-2.8-.8 2.8z"></path>
+              </svg>
+              <span>{t.navI10n}</span>
+              <span class="folder-tab-badge">06</span>
+            </button>
           </nav>
       </div>
     </header>
@@ -4511,6 +4529,18 @@ const jsonLdSchema = {
                               </svg>
                               <span>{t.verifiedBadge}</span>
                             </button>
+                          )}
+
+                          {(project.archived || (project.tags || []).includes('Архів')) && (
+                            <span
+                              class="stamp stamp-archived"
+                              title={t.archivedTooltip}
+                            >
+                              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d="M2 2h12v3H2V2zm1 4h10v8H3V6zm3 2v2h4V8H6z"></path>
+                              </svg>
+                              <span>{t.archivedBadgeLabel}</span>
+                            </span>
                           )}
 
                                                     {project.dangerReport && (
@@ -5290,7 +5320,7 @@ const jsonLdSchema = {
               <h3 class="expense-title">{t.spentLabel}</h3>
               <p class="expense-desc">{t.spentDesc}</p>
               <div class="expense-meta">
-                <span>Джерело: Власні кошти Baneronetwo</span>
+                <span>{t.fundedByCommunitySource}</span>
                 <span class="status-indicator-done">Завершено</span>
               </div>
             </div>
@@ -5634,6 +5664,52 @@ const jsonLdSchema = {
                 )}
               </a>
             ))}
+          </div>
+        </section>
+      </div>
+
+      <div id="view-i10n" class="tab-view-panel">
+        <section class="hero-wrap">
+          <div class="paper-sheet-box hero-dossier">
+            <div class="hero-inner-card">
+              <div class="hero-kicker">{t.i10nKicker}</div>
+              <h1 class="hero-title">{t.i10nTitle}</h1>
+              <p class="hero-subtitle">{t.i10nSubtitle}</p>
+              <div style="margin-top: 0.9rem;">
+                <span class="stamp stamp-alpha">{t.i10nStatusBadge}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-bottom: 2rem;">
+          <div class="form-card" style="max-width: 760px;">
+            <h2 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 0.5rem;">{t.i10nDonateTitle}</h2>
+            <p style="font-size: 0.88rem; color: var(--ink-muted); line-height: 1.5; margin-bottom: 1.1rem;">
+              {t.i10nSubtitle}
+            </p>
+            <div class="fund-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.85rem;">
+              <a
+                href={MONOBANK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="paper-btn paper-btn-accent"
+                style="width: 100%; justify-content: center; text-decoration: none;"
+              >
+                <MonobankIcon size={16} />
+                <span>{t.monobankSupportBtn}</span>
+              </a>
+              <a
+                href={YOUTUBE_JOIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="paper-btn"
+                style="width: 100%; justify-content: center; text-decoration: none;"
+              >
+                <YoutubeIcon size={16} />
+                <span>{t.supportYoutube}</span>
+              </a>
+            </div>
           </div>
         </section>
       </div>
@@ -6181,6 +6257,7 @@ const jsonLdSchema = {
           expenses: document.getElementById('view-expenses'),
           report: document.getElementById('view-report'),
           discussions: document.getElementById('view-discussions'),
+          i10n: document.getElementById('view-i10n'),
         };
         const filterBar = document.getElementById('catalog-filter-bar');
         const singleBackBar = document.getElementById('single-project-back-bar');

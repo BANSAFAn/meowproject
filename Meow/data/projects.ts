@@ -39,6 +39,7 @@ export interface ProjectMeta {
   country: string;
   developer: string;
   license: string;
+  archived?: boolean;
   platforms: string[];
   website?: string;
   /** Server-specific metadata */

@@ -7,6 +7,7 @@
   "country": "Asia",
   "developer": "Github",
   "license": "MIT",
+  "archived": true,
   "platforms": [
     "Windows 10",
     "Windows 11"
@@ -23,6 +24,7 @@
   "issueSearchTerm": "FluenLauncher",
   "tags": [
     "launcher",
+    "Архів",
     "Windows 10",
     "Windows 11",
     "Asia"

@@ -4,7 +4,7 @@
   "metaKeywords": "launchery Minecraft, XMCL, HMCL, Lunar Client, Sodium, All the Mods 9, mody Minecraft, modpacki, MeowProject, Baneronetwo",
   "alphaBadge": "Wersja Alfa",
   "alphaTooltip": "Projekt w fazie aktywnego rozwoju Alfa",
-  "sponsoredBy": "Utrzymywany na koszt Baneronetwo",
+  "sponsoredBy": "Finansowane przez społeczność",
   "noAuthBadge": "Bez autoryzacji · Wszystko otwarte",
   "supportLabel": "Wesprzyj projekt:",
   "supportMonobank": "Monobank Jar",
@@ -58,7 +58,7 @@
   "reviewsEmpty": "Brak prawdziwych komentarzy w GitHub Issues. Wybierz ocenę powyżej i dodaj pierwszą opinię!",
   "verifiedViaGithub": "GitHub Issue",
   "footerAbout": "Otwarty katalog projektów społeczności Minecraft, launcherów, modów i serwisów.",
-  "footerAlphaNote": "Status: Wersja Alfa (Alpha). Projekt utrzymywany z funduszy Baneronetwo.",
+  "footerAlphaNote": "Status: Wersja Alfa (Alpha). Projekt finansowany przez ludzi i społeczność.",
   "footerNoAuthNote": "Projekt nie wymaga autoryzacji, blokuje wykonywanie obcych skryptów (CSP) i jest w pełni otwarty.",
   "footerSourceLink": "Kod źródłowy strony",
   "emptyFilterResult": "Brak wpisów w tej kategorii.",
@@ -269,5 +269,14 @@
   "bsodTitle": "Ty.....po co tam wlazłeś ?",
   "bsodSubtitle": "Twoja przeglądarka napotkała krytyczny poziom ciekawości przez komendę meowlab i wymaga ponownego uruchomienia.",
   "bsodProgressLabel": "zbieranie zrzutów pamięci mruczenia",
-  "bsodExitBtn": "Naciśnij ESC lub kliknij tutaj, aby wrócić"
+  "bsodExitBtn": "Naciśnij ESC lub kliknij tutaj, aby wrócić",
+  "fundedByCommunitySource": "Źródło: Finansowane przez ludzi",
+  "archivedBadgeLabel": "ARCHIWUM",
+  "archivedTooltip": "Ten projekt został zarchiwizowany — niestety nikt już nie będzie się nim zajmować :(",
+  "navI10n": "i10n",
+  "i10nKicker": "LOKALIZACJA // W BUDOWIE",
+  "i10nTitle": "Zakładka i10n jest w trakcie tworzenia",
+  "i10nSubtitle": "Powstaje tu centrum tłumaczeń launcherów, modów i paczek. Projekt jest finansowany przez ludzi — wsparcie finansowe przyspieszy stworzenie tej zakładki.",
+  "i10nStatusBadge": "W BUDOWIE // POTRZEBNE FINANSOWANIE",
+  "i10nDonateTitle": "Wesprzyj i przyspiesz uruchomienie i10n"
 }

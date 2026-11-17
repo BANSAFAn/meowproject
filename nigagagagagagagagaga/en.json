@@ -4,7 +4,7 @@
   "metaKeywords": "Minecraft launchers, XMCL, HMCL, Lunar Client, Sodium, All the Mods 9, Minecraft mods, modpacks, MeowProject, Baneronetwo",
   "alphaBadge": "Alpha Version",
   "alphaTooltip": "This project is in active Alpha development",
-  "sponsoredBy": "Maintained & funded by Baneronetwo",
+  "sponsoredBy": "Funded by the community",
   "noAuthBadge": "No Auth · Everything Open",
   "supportLabel": "Support Project:",
   "supportMonobank": "Monobank Jar",
@@ -58,7 +58,7 @@
   "reviewsEmpty": "No real comments in GitHub Issues yet. Pick a rating above and leave the first review!",
   "verifiedViaGithub": "GitHub Issue",
   "footerAbout": "Open community directory for Minecraft projects, launchers, mods, and web services.",
-  "footerAlphaNote": "Status: Alpha Version. Funded and maintained by Baneronetwo.",
+  "footerAlphaNote": "Status: Alpha Version. Funded and supported by the community.",
   "footerNoAuthNote": "Zero authentication required, protected against script execution (strict CSP), and 100% open.",
   "footerSourceLink": "Website Source Code",
   "emptyFilterResult": "No entries in this category yet.",
@@ -267,5 +267,14 @@
   "bsodTitle": "You.....why did you go in there ?",
   "bsodSubtitle": "Your browser encountered a critical level of curiosity via the meowlab command and needs to restart.",
   "bsodProgressLabel": "collecting purr-memory dumps",
-  "bsodExitBtn": "Press ESC or click here to recover"
+  "bsodExitBtn": "Press ESC or click here to recover",
+  "fundedByCommunitySource": "Source: Funded by people (community)",
+  "archivedBadgeLabel": "ARCHIVED",
+  "archivedTooltip": "This project has been archived — it will no longer be maintained, unfortunately :(",
+  "navI10n": "i10n",
+  "i10nKicker": "LOCALIZATION // IN DEVELOPMENT",
+  "i10nTitle": "The i10n tab is currently in development",
+  "i10nSubtitle": "This will be a unified hub for translating launchers, mods, modpacks, and docs. The project is funded by people, and financial support is needed to speed up development of this tab.",
+  "i10nStatusBadge": "IN DEVELOPMENT // FUNDING NEEDED",
+  "i10nDonateTitle": "Support & speed up the i10n launch"
 }
