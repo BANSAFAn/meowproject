@@ -294,5 +294,7 @@
   "newsAlphaDesc": "Otworzyliśmy publiczną wersję Global Alpha do testów! Testuj filtry, dodawaj projekty, wystawiaj oceny i dziel się pomysłami w Dyskusjach.",
   "contactTitle": "Kontakt z autorem",
   "liveNowLabel": "Teraz na stronie",
-  "liveGoalLabel": "Cel"
+  "liveGoalLabel": "Cel",
+  "similarByTagsTitle": "PODOBNE WG TAGÓW",
+  "subCatSpecTitle": "Pola specyficzne dla kategorii"
 }

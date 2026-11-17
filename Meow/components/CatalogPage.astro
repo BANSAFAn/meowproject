@@ -94,6 +94,24 @@ const selectedProject = initialProjectSlug
   ? PROJECTS.find((p) => p.slug === initialProjectSlug)
   : undefined;
 
+const similarByTagsList = selectedProject
+  ? [...PROJECTS]
+      .filter((p) => p.slug !== selectedProject.slug)
+      .map((p) => {
+        const selTags = new Set((selectedProject.tags || []).map((x) => x.toLowerCase()));
+        const shared = (p.tags || []).filter((x) => selTags.has(x.toLowerCase()));
+        const score = shared.length + (p.category === selectedProject.category ? 0.5 : 0);
+        return { project: p, shared, score };
+      })
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5)
+  : [];
+
+const singleRecList = selectedProject
+  ? allRecSorted.filter((p) => p.slug !== selectedProject.slug && p.category === selectedProject.category).slice(0, 5)
+  : [];
+
 let pageTitle = t.metaTitle;
 let pageDescription = t.metaDescription;
 
@@ -2122,9 +2140,69 @@ const jsonLdSchema = {
         display: none !important;
       }
       #view-catalog.is-single-project-page .catalog-workspace {
-        grid-template-columns: 1fr;
-        max-width: 1060px;
+        grid-template-columns: minmax(0, 1fr) 310px;
+        gap: 1.35rem;
+        max-width: 1320px;
         margin: 0 auto;
+        align-items: start;
+      }
+      @media (max-width: 1099px) {
+        #view-catalog.is-single-project-page .catalog-workspace {
+          grid-template-columns: 1fr;
+        }
+      }
+      .single-project-sidebar {
+        position: sticky;
+        top: 9.2rem;
+        max-height: calc(100vh - 10.4rem);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      @media (max-width: 1099px) {
+        .single-project-sidebar {
+          position: static;
+          max-height: none;
+        }
+      }
+      .sim-shared-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+      }
+      .sim-tag-pill {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.66rem;
+        padding: 0.05rem 0.32rem;
+        border: 1px solid var(--border-muted);
+        color: var(--ink-muted);
+      }
+
+      /* Category-Adaptive Submit Form */
+      .sub-cat-guide-box {
+        margin-top: 0.65rem;
+        padding: 0.7rem 0.9rem;
+        border: 1.5px solid var(--border-ink);
+        border-left: 4px solid var(--accent);
+        background: var(--paper-inset);
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+      .sub-cat-fields-panel {
+        border: 1.5px dashed var(--border-muted);
+        background: var(--paper-inset);
+        padding: 0.9rem 1rem;
+        margin-bottom: 1rem;
+      }
+      .sub-cat-fields-title {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.75rem;
+        font-weight: 900;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 0.7rem;
       }
       #view-catalog.is-single-project-page .dossier-title-link {
         pointer-events: none;
@@ -5322,6 +5400,75 @@ const jsonLdSchema = {
               </div>
             </div>
           </aside>
+
+          {selectedProject && (
+            <aside class="single-project-sidebar" aria-label={t.similarByTagsTitle}>
+              {similarByTagsList.length > 0 && (
+                <div class="paper-sheet-box" style="padding: 0.95rem;">
+                  <div class="sidebar-section-title">
+                    <span>{t.similarByTagsTitle}</span>
+                    <span>#</span>
+                  </div>
+                  <div class="rec-mini-list">
+                    {similarByTagsList.map(({ project: sp, shared }) => {
+                      const spScore = (reviewsData as any)?.projects?.[sp.slug]?.averageRating || 0;
+                      return (
+                        <a href={getProjectHref(lang, sp.slug)} class="rec-mini-item" style="flex-direction: column; align-items: stretch; gap: 0.25rem;">
+                          <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <img src={sp.icon} alt="" class="rec-mini-icon" width="22" height="22" loading="lazy" />
+                            <span class="rec-mini-name">{sp.shortName || sp.name}</span>
+                            {sp.verified && (
+                              <span class="rec-mini-ver" title={t.verifiedBadge}>
+                                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                  <path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm-1 9.5L4.5 8l1.2-1.2L7 8.1l3.3-3.3L11.5 6 7 10.5z"></path>
+                                </svg>
+                              </span>
+                            )}
+                            {spScore > 0 && <span class="rec-mini-score">{spScore}</span>}
+                          </div>
+                          {shared.length > 0 && (
+                            <div class="sim-shared-tags">
+                              {shared.slice(0, 3).map((tg) => (
+                                <span class="sim-tag-pill">#{tg}</span>
+                              ))}
+                            </div>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {singleRecList.length > 0 && (
+                <div class="paper-sheet-box" style="padding: 0.95rem;">
+                  <div class="sidebar-section-title">
+                    <span>{t.recommendedSidebarTitle}</span>
+                    <span>★</span>
+                  </div>
+                  <div class="rec-mini-list">
+                    {singleRecList.map((rec) => {
+                      const recScore = (reviewsData as any)?.projects?.[rec.slug]?.averageRating || 0;
+                      return (
+                        <a href={getProjectHref(lang, rec.slug)} class="rec-mini-item" title={rec.name}>
+                          <img src={rec.icon} alt="" class="rec-mini-icon" width="22" height="22" loading="lazy" />
+                          <span class="rec-mini-name">{rec.shortName || rec.name}</span>
+                          {rec.verified && (
+                            <span class="rec-mini-ver" title={t.verifiedBadge}>
+                              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm-1 9.5L4.5 8l1.2-1.2L7 8.1l3.3-3.3L11.5 6 7 10.5z"></path>
+                              </svg>
+                            </span>
+                          )}
+                          {recScore > 0 && <span class="rec-mini-score">{recScore}</span>}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </aside>
+          )}
         </div>
       </div>
 
@@ -5481,6 +5628,61 @@ const jsonLdSchema = {
                       {p}:
                     </button>
                   ))}
+                </div>
+                <div id="sub-cat-guide" class="sub-cat-guide-box">
+                  <strong>Лаунчер:</strong> вкажіть підтримувані ОС (Windows / macOS / Linux), чи є форком іншого лаунчера, та посилання на сайт/репозиторій.
+                </div>
+              </div>
+
+              <div id="sub-category-fields" class="sub-cat-fields-panel">
+                <div class="sub-cat-fields-title">{t.subCatSpecTitle}</div>
+
+                <div data-cat-group="launcher client" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-fork">Форк якого проєкту (якщо є)</label>
+                    <input type="text" id="sub-cat-fork" class="paper-input" placeholder="Напр. MultiMC (або залиште порожнім)" />
+                  </div>
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-auth">Авторизація / Режим</label>
+                    <input type="text" id="sub-cat-auth" class="paper-input" placeholder="Microsoft / Offline / Обидва" />
+                  </div>
+                </div>
+
+                <div data-cat-group="mod modpack" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-loaders">Модлоадери *</label>
+                    <input type="text" id="sub-cat-loaders" class="paper-input" placeholder="Fabric, NeoForge, Forge, Quilt" />
+                  </div>
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-mcver">Версії Minecraft *</label>
+                    <input type="text" id="sub-cat-mcver" class="paper-input" placeholder="1.20.1, 1.21.1" />
+                  </div>
+                </div>
+
+                <div data-cat-group="server" style="display: none; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-server-ip">IP-адреса сервера *</label>
+                    <input type="text" id="sub-cat-server-ip" class="paper-input" placeholder="play.example.net" />
+                  </div>
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-server-license">Вхід на сервер</label>
+                    <input type="text" id="sub-cat-server-license" class="paper-input" placeholder="Ліцензія / Піратка (без ліцензії)" />
+                  </div>
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-server-lang">Основна мова</label>
+                    <input type="text" id="sub-cat-server-lang" class="paper-input" placeholder="Українська / English" />
+                  </div>
+                </div>
+
+                <div data-cat-group="website project" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-web-purpose">Призначення / Тип сервісу</label>
+                    <input type="text" id="sub-cat-web-purpose" class="paper-input" placeholder="Wiki, моніторинг, генератор, CLI-утиліта..." />
+                  </div>
+                  <div class="field-group" style="margin-bottom: 0;">
+                    <label class="field-label" for="sub-cat-web-api">Стек або API (за бажанням)</label>
+                    <input type="text" id="sub-cat-web-api" class="paper-input" placeholder="REST API, Open Source, безкоштовний..." />
+                  </div>
                 </div>
               </div>
 
@@ -7225,6 +7427,56 @@ const jsonLdSchema = {
           if (box) box.textContent = ok ? '[x]' : '[ ]';
         }
 
+        const CAT_GUIDE_MAP = {
+          launcher: {
+            guide: '<strong>Лаунчер:</strong> вкажіть підтримувані ОС (Windows / macOS / Linux), чи є форком іншого лаунчера, та посилання на сайт/репозиторій.',
+            namePh: 'Напр. Prism Launcher або GileaLauncher',
+            platPh: 'Windows, macOS, Linux',
+          },
+          client: {
+            guide: '<strong>Клієнт:</strong> опишіть вбудовані моди, версії Minecraft та умови поширення (Open Source або Proprietary).',
+            namePh: 'Напр. Lunar Client або Feather Client',
+            platPh: 'Windows, macOS, Linux',
+          },
+          modpack: {
+            guide: '<strong>Модпак:</strong> обов’язково вкажіть модлоадер (Fabric/Forge/NeoForge), версію Minecraft та платформу завантаження (Modrinth / CurseForge).',
+            namePh: 'Напр. All the Mods 9 або Fabulously Optimized',
+            platPh: 'CurseForge / Modrinth / Minecraft 1.21',
+          },
+          mod: {
+            guide: '<strong>Мод:</strong> вкажіть підтримувані модлоадери (Fabric, NeoForge, Forge, Quilt), версії гри та сумісність.',
+            namePh: 'Напр. Sodium або Lithium',
+            platPh: 'Modrinth / Fabric / NeoForge 1.21',
+          },
+          server: {
+            guide: '<strong>Сервер:</strong> обов’язково вкажіть робочу IP-адресу для живого моніторингу онлайну, режим входу (ліцензія/без) та мову.',
+            namePh: 'Напр. Hypixel Network або 2b2t',
+            platPh: 'Java Edition 1.20+ / Bedrock',
+          },
+          website: {
+            guide: '<strong>Вебсайт:</strong> вкажіть призначення сервісу (вікі, калькулятор, моніторинг, хостинг-інструмент) та чи є відкритий код.',
+            namePh: 'Напр. Modrinth або ChunkBase',
+            platPh: 'Web / Browser',
+          },
+          project: {
+            guide: '<strong>Проєкт:</strong> опишіть тип інструменту, плагіну або бібліотеки для спільноти Minecraft.',
+            namePh: 'Напр. PaperMC або MCStatus API',
+            platPh: 'Cross-Platform / CLI / API',
+          },
+        };
+
+        function updateCategoryFieldsUI(prefix) {
+          const cfg = CAT_GUIDE_MAP[prefix] || CAT_GUIDE_MAP.project;
+          const guideEl = document.getElementById('sub-cat-guide');
+          if (guideEl) guideEl.innerHTML = cfg.guide;
+          if (subName) subName.placeholder = cfg.namePh;
+          if (subPlatforms) subPlatforms.placeholder = cfg.platPh;
+          document.querySelectorAll('[data-cat-group]').forEach((grp) => {
+            const list = (grp.getAttribute('data-cat-group') || '').split(/\s+/);
+            grp.style.display = list.includes(prefix) ? 'grid' : 'none';
+          });
+        }
+
         // Prefix stamp picker
         document.querySelectorAll('[data-prefix-value]').forEach((pill) => {
           pill.addEventListener('click', () => {
@@ -7234,9 +7486,15 @@ const jsonLdSchema = {
             });
             pill.classList.add('active');
             pill.setAttribute('aria-checked', 'true');
-            if (subPrefix) subPrefix.value = pill.getAttribute('data-prefix-value') || 'project';
+            const nextPref = pill.getAttribute('data-prefix-value') || 'project';
+            if (subPrefix) subPrefix.value = nextPref;
+            updateCategoryFieldsUI(nextPref);
             validateSubmissionForm();
           });
+        });
+        updateCategoryFieldsUI((subPrefix && subPrefix.value) || 'launcher');
+        document.querySelectorAll('#sub-category-fields input').forEach((inp) => {
+          inp.addEventListener('input', validateSubmissionForm);
         });
 
         // Region quick select
@@ -7386,13 +7644,41 @@ const jsonLdSchema = {
             filledLangs.every((k) => descs[k].length >= 20 && descs[k].length <= 2000) &&
             noScripts;
 
+          const extraCatLines = [];
+          let okCatExtra = true;
+          if (prefix === 'launcher' || prefix === 'client') {
+            const fFork = (document.getElementById('sub-cat-fork')?.value || '').trim();
+            const fAuth = (document.getElementById('sub-cat-auth')?.value || '').trim();
+            if (fFork) extraCatLines.push(`- Fork of: ${sanitizePlainText(fFork)}`);
+            if (fAuth) extraCatLines.push(`- Auth: ${sanitizePlainText(fAuth)}`);
+          } else if (prefix === 'mod' || prefix === 'modpack') {
+            const fLoaders = (document.getElementById('sub-cat-loaders')?.value || '').trim();
+            const fMcVer = (document.getElementById('sub-cat-mcver')?.value || '').trim();
+            okCatExtra = fLoaders.length > 0 && fMcVer.length > 0;
+            if (fLoaders) extraCatLines.push(`- Loaders: ${sanitizePlainText(fLoaders)}`);
+            if (fMcVer) extraCatLines.push(`- Minecraft Versions: ${sanitizePlainText(fMcVer)}`);
+          } else if (prefix === 'server') {
+            const fIp = (document.getElementById('sub-cat-server-ip')?.value || '').trim();
+            const fLic = (document.getElementById('sub-cat-server-license')?.value || '').trim();
+            const fLang = (document.getElementById('sub-cat-server-lang')?.value || '').trim();
+            okCatExtra = fIp.length >= 3;
+            if (fIp) extraCatLines.push(`- Server IP: ${sanitizePlainText(fIp)}`);
+            if (fLic) extraCatLines.push(`- Access: ${sanitizePlainText(fLic)}`);
+            if (fLang) extraCatLines.push(`- Primary Language: ${sanitizePlainText(fLang)}`);
+          } else {
+            const fPurp = (document.getElementById('sub-cat-web-purpose')?.value || '').trim();
+            const fApi = (document.getElementById('sub-cat-web-api')?.value || '').trim();
+            if (fPurp) extraCatLines.push(`- Purpose: ${sanitizePlainText(fPurp)}`);
+            if (fApi) extraCatLines.push(`- Stack / API: ${sanitizePlainText(fApi)}`);
+          }
+
           setCheckState('check-name', okName);
           setCheckState('check-country', okCountry);
-          setCheckState('check-link', okLink);
+          setCheckState('check-link', okLink && okCatExtra);
           setCheckState('check-media', okMedia);
           setCheckState('check-desc', okDesc);
 
-          const allValid = okName && okCountry && okLink && okMedia && okDesc;
+          const allValid = okName && okCountry && okLink && okCatExtra && okMedia && okDesc;
           if (!proceedBtn) return;
           proceedBtn.classList.toggle('disabled', !allValid);
           proceedBtn.setAttribute('aria-disabled', allValid ? 'false' : 'true');
@@ -7416,6 +7702,7 @@ const jsonLdSchema = {
             '### Platforms',
             platformsRaw || 'Windows, macOS, Linux',
             '',
+            ...(extraCatLines.length ? ['### Category Details', ...extraCatLines, ''] : []),
             '### Website',
             siteRaw,
             '',

@@ -294,5 +294,7 @@
   "newsAlphaDesc": "Wir haben die öffentliche Global Alpha für Community-Tests geöffnet! Teste Filter, reiche Projekte ein und teile Ideen in den Diskussionen.",
   "contactTitle": "Kontakt zum Autor",
   "liveNowLabel": "Jetzt online",
-  "liveGoalLabel": "Ziel"
+  "liveGoalLabel": "Ziel",
+  "similarByTagsTitle": "ÄHNLICH NACH TAGS",
+  "subCatSpecTitle": "Kategoriespezifische Felder"
 }

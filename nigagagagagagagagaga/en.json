@@ -292,5 +292,7 @@
   "newsAlphaDesc": "We opened the public Global Alpha version of the catalog for community testing! Feel free to test filters, submit projects, leave reviews, and share ideas in Discussions.",
   "contactTitle": "Contact Author",
   "liveNowLabel": "Online now",
-  "liveGoalLabel": "Goal"
+  "liveGoalLabel": "Goal",
+  "similarByTagsTitle": "SIMILAR BY TAGS",
+  "subCatSpecTitle": "Category-specific fields"
 }
