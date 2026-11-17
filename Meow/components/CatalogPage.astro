@@ -1830,6 +1830,150 @@ const jsonLdSchema = {
         border-color: var(--ink-muted);
         cursor: help;
       }
+
+      /* Animated Sleek Hero */
+      .hero-dossier {
+        animation: heroPaperIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      @keyframes heroPaperIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: none; }
+      }
+      .hero-dossier .hero-inner-card {
+        padding: 1.35rem 1.65rem;
+      }
+
+      /* 3-Column Catalog Workspace (Left Categories | Center Cards | Right Tags) */
+      @media (min-width: 1260px) {
+        main.container {
+          max-width: 1480px;
+        }
+      }
+      .catalog-workspace {
+        display: grid;
+        grid-template-columns: 225px minmax(0, 1fr) 265px;
+        gap: 1.25rem;
+        align-items: start;
+      }
+      .catalog-sidebar-left,
+      .catalog-sidebar-right {
+        position: sticky;
+        top: 1.15rem;
+        padding: 0.9rem;
+      }
+      .sidebar-section-title {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin-bottom: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .catalog-sidebar-left .index-tabs {
+        display: flex;
+        flex-direction: column;
+        gap: 0.42rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      .catalog-sidebar-left .tab-btn {
+        width: 100%;
+        justify-content: space-between;
+        text-align: left;
+      }
+      .catalog-sidebar-right .tags-filter-bar {
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+      }
+      .catalog-sidebar-right .tags-header-line {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+      .catalog-sidebar-right .tag-search-wrapper,
+      .catalog-sidebar-right .tag-search-input {
+        width: 100%;
+        max-width: none;
+      }
+      .catalog-sidebar-right .tags-scroll-container {
+        max-height: 460px;
+        overflow-y: auto;
+        padding-right: 0.25rem;
+        margin-top: 0.55rem;
+      }
+      .catalog-sidebar-right .tags-scroll-container.collapsed {
+        max-height: 460px;
+      }
+      .catalog-sidebar-right .btn-toggle-all-tags {
+        display: none;
+      }
+      .catalog-main-col {
+        min-width: 0;
+      }
+      .catalog-main-col .filter-bar {
+        margin-bottom: 1.1rem;
+      }
+      .catalog-main-col .filter-selects-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+        gap: 0.75rem;
+        width: 100%;
+      }
+      .catalog-main-col .catalog-sort-box {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.3rem;
+      }
+
+      @media (max-width: 1219px) {
+        .catalog-workspace {
+          grid-template-columns: 1fr;
+        }
+        .catalog-sidebar-left,
+        .catalog-sidebar-right {
+          position: static;
+        }
+        .catalog-sidebar-left .index-tabs {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .catalog-sidebar-left .tab-btn {
+          width: auto;
+        }
+        .catalog-sidebar-right .btn-toggle-all-tags {
+          display: inline-flex;
+        }
+        .catalog-sidebar-right .tags-scroll-container.collapsed {
+          max-height: 82px;
+        }
+      }
+
+      /* Dedicated Single Project Page Mode */
+      #view-catalog.is-single-project-page .hero-wrap,
+      #view-catalog.is-single-project-page .catalog-sidebar-left,
+      #view-catalog.is-single-project-page .catalog-sidebar-right,
+      #view-catalog.is-single-project-page #catalog-filter-bar {
+        display: none !important;
+      }
+      #view-catalog.is-single-project-page .catalog-workspace {
+        grid-template-columns: 1fr;
+        max-width: 1060px;
+        margin: 0 auto;
+      }
+      #view-catalog.is-single-project-page .dossier-title-link {
+        pointer-events: none;
+      }
+      #view-catalog.is-single-project-page .screenshots-grid {
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 1rem;
+      }
       @keyframes bsodGlitchIn {
         0% {
           opacity: 0;
@@ -4088,7 +4232,7 @@ const jsonLdSchema = {
     </header>
 
     <main class="container">
-            <div id="view-catalog" class="tab-view-panel active">
+            <div id="view-catalog" class={`tab-view-panel active ${initialProjectSlug ? 'is-single-project-page' : ''}`}>
                 <section class="hero-wrap">
           <div class="paper-sheet-box hero-dossier">
             <div class="hero-inner-card">
@@ -4105,6 +4249,17 @@ const jsonLdSchema = {
               <p class="hero-subtitle">{t.heroSubtitle}</p>
 
               <div class="hero-actions">
+                <button
+                  type="button"
+                  id="hero-to-catalog-btn"
+                  class="paper-btn paper-btn-accent"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <polygon points="8,14 2,7 6,7 6,2 10,2 10,7 14,7"></polygon>
+                  </svg>
+                  {t.heroToCatalogBtn}
+                </button>
+
                 <button
                   type="button"
                   class="paper-btn paper-btn-ink"
@@ -4185,6 +4340,35 @@ const jsonLdSchema = {
           </div>
         </section>
 
+        <div class="catalog-workspace" id="catalog-workspace">
+          <aside class="paper-sheet-box catalog-sidebar-left" aria-label={t.categoriesSidebarTitle}>
+            <div class="sidebar-section-title">
+              <span>{t.categoriesSidebarTitle}</span>
+              <span>[{PROJECTS.length}]</span>
+            </div>
+            <div class="index-tabs" role="tablist">
+              <a
+                href={getLangHref(lang)}
+                class={`tab-btn ${!initialCategory || initialCategory === 'all' ? 'active' : ''}`}
+                data-category="all"
+              >
+                <span>{t.catAll}</span>
+                <span>{PROJECTS.length}</span>
+              </a>
+              {PREFIXES.map((cat) => (
+                <a
+                  href={getCategoryHref(lang, cat)}
+                  class={`tab-btn ${initialCategory === cat ? 'active' : ''}`}
+                  data-category={cat}
+                >
+                  <span>{cat}</span>
+                  <span>{categoryCounts[cat]}</span>
+                </a>
+              ))}
+            </div>
+          </aside>
+
+          <div class="catalog-main-col">
                 <section id="catalog-filter-bar" class="paper-sheet-box filter-bar">
           <div class="filter-toolbar-top">
             <div class="search-box">
@@ -4202,111 +4386,100 @@ const jsonLdSchema = {
 
             <div class="filter-selects-group">
               <div class="catalog-sort-box">
-                <label for="catalog-license-select" class="sort-label">{t.licenseFilterLabel}</label>
-                <div class="sort-select-wrapper">
-                  <select id="catalog-license-select" class="sort-dropdown-select" aria-label={t.licenseFilterLabel}>
-                    <option value="all">{t.licenseFilterAll}</option>
-                    <option value="permissive">MIT / Permissive</option>
-                    <option value="copyleft">Copyleft (GPL / AGPL / LGPL)</option>
-                    <option value="proprietary">{t.licenseFilterProprietary}</option>
-                  </select>
-                  <svg class="sort-chevron" width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <polygon points="3,5 13,5 8,11"></polygon>
-                  </svg>
+                <label for="catalog-license-trigger" class="sort-label">{t.licenseFilterLabel}</label>
+                <div class="paper-select-dropdown" data-paper-select="catalog-license-select">
+                  <input type="hidden" id="catalog-license-select" value="all" />
+                  <button type="button" id="catalog-license-trigger" class="paper-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="paper-select-trigger-text">{t.licenseFilterAll}</span>
+                    <svg class="paper-select-chevron" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <polygon points="3,5 13,5 8,11"></polygon>
+                    </svg>
+                  </button>
+                  <div class="paper-select-panel" role="listbox">
+                    <div class="paper-select-list">
+                      <button type="button" class="paper-select-option is-selected" data-value="all" data-label={t.licenseFilterAll}>
+                        <span>{t.licenseFilterAll}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="permissive" data-label="MIT / Permissive">
+                        <span>MIT / Permissive</span>
+                        <span class="paper-select-opt-meta">MIT</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="copyleft" data-label="Copyleft (GPL / AGPL / LGPL)">
+                        <span>Copyleft (GPL / AGPL)</span>
+                        <span class="paper-select-opt-meta">GPL</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="proprietary" data-label={t.licenseFilterProprietary}>
+                        <span>{t.licenseFilterProprietary}</span>
+                        <span class="paper-select-opt-meta">Closed</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div class="catalog-sort-box">
-                <label for="catalog-verified-select" class="sort-label">{t.verifiedFilterLabel}</label>
-                <div class="sort-select-wrapper">
-                  <select id="catalog-verified-select" class="sort-dropdown-select" aria-label={t.verifiedFilterLabel}>
-                    <option value="all">{t.verifiedFilterAll}</option>
-                    <option value="verified">{t.verifiedFilterVerified}</option>
-                    <option value="unverified">{t.verifiedFilterUnverified}</option>
-                    <option value="danger">{t.verifiedFilterDanger}</option>
-                  </select>
-                  <svg class="sort-chevron" width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <polygon points="3,5 13,5 8,11"></polygon>
-                  </svg>
+                <label for="catalog-verified-trigger" class="sort-label">{t.verifiedFilterLabel}</label>
+                <div class="paper-select-dropdown" data-paper-select="catalog-verified-select">
+                  <input type="hidden" id="catalog-verified-select" value="all" />
+                  <button type="button" id="catalog-verified-trigger" class="paper-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="paper-select-trigger-text">{t.verifiedFilterAll}</span>
+                    <svg class="paper-select-chevron" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <polygon points="3,5 13,5 8,11"></polygon>
+                    </svg>
+                  </button>
+                  <div class="paper-select-panel" role="listbox">
+                    <div class="paper-select-list">
+                      <button type="button" class="paper-select-option is-selected" data-value="all" data-label={t.verifiedFilterAll}>
+                        <span>{t.verifiedFilterAll}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="verified" data-label={t.verifiedFilterVerified}>
+                        <span>{t.verifiedFilterVerified}</span>
+                        <span class="paper-select-opt-meta">OK</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="unverified" data-label={t.verifiedFilterUnverified}>
+                        <span>{t.verifiedFilterUnverified}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="danger" data-label={t.verifiedFilterDanger}>
+                        <span>{t.verifiedFilterDanger}</span>
+                        <span class="paper-select-opt-meta">!</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div class="catalog-sort-box">
-                <label for="catalog-sort-select" class="sort-label">{t.sortLabel}</label>
-                <div class="sort-select-wrapper">
-                  <select id="catalog-sort-select" class="sort-dropdown-select" aria-label={t.sortLabel}>
-                    <option value="featured">{t.sortFeatured}</option>
-                    <option value="rating-desc">{t.sortRating}</option>
-                    <option value="updated-desc">{t.sortUpdated}</option>
-                    <option value="newest-desc">{t.sortNewest}</option>
-                    <option value="name-asc">{t.sortName}</option>
-                  </select>
-                  <svg class="sort-chevron" width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <polygon points="3,5 13,5 8,11"></polygon>
-                  </svg>
+                <label for="catalog-sort-trigger" class="sort-label">{t.sortLabel}</label>
+                <div class="paper-select-dropdown" data-paper-select="catalog-sort-select">
+                  <input type="hidden" id="catalog-sort-select" value="featured" />
+                  <button type="button" id="catalog-sort-trigger" class="paper-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="paper-select-trigger-text">{t.sortFeatured}</span>
+                    <svg class="paper-select-chevron" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <polygon points="3,5 13,5 8,11"></polygon>
+                    </svg>
+                  </button>
+                  <div class="paper-select-panel" role="listbox">
+                    <div class="paper-select-list">
+                      <button type="button" class="paper-select-option is-selected" data-value="featured" data-label={t.sortFeatured}>
+                        <span>{t.sortFeatured}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="rating-desc" data-label={t.sortRating}>
+                        <span>{t.sortRating}</span>
+                        <span class="paper-select-opt-meta">100→0</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="updated-desc" data-label={t.sortUpdated}>
+                        <span>{t.sortUpdated}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="newest-desc" data-label={t.sortNewest}>
+                        <span>{t.sortNewest}</span>
+                      </button>
+                      <button type="button" class="paper-select-option" data-value="name-asc" data-label={t.sortName}>
+                        <span>{t.sortName}</span>
+                        <span class="paper-select-opt-meta">A-Z</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="index-tabs" role="tablist">
-            <a
-              href={getLangHref(lang)}
-              class={`tab-btn ${!initialCategory || initialCategory === 'all' ? 'active' : ''}`}
-              data-category="all"
-            >
-              [ {t.catAll}: {PROJECTS.length} ]
-            </a>
-            {PREFIXES.map((cat) => (
-              <a
-                href={getCategoryHref(lang, cat)}
-                class={`tab-btn ${initialCategory === cat ? 'active' : ''}`}
-                data-category={cat}
-              >
-                [ {cat}: {categoryCounts[cat]} ]
-              </a>
-            ))}
-          </div>
-
-                    <div class="tags-filter-bar" id="tags-filter-bar">
-            <div class="tags-header-line">
-              <div class="tags-title-group">
-                <span class="tags-bar-title">{t.tagsLabel}</span>
-                <span class="tags-counter mono">({allUniqueTags.length})</span>
-              </div>
-
-                            <div class="tag-search-wrapper">
-                <input
-                  type="text"
-                  id="tag-filter-search"
-                  class="tag-search-input"
-                  placeholder={t.tagSearchPlaceholder}
-                  aria-label="Пошук по тегам"
-                />
-              </div>
-
-                            <div id="active-tag-chip" class="active-tag-chip" style="display: none;">
-                <span class="active-tag-name" id="active-tag-display"></span>
-                <button type="button" id="btn-clear-tag" class="btn-clear-tag" title={t.clearTagBtn}>
-                  ✕
-                </button>
-              </div>
-
-                            <button type="button" id="btn-toggle-all-tags" class="btn-toggle-all-tags">
-                <span id="toggle-tags-label">{t.showAllTags}</span>
-                <span class="toggle-tags-arrow" id="toggle-tags-arrow">▼</span>
-              </button>
-            </div>
-
-                        <div class="tags-scroll-container collapsed" id="tags-scroll-container">
-              <button type="button" class="tag-filter-btn active" data-tag="all">{t.allTagsLabel}</button>
-              {allUniqueTags.map((tag) => (
-                <button type="button" class="tag-filter-btn" data-tag={tag}>
-                  #{tag}
-                </button>
-              ))}
-              <div id="tags-empty-search" class="tags-empty-search" style="display: none;">
-                {t.noTagsFound}
               </div>
             </div>
           </div>
@@ -4859,6 +5032,53 @@ const jsonLdSchema = {
             })
           }
         </section>
+          </div>
+
+          <aside class="paper-sheet-box catalog-sidebar-right" aria-label={t.tagsLabel}>
+            <div class="tags-filter-bar" id="tags-filter-bar">
+              <div class="tags-header-line">
+                <div class="sidebar-section-title" style="margin-bottom: 0;">
+                  <span>{t.tagsLabel}</span>
+                  <span>({allUniqueTags.length})</span>
+                </div>
+
+                <div class="tag-search-wrapper">
+                  <input
+                    type="text"
+                    id="tag-filter-search"
+                    class="tag-search-input"
+                    placeholder={t.tagSearchPlaceholder}
+                    aria-label={t.tagSearchPlaceholder}
+                  />
+                </div>
+
+                <div id="active-tag-chip" class="active-tag-chip" style="display: none;">
+                  <span class="active-tag-name" id="active-tag-display"></span>
+                  <button type="button" id="btn-clear-tag" class="btn-clear-tag" title={t.clearTagBtn}>
+                    ✕
+                  </button>
+                </div>
+
+                <button type="button" id="btn-toggle-all-tags" class="btn-toggle-all-tags">
+                  <span id="toggle-tags-label">{t.showAllTags}</span>
+                  <span class="toggle-tags-arrow" id="toggle-tags-arrow">▼</span>
+                </button>
+              </div>
+
+              <div class="tags-scroll-container" id="tags-scroll-container">
+                <button type="button" class="tag-filter-btn active" data-tag="all">{t.allTagsLabel}</button>
+                {allUniqueTags.map((tag) => (
+                  <button type="button" class="tag-filter-btn" data-tag={tag}>
+                    #{tag}
+                  </button>
+                ))}
+                <div id="tags-empty-search" class="tags-empty-search" style="display: none;">
+                  {t.noTagsFound}
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
 
             <div id="view-guide" class="tab-view-panel">
@@ -6186,6 +6406,24 @@ const jsonLdSchema = {
         acceptedCountries,
         initialSlug: initialProjectSlug || null,
         initialCat: initialCategory || 'all',
+        tabTitles: {
+          catalog: t.navCatalog,
+          guide: t.navHowItWorks,
+          submit: t.navSubmit,
+          expenses: t.navExpenses,
+          report: t.navReport,
+          discussions: t.navDiscussions,
+          i10n: t.navI10n,
+        },
+        categoryTitles: {
+          launcher: t.catLauncher,
+          modpack: t.catModpack,
+          mod: t.catMod,
+          client: t.catClient,
+          server: t.catServer,
+          website: t.catWebsite,
+          project: t.catProject,
+        },
       }}
     >
       // Anti-XSS & Script Sanitizer Function
@@ -6267,9 +6505,58 @@ const jsonLdSchema = {
         const exitSingleBtn = document.getElementById('btn-exit-single-project');
         let singleProjectSlug = initialSlug;
 
+        function updateBrowserTabIdentity(activeView, activeCat, activeSlug) {
+          try {
+            let nextTitle = `${tabTitles.catalog || 'MeowLab'} — MeowLab`;
+            let svgData = null;
+
+            const makeSvgDataUri = (bg, fg, inner) =>
+              'data:image/svg+xml,' +
+              encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="${bg}" stroke="#181615" stroke-width="2"/>${inner.replace(/CURRENT/g, fg)}</svg>`
+              );
+
+            if (activeSlug) {
+              const card = document.querySelector(`[data-project-card="${activeSlug}"]`);
+              const pName = card ? card.getAttribute('data-project-name') : activeSlug;
+              const pIcon = card ? card.querySelector('.dossier-icon-frame img')?.getAttribute('src') : null;
+              nextTitle = `${pName} — MeowLab`;
+              if (pIcon) svgData = pIcon;
+            } else if (activeView && activeView !== 'catalog') {
+              const label = tabTitles[activeView] || activeView;
+              nextTitle = `${label} — MeowLab`;
+              const icons = {
+                guide: makeSvgDataUri('#f59e0b', '#181615', '<path d="M9 7h10l4 4v14H9V7zm4 6h6v2h-6v-2zm0 4h6v2h-6v-2z" fill="CURRENT"/>'),
+                submit: makeSvgDataUri('#22c55e', '#181615', '<path d="M14 7h4v7h7v4h-7v7h-4v-7H7v-4h7V7z" fill="CURRENT"/>'),
+                expenses: makeSvgDataUri('#eab308', '#181615', '<rect x="6" y="9" width="20" height="14" rx="2" fill="none" stroke="CURRENT" stroke-width="2.5"/><line x1="6" y1="14" x2="26" y2="14" stroke="CURRENT" stroke-width="2.5"/>'),
+                report: makeSvgDataUri('#dc2626', '#ffffff', '<polygon points="16,5 28,26 4,26" fill="none" stroke="CURRENT" stroke-width="2.4"/><rect x="15" y="12" width="2" height="7" fill="CURRENT"/><rect x="15" y="21" width="2" height="2" fill="CURRENT"/>'),
+                discussions: makeSvgDataUri('#3b82f6', '#ffffff', '<path d="M6 7h20v13H13l-7 5V7z" fill="CURRENT"/>'),
+                i10n: makeSvgDataUri('#38bdf8', '#0b0f17', '<circle cx="16" cy="16" r="9" fill="none" stroke="CURRENT" stroke-width="2.2"/><line x1="7" y1="16" x2="25" y2="16" stroke="CURRENT" stroke-width="2"/><line x1="16" y1="7" x2="16" y2="25" stroke="CURRENT" stroke-width="2"/>'),
+              };
+              svgData = icons[activeView] || '/favicon.svg';
+            } else if (activeCat && activeCat !== 'all') {
+              const catName = categoryTitles[activeCat] || activeCat;
+              nextTitle = `${catName} — MeowLab`;
+              const catLetter = String(activeCat).charAt(0).toUpperCase();
+              svgData = makeSvgDataUri('#181615', '#f59e0b', `<text x="16" y="22" text-anchor="middle" font-family="monospace" font-weight="900" font-size="16" fill="CURRENT">${catLetter}</text>`);
+            } else {
+              svgData = '/favicon.svg';
+            }
+
+            document.title = nextTitle;
+            if (svgData) {
+              document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]').forEach((lnk) => {
+                lnk.setAttribute('href', svgData);
+              });
+            }
+          } catch (_) {}
+        }
+
         function updateSingleProjectView(slug) {
           singleProjectSlug = slug;
           const allCards = document.querySelectorAll('[data-project-card]');
+          const catalogPanel = viewPanels.catalog;
+          if (catalogPanel) catalogPanel.classList.toggle('is-single-project-page', Boolean(slug));
           if (filterBar) filterBar.style.display = slug ? 'none' : '';
           if (singleBackBar) singleBackBar.style.display = slug ? 'block' : 'none';
 
@@ -6287,6 +6574,7 @@ const jsonLdSchema = {
             const itemSlug = item.getAttribute('data-review-extra-item');
             item.style.display = slug === itemSlug ? 'flex' : 'none';
           });
+          updateBrowserTabIdentity('catalog', initialCat, slug);
         }
 
         function switchView(targetView, skipScroll) {
@@ -6302,6 +6590,7 @@ const jsonLdSchema = {
           viewButtons.forEach((btn) => {
             btn.classList.toggle('active', btn.getAttribute('data-view-btn') === targetView);
           });
+          updateBrowserTabIdentity(targetView, initialCat, targetView === 'catalog' ? singleProjectSlug : null);
           try {
             sessionStorage.setItem(`meow_view_${window.location.pathname}`, targetView);
           } catch (_) {}
@@ -6309,6 +6598,16 @@ const jsonLdSchema = {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         }
+
+        const heroToCatalogBtn = document.getElementById('hero-to-catalog-btn');
+        if (heroToCatalogBtn && !heroToCatalogBtn.dataset.bound) {
+          heroToCatalogBtn.dataset.bound = '1';
+          heroToCatalogBtn.addEventListener('click', () => {
+            const ws = document.getElementById('catalog-workspace');
+            if (ws) ws.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
+        updateBrowserTabIdentity('catalog', initialCat, singleProjectSlug);
 
         // Restore active view & scroll position on reload
         try {
@@ -8042,6 +8341,7 @@ const jsonLdSchema = {
           const txtEl = dd.querySelector('.paper-select-trigger-text');
           if (txtEl) txtEl.textContent = matched.getAttribute('data-label') || matched.textContent.trim();
           opts.forEach((o) => o.classList.toggle('is-selected', o === matched));
+          hidden.dispatchEvent(new Event('change', { bubbles: true }));
         }
 
         document.querySelectorAll('.paper-select-dropdown').forEach((dd) => {
