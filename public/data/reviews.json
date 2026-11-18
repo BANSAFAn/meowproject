@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T01:12:46.106Z",
+  "updatedAt": "2026-11-18T07:43:36.917Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -80,6 +80,14 @@
     "2b2t": {
       "issueNumber": 16,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/16",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "clegendary-launcher": {
+      "issueNumber": 37,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/37",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
