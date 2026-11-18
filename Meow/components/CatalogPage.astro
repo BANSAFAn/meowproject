@@ -4781,9 +4781,6 @@ const jsonLdSchema = {
                       <button type="button" class="paper-select-option" data-value="updated-desc" data-label={t.sortUpdated}>
                         <span>{t.sortUpdated}</span>
                       </button>
-                      <button type="button" class="paper-select-option" data-value="newest-desc" data-label={t.sortNewest}>
-                        <span>{t.sortNewest}</span>
-                      </button>
                       <button type="button" class="paper-select-option" data-value="name-asc" data-label={t.sortName}>
                         <span>{t.sortName}</span>
                         <span class="paper-select-opt-meta">A-Z</span>
@@ -4803,6 +4800,7 @@ const jsonLdSchema = {
           <a
             href={initialCategory ? getCategoryHref(lang, initialCategory) : getLangHref(lang)}
             id="btn-exit-single-project"
+            data-astro-reload
             class="paper-btn paper-btn-ink"
             style="text-decoration: none;"
           >
@@ -7026,6 +7024,9 @@ const jsonLdSchema = {
       }
 
       function setupPage() {
+        const vcGuard = document.getElementById('view-catalog');
+        if (vcGuard && vcGuard.dataset.meowInit === '1') return;
+        if (vcGuard) vcGuard.dataset.meowInit = '1';
         // 1. Theme Toggle
         const themeBtn = document.getElementById('theme-toggle');
         if (themeBtn && !themeBtn.dataset.bound) {
@@ -8050,15 +8051,15 @@ const jsonLdSchema = {
 
         tabButtons.forEach((btn) => {
           btn.addEventListener('click', (e) => {
-            if (!window.location.pathname.includes('/project/')) {
+            if (!window.location.pathname.includes('/project/') && cards.length > 1) {
               e.preventDefault();
+              e.stopPropagation();
               tabButtons.forEach((b) => b.classList.remove('active'));
               btn.classList.add('active');
               activeCategory = btn.getAttribute('data-category') || 'all';
               const href = btn.getAttribute('href');
               if (href) history.pushState(null, '', href);
               updateVisibleTagsForCategory(activeCategory);
-        filterProjects();
               filterProjects();
             }
           });
@@ -9259,8 +9260,15 @@ const jsonLdSchema = {
         window.addEventListener('resize', checkDeviceAndResolution);
       }
 
-      setupPage();
-      document.addEventListener('astro:after-swap', setupPage);
+      if (!window.__meowPageLoadBound) {
+        window.__meowPageLoadBound = true;
+        document.addEventListener('astro:page-load', setupPage);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupPage, { once: true });
+      } else {
+        setupPage();
+      }
     </script>
 
     <div id="meow-bsod-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">

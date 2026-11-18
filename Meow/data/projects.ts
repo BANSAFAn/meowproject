@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import nodePath from 'node:path';
+import addedDatesJson from './added-dates.json';
 import { LANG_CODES, type LangCode } from '../i18n/translations';
 
 /**
@@ -99,7 +100,7 @@ function slugFromPath(path: string) {
 }
 
 function loadProjectAddedTimestamps(): Record<string, number> {
-  const map: Record<string, number> = {};
+  const map: Record<string, number> = { ...(addedDatesJson as Record<string, number>) };
   try {
     const out = execSync(
       'git log --format="COMMIT:%ct" --diff-filter=A --name-only -- "Meow/projects/*/project.json"',
