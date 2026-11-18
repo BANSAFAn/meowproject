@@ -1,9 +1,9 @@
 {
-  "tagline": "Chinesisches Minecraft-Ressourcenportal für Mods, Modpacks, Shader und Tools",
-  "description": "BBSMC (bbsmc.net) ist ein beliebtes Minecraft-Ressourcenportal und Community-Forum mit Mods, Modpacks, Karten, Shadern, Ressourcenpaketen und Server-Plugins.",
+  "tagline": "Chinesisches Open-Source-Minecraft-Ressourcenportal (Fork von Modrinth)",
+  "description": "BBSMC (bbsmc.net) ist ein beliebtes Open-Source-Minecraft-Ressourcenportal (Fork von Modrinth) mit Mods, Modpacks, Karten, Shadern, Ressourcenpaketen und Server-Plugins.",
   "features": [
+    "Open-Source-Fork von Modrinth (Quellcode auf GitHub)",
     "Verzeichnis für Minecraft-Mods, Modpacks und Clients",
-    "Bequemer Download von Versionen und Ressourcen",
     "Shader, Texturpakete, Karten und Server-Plugins",
     "Aktive Community aus Spielern und Entwicklern"
   ],

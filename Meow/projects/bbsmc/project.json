@@ -6,19 +6,32 @@
   "icon": "/projects/bbsmc/icon.png",
   "country": "CN",
   "developer": "BBSMC",
-  "license": "Proprietary",
+  "license": "GPL-3.0",
+  "forkOf": {
+    "name": "Modrinth",
+    "slug": "modrinth",
+    "url": "https://modrinth.com"
+  },
   "platforms": [
     "Web"
   ],
   "website": "https://bbsmc.net",
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/bbsmc/app"
+    }
+  ],
   "tags": [
     "Website",
     "Mods",
     "Modpacks",
     "Shaders",
     "Community",
-    "China"
+    "China",
+    "Modrinth",
+    "Open Source"
   ],
   "screenshots": [],
   "issueThreadNumber": 38

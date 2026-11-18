@@ -2010,15 +2010,20 @@ const jsonLdSchema = {
         max-width: none;
       }
       .catalog-sidebar-right .tags-scroll-container {
-        max-height: calc(100vh - 15.5rem);
+        max-height: 250px;
         overflow-y: auto;
         padding-right: 0.25rem;
-        margin-top: 0.55rem;
+        margin-top: 0.5rem;
+        gap: 0.35rem;
         scrollbar-width: thin;
         scrollbar-color: var(--border-muted) transparent;
       }
       .catalog-sidebar-right .tags-scroll-container.collapsed {
-        max-height: calc(100vh - 15.5rem);
+        max-height: 250px;
+      }
+      .catalog-sidebar-right .tag-filter-btn {
+        padding: 0.22rem 0.5rem;
+        font-size: 0.75rem;
       }
       .catalog-sidebar-right .btn-toggle-all-tags {
         display: none;
@@ -2138,7 +2143,8 @@ const jsonLdSchema = {
       #view-catalog.is-single-project-page .hero-wrap,
       #view-catalog.is-single-project-page .catalog-sidebar-left,
       #view-catalog.is-single-project-page .catalog-sidebar-right,
-      #view-catalog.is-single-project-page #catalog-filter-bar {
+      #view-catalog.is-single-project-page #catalog-filter-bar,
+      #view-catalog:not(.is-single-project-page) .single-project-sidebar {
         display: none !important;
       }
       #view-catalog.is-single-project-page .catalog-workspace {
@@ -2161,6 +2167,9 @@ const jsonLdSchema = {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+      }
+      .single-project-sidebar > * {
+        flex-shrink: 0;
       }
       @media (max-width: 1099px) {
         .single-project-sidebar {
@@ -4124,12 +4133,12 @@ const jsonLdSchema = {
         z-index: 900;
         display: flex;
         flex-direction: column;
-        gap: 0.65rem;
-        min-width: 154px;
+        gap: 0.5rem;
+        min-width: auto;
         background: var(--paper-sheet);
         border: 2px solid var(--border-ink);
         border-radius: 8px;
-        padding: 0.7rem;
+        padding: 0.45rem;
         box-shadow: 4px 4px 0 var(--shadow-hard);
         opacity: 0;
         pointer-events: none;
@@ -4283,7 +4292,7 @@ const jsonLdSchema = {
                 id="lang-dropdown-trigger"
                 aria-haspopup="listbox"
                 aria-expanded="false"
-                aria-label="Оберіть мову інтерфейсу"
+                aria-label={t.langAriaLabel}
               >
                 <span class="lang-flag-svg" style="display:inline-flex;align-items:center;" aria-hidden="true">
                   {lang === 'uk' && <svg width="16" height="11" viewBox="0 0 3 2"><rect width="3" height="1" y="0" fill="#0057B7"/><rect width="3" height="1" y="1" fill="#FFDD00"/></svg>}
@@ -4451,7 +4460,7 @@ const jsonLdSchema = {
                 <rect x="7.2" y="5.5" width="1.6" height="4.5"></rect>
                 <rect x="7.2" y="11" width="1.6" height="1.6"></rect>
               </svg>
-              <span>{t.navReport || 'Скарга'}</span>
+              <span>{t.navReport}</span>
               <span class="folder-tab-badge">04</span>
             </button>
 
@@ -4837,6 +4846,7 @@ const jsonLdSchema = {
                   data-tags={project.tags.join(',').toLowerCase()}
                   data-project-name={project.name}
                   data-project-index={index}
+                  data-added-at={project.addedAt}
                   data-project-score={initialScore}
                   data-license={(project.license || '').toLowerCase()}
                   data-opensource={project.isOpenSource ? 'true' : 'false'}
@@ -4986,7 +4996,7 @@ const jsonLdSchema = {
                             class="stamp stamp-open stamp-license-btn"
                             data-open-license-modal
                             data-license-name={project.license}
-                            title="Дізнатися умови ліцензії"
+                            title={t.licenseTitleTooltip}
                           >
                             <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                               <rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
@@ -5139,7 +5149,7 @@ const jsonLdSchema = {
                           <rect x="7.2" y="5.5" width="1.6" height="4.5"></rect>
                           <rect x="7.2" y="11" width="1.6" height="1.6"></rect>
                         </svg>
-                        <span>{t.navReport || 'Скарга'}</span>
+                        <span>{t.navReport}</span>
                       </button>
                     </div>
                   </div>
@@ -5183,7 +5193,7 @@ const jsonLdSchema = {
                           {project.serverIp && (
                             <span class="stamp stamp-online" data-live-server-ip={project.serverIp}>
                               <span class="online-dot"></span>
-                              <span class="online-text">{project.serverOnline || 'Підключення...'}</span>
+                              <span class="online-text">{project.serverOnline || t.serverOnlineConnecting}</span>
                             </span>
                           )}
                           <button
@@ -5191,7 +5201,7 @@ const jsonLdSchema = {
                             class={`stamp ${project.licenseRequired ? 'stamp-alpha' : 'stamp-open'} stamp-license-btn`}
                             data-open-license-modal
                             data-license-name={project.licenseRequired ? 'Потрібна ліцензія' : 'Без ліцензії'}
-                            title="Дізнатися деталі доступу до сервера"
+                            title={t.serverAccessDetailsTitle}
                           >
                             {project.licenseRequired ? t.serverLicenseRequired : t.serverNoLicenseRequired}
                           </button>
@@ -5353,7 +5363,7 @@ const jsonLdSchema = {
 
                                         <div class="tags-strip">
                       {project.tags.map((tag) => (
-                        <button type="button" class="tag-item tag-item-clickable" data-click-tag={tag} title={`Фільтрувати за тегом #${tag}`}>#{tag}</button>
+                        <button type="button" class="tag-item tag-item-clickable" data-click-tag={tag} title={`${t.filterByTagTitle} #${tag}`}>#{tag}</button>
                       ))}
                     </div>
                   </div>
@@ -5587,25 +5597,25 @@ const jsonLdSchema = {
 
             <div class="guide-steps-grid">
               <div class="guide-step-card">
-                <span class="guide-step-num">КРОК 01</span>
+                <span class="guide-step-num">{t.guideStepWord} 01</span>
                 <span class="guide-step-title">{t.guideStep1Title || 'Заповнення форми'}</span>
                 <p class="guide-step-desc">{t.guideStep1Desc || 'Оберіть категорію проєкту (launcher, mod, server тощо), введіть назву, сайт і опис українською або іншими мовами.'}</p>
               </div>
 
               <div class="guide-step-card">
-                <span class="guide-step-num">КРОК 02</span>
+                <span class="guide-step-num">{t.guideStepWord} 02</span>
                 <span class="guide-step-title">{t.guideStep2Title || 'Автоматична валідація'}</span>
                 <p class="guide-step-desc">{t.guideStep2Desc || 'Форма автоматично перевіряє правильність посилань, формат логотипу та описи перед відправкою.'}</p>
               </div>
 
               <div class="guide-step-card">
-                <span class="guide-step-num">КРОК 03</span>
+                <span class="guide-step-num">{t.guideStepWord} 03</span>
                 <span class="guide-step-title">{t.guideStep3Title || 'Створення заявки на GitHub'}</span>
                 <p class="guide-step-desc">{t.guideStep3Desc || 'Натисніть кнопку переходу — система відкриє повністю готову заявку на GitHub з усіма заповненими даними.'}</p>
               </div>
 
               <div class="guide-step-card">
-                <span class="guide-step-num">КРОК 04</span>
+                <span class="guide-step-num">{t.guideStepWord} 04</span>
                 <span class="guide-step-title">{t.guideStep4Title || 'Публікація ботом'}</span>
                 <p class="guide-step-desc">{t.guideStep4Desc || 'GitHub-бот перевіряє дані, автоматично створює Pull Request, і після підтвердження проєкт зʼявляється на сайті!'}</p>
               </div>
@@ -5638,7 +5648,7 @@ const jsonLdSchema = {
                   ))}
                 </div>
                 <div id="sub-cat-guide" class="sub-cat-guide-box">
-                  <strong>Лаунчер:</strong> вкажіть підтримувані ОС (Windows / macOS / Linux), чи є форком іншого лаунчера, та посилання на сайт/репозиторій.
+                  <Fragment set:html={t.catHintLauncher} />
                 </div>
               </div>
 
@@ -5647,49 +5657,49 @@ const jsonLdSchema = {
 
                 <div data-cat-group="launcher client" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-fork">Форк якого проєкту (якщо є)</label>
-                    <input type="text" id="sub-cat-fork" class="paper-input" placeholder="Напр. MultiMC (або залиште порожнім)" />
+                    <label class="field-label" for="sub-cat-fork">{t.subCatForkLabel}</label>
+                    <input type="text" id="sub-cat-fork" class="paper-input" placeholder={t.subCatForkPh} />
                   </div>
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-auth">Авторизація / Режим</label>
-                    <input type="text" id="sub-cat-auth" class="paper-input" placeholder="Microsoft / Offline / Обидва" />
+                    <label class="field-label" for="sub-cat-auth">{t.subCatAuthLabel}</label>
+                    <input type="text" id="sub-cat-auth" class="paper-input" placeholder={t.subCatAuthPh} />
                   </div>
                 </div>
 
                 <div data-cat-group="mod modpack" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-loaders">Модлоадери *</label>
+                    <label class="field-label" for="sub-cat-loaders">{t.subCatLoadersLabel}</label>
                     <input type="text" id="sub-cat-loaders" class="paper-input" placeholder="Fabric, NeoForge, Forge, Quilt" />
                   </div>
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-mcver">Версії Minecraft *</label>
+                    <label class="field-label" for="sub-cat-mcver">{t.subCatMcVerLabel}</label>
                     <input type="text" id="sub-cat-mcver" class="paper-input" placeholder="1.20.1, 1.21.1" />
                   </div>
                 </div>
 
                 <div data-cat-group="server" style="display: none; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-server-ip">IP-адреса сервера *</label>
+                    <label class="field-label" for="sub-cat-server-ip">{t.subCatServerIpLabel}</label>
                     <input type="text" id="sub-cat-server-ip" class="paper-input" placeholder="play.example.net" />
                   </div>
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-server-license">Вхід на сервер</label>
-                    <input type="text" id="sub-cat-server-license" class="paper-input" placeholder="Ліцензія / Піратка (без ліцензії)" />
+                    <label class="field-label" for="sub-cat-server-license">{t.subCatServerLicLabel}</label>
+                    <input type="text" id="sub-cat-server-license" class="paper-input" placeholder={t.subCatServerLicPh} />
                   </div>
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-server-lang">Основна мова</label>
-                    <input type="text" id="sub-cat-server-lang" class="paper-input" placeholder="Українська / English" />
+                    <label class="field-label" for="sub-cat-server-lang">{t.subCatServerLangLabel}</label>
+                    <input type="text" id="sub-cat-server-lang" class="paper-input" placeholder={t.subCatServerLangPh} />
                   </div>
                 </div>
 
                 <div data-cat-group="website project" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-web-purpose">Призначення / Тип сервісу</label>
-                    <input type="text" id="sub-cat-web-purpose" class="paper-input" placeholder="Wiki, моніторинг, генератор, CLI-утиліта..." />
+                    <label class="field-label" for="sub-cat-web-purpose">{t.subCatWebPurposeLabel}</label>
+                    <input type="text" id="sub-cat-web-purpose" class="paper-input" placeholder={t.subCatWebPurposePh} />
                   </div>
                   <div class="field-group" style="margin-bottom: 0;">
-                    <label class="field-label" for="sub-cat-web-api">Стек або API (за бажанням)</label>
-                    <input type="text" id="sub-cat-web-api" class="paper-input" placeholder="REST API, Open Source, безкоштовний..." />
+                    <label class="field-label" for="sub-cat-web-api">{t.subCatWebApiLabel}</label>
+                    <input type="text" id="sub-cat-web-api" class="paper-input" placeholder={t.subCatWebApiPh} />
                   </div>
                 </div>
               </div>
@@ -5988,20 +5998,20 @@ const jsonLdSchema = {
           <div class="expenses-grid">
                         <div class="expense-card done">
               <div class="expense-card-top">
-                <span class="stamp stamp-open">01 // ПОКРИТО</span>
+                <span class="stamp stamp-open">{t.expStatusCovered}</span>
                 <span class="expense-sum">{t.spentAmount}</span>
               </div>
               <h3 class="expense-title">{t.spentLabel}</h3>
               <p class="expense-desc">{t.spentDesc}</p>
               <div class="expense-meta">
                 <span>{t.fundedByCommunitySource}</span>
-                <span class="status-indicator-done">Завершено</span>
+                <span class="status-indicator-done">{t.expStatusDone}</span>
               </div>
             </div>
 
                         <div class="expense-card active-goal">
               <div class="expense-card-top">
-                <span class="stamp stamp-alpha">02 // ЗБІР ВІДКРИТО</span>
+                <span class="stamp stamp-alpha">{t.expStatusOpen}</span>
                 <span class="expense-sum">{t.nextGoalAmount}</span>
               </div>
               <h3 class="expense-title">{t.nextGoalLabel}</h3>
@@ -6009,20 +6019,20 @@ const jsonLdSchema = {
 
                             <div class="fund-progress-box">
                 <div class="fund-progress-meta">
-                  <span class="fund-progress-collected">Зібрано: 694 ₴ (34.7%)</span>
-                  <span class="fund-progress-target">Ціль: 2 000 ₴</span>
+                  <span class="fund-progress-collected">{t.expCollected}</span>
+                  <span class="fund-progress-target">{t.expTarget}</span>
                 </div>
                 <div class="fund-progress-track">
                   <div class="fund-progress-fill" style="width: 34.7%;"></div>
                 </div>
                 <div class="fund-progress-hint">
-                  Разом: Monobank Банка + YouTube Спонсорство
+                  {t.expCombinedChannels}
                 </div>
               </div>
 
               <div class="expense-meta">
-                <span>Ціль: Домен на 1 рік</span>
-                <span class="status-indicator-active">Потрібна підтримка</span>
+                <span>{t.expGoalDomain}</span>
+                <span class="status-indicator-active">{t.expStatusNeedSupport}</span>
               </div>
 
               <div class="fund-actions">
@@ -6051,14 +6061,14 @@ const jsonLdSchema = {
 
                         <div class="expense-card future">
               <div class="expense-card-top">
-                <span class="stamp">03 // РОЗВИТОК</span>
-                <span class="expense-sum">ПЕРСПЕКТИВА</span>
+                <span class="stamp">{t.expStatusDev}</span>
+                <span class="expense-sum">{t.expStatusPerspective}</span>
               </div>
               <h3 class="expense-title">{t.futureGoalTitle}</h3>
               <p class="expense-desc">{t.futureGoalDesc}</p>
               <div class="expense-meta">
-                <span>Мета: Сервіс швидкого перекладу Minecraft українською</span>
-                <span class="status-indicator-plan">В планах</span>
+                <span>{t.expGoalTranslation}</span>
+                <span class="status-indicator-plan">{t.expStatusPlanned}</span>
               </div>
             </div>
           </div>
@@ -6081,30 +6091,30 @@ const jsonLdSchema = {
                 <rect x="7.2" y="11" width="1.6" height="1.6"></rect>
               </svg>
               <h2 style="font-size: 1.1rem; font-weight: 900; margin: 0; color: var(--ink);">
-                Як працює система перевірки та маркування «НЕБЕЗПЕЧНИЙ»
+                {t.reportHowTitle}
               </h2>
             </div>
 
             <div class="guide-steps-grid">
               <div class="guide-step-card">
-                <span class="guide-step-num" style="color: var(--stamp-red);">КРОК 01</span>
-                <span class="guide-step-title">Опис загрози (Markdown)</span>
-                <p class="guide-step-desc">Опишіть проблему будь-якою мовою (до 20 000 символів у Markdown): віруси, крадіжка токенів, скам, погана репутація.</p>
+                <span class="guide-step-num" style="color: var(--stamp-red);">{t.guideStepWord} 01</span>
+                <span class="guide-step-title">{t.reportStep1Title}</span>
+                <p class="guide-step-desc">{t.reportStep1Desc}</p>
               </div>
               <div class="guide-step-card">
-                <span class="guide-step-num" style="color: var(--stamp-red);">КРОК 02</span>
-                <span class="guide-step-title">Додавання доказів</span>
-                <p class="guide-step-desc">Додайте посилання на звіти VirusTotal, декомпіляцію, архіви, скріншоти чи відео-підтвердження.</p>
+                <span class="guide-step-num" style="color: var(--stamp-red);">{t.guideStepWord} 02</span>
+                <span class="guide-step-title">{t.reportStep2Title}</span>
+                <p class="guide-step-desc">{t.reportStep2Desc}</p>
               </div>
               <div class="guide-step-card">
-                <span class="guide-step-num" style="color: var(--stamp-red);">КРОК 03</span>
-                <span class="guide-step-title">Issue та Авто-PR</span>
-                <p class="guide-step-desc">Заявка формується в GitHub Issue. Бот автоматично створює Pull Request для перевірки адміністратором.</p>
+                <span class="guide-step-num" style="color: var(--stamp-red);">{t.guideStepWord} 03</span>
+                <span class="guide-step-title">{t.reportStep3Title}</span>
+                <p class="guide-step-desc">{t.reportStep3Desc}</p>
               </div>
               <div class="guide-step-card">
-                <span class="guide-step-num" style="color: var(--stamp-red);">КРОК 04</span>
-                <span class="guide-step-title">Публічна мітка</span>
-                <p class="guide-step-desc">Після підтвердження адміністратором біля проєкту зʼявляється мітка НЕБЕЗПЕЧНИЙ із вашим поясненням.</p>
+                <span class="guide-step-num" style="color: var(--stamp-red);">{t.guideStepWord} 04</span>
+                <span class="guide-step-title">{t.reportStep4Title}</span>
+                <p class="guide-step-desc">{t.reportStep4Desc}</p>
               </div>
             </div>
           </div>
@@ -6407,7 +6417,7 @@ const jsonLdSchema = {
           </div>
 
           <div>
-            <div class="footer-col-title">Правова інформація та конфіденційність</div>
+            <div class="footer-col-title">{t.footerLegalColTitle}</div>
             <div class="footer-legal-links">
               <button type="button" id="open-privacy-btn" class="footer-legal-btn">
                 {t.footerPrivacy}
@@ -6419,13 +6429,13 @@ const jsonLdSchema = {
                 {t.footerTerms}
               </button>
               <button type="button" class="footer-legal-btn" data-switch-view="report" style="color: var(--stamp-red);">
-                Повідомити про загрозу / Порушення
+                {t.footerReportThreatLink}
               </button>
             </div>
           </div>
 
           <div>
-            <div class="footer-col-title">Репозиторій та підтримка</div>
+            <div class="footer-col-title">{t.footerRepoColTitle}</div>
             <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
               <a
                 href={SITE_REPO_URL}
@@ -6512,12 +6522,12 @@ const jsonLdSchema = {
           {t.verifiedDesc}
         </p>
         <div style="background: var(--paper-inset); border: 1px dashed var(--border-ink); padding: 0.85rem; font-size: 0.82rem; line-height: 1.5;">
-          <strong>Критерії верифікації безпеки MeowProject:</strong>
+          <strong>{t.verifyCriteriaTitle}</strong>
           <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0;">
-            <li>Відкритий вихідний код на GitHub без обфускації шкідливого характеру.</li>
-            <li>Відсутність прихованого збору паролів, токенів чи облікових даних гравця.</li>
-            <li>Безпечні алгоритми завантаження бібліотек та файлів гри.</li>
-            <li>Бездоганна репутація серед незалежних розробників Minecraft-спільноти.</li>
+            <li>{t.verifyCriterion1}</li>
+            <li>{t.verifyCriterion2}</li>
+            <li>{t.verifyCriterion3}</li>
+            <li>{t.verifyCriterion4}</li>
           </ul>
         </div>
       </div>
@@ -6528,7 +6538,7 @@ const jsonLdSchema = {
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid #ef4444; padding-bottom: 0.75rem;">
           <div>
             <span class="mono" style="font-size: 0.74rem; color: #ef4444; font-weight: 900; letter-spacing: 0.06em;">
-              [SECURITY ALERT // ПІДТВЕРДЖЕНА ЗАГРОЗА]
+              {t.dangerModalKicker}
             </span>
             <h3 id="danger-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.2rem; font-weight: 900; color: var(--ink);">
               Небезпечний проєкт
@@ -6545,7 +6555,7 @@ const jsonLdSchema = {
         <div id="danger-modal-body" class="danger-md-body"></div>
 
         <div id="danger-modal-links-wrap" style="display: none; margin-top: 1.25rem; border-top: 1px dashed var(--border-ink); padding-top: 0.85rem;">
-          <div class="mono" style="font-size: 0.76rem; font-weight: 900; margin-bottom: 0.45rem;">ДОКАЗИ ТА ПОСИЛАННЯ:</div>
+          <div class="mono" style="font-size: 0.76rem; font-weight: 900; margin-bottom: 0.45rem;">{t.dangerModalEvidenceHeading}</div>
           <ul id="danger-modal-links" style="margin: 0; padding-left: 1.2rem; font-size: 0.84rem; line-height: 1.6;"></ul>
         </div>
       </div>
@@ -6564,16 +6574,16 @@ const jsonLdSchema = {
         </div>
         <div class="legal-clauses-grid">
           <div class="legal-clause-card">
-            <div class="legal-clause-head">01 // Загальні положення</div>
+            <div class="legal-clause-head">{t.privacyClause1Head}</div>
             <p class="legal-clause-body">{t.privacyModalText}</p>
           </div>
           <div class="legal-clause-card">
             <div class="legal-clause-head">02 // Cloudflare &amp; GitHub CDN</div>
-            <p class="legal-clause-body">Інфраструктура доставки контенту (Cloudflare / GitHub) може обробляти технічні HTTP-заголовки виключно для захисту від DDoS-атак і забезпечення HTTPS.</p>
+            <p class="legal-clause-body">{t.privacyClause2Body}</p>
           </div>
           <div class="legal-clause-card">
-            <div class="legal-clause-head">03 // Зовнішні запити статусу</div>
-            <p class="legal-clause-body">Статус Minecraft-серверів запитується напряму з браузера через публічний API mcstatus.io без передачі персональних ідентифікаторів.</p>
+            <div class="legal-clause-head">{t.privacyClause3Head}</div>
+            <p class="legal-clause-body">{t.privacyClause3Body}</p>
           </div>
         </div>
       </div>
@@ -6592,12 +6602,12 @@ const jsonLdSchema = {
         </div>
         <div class="legal-clauses-grid">
           <div class="legal-clause-card">
-            <div class="legal-clause-head">01 // Публічність GitHub Issues</div>
+            <div class="legal-clause-head">{t.confClause1Head}</div>
             <p class="legal-clause-body">{t.confidentialityModalText || 'Усі звернення через GitHub Issues є публічними. Не публікуйте паролі, приватні ключі чи персональні документи третіх осіб.'}</p>
           </div>
           <div class="legal-clause-card">
-            <div class="legal-clause-head">02 // Захист викривачів та доказів</div>
-            <p class="legal-clause-body">При подачі скарги на небезпечне ПЗ обовʼязково перевіряйте, щоб скріншоти та логи не містили ваших особистих токенів авторизації або конфіденційних даних.</p>
+            <div class="legal-clause-head">{t.confClause2Head}</div>
+            <p class="legal-clause-body">{t.confClause2Body}</p>
           </div>
         </div>
       </div>
@@ -6629,15 +6639,15 @@ const jsonLdSchema = {
 
           <div class="roadmap-item">
             <div class="roadmap-item-head">
-              <strong style="font-size: 0.94rem;">Підключення дзеркал (GitLab, SourceForge, Gitea, CNB)</strong>
-              <span class="stamp stamp-open">В РОЗРОБЦІ</span>
+              <strong style="font-size: 0.94rem;">{t.i10nRoadmap1Title}</strong>
+              <span class="stamp stamp-open">{t.i10nRoadmap1Badge}</span>
             </div>
           </div>
 
           <div class="roadmap-item">
             <div class="roadmap-item-head">
-              <strong style="font-size: 0.94rem;">Форум онлайн та інтерактивний центр i10n</strong>
-              <span class="stamp stamp-amber">У ПЛАНАХ</span>
+              <strong style="font-size: 0.94rem;">{t.i10nRoadmap2Title}</strong>
+              <span class="stamp stamp-amber">{t.i10nRoadmap2Badge}</span>
             </div>
           </div>
         </div>
@@ -6645,21 +6655,46 @@ const jsonLdSchema = {
     </div>
 
     <div id="sponsor-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 560px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.65rem;">
           <div>
             <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[SPONSOR // PARTNER]</span>
-            <h3 id="sponsor-modal-title" style="margin: 0.2rem 0 0; font-size: 1.12rem; font-weight: 900;">{t.sponsorModalTitle}</h3>
+            <h3 id="sponsor-modal-title" style="margin: 0.2rem 0 0; font-size: 1.14rem; font-weight: 900;">{t.sponsorModalTitle}</h3>
           </div>
           <button type="button" id="sponsor-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
             {t.closeModal} [ESC]
           </button>
         </div>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 1.15rem; white-space: pre-line;">
-          {t.sponsorModalDesc}
+
+        <p style="font-size: 0.88rem; line-height: 1.55; color: var(--ink); margin: 0 0 1rem;">
+          {t.sponsorModalIntro}
         </p>
+
+        <div style="background: var(--paper-inset); border: 1.5px solid var(--border-ink); border-left: 4px solid var(--accent); border-radius: 6px; padding: 0.9rem 1rem; margin-bottom: 1.15rem;">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.45rem;">
+            <span style="display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 900; font-size: 0.92rem; color: var(--ink);">
+              <MonobankIcon size={16} />
+              {t.sponsorMonoTitle}
+            </span>
+            <span class="stamp stamp-open" style="font-size: 0.7rem; padding: 0.14rem 0.48rem;">{t.sponsorMonoBadge}</span>
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.48; color: var(--ink-muted); margin: 0 0 0.75rem;">
+            {t.sponsorMonoDesc}
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.55rem;">
+            <div style="background: var(--paper-sheet); border: 1.5px solid var(--border-muted); border-radius: 5px; padding: 0.55rem 0.75rem; display: flex; flex-direction: column; gap: 0.15rem;">
+              <span class="mono" style="font-size: 0.85rem; font-weight: 900; color: var(--accent);">{t.sponsorTier1Amount}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink);">{t.sponsorTier1Reward}</span>
+            </div>
+            <div style="background: var(--paper-sheet); border: 1.5px solid var(--border-muted); border-radius: 5px; padding: 0.55rem 0.75rem; display: flex; flex-direction: column; gap: 0.15rem;">
+              <span class="mono" style="font-size: 0.85rem; font-weight: 900; color: var(--accent);">{t.sponsorTier2Amount}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink);">{t.sponsorTier2Reward}</span>
+            </div>
+          </div>
+        </div>
+
         <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
-          <a href={MONOBANK_URL} target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent">
+          <a href={MONOBANK_URL} target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent" style="font-weight: 800;">
             <MonobankIcon size={15} />
             {t.monobankSupportBtn}
           </a>
@@ -6689,16 +6724,16 @@ const jsonLdSchema = {
         </div>
         <div class="legal-clauses-grid">
           <div class="legal-clause-card">
-            <div class="legal-clause-head">01 // Відкрита ліцензія та статус Global Alpha</div>
+            <div class="legal-clause-head">{t.termsClause1Head}</div>
             <p class="legal-clause-body">{t.termsModalText}</p>
           </div>
           <div class="legal-clause-card">
-            <div class="legal-clause-head">02 // Вміст каталогу та права авторів</div>
-            <p class="legal-clause-body">Описи, посилання та медіа-матеріали публікуються у довідкових цілях для спільноти Minecraft. Усі майнові та авторські права на програмні продукти належать їхнім розробникам.</p>
+            <div class="legal-clause-head">{t.termsClause2Head}</div>
+            <p class="legal-clause-body">{t.termsClause2Body}</p>
           </div>
           <div class="legal-clause-card">
-            <div class="legal-clause-head">03 // Оскарження та зв’язок</div>
-            <p class="legal-clause-body">Законний правовласник може подати запит на оновлення або видалення запису через GitHub Issues, Discord (discord.com/invite/FEyMjn3mtA) або на baneronetwo@memeware.net.</p>
+            <div class="legal-clause-head">{t.termsClause3Head}</div>
+            <p class="legal-clause-body">{t.termsClause3Body}</p>
           </div>
         </div>
       </div>
@@ -6725,14 +6760,14 @@ const jsonLdSchema = {
         </div>
 
         <p id="license-modal-desc" style="font-size: 0.88rem; line-height: 1.55; margin-bottom: 1.2rem; color: var(--ink);">
-          Детальний опис умов та правил ліцензування.
+          {t.licenseModalSubtitle}
         </p>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
                     <div style="background: rgba(46, 204, 113, 0.08); border: 1.5px solid #2ecc71; border-radius: 4px; padding: 0.75rem;">
             <div style="display: flex; align-items: center; gap: 0.4rem; color: #27ae60; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><polygon points="2,9 6,13 14,4 12,2 6,9 4,7" /></svg>
-              <span>Що дозволено:</span>
+              <span>{t.licensePermitted}</span>
             </div>
             <ul id="license-modal-permissions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
             </ul>
@@ -6741,7 +6776,7 @@ const jsonLdSchema = {
                     <div style="background: rgba(52, 152, 219, 0.08); border: 1.5px solid #3498db; border-radius: 4px; padding: 0.75rem;">
             <div style="display: flex; align-items: center; gap: 0.4rem; color: #2980b9; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 2h2v7H7V2zm0 9h2v2H7v-2z" /></svg>
-              <span>Що вимагається:</span>
+              <span>{t.licenseConditions}</span>
             </div>
             <ul id="license-modal-conditions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
             </ul>
@@ -6750,7 +6785,7 @@ const jsonLdSchema = {
                     <div style="background: rgba(231, 76, 60, 0.08); border: 1.5px solid #e74c3c; border-radius: 4px; padding: 0.75rem;">
             <div style="display: flex; align-items: center; gap: 0.4rem; color: #c0392b; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 8,6 12,2 14,4 10,8 14,12 12,14 8,10 4,14 2,12 6,8 2,4" /></svg>
-              <span>Обмеження / Заборони:</span>
+              <span>{t.licenseLimitations}</span>
             </div>
             <ul id="license-modal-limitations" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
             </ul>
@@ -6758,8 +6793,8 @@ const jsonLdSchema = {
         </div>
 
         <div style="background: var(--paper); border: 1px dashed var(--border-ink); padding: 0.6rem 0.85rem; font-size: 0.76rem; color: var(--ink-faint); display: flex; justify-content: space-between; align-items: center;">
-          <span>Довідка підготовлена MeowProject на основі відкритих стандартів OSI.</span>
-          <span style="font-weight: 700; color: var(--ink);">Правова інформація</span>
+          <span>{t.licenseFooterNote}</span>
+          <span style="font-weight: 700; color: var(--ink);">{t.licenseLegalInfo}</span>
         </div>
       </div>
     </div>
@@ -6787,59 +6822,59 @@ const jsonLdSchema = {
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
             <div class="suggest-form-field">
-              <label for="suggest-name">Назва проєкту *</label>
+              <label for="suggest-name">{t.suggestNameLabel}</label>
               <input type="text" id="suggest-name" class="suggest-form-input" required />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-category">Категорія проєкту *</label>
+              <label for="suggest-category">{t.suggestCategoryLabel}</label>
               <select id="suggest-category" class="suggest-form-input" style="padding: 0.45rem;">
-                <option value="launcher">Лаунчер (launcher)</option>
-                <option value="client">Клієнт (client)</option>
-                <option value="modpack">Модпак (modpack)</option>
-                <option value="mod">Мод (mod)</option>
-                <option value="server">Сервер (server)</option>
-                <option value="website">Вебсайт (website)</option>
-                <option value="project">Проєкт (project)</option>
+                <option value="launcher">{t.suggestCatOptLauncher}</option>
+                <option value="client">{t.suggestCatOptClient}</option>
+                <option value="modpack">{t.suggestCatOptModpack}</option>
+                <option value="mod">{t.suggestCatOptMod}</option>
+                <option value="server">{t.suggestCatOptServer}</option>
+                <option value="website">{t.suggestCatOptWebsite}</option>
+                <option value="project">{t.suggestCatOptProject}</option>
               </select>
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-country">Країна або регіон *</label>
+              <label for="suggest-country">{t.suggestCountryLabel}</label>
               <input type="text" id="suggest-country" class="suggest-form-input" placeholder="Global, Ukraine, China, USA, Europe..." />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-license">Ліцензія *</label>
+              <label for="suggest-license">{t.suggestLicenseLabel}</label>
               <input type="text" id="suggest-license" class="suggest-form-input" placeholder="MIT, GPL-3.0, BSD-3-Clause, Proprietary..." />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-is-open-source">Тип вихідного коду</label>
+              <label for="suggest-is-open-source">{t.suggestOpenSourceLabel}</label>
               <select id="suggest-is-open-source" class="suggest-form-input" style="padding: 0.45rem;">
-                <option value="yes">Так — Відкритий вихідний код (Open Source)</option>
-                <option value="no">Ні — Пропрієтарний / Закритий код (Closed)</option>
+                <option value="yes">{t.suggestOpenSourceYes}</option>
+                <option value="no">{t.suggestOpenSourceNo}</option>
               </select>
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-repo-url">Посилання на репозиторій коду</label>
+              <label for="suggest-repo-url">{t.suggestRepoLabel}</label>
               <input type="url" id="suggest-repo-url" class="suggest-form-input" placeholder="https://github.com/owner/repo" />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-website">Офіційний сайт</label>
+              <label for="suggest-website">{t.suggestWebsiteLabel}</label>
               <input type="url" id="suggest-website" class="suggest-form-input" placeholder="https://project.org" />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-platforms">Платформи (через кому)</label>
+              <label for="suggest-platforms">{t.suggestPlatformsLabel}</label>
               <input type="text" id="suggest-platforms" class="suggest-form-input" placeholder="Windows 10, Windows 11, Linux, macOS" />
             </div>
           </div>
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
-            <label for="suggest-tags">Теги проєкту (через кому)</label>
+            <label for="suggest-tags">{t.suggestTagsLabel}</label>
             <input type="text" id="suggest-tags" class="suggest-form-input" placeholder="Optimization, Fabric, Shaders, Performance" />
           </div>
 
@@ -6855,13 +6890,13 @@ const jsonLdSchema = {
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
             <label for="suggest-screenshot-captions">{t.suggestCaptionsLabel || 'Опис до скріншотів / картинок (по одному на рядок, у порядку посилань):'}</label>
-            <textarea id="suggest-screenshot-captions" class="suggest-form-textarea" style="min-height: 55px;" placeholder="Головне меню лаунчера&#10;Налаштування профілів та модів"></textarea>
+            <textarea id="suggest-screenshot-captions" class="suggest-form-textarea" style="min-height: 55px;" placeholder={t.suggestCaptionsPh}></textarea>
           </div>
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
             <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-              <span>Описи проєкту різними мовами (доповнення та переклади):</span>
-              <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 700;">[6 МОВ]</span>
+              <span>{t.suggestDescsLabel}</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 700;">{t.suggestDescsLangBadge}</span>
             </label>
 
                         <div class="suggest-lang-tabs" id="suggest-lang-tabs">
@@ -6894,13 +6929,13 @@ const jsonLdSchema = {
           </div>
 
           <div class="suggest-form-field" style="margin-top: 0.75rem;">
-            <label for="suggest-notes">Примітка автора правки / Джерело</label>
-            <textarea id="suggest-notes" class="suggest-form-textarea" style="min-height: 45px;" placeholder="Коротко вкажіть, що саме та чому ви змінюєте..."></textarea>
+            <label for="suggest-notes">{t.suggestNotesLabel}</label>
+            <textarea id="suggest-notes" class="suggest-form-textarea" style="min-height: 45px;" placeholder={t.suggestNotesPh}></textarea>
           </div>
 
           <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.6rem;">
             <button type="button" id="btn-cancel-suggest" class="paper-btn">
-              Скасувати
+              {t.cancelBtn}
             </button>
             <button type="submit" class="paper-btn paper-btn-ink" style="font-weight: 800;">
               🚀 {t.suggestSubmitBtn}
@@ -6910,16 +6945,9 @@ const jsonLdSchema = {
       </div>
     </div>
 
-    <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockSearch}>
-      <button type="button" id="dock-search-btn" class="floating-dock-btn" title={t.floatingDockSearch}>
-        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <rect x="2" y="2" width="8" height="8" />
-          <line x1="10" y1="10" x2="14.5" y2="14.5" />
-        </svg>
-        <span>{t.floatingDockSearch}</span>
-      </button>
+    <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockTop}>
       <button type="button" id="dock-top-btn" class="floating-dock-btn" title={t.floatingDockTop}>
-        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
           <polygon points="8,2 14,9 10,9 10,14 6,14 6,9 2,9" />
         </svg>
         <span>{t.floatingDockTop}</span>
@@ -6957,6 +6985,27 @@ const jsonLdSchema = {
           server: t.catServer,
           website: t.catWebsite,
           project: t.catProject,
+        },
+        uiStrings: {
+          copiedToast: t.copiedToast,
+          onlineSuffix: t.serverOnlineSuffix,
+          offlineLabel: t.serverOfflineLabel,
+          collapseTagsBtn: t.collapseTagsBtn,
+          expandTagsBtn: t.expandTagsBtn,
+          suggestTitlePrefix: t.suggestTitlePrefix,
+          dangerPrefix: t.dangerBadgeLabel,
+          dangerTypeLabel: t.dangerModalTypeLabel,
+          dangerDateLabel: t.dangerModalDateLabel,
+          dangerSummaryDefault: t.dangerModalSummaryDefault,
+          catHints: {
+            launcher: { guide: t.catHintLauncher, namePh: t.catHintLauncherPh, platPh: 'Windows, macOS, Linux' },
+            client: { guide: t.catHintClient, namePh: t.catHintClientPh, platPh: 'Windows, macOS, Linux' },
+            modpack: { guide: t.catHintModpack, namePh: t.catHintModpackPh, platPh: 'CurseForge / Modrinth / Minecraft 1.21' },
+            mod: { guide: t.catHintMod, namePh: t.catHintModPh, platPh: 'Modrinth / Fabric / NeoForge 1.21' },
+            server: { guide: t.catHintServer, namePh: t.catHintServerPh, platPh: 'Java Edition 1.20+ / Bedrock' },
+            website: { guide: t.catHintWebsite, namePh: t.catHintWebsitePh, platPh: 'Web / Browser' },
+            project: { guide: t.catHintProject, namePh: t.catHintProjectPh, platPh: 'Cross-Platform / CLI / API' },
+          },
         },
       }}
     >
@@ -7244,7 +7293,7 @@ const jsonLdSchema = {
                 const txt = btn.querySelector('.copy-text');
                 if (txt) {
                   const orig = txt.textContent;
-                  txt.textContent = 'Скопійовано!';
+                  txt.textContent = uiStrings.copiedToast;
                   setTimeout(() => { txt.textContent = orig; }, 2000);
                 }
               } catch (_) {}
@@ -7304,10 +7353,10 @@ const jsonLdSchema = {
             const dot = badge.querySelector('.online-dot');
             if (data.online) {
               const count = data.players?.online ?? 0;
-              if (onlineText) onlineText.textContent = `${count.toLocaleString()} онлайн`;
+              if (onlineText) onlineText.textContent = `${count.toLocaleString()} ${uiStrings.onlineSuffix}`;
               if (dot) dot.style.background = '#2ecc71';
             } else {
-              if (onlineText) onlineText.textContent = 'Офлайн';
+              if (onlineText) onlineText.textContent = uiStrings.offlineLabel;
               if (dot) dot.style.background = '#e74c3c';
             }
           };
@@ -7448,43 +7497,7 @@ const jsonLdSchema = {
           if (box) box.textContent = ok ? '[x]' : '[ ]';
         }
 
-        const CAT_GUIDE_MAP = {
-          launcher: {
-            guide: '<strong>Лаунчер:</strong> вкажіть підтримувані ОС (Windows / macOS / Linux), чи є форком іншого лаунчера, та посилання на сайт/репозиторій.',
-            namePh: 'Напр. Prism Launcher або GileaLauncher',
-            platPh: 'Windows, macOS, Linux',
-          },
-          client: {
-            guide: '<strong>Клієнт:</strong> опишіть вбудовані моди, версії Minecraft та умови поширення (Open Source або Proprietary).',
-            namePh: 'Напр. Lunar Client або Feather Client',
-            platPh: 'Windows, macOS, Linux',
-          },
-          modpack: {
-            guide: '<strong>Модпак:</strong> обов’язково вкажіть модлоадер (Fabric/Forge/NeoForge), версію Minecraft та платформу завантаження (Modrinth / CurseForge).',
-            namePh: 'Напр. All the Mods 9 або Fabulously Optimized',
-            platPh: 'CurseForge / Modrinth / Minecraft 1.21',
-          },
-          mod: {
-            guide: '<strong>Мод:</strong> вкажіть підтримувані модлоадери (Fabric, NeoForge, Forge, Quilt), версії гри та сумісність.',
-            namePh: 'Напр. Sodium або Lithium',
-            platPh: 'Modrinth / Fabric / NeoForge 1.21',
-          },
-          server: {
-            guide: '<strong>Сервер:</strong> обов’язково вкажіть робочу IP-адресу для живого моніторингу онлайну, режим входу (ліцензія/без) та мову.',
-            namePh: 'Напр. Hypixel Network або 2b2t',
-            platPh: 'Java Edition 1.20+ / Bedrock',
-          },
-          website: {
-            guide: '<strong>Вебсайт:</strong> вкажіть призначення сервісу (вікі, калькулятор, моніторинг, хостинг-інструмент) та чи є відкритий код.',
-            namePh: 'Напр. Modrinth або ChunkBase',
-            platPh: 'Web / Browser',
-          },
-          project: {
-            guide: '<strong>Проєкт:</strong> опишіть тип інструменту, плагіну або бібліотеки для спільноти Minecraft.',
-            namePh: 'Напр. PaperMC або MCStatus API',
-            platPh: 'Cross-Platform / CLI / API',
-          },
-        };
+        const CAT_GUIDE_MAP = uiStrings.catHints;
 
         function updateCategoryFieldsUI(prefix) {
           const cfg = CAT_GUIDE_MAP[prefix] || CAT_GUIDE_MAP.project;
@@ -7857,7 +7870,7 @@ const jsonLdSchema = {
             const isCollapsed = tagsContainer.classList.contains('collapsed');
             tagsContainer.classList.toggle('collapsed', !isCollapsed);
             tagsContainer.classList.toggle('expanded', isCollapsed);
-            if (toggleTagsLabel) toggleTagsLabel.textContent = isCollapsed ? '▲ Згорнути' : '▼ Всі теги';
+            if (toggleTagsLabel) toggleTagsLabel.textContent = isCollapsed ? uiStrings.collapseTagsBtn : uiStrings.expandTagsBtn;
             if (toggleTagsArrow) toggleTagsArrow.textContent = isCollapsed ? '▲' : '▼';
           });
         }
@@ -7867,7 +7880,7 @@ const jsonLdSchema = {
             const q = tagSearchInput.value.trim().toLowerCase();
             tagsContainer.classList.remove('collapsed');
             tagsContainer.classList.add('expanded');
-            if (toggleTagsLabel) toggleTagsLabel.textContent = '▲ Згорнути';
+            if (toggleTagsLabel) toggleTagsLabel.textContent = uiStrings.collapseTagsBtn;
             if (toggleTagsArrow) toggleTagsArrow.textContent = '▲';
 
             let visibleCount = 0;
@@ -7956,7 +7969,10 @@ const jsonLdSchema = {
               return nameA.localeCompare(nameB);
             }
             if (mode === 'newest-desc' || mode === 'updated-desc') {
-              return Number(b.dataset.projectIndex || 0) - Number(a.dataset.projectIndex || 0);
+              const addedA = Number(a.dataset.addedAt || 0);
+              const addedB = Number(b.dataset.addedAt || 0);
+              if (addedB !== addedA) return addedB - addedA;
+              return Number(a.dataset.projectIndex || 0) - Number(b.dataset.projectIndex || 0);
             }
             // featured / default: sponsors first
             const spA = a.getAttribute('data-sponsor') === 'true' ? 1 : 0;
@@ -8786,7 +8802,7 @@ const jsonLdSchema = {
           if (document.getElementById('suggest-desc-kk')) document.getElementById('suggest-desc-kk').value = descKk || '';
 
           if (suggestTitle) {
-            suggestTitle.textContent = `Доповнити або змінити: ${name || slug}`;
+            suggestTitle.textContent = `${uiStrings.suggestTitlePrefix} ${name || slug}`;
           }
           if (suggestServerIpField) {
             suggestServerIpField.style.display = cat === 'server' ? 'block' : 'none';
@@ -8952,16 +8968,16 @@ const jsonLdSchema = {
             let links = [];
             try { links = JSON.parse(btn.getAttribute('data-danger-links') || '[]'); } catch (_) {}
 
-            if (dangerModalTitle) dangerModalTitle.textContent = `НЕБЕЗПЕЧНИЙ: ${pName}`;
+            if (dangerModalTitle) dangerModalTitle.textContent = `${uiStrings.dangerPrefix}: ${pName}`;
             if (dangerModalMeta) {
               const parts = [];
-              if (rType) parts.push(`Тип: ${rType}`);
-              if (rDate) parts.push(`Дата: ${rDate}`);
+              if (rType) parts.push(`${uiStrings.dangerTypeLabel}: ${rType}`);
+              if (rDate) parts.push(`${uiStrings.dangerDateLabel}: ${rDate}`);
               if (issueNum) parts.push(`GitHub Issue #${issueNum}`);
               dangerModalMeta.textContent = parts.join(' · ');
             }
             if (dangerModalSummary) {
-              dangerModalSummary.textContent = summary || 'Підтверджене попередження безпеки';
+              dangerModalSummary.textContent = summary || uiStrings.dangerSummaryDefault;
             }
             if (dangerModalBody) {
               dangerModalBody.innerHTML = renderSafeMarkdown(reason);

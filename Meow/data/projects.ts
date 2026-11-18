@@ -1,3 +1,6 @@
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import nodePath from 'node:path';
 import { LANG_CODES, type LangCode } from '../i18n/translations';
 
 /**
@@ -74,6 +77,7 @@ export interface ProjectLocale {
 export interface ProjectEntry extends ProjectMeta {
   isOpenSource: boolean;
   primaryLink: string;
+  addedAt: number;
   locales: Record<LangCode, ProjectLocale>;
   availableLangs: LangCode[];
 }
@@ -93,6 +97,34 @@ const localeFiles = import.meta.glob<ProjectLocale>('../projects/*/locales/*.jso
 function slugFromPath(path: string) {
   return path.split('/projects/')[1].split('/')[0];
 }
+
+function loadProjectAddedTimestamps(): Record<string, number> {
+  const map: Record<string, number> = {};
+  try {
+    const out = execSync(
+      'git log --format="COMMIT:%ct" --diff-filter=A --name-only -- "Meow/projects/*/project.json"',
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
+    );
+    let currentTs = 0;
+    for (const rawLine of out.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line) continue;
+      if (line.startsWith('COMMIT:')) {
+        currentTs = Number(line.slice(7)) || 0;
+        continue;
+      }
+      const m = line.match(/^Meow\/projects\/([^/]+)\/project\.json$/);
+      if (m && currentTs > 0 && !(m[1] in map)) {
+        map[m[1]] = currentTs;
+      }
+    }
+  } catch {
+    // Fallback handled per-project via fs.statSync below
+  }
+  return map;
+}
+
+const PROJECT_ADDED_AT = loadProjectAddedTimestamps();
 
 const DEFAULT_ORDER = ['xmcl', 'hmcl', 'atm9', 'sodium', 'lunarclient'];
 
@@ -115,6 +147,16 @@ export const PROJECTS: ProjectEntry[] = Object.entries(metaFiles)
       }),
     ) as Record<LangCode, ProjectLocale>;
 
+    let addedAt = PROJECT_ADDED_AT[slug] || 0;
+    if (!addedAt) {
+      try {
+        const stat = fs.statSync(nodePath.resolve(process.cwd(), 'Meow', 'projects', slug, 'project.json'));
+        addedAt = Math.floor(stat.mtimeMs / 1000);
+      } catch {
+        addedAt = 0;
+      }
+    }
+
     const sourceLinks = meta.sourceLinks ?? [];
     return {
       ...meta,
@@ -122,6 +164,7 @@ export const PROJECTS: ProjectEntry[] = Object.entries(metaFiles)
       sourceLinks,
       isOpenSource: sourceLinks.length > 0,
       primaryLink: meta.website || sourceLinks[0]?.url || SITE_REPO_URL,
+      addedAt,
       locales,
       availableLangs,
     } satisfies ProjectEntry;

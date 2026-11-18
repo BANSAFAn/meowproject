@@ -1,9 +1,9 @@
 {
-  "tagline": "Chiński portal zasobów Minecraft z modami, paczkami modów i shaderami",
-  "description": "BBSMC (bbsmc.net) to popularny portal i społeczność Minecraft oferująca katalog modów, paczek modów, map, shaderów, paczek zasobów oraz pluginów serwerowych.",
+  "tagline": "Chiński portal open-source zasobów Minecraft oparty na forku Modrinth",
+  "description": "BBSMC (bbsmc.net) to popularny portal i społeczność Minecraft o otwartym kodzie źródłowym (fork Modrinth), oferujący katalog modów, paczek modów, map, shaderów i pluginów.",
   "features": [
+    "Otwartoźródłowy fork platformy Modrinth (kod na GitHub)",
     "Katalog modów, paczek modów i klientów Minecraft",
-    "Wygodne pobieranie wersji oraz zasobów",
     "Shadery, paczki tekstur, mapy i pluginy serwerowe",
     "Aktywna społeczność graczy i twórców"
   ],
