@@ -4118,8 +4118,9 @@ const jsonLdSchema = {
       .floating-quick-dock {
         position: fixed;
         right: 1.5rem;
-        top: 50%;
-        transform: translate3d(18px, -50%, 0);
+        top: auto;
+        bottom: 1.5rem;
+        transform: translate3d(0, 16px, 0);
         z-index: 900;
         display: flex;
         flex-direction: column;
@@ -4140,7 +4141,7 @@ const jsonLdSchema = {
       .floating-quick-dock.is-visible {
         opacity: 1;
         pointer-events: auto;
-        transform: translate3d(0, -50%, 0);
+        transform: translate3d(0, 0, 0);
       }
 
       .floating-dock-btn {
@@ -4482,7 +4483,12 @@ const jsonLdSchema = {
     </header>
 
     <main class="container">
-            <div id="view-catalog" class={`tab-view-panel active ${initialProjectSlug ? 'is-single-project-page' : ''}`}>
+            <div
+              id="view-catalog"
+              class={`tab-view-panel active ${initialProjectSlug ? 'is-single-project-page' : ''}`}
+              data-initial-slug={initialProjectSlug || ''}
+              data-initial-cat={initialCategory || 'all'}
+            >
                 <section class="hero-wrap">
           <div class="paper-sheet-box hero-dossier">
             <div class="hero-inner-card">
@@ -6649,11 +6655,15 @@ const jsonLdSchema = {
             {t.closeModal} [ESC]
           </button>
         </div>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 1.15rem;">
+        <p style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); margin-bottom: 1.15rem; white-space: pre-line;">
           {t.sponsorModalDesc}
         </p>
         <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
-          <a href="https://discord.com/invite/FEyMjn3mtA" target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent">
+          <a href={MONOBANK_URL} target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent">
+            <MonobankIcon size={15} />
+            {t.monobankSupportBtn}
+          </a>
+          <a href="https://discord.com/invite/FEyMjn3mtA" target="_blank" rel="noopener noreferrer" class="paper-btn">
             Discord ↗
           </a>
           <a href="mailto:baneronetwo@memeware.net" class="paper-btn">
@@ -7027,7 +7037,10 @@ const jsonLdSchema = {
         const filterBar = document.getElementById('catalog-filter-bar');
         const singleBackBar = document.getElementById('single-project-back-bar');
         const exitSingleBtn = document.getElementById('btn-exit-single-project');
-        let singleProjectSlug = initialSlug;
+        const vcInit = document.getElementById('view-catalog');
+        const domSlug = vcInit?.getAttribute('data-initial-slug') || null;
+        const domCat = vcInit?.getAttribute('data-initial-cat') || 'all';
+        let singleProjectSlug = domSlug || initialSlug;
 
         function updateBrowserTabIdentity(activeView, activeCat, activeSlug) {
           try {
@@ -7083,6 +7096,8 @@ const jsonLdSchema = {
           if (catalogPanel) catalogPanel.classList.toggle('is-single-project-page', Boolean(slug));
           if (filterBar) filterBar.style.display = slug ? 'none' : '';
           if (singleBackBar) singleBackBar.style.display = slug ? 'block' : 'none';
+          const es = document.getElementById('empty-filter-state');
+          if (es && slug) es.style.display = 'none';
 
           allCards.forEach((card) => {
             const cSlug = card.getAttribute('data-project-card');
@@ -7098,7 +7113,11 @@ const jsonLdSchema = {
             const itemSlug = item.getAttribute('data-review-extra-item');
             item.style.display = slug === itemSlug ? 'flex' : 'none';
           });
-          updateBrowserTabIdentity('catalog', initialCat, slug);
+          updateBrowserTabIdentity('catalog', domCat, slug);
+        }
+
+        if (singleProjectSlug) {
+          updateSingleProjectView(singleProjectSlug);
         }
 
         function switchView(targetView, skipScroll) {
@@ -7745,7 +7764,7 @@ const jsonLdSchema = {
         const emptyState = document.getElementById('empty-filter-state');
         const sortSelect = document.getElementById('catalog-sort-select');
         const tagClearBtn = document.getElementById('btn-clear-tag');
-        let activeCategory = (typeof initialCat !== 'undefined' && initialCat) ? initialCat : 'all';
+        let activeCategory = domCat || ((typeof initialCat !== 'undefined' && initialCat) ? initialCat : 'all');
         const activeTags = new Set();
 
         const licenseSelect = document.getElementById('catalog-license-select');
@@ -7772,7 +7791,10 @@ const jsonLdSchema = {
         }
 
         function filterProjects() {
-          if (singleProjectSlug) return;
+          if (singleProjectSlug) {
+            if (emptyState) emptyState.style.display = 'none';
+            return;
+          }
           const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
           const licMode = licenseSelect ? licenseSelect.value : 'all';
           const verMode = verifiedSelect ? verifiedSelect.value : 'all';

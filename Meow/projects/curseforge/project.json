@@ -1,0 +1,28 @@
+{
+  "slug": "curseforge",
+  "name": "CurseForge",
+  "shortName": "CurseForge",
+  "category": "website",
+  "icon": "/projects/curseforge/icon.png",
+  "country": "US",
+  "developer": "Overwolf / CurseForge",
+  "license": "Proprietary",
+  "platforms": [
+    "Web",
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://www.curseforge.com/minecraft",
+  "sourceLinks": [],
+  "tags": [
+    "Website",
+    "Mods",
+    "Modpacks",
+    "Resource Packs",
+    "Shaders",
+    "CurseForge",
+    "Minecraft"
+  ],
+  "screenshots": []
+}

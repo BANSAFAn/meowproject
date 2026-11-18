@@ -1,0 +1,34 @@
+{
+  "slug": "modrinth",
+  "name": "Modrinth",
+  "shortName": "Modrinth",
+  "category": "website",
+  "icon": "/projects/modrinth/icon.png",
+  "country": "US",
+  "developer": "Rinth, Inc.",
+  "license": "GPL-3.0",
+  "platforms": [
+    "Web",
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://modrinth.com",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/modrinth/code"
+    }
+  ],
+  "tags": [
+    "Website",
+    "Mods",
+    "Modpacks",
+    "Plugins",
+    "Shaders",
+    "Modrinth",
+    "Open Source"
+  ],
+  "screenshots": []
+}

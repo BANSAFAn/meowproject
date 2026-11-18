@@ -1,0 +1,24 @@
+{
+  "slug": "planetminecraft",
+  "name": "Planet Minecraft",
+  "shortName": "Planet Minecraft",
+  "category": "website",
+  "icon": "/projects/planetminecraft/icon.png",
+  "country": "US",
+  "developer": "Planet Minecraft",
+  "license": "Proprietary",
+  "platforms": [
+    "Web"
+  ],
+  "website": "https://www.planetminecraft.com",
+  "sourceLinks": [],
+  "tags": [
+    "Website",
+    "Maps",
+    "Skins",
+    "Texture Packs",
+    "Data Packs",
+    "Community"
+  ],
+  "screenshots": []
+}

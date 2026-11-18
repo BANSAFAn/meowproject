@@ -1,0 +1,24 @@
+{
+  "slug": "bbsmc",
+  "name": "BBSMC",
+  "shortName": "BBSMC",
+  "category": "website",
+  "icon": "/projects/bbsmc/icon.png",
+  "country": "CN",
+  "developer": "BBSMC",
+  "license": "Proprietary",
+  "platforms": [
+    "Web"
+  ],
+  "website": "https://bbsmc.net",
+  "sourceLinks": [],
+  "tags": [
+    "Website",
+    "Mods",
+    "Modpacks",
+    "Shaders",
+    "Community",
+    "China"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,11 @@
+{
+  "tagline": "Szybka platforma open-source dla modów, pluginów, shaderów i paczek modów Minecraft",
+  "description": "Modrinth to nowoczesna platforma open-source do publikowania i pobierania modów, pluginów, shaderów, paczek zasobów, paczek danych i paczek modów do Minecraft.",
+  "features": [
+    "Szybki interfejs z filtrowaniem wersji i loaderów",
+    "Obsługa Fabric, Forge, NeoForge, Quilt, Paper, Purpur i innych",
+    "Otwarty kod źródłowy oraz publiczne API",
+    "Oficjalna aplikacja Modrinth App i integracja z launcherami"
+  ],
+  "screenshotCaptions": []
+}
