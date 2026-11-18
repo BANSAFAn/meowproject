@@ -3,7 +3,7 @@
   "name": "PaxLauncher",
   "shortName": "PaxLauncher",
   "category": "launcher",
-  "icon": "/favicon.svg",
+  "icon": "/projects/paxlauncher/icon.png",
   "country": "Україна",
   "developer": "Kryp-s",
   "license": "GPL-3.0",
