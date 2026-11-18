@@ -136,7 +136,47 @@ const SOURCE_HOSTS = [
 
 const countryList = countryOptions(lang);
 const acceptedCountries = acceptedCountryValues();
-const projectCountry = (code: string) => countryName(code, lang, t.countryGlobal);
+const COUNTRY_ALIASES: Record<string, string> = {
+  ua: 'UA', ukr: 'UA', ukraine: 'UA', 'україна': 'UA', 'украина': 'UA',
+  us: 'US', usa: 'US', 'united states': 'US', america: 'US', 'сша': 'US',
+  cn: 'CN', chn: 'CN', china: 'CN', 'китай': 'CN',
+  de: 'DE', deu: 'DE', germany: 'DE', deutschland: 'DE', 'німеччина': 'DE', 'германия': 'DE',
+  gb: 'GB', uk: 'GB', britain: 'GB', 'united kingdom': 'GB', england: 'GB', 'велика британія': 'GB', 'британія': 'GB',
+  pl: 'PL', pol: 'PL', poland: 'PL', polska: 'PL', 'польща': 'PL',
+  ca: 'CA', can: 'CA', canada: 'CA', 'канада': 'CA',
+  fr: 'FR', fra: 'FR', france: 'FR', 'франція': 'FR',
+  nl: 'NL', nld: 'NL', netherlands: 'NL', holland: 'NL', 'нідерланди': 'NL',
+  jp: 'JP', jpn: 'JP', japan: 'JP', 'японія': 'JP',
+  kr: 'KR', kor: 'KR', 'south korea': 'KR', korea: 'KR', 'корея': 'KR',
+  cz: 'CZ', cze: 'CZ', czechia: 'CZ', 'czech republic': 'CZ', 'чехія': 'CZ',
+  it: 'IT', ita: 'IT', italy: 'IT', 'італія': 'IT',
+  es: 'ES', esp: 'ES', spain: 'ES', 'іспанія': 'ES',
+  se: 'SE', swe: 'SE', sweden: 'SE', 'швеція': 'SE',
+  fi: 'FI', fin: 'FI', finland: 'FI', 'фінляндія': 'FI',
+  no: 'NO', nor: 'NO', norway: 'NO', 'норвегія': 'NO',
+  br: 'BR', bra: 'BR', brazil: 'BR', 'бразилія': 'BR',
+  au: 'AU', aus: 'AU', australia: 'AU', 'австралія': 'AU',
+  kz: 'KZ', kaz: 'KZ', kazakhstan: 'KZ', 'казахстан': 'KZ',
+  by: 'BY', blr: 'BY', belarus: 'BY', 'білорусь': 'BY', 'беларусь': 'BY',
+  eu: 'EU', europe: 'EU', 'європа': 'EU',
+  global: 'GLOBAL', international: 'GLOBAL', world: 'GLOBAL', 'глобальний': 'GLOBAL', 'міжнародний': 'GLOBAL', 'світ': 'GLOBAL',
+};
+
+const normalizeCountryCode = (raw: string) => {
+  const clean = (raw || '').trim().toLowerCase();
+  return COUNTRY_ALIASES[clean] || (raw || '').trim().toUpperCase();
+};
+
+const KNOWN_FLAG_CODES = new Set([
+  'CN', 'US', 'DE', 'GB', 'UA', 'PL', 'CA', 'FR', 'NL', 'JP', 'KR',
+  'CZ', 'IT', 'ES', 'SE', 'FI', 'NO', 'BR', 'AU', 'KZ', 'BY', 'EU', 'GLOBAL',
+]);
+
+const projectCountry = (code: string) => {
+  const norm = normalizeCountryCode(code);
+  const res = countryName(norm, lang, t.countryGlobal);
+  return res === norm && code ? code : res;
+};
 
 const siteOrigin = Astro.site?.origin || 'https://meowlab.pp.ua';
 const canonicalUrl = selectedProject
@@ -4909,8 +4949,8 @@ const jsonLdSchema = {
               const initialScore = (reviewsData as any)?.projects?.[project.slug]?.averageRating || 0;
               const primaryProjectLink = project.primaryLink;
               const primaryLinkLabel = project.website ? t.officialSite : t.fallbackProjectLink;
+              const cCode = normalizeCountryCode(project.country);
               const cName = projectCountry(project.country);
-              const cCode = project.country.toUpperCase();
               const reviewUrl = `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(`${project.category}: ${project.name}`)}&body=${encodeURIComponent(t.reviewTemplateBody)}`;
               const contributeTranslationUrl = `${SITE_REPO_URL}/issues/new?template=submit-translation.yml&title=${encodeURIComponent(`[i18n: ${project.slug}] ${lang.toUpperCase()} translation`)}&project_slug=${encodeURIComponent(project.slug)}`;
 
@@ -4983,6 +5023,128 @@ const jsonLdSchema = {
                                 <rect width="3" height="1" y="1" fill="#FFDD00" />
                               </svg>
                             )}
+                            {cCode === 'PL' && (
+                              <svg width="14" height="10" viewBox="0 0 8 5" aria-hidden="true">
+                                <rect width="8" height="2.5" y="0" fill="#FFFFFF" />
+                                <rect width="8" height="2.5" y="2.5" fill="#DC143C" />
+                              </svg>
+                            )}
+                            {cCode === 'CA' && (
+                              <svg width="14" height="10" viewBox="0 0 4 2" aria-hidden="true">
+                                <rect width="1" height="2" x="0" fill="#D80621" />
+                                <rect width="2" height="2" x="1" fill="#FFFFFF" />
+                                <rect width="1" height="2" x="3" fill="#D80621" />
+                                <circle cx="2" cy="1" r="0.45" fill="#D80621" />
+                              </svg>
+                            )}
+                            {cCode === 'FR' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="1" height="2" x="0" fill="#0055A4" />
+                                <rect width="1" height="2" x="1" fill="#FFFFFF" />
+                                <rect width="1" height="2" x="2" fill="#EF4135" />
+                              </svg>
+                            )}
+                            {cCode === 'NL' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="0.67" y="0" fill="#AE1C28" />
+                                <rect width="3" height="0.67" y="0.67" fill="#FFFFFF" />
+                                <rect width="3" height="0.67" y="1.33" fill="#21468B" />
+                              </svg>
+                            )}
+                            {cCode === 'JP' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="2" fill="#FFFFFF" />
+                                <circle cx="1.5" cy="1" r="0.6" fill="#BC002D" />
+                              </svg>
+                            )}
+                            {cCode === 'KR' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="2" fill="#FFFFFF" />
+                                <circle cx="1.5" cy="1" r="0.52" fill="#CD2E3A" />
+                                <path d="M1.5 1 A0.52 0.52 0 0 1 1.5 1.52 A0.52 0.52 0 0 1 0.98 1 Z" fill="#0047A0" />
+                              </svg>
+                            )}
+                            {cCode === 'CZ' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="1" y="0" fill="#FFFFFF" />
+                                <rect width="3" height="1" y="1" fill="#D7141A" />
+                                <polygon points="0,0 1.5,1 0,2" fill="#11457E" />
+                              </svg>
+                            )}
+                            {cCode === 'IT' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="1" height="2" x="0" fill="#009246" />
+                                <rect width="1" height="2" x="1" fill="#FFFFFF" />
+                                <rect width="1" height="2" x="2" fill="#CE2B37" />
+                              </svg>
+                            )}
+                            {cCode === 'ES' && (
+                              <svg width="14" height="10" viewBox="0 0 3 2" aria-hidden="true">
+                                <rect width="3" height="0.5" y="0" fill="#AA151B" />
+                                <rect width="3" height="1" y="0.5" fill="#F1BF00" />
+                                <rect width="3" height="0.5" y="1.5" fill="#AA151B" />
+                              </svg>
+                            )}
+                            {cCode === 'SE' && (
+                              <svg width="14" height="10" viewBox="0 0 16 10" aria-hidden="true">
+                                <rect width="16" height="10" fill="#006AA7" />
+                                <rect x="5" y="0" width="2" height="10" fill="#FECC00" />
+                                <rect x="0" y="4" width="16" height="2" fill="#FECC00" />
+                              </svg>
+                            )}
+                            {cCode === 'FI' && (
+                              <svg width="14" height="10" viewBox="0 0 16 10" aria-hidden="true">
+                                <rect width="16" height="10" fill="#FFFFFF" />
+                                <rect x="4.5" y="0" width="2.5" height="10" fill="#003580" />
+                                <rect x="0" y="3.8" width="16" height="2.4" fill="#003580" />
+                              </svg>
+                            )}
+                            {cCode === 'NO' && (
+                              <svg width="14" height="10" viewBox="0 0 16 10" aria-hidden="true">
+                                <rect width="16" height="10" fill="#BA0C2F" />
+                                <rect x="4.5" y="0" width="3" height="10" fill="#FFFFFF" />
+                                <rect x="0" y="3.5" width="16" height="3" fill="#FFFFFF" />
+                                <rect x="5.2" y="0" width="1.6" height="10" fill="#00205B" />
+                                <rect x="0" y="4.2" width="16" height="1.6" fill="#00205B" />
+                              </svg>
+                            )}
+                            {cCode === 'BR' && (
+                              <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">
+                                <rect width="14" height="10" fill="#009739" />
+                                <polygon points="7,1.4 12.2,5 7,8.6 1.8,5" fill="#FEDD00" />
+                                <circle cx="7" cy="5" r="1.9" fill="#012169" />
+                              </svg>
+                            )}
+                            {cCode === 'AU' && (
+                              <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">
+                                <rect width="14" height="10" fill="#00008B" />
+                                <rect width="6" height="4.5" fill="#012169" />
+                                <path d="M0 0 L6 4.5 M6 0 L0 4.5" stroke="#FFF" stroke-width="0.9" />
+                                <path d="M3 0 v4.5 M0 2.25 h6" stroke="#C8102E" stroke-width="0.9" />
+                                <circle cx="10.5" cy="3" r="0.7" fill="#FFF" />
+                                <circle cx="10.5" cy="7" r="0.9" fill="#FFF" />
+                              </svg>
+                            )}
+                            {cCode === 'KZ' && (
+                              <svg width="14" height="10" viewBox="0 0 24 16" aria-hidden="true">
+                                <rect width="24" height="16" fill="#00AFCA" />
+                                <circle cx="12" cy="8" r="3.4" fill="#FEC50C" />
+                                <rect x="2" y="2" width="1.8" height="12" fill="#FEC50C" />
+                              </svg>
+                            )}
+                            {cCode === 'BY' && (
+                              <svg width="14" height="10" viewBox="0 0 24 16" aria-hidden="true">
+                                <rect width="24" height="5.33" fill="#FFF" />
+                                <rect y="5.33" width="24" height="5.33" fill="#D22730" />
+                                <rect y="10.66" width="24" height="5.34" fill="#FFF" />
+                              </svg>
+                            )}
+                            {cCode === 'EU' && (
+                              <svg width="14" height="10" viewBox="0 0 15 10" aria-hidden="true">
+                                <rect width="15" height="10" fill="#003399" />
+                                <circle cx="7.5" cy="5" r="2.8" fill="none" stroke="#FFCC00" stroke-width="1" stroke-dasharray="0.9 1.3" />
+                              </svg>
+                            )}
                             {cCode === 'GLOBAL' && (
                               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                                 <rect x="1.5" y="1.5" width="13" height="13"></rect>
@@ -4990,10 +5152,11 @@ const jsonLdSchema = {
                                 <line x1="8" y1="1.5" x2="8" y2="14.5"></line>
                               </svg>
                             )}
-                            {!['CN', 'US', 'DE', 'GB', 'UA', 'GLOBAL'].includes(cCode) && (
-                              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                <rect x="2" y="2" width="2" height="13"></rect>
-                                <rect x="4" y="2" width="9" height="6"></rect>
+                            {!KNOWN_FLAG_CODES.has(cCode) && (
+                              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--accent)" stroke-width="1.6" aria-hidden="true">
+                                <circle cx="8" cy="8" r="6" />
+                                <ellipse cx="8" cy="8" rx="3" ry="6" />
+                                <line x1="2" y1="8" x2="14" y2="8" />
                               </svg>
                             )}
                             <span>{t.countryOrigin}: {cName}</span>
