@@ -424,5 +424,6 @@
   "catHintWebsite": "<strong>Website:</strong> specify the service purpose (wiki, calculator, monitor, hosting tool) and whether it is open source.",
   "catHintWebsitePh": "e.g. Modrinth or ChunkBase",
   "catHintProject": "<strong>Project:</strong> describe the type of tool, plugin, or library for the Minecraft community.",
-  "catHintProjectPh": "e.g. PaperMC or MCStatus API"
+  "catHintProjectPh": "e.g. PaperMC or MCStatus API",
+  "footerCardsDonate": "We accept donations worldwide via Monobank:"
 }

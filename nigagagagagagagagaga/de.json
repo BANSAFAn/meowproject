@@ -426,5 +426,6 @@
   "catHintWebsite": "<strong>Website:</strong> Beschreiben Sie den Zweck (Wiki, Rechner, Monitor, Hosting-Tool) und ob der Code offen ist.",
   "catHintWebsitePh": "z. B. Modrinth oder ChunkBase",
   "catHintProject": "<strong>Projekt:</strong> Beschreiben Sie Art des Tools, Plugins oder der Bibliothek für die Minecraft-Community.",
-  "catHintProjectPh": "z. B. PaperMC oder MCStatus API"
+  "catHintProjectPh": "z. B. PaperMC oder MCStatus API",
+  "footerCardsDonate": "Wir akzeptieren weltweite Spenden über Monobank:"
 }

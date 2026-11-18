@@ -424,5 +424,6 @@
   "catHintWebsite": "<strong>Вебсайт:</strong> вкажіть призначення сервісу (вікі, калькулятор, моніторинг, хостинг-інструмент) та чи є відкритий код.",
   "catHintWebsitePh": "Напр. Modrinth або ChunkBase",
   "catHintProject": "<strong>Проєкт:</strong> опишіть тип інструменту, плагіну або бібліотеки для спільноти Minecraft.",
-  "catHintProjectPh": "Напр. PaperMC або MCStatus API"
+  "catHintProjectPh": "Напр. PaperMC або MCStatus API",
+  "footerCardsDonate": "Приймаємо донати з усього світу через Monobank:"
 }

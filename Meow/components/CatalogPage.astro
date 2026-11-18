@@ -6486,6 +6486,34 @@ const jsonLdSchema = {
             </div>
           </div>
         </div>
+
+        <div style="margin-top: 1.4rem; padding-top: 1rem; border-top: 1px dashed var(--border-muted); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;">
+          <span style="font-size: 0.8rem; color: var(--ink-muted); font-weight: 700;">
+            {t.footerCardsDonate}
+          </span>
+          <a
+            href={MONOBANK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="paper-btn"
+            style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.75rem; text-decoration: none;"
+            title={t.monobankSupportBtn}
+          >
+            <svg width="38" height="24" viewBox="0 0 38 24" aria-label="Visa" role="img">
+              <rect width="38" height="24" rx="4" fill="#1434CB" />
+              <text x="19" y="15.5" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-weight="900" font-style="italic" font-size="10.5" letter-spacing="0.5">VISA</text>
+            </svg>
+            <svg width="38" height="24" viewBox="0 0 38 24" aria-label="Mastercard" role="img">
+              <rect width="38" height="24" rx="4" fill="#1D1D1B" />
+              <circle cx="15" cy="12" r="6.5" fill="#EB001B" />
+              <circle cx="23" cy="12" r="6.5" fill="#F79E1B" fill-opacity="0.9" />
+            </svg>
+            <span style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; font-weight: 800; color: var(--ink);">
+              <MonobankIcon size={14} />
+              Monobank ↗
+            </span>
+          </a>
+        </div>
       </div>
     </footer>
 
@@ -8469,7 +8497,7 @@ const jsonLdSchema = {
           // STEP 2: Progressive live fetch from GitHub Issues if rate limit permits
           let allIssues = null;
           try {
-            const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=all&per_page=50`, {
+            const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=open&per_page=100`, {
               headers: { Accept: 'application/vnd.github.v3+json' },
             });
             if (res.ok) {
@@ -8523,6 +8551,7 @@ const jsonLdSchema = {
               const matchingIssues = allIssues.filter(
                 (iss) =>
                   !iss.pull_request &&
+                  iss.state === 'open' &&
                   (issueNumber ? iss.number === issueNumber : (iss.title && iss.title.toLowerCase().includes(searchTerm)))
               );
 
