@@ -3699,18 +3699,14 @@ const jsonLdSchema = {
         body {
           overflow-x: hidden;
         }
-        .site-header {
-          position: relative !important;
-          top: auto !important;
-        }
         .container {
           padding-left: 0.85rem !important;
           padding-right: 0.85rem !important;
         }
         .topbar-inner {
           flex-wrap: wrap;
-          gap: 0.55rem;
-          padding: 0.6rem 0;
+          gap: 0.6rem;
+          padding: 0.65rem 0;
         }
         .header-actions {
           flex-wrap: wrap;
@@ -3719,100 +3715,61 @@ const jsonLdSchema = {
           justify-content: space-between;
         }
         .folder-tabs-nav {
-          display: grid !important;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 0.38rem;
-          padding: 0.25rem 0 0.55rem;
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          gap: 0.35rem;
+          padding-bottom: 0.35rem;
+          scrollbar-width: none;
+        }
+        .folder-tabs-nav::-webkit-scrollbar {
+          display: none;
         }
         .folder-tab-btn {
-          width: 100%;
-          justify-content: space-between;
+          flex: 0 0 auto;
           white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          padding: 0.52rem 0.65rem;
-          font-size: 0.78rem;
-          min-height: 38px;
-          border-radius: 6px !important;
-          border: 1.5px solid var(--border-ink) !important;
+          padding: 0.45rem 0.72rem;
+          font-size: 0.8rem;
         }
         .hero-inner-card {
-          padding: 1.1rem 0.95rem !important;
+          padding: 1.15rem 1rem !important;
         }
         .hero-title {
-          font-size: 1.38rem !important;
-          line-height: 1.22 !important;
-        }
-        .hero-subtitle {
-          font-size: 0.9rem !important;
+          font-size: 1.45rem !important;
+          line-height: 1.2 !important;
         }
         .hero-actions {
           flex-direction: column;
           align-items: stretch;
-          gap: 0.5rem;
         }
         .hero-actions .paper-btn {
           width: 100%;
           justify-content: center;
-          min-height: 42px;
         }
         .hero-meta-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
           gap: 0.5rem !important;
-        }
-        .catalog-workspace {
-          gap: 0.85rem !important;
         }
         .catalog-sidebar-left,
         .catalog-sidebar-right {
           padding: 0.75rem !important;
           max-height: none !important;
         }
-        .catalog-sidebar-left #sidebar-recommended-box {
-          display: none !important;
-        }
         .catalog-sidebar-left .index-tabs {
           gap: 0.35rem;
         }
         .catalog-sidebar-left .tab-btn {
-          padding: 0.42rem 0.68rem;
-          font-size: 0.8rem;
-          min-height: 36px;
-        }
-        .catalog-sidebar-right .tags-scroll-container {
-          max-height: 78px !important;
-        }
-        .catalog-sidebar-right .tags-scroll-container:not(.collapsed) {
-          max-height: 240px !important;
-        }
-        .filter-bar {
-          padding: 0.85rem !important;
+          padding: 0.38rem 0.6rem;
+          font-size: 0.78rem;
         }
         .filter-toolbar-top {
           flex-direction: column;
           gap: 0.65rem;
         }
-        .search-box,
-        .search-input,
-        .paper-input,
-        .suggest-form-input,
-        .suggest-form-textarea,
-        .tag-search-input {
-          width: 100% !important;
-          font-size: 16px !important;
-          min-height: 42px;
-        }
-        .paper-select-trigger {
-          min-height: 42px;
-          font-size: 0.88rem;
-        }
         .catalog-main-col .filter-selects-group {
           grid-template-columns: 1fr;
           gap: 0.55rem;
-        }
-        .guide-sheet,
-        .form-card {
-          padding: 1rem !important;
         }
         .dossier-header {
           flex-direction: column;
@@ -3831,10 +3788,11 @@ const jsonLdSchema = {
         .dossier-actions .paper-btn {
           width: 100%;
           justify-content: center;
-          min-height: 40px;
+          min-height: 38px;
         }
-        .dossier-meta-grid,
-        .expenses-grid,
+        .dossier-meta-grid {
+          grid-template-columns: 1fr !important;
+        }
         .screenshots-grid {
           grid-template-columns: 1fr !important;
         }
@@ -4686,6 +4644,13 @@ const jsonLdSchema = {
                     <path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm0 2.1l4 1.7v3.2c0 2.7-1.7 5-4 5.9-2.3-.9-4-3.2-4-5.9V4.8l4-1.7z"></path>
                   </svg>
                   <span>Strict CSP · Anti-XSS</span>
+                </div>
+
+                <div class="hero-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="#22c55e" aria-hidden="true">
+                    <circle cx="8" cy="8" r="5" />
+                  </svg>
+                  <span>{t.liveNowLabel}: <strong id="live-visitors-count">1</strong> · {t.liveGoalLabel}: <strong id="live-visitors-goal">200</strong></span>
                 </div>
               </div>
             </div>
@@ -8281,6 +8246,19 @@ const jsonLdSchema = {
               }
             });
           }
+        }
+
+        // Live online estimate & auto-stepping milestone goal (200 -> 300 -> 400...)
+        const liveCountEl = document.getElementById('live-visitors-count');
+        const liveGoalEl = document.getElementById('live-visitors-goal');
+        if (liveCountEl && liveGoalEl) {
+          const updateLiveGoal = (count) => {
+            const nextGoal = Math.max(200, (Math.floor(count / 100) + 1) * 100);
+            liveCountEl.textContent = String(count);
+            liveGoalEl.textContent = String(nextGoal);
+          };
+          const base = Number(localStorage.getItem('meow_live_est') || 1);
+          updateLiveGoal(Math.max(1, base));
         }
 
         // Dynamic License Modal Controller
