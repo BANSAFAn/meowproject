@@ -1,0 +1,37 @@
+{
+  "slug": "gdlauncher",
+  "name": "GDLauncher",
+  "shortName": "GDLauncher",
+  "category": "launcher",
+  "icon": "/projects/gdlauncher/icon.png",
+  "country": "USA",
+  "developer": "gorilla-devs",
+  "license": "Other",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://gdlauncher.com/",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/gorilla-devs/GDLauncher-Carbon"
+    }
+  ],
+  "issueThreadNumber": 47,
+  "issueSearchTerm": "GDLauncher",
+  "tags": [
+    "launcher",
+    "Windows",
+    "macOS",
+    "Linux",
+    "USA"
+  ],
+  "screenshots": [
+    "/projects/gdlauncher/screen-1.png",
+    "/projects/gdlauncher/screen-2.png",
+    "/projects/gdlauncher/screen-3.png"
+  ]
+}
