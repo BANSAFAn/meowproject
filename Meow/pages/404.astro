@@ -1,0 +1,217 @@
+---
+---
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — MeowLab</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('meow_theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      :root {
+        --bg: #ebe6dc;
+        --sheet: #fbf9f4;
+        --inset: #f2ede2;
+        --ink: #1a1917;
+        --muted: #57534e;
+        --border: #292524;
+        --accent: #c85a0a;
+        --shadow: rgba(26, 25, 23, 0.18);
+      }
+
+      html[data-theme='dark'] {
+        --bg: #12110f;
+        --sheet: #1a1916;
+        --inset: #151412;
+        --ink: #f3efe6;
+        --muted: #b5ada0;
+        --border: #4a4339;
+        --accent: #f59e0b;
+        --shadow: rgba(0, 0, 0, 0.75);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 560px;
+        background: var(--sheet);
+        border: 2px solid var(--border);
+        border-left: 6px solid var(--accent);
+        border-radius: 8px;
+        box-shadow: 6px 6px 0 var(--shadow);
+        padding: 1.75rem;
+      }
+
+      .kicker {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.78rem;
+        font-weight: 900;
+        color: var(--accent);
+        letter-spacing: 0.06em;
+        margin-bottom: 0.5rem;
+      }
+
+      .code-num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 3.1rem;
+        font-weight: 900;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 900;
+        margin-bottom: 0.55rem;
+      }
+
+      p {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--muted);
+        margin-bottom: 1.25rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.65rem 1rem;
+        border: 1.5px solid var(--border);
+        border-radius: 6px;
+        background: var(--inset);
+        color: var(--ink);
+        font-size: 0.88rem;
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 3px 3px 0 var(--shadow);
+      }
+
+      .btn-accent {
+        background: var(--accent);
+        color: #12110f;
+      }
+
+      html:not([data-theme='dark']) .btn-accent {
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="kicker">[HTTP // 404 NOT FOUND]</div>
+      <div class="code-num">404</div>
+      <h1 id="err-title">Сторінку не знайдено</h1>
+      <p id="err-desc">
+        Можливо, посилання застаріло або проєкт було переміщено. Поверніться до каталогу MeowLab, щоб знайти потрібний лаунчер, мод або сервер.
+      </p>
+      <div class="actions">
+        <a href="/" class="btn btn-accent" id="btn-home">← Повернутися до каталогу</a>
+        <a href="/category/launcher/" class="btn" id="btn-launchers">Лаунчери</a>
+        <a href="/category/server/" class="btn" id="btn-servers">Сервери</a>
+      </div>
+    </main>
+
+    <script is:inline>
+      (function () {
+        var copy = {
+          uk: {
+            title: 'Сторінку не знайдено',
+            desc: 'Можливо, посилання застаріло або проєкт було переміщено. Поверніться до каталогу MeowLab, щоб знайти потрібний лаунчер, мод або сервер.',
+            home: '← Повернутися до каталогу',
+            launchers: 'Лаунчери',
+            servers: 'Сервери',
+            prefix: ''
+          },
+          en: {
+            title: 'Page Not Found',
+            desc: 'The link may be outdated or the project was moved. Return to the MeowLab catalog to find launchers, mods, or servers.',
+            home: '← Back to Catalog',
+            launchers: 'Launchers',
+            servers: 'Servers',
+            prefix: '/en'
+          },
+          de: {
+            title: 'Seite nicht gefunden',
+            desc: 'Der Link ist möglicherweise veraltet oder wurde verschoben. Kehre zum MeowLab-Katalog zurück.',
+            home: '← Zurück zum Katalog',
+            launchers: 'Launcher',
+            servers: 'Server',
+            prefix: '/de'
+          },
+          pl: {
+            title: 'Nie znaleziono strony',
+            desc: 'Link może być nieaktualny lub projekt został przeniesiony. Wróć do katalogu MeowLab.',
+            home: '← Wróć do katalogu',
+            launchers: 'Launchery',
+            servers: 'Serwery',
+            prefix: '/pl'
+          },
+          be: {
+            title: 'Старонка не знойдзена',
+            desc: 'Магчыма, спасылка састарэла або праект быў перамешчаны. Вярніцеся ў каталог MeowLab.',
+            home: '← Вярнуцца ў каталог',
+            launchers: 'Лаўнчары',
+            servers: 'Серверы',
+            prefix: '/be'
+          },
+          kk: {
+            title: 'Бет табылмады',
+            desc: 'Сілтеме ескірген немесе жоба жылжытылған болуы мүмкін. MeowLab каталогына оралыңыз.',
+            home: '← Каталогқа оралу',
+            launchers: 'Лаунчерлер',
+            servers: 'Серверлер',
+            prefix: '/kk'
+          }
+        };
+        var path = window.location.pathname || '/';
+        var m = path.match(/^\/(uk|en|de|pl|be|kk)(\/|$)/);
+        var lang = m ? m[1] : ((navigator.language || 'uk').slice(0, 2));
+        var c = copy[lang] || copy.uk;
+        document.getElementById('err-title').textContent = c.title;
+        document.getElementById('err-desc').textContent = c.desc;
+        var homeEl = document.getElementById('btn-home');
+        var lEl = document.getElementById('btn-launchers');
+        var sEl = document.getElementById('btn-servers');
+        homeEl.textContent = c.home;
+        homeEl.setAttribute('href', c.prefix ? c.prefix + '/' : '/');
+        lEl.textContent = c.launchers;
+        lEl.setAttribute('href', c.prefix + '/category/launcher/');
+        sEl.textContent = c.servers;
+        sEl.setAttribute('href', c.prefix + '/category/server/');
+      })();
+    </script>
+  </body>
+</html>
