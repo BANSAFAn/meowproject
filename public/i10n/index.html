@@ -4,19 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>i10n MeowLab — Сайт у розробці</title>
-    <meta name="description" content="i10n MeowLab — платформа локалізації Minecraft-проєктів. Сайт поки в розробці." />
+    <meta name="description" content="i10n MeowLab — сервіс перекладів модів, модпаків і шейдерів. Сайт у розробці — підтримайте донатом, щоб пришвидшити запуск." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('meow_theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
     <style>
       :root {
-        --bg: #0b0f17;
-        --panel: rgba(16, 22, 34, 0.88);
-        --border: rgba(148, 163, 184, 0.22);
-        --border-strong: rgba(56, 189, 248, 0.45);
-        --ink: #f1f5f9;
-        --muted: #94a3b8;
-        --accent: #38bdf8;
-        --accent-2: #a78bfa;
-        --amber: #f59e0b;
-        --green: #34d399;
+        --bg: #f6f3ec;
+        --sheet: #fffdf8;
+        --inset: #f0ebe0;
+        --ink: #181615;
+        --muted: #5a534a;
+        --border: #181615;
+        --border-muted: rgba(24, 22, 21, 0.22);
+        --accent: #d97706;
+        --accent-ink: #ffffff;
+        --shadow: rgba(24, 22, 21, 0.9);
+      }
+
+      html[data-theme='dark'] {
+        --bg: #12110f;
+        --sheet: #1a1815;
+        --inset: #22201c;
+        --ink: #f4efe6;
+        --muted: #b5ada0;
+        --border: #4a4339;
+        --border-muted: rgba(244, 239, 230, 0.16);
+        --accent: #f59e0b;
+        --accent-ink: #12110f;
+        --shadow: rgba(0, 0, 0, 0.85);
       }
 
       * {
@@ -25,607 +47,285 @@
         padding: 0;
       }
 
-      html, body {
-        min-height: 100%;
+      body {
+        min-height: 100vh;
         background: var(--bg);
         color: var(--ink);
         font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
-        overflow-x: hidden;
-      }
-
-      body {
-        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
         padding: 1.5rem;
       }
 
-      /* Background blueprint grid */
-      .i18n-grid-bg {
-        position: fixed;
-        inset: 0;
-        background-image:
-          linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-        background-size: 42px 42px;
-        pointer-events: none;
-        z-index: 0;
-      }
-
-      /* Moving i18n key sliders in background */
-      .i18n-marquee-wall {
-        position: fixed;
-        inset: -10% -5%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        gap: 1.15rem;
-        transform: rotate(-4deg);
-        pointer-events: none;
-        z-index: 1;
-        opacity: 0.48;
-      }
-
-      .marquee-track {
-        display: flex;
-        width: max-content;
-        gap: 1rem;
-        will-change: transform;
-      }
-
-      .marquee-track.dir-left {
-        animation: slideLeft 46s linear infinite;
-      }
-
-      .marquee-track.dir-right {
-        animation: slideRight 52s linear infinite;
-      }
-
-      .marquee-track.slow {
-        animation-duration: 66s;
-        opacity: 0.72;
-      }
-
-      .i18n-token {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.42rem 0.78rem;
-        border: 1px solid rgba(56, 189, 248, 0.18);
-        background: rgba(15, 23, 42, 0.78);
-        border-radius: 6px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.78rem;
-        white-space: nowrap;
-        color: var(--muted);
-      }
-
-      .i18n-token .k {
-        color: var(--accent);
-        font-weight: 700;
-      }
-
-      .i18n-token .eq {
-        color: #475569;
-      }
-
-      .i18n-token .v {
-        color: #cbd5e1;
-      }
-
-      .i18n-token .loc {
-        font-size: 0.68rem;
-        padding: 0.08rem 0.34rem;
-        border-radius: 4px;
-        background: rgba(167, 139, 250, 0.16);
-        color: var(--accent-2);
-        font-weight: 800;
-      }
-
-      @keyframes slideLeft {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-
-      @keyframes slideRight {
-        0% { transform: translateX(-50%); }
-        100% { transform: translateX(0); }
-      }
-
-      /* Center Studio Card */
-      .center-stage {
-        position: relative;
-        z-index: 10;
+      .card {
         width: 100%;
-        max-width: 720px;
-        background: var(--panel);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border: 1.5px solid var(--border-strong);
-        border-radius: 14px;
-        padding: 2rem;
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
-        animation: cardEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        max-width: 640px;
+        background: var(--sheet);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 6px 6px 0 var(--shadow);
+        padding: 1.85rem;
       }
 
-      @keyframes cardEnter {
-        from { opacity: 0; transform: translateY(18px) scale(0.98); }
-        to { opacity: 1; transform: none; }
-      }
-
-      .stage-top {
+      .top-bar {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: 0.75rem;
-        margin-bottom: 1.35rem;
+        margin-bottom: 1.15rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1.5px dashed var(--border-muted);
+      }
+
+      .kicker {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.78rem;
+        font-weight: 900;
+        color: var(--accent);
+        letter-spacing: 0.05em;
       }
 
       .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.34rem 0.75rem;
-        border-radius: 999px;
-        border: 1px solid rgba(245, 158, 11, 0.45);
-        background: rgba(245, 158, 11, 0.12);
-        color: var(--amber);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.76rem;
-        font-weight: 800;
-        letter-spacing: 0.03em;
+        font-size: 0.72rem;
+        font-weight: 900;
+        padding: 0.22rem 0.6rem;
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        border-radius: 4px;
+        background: rgba(245, 158, 11, 0.1);
       }
 
-      .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--amber);
-        animation: pulseDot 1.6s ease-in-out infinite;
+      h1 {
+        font-size: 1.65rem;
+        font-weight: 900;
+        line-height: 1.2;
+        margin-bottom: 0.7rem;
       }
 
-      @keyframes pulseDot {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.4; transform: scale(0.75); }
-      }
-
-      .lang-switcher {
-        display: inline-flex;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-      }
-
-      .lang-pill {
-        border: 1px solid var(--border);
-        background: rgba(15, 23, 42, 0.75);
+      .lead {
+        font-size: 0.96rem;
+        line-height: 1.6;
         color: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.74rem;
-        font-weight: 800;
-        padding: 0.28rem 0.56rem;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.15s ease;
+        margin-bottom: 1.25rem;
       }
 
-      .lang-pill:hover {
-        border-color: var(--accent);
+      .boost-box {
+        background: var(--inset);
+        border: 1.5px solid var(--border);
+        border-left: 5px solid var(--accent);
+        border-radius: 6px;
+        padding: 1.1rem 1.15rem;
+        margin-bottom: 1.35rem;
+      }
+
+      .boost-title {
+        font-size: 1rem;
+        font-weight: 900;
+        margin-bottom: 0.45rem;
         color: var(--ink);
       }
 
-      .lang-pill.active {
-        background: var(--accent);
-        color: #08101c;
-        border-color: var(--accent);
-      }
-
-      .hero-title {
-        font-size: clamp(1.75rem, 4vw, 2.5rem);
-        font-weight: 900;
-        line-height: 1.15;
-        margin-bottom: 0.65rem;
-        letter-spacing: -0.02em;
-      }
-
-      .hero-sub {
+      .boost-desc {
+        font-size: 0.88rem;
+        line-height: 1.55;
         color: var(--muted);
-        font-size: 0.96rem;
-        line-height: 1.6;
-        margin-bottom: 1.4rem;
+        margin-bottom: 0.85rem;
       }
 
-      /* Interactive translation key slider box */
-      .key-slider-box {
-        border: 1px solid var(--border);
-        background: rgba(9, 13, 22, 0.85);
-        border-radius: 10px;
-        padding: 1rem 1.1rem;
-        margin-bottom: 1.4rem;
-      }
-
-      .key-slider-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        margin-bottom: 0.65rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.76rem;
-        color: var(--muted);
-      }
-
-      .key-range {
-        width: 100%;
-        accent-color: var(--accent);
-        cursor: pointer;
-        margin-bottom: 0.75rem;
-      }
-
-      .key-preview-line {
+      .cards-row {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 0.5rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.84rem;
-        padding: 0.55rem 0.75rem;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-        border-radius: 6px;
-      }
-
-      .key-preview-line .kp-key { color: var(--accent); font-weight: 700; }
-      .key-preview-line .kp-arrow { color: #64748b; }
-      .key-preview-line .kp-val { color: var(--green); font-weight: 600; }
-
-      /* Locale progress bars */
-      .progress-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 0.65rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .prog-item {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.55rem 0.7rem;
-      }
-
-      .prog-meta {
-        display: flex;
-        justify-content: space-between;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.74rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        margin-bottom: 0.35rem;
+        color: var(--muted);
       }
 
-      .prog-bar {
-        height: 6px;
-        background: rgba(148, 163, 184, 0.16);
-        border-radius: 999px;
-        overflow: hidden;
-      }
-
-      .prog-fill {
-        height: 100%;
-        background: var(--accent);
-        border-radius: 999px;
-      }
-
-      .actions-row {
+      .actions {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-        gap: 0.7rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
       }
 
       .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.45rem;
-        padding: 0.68rem 1rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid var(--border);
+        border-radius: 6px;
+        background: var(--inset);
+        color: var(--ink);
+        font-size: 0.9rem;
         font-weight: 800;
         text-decoration: none;
-        border: 1px solid var(--border);
-        background: rgba(15, 23, 42, 0.9);
-        color: var(--ink);
-        transition: all 0.16s ease;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 var(--shadow);
+        transition: transform 0.14s ease, filter 0.14s ease;
       }
 
       .btn:hover {
-        border-color: var(--accent);
-        transform: translateY(-1px);
+        transform: translate(-1px, -1px);
       }
 
       .btn-accent {
-        background: var(--amber);
-        color: #111827;
-        border-color: var(--amber);
-      }
-
-      .btn-accent:hover {
-        border-color: #fbbf24;
-        filter: brightness(1.06);
-      }
-
-      .btn-primary {
         background: var(--accent);
-        color: #08101c;
+        color: var(--accent-ink);
+        border-color: var(--border);
+      }
+
+      .footer-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-top: 0.95rem;
+        border-top: 1px dashed var(--border-muted);
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.86rem;
+        font-weight: 800;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        color: var(--accent);
+      }
+
+      .lang-switch {
+        display: inline-flex;
+        gap: 0.35rem;
+      }
+
+      .lang-btn {
+        background: var(--inset);
+        border: 1px solid var(--border-muted);
+        color: var(--muted);
+        border-radius: 4px;
+        padding: 0.22rem 0.5rem;
+        font-size: 0.74rem;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .lang-btn.active {
         border-color: var(--accent);
+        color: var(--accent);
       }
     </style>
   </head>
   <body>
-    <div class="i18n-grid-bg" aria-hidden="true"></div>
-    <div class="i18n-marquee-wall" id="marquee-wall" aria-hidden="true"></div>
-
-    <main class="center-stage">
-      <div class="stage-top">
-        <span class="status-pill">
-          <span class="status-dot"></span>
-          <span id="ui-badge">i10n.meowlab // У РОЗРОБЦІ</span>
-        </span>
-        <div class="lang-switcher" role="group" aria-label="Language">
-          <button type="button" class="lang-pill active" data-lang="uk">UA</button>
-          <button type="button" class="lang-pill" data-lang="en">EN</button>
-          <button type="button" class="lang-pill" data-lang="pl">PL</button>
-          <button type="button" class="lang-pill" data-lang="de">DE</button>
-          <button type="button" class="lang-pill" data-lang="be">BY</button>
-          <button type="button" class="lang-pill" data-lang="kk">KZ</button>
-        </div>
+    <main class="card">
+      <div class="top-bar">
+        <span class="kicker">[i10n // MEOWLAB TRANSLATIONS]</span>
+        <span class="status-pill" id="status-pill">В РОЗРОБЦІ</span>
       </div>
 
-      <h1 class="hero-title" id="ui-title">Сайт поки в розробці</h1>
-      <p class="hero-sub" id="ui-sub">
-        Це окремий модуль локалізації <strong>i10n MeowLab</strong> — платформа для спільного перекладу Minecraft-лаунчерів, модів і документації. Проєкт фінансується людьми, тож підтримка допоможе швидше запустити повну версію.
+      <h1 id="page-title">Сайт перекладів ще в розробці</h1>
+      <p class="lead" id="page-lead">
+        Тут можна буде безкоштовно завантажувати готові українські переклади для модпаків, модів та шейдерів Minecraft. Зараз ми активно працюємо над запуском платформи.
       </p>
 
-      <div class="key-slider-box">
-        <div class="key-slider-head">
-          <span id="ui-slider-label">Слайдер ключів перекладу (live preview)</span>
-          <span id="ui-slider-index">1 / 6</span>
-        </div>
-        <input type="range" min="0" max="5" value="0" class="key-range" id="key-range-slider" aria-label="Translation key slider" />
-        <div class="key-preview-line">
-          <span class="kp-key" id="kp-key">site.status</span>
-          <span class="kp-arrow">→</span>
-          <span class="kp-val" id="kp-val">"Сайт поки в розробці"</span>
-        </div>
-      </div>
-
-      <div class="progress-grid">
-        <div class="prog-item">
-          <div class="prog-meta"><span>uk_UA</span><span>100%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 100%; background: var(--green);"></div></div>
-        </div>
-        <div class="prog-item">
-          <div class="prog-meta"><span>en_US</span><span>100%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 100%; background: var(--green);"></div></div>
-        </div>
-        <div class="prog-item">
-          <div class="prog-meta"><span>pl_PL</span><span>84%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 84%;"></div></div>
-        </div>
-        <div class="prog-item">
-          <div class="prog-meta"><span>de_DE</span><span>82%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 82%;"></div></div>
-        </div>
-        <div class="prog-item">
-          <div class="prog-meta"><span>be_BY</span><span>79%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 79%; background: var(--accent-2);"></div></div>
-        </div>
-        <div class="prog-item">
-          <div class="prog-meta"><span>kk_KZ</span><span>76%</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width: 76%; background: var(--accent-2);"></div></div>
+      <div class="boost-box">
+        <div class="boost-title" id="boost-title">Хочеш пришвидшити вихід сайту?</div>
+        <p class="boost-desc" id="boost-desc">
+          Будь-який донат напряму прискорює розробку, оплату інфраструктури та підготовку перших перекладів модпаків і модів. Приймаються картки з будь-якої країни та в будь-якій валюті.
+        </p>
+        <div class="cards-row">
+          <svg width="36" height="22" viewBox="0 0 38 24" aria-label="Visa">
+            <rect width="38" height="24" rx="4" fill="#1434CB" />
+            <text x="19" y="15.5" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-weight="900" font-style="italic" font-size="10.5">VISA</text>
+          </svg>
+          <svg width="36" height="22" viewBox="0 0 38 24" aria-label="Mastercard">
+            <rect width="38" height="24" rx="4" fill="#1D1D1B" />
+            <circle cx="15" cy="12" r="6.5" fill="#EB001B" />
+            <circle cx="23" cy="12" r="6.5" fill="#F79E1B" fill-opacity="0.9" />
+          </svg>
+          <span id="cards-note">Visa / Mastercard через Monobank</span>
         </div>
       </div>
 
-      <div class="actions-row">
-        <a href="https://send.monobank.ua/jar/7cQ5hJtFDy" target="_blank" rel="noopener noreferrer" class="btn btn-accent" id="ui-mono">
-          Monobank Банка
+      <div class="actions">
+        <a
+          href="https://send.monobank.ua/jar/7cQ5hJtFDy"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-accent"
+        >
+          <span id="btn-mono">Підтримати через Monobank ↗</span>
         </a>
-        <a href="https://www.youtube.com/@Baneronetwo/join" target="_blank" rel="noopener noreferrer" class="btn" id="ui-yt">
-          YouTube Спонсорство
+        <a
+          href="https://www.youtube.com/channel/UCTv1Y2G26o8h-i927g69a0w/join"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+        >
+          <span id="btn-yt">Спонсорство YouTube ↗</span>
         </a>
-        <a href="https://meowlab.pp.ua/" class="btn btn-primary" id="ui-back">
-          ← MeowLab Каталог
-        </a>
-        <a href="https://github.com/BANSAFAn/i10n-meowlab-" target="_blank" rel="noopener noreferrer" class="btn">
-          GitHub i10n ↗
-        </a>
+      </div>
+
+      <div class="footer-row">
+        <a href="/" class="back-link" id="back-link">← Повернутися до каталогу MeowLab</a>
+        <div class="lang-switch">
+          <button type="button" class="lang-btn active" data-lang="uk">UK</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
       </div>
     </main>
 
     <script>
-      const BG_KEYS = [
-        { k: 'site.status', v: 'У розробці', loc: 'UA' },
-        { k: 'i10n.engine.ready', v: 'Translation Memory v1', loc: 'EN' },
-        { k: 'launcher.prism.name', v: 'Prism Launcher', loc: 'EN' },
-        { k: 'catalog.filter.license', v: 'MIT / GPL-3.0', loc: 'PL' },
-        { k: 'security.badge.danger', v: 'НЕБЕЗПЕЧНИЙ', loc: 'UA' },
-        { k: 'community.funding', v: 'Фінансується людьми', loc: 'UA' },
-        { k: 'mod.sodium.tagline', v: 'Optimierung der Engine', loc: 'DE' },
-        { k: 'archive.badge', v: 'АРХІВ // ARCHIVED', loc: 'UA' },
-        { k: 'server.online.count', v: '{players} онлайн', loc: 'BE' },
-        { k: 'i18n.plural.keys', v: '{n} аударма кілті', loc: 'KZ' },
-        { k: 'bot.author.name', v: 'meowblin[bot]', loc: 'GIT' },
-        { k: 'console.bsod.cmd', v: 'meowlab', loc: 'SYS' }
-      ];
-
-      const wall = document.getElementById('marquee-wall');
-      if (wall) {
-        const rows = [
-          { dir: 'dir-left', slow: false, offset: 0 },
-          { dir: 'dir-right', slow: true, offset: 3 },
-          { dir: 'dir-left', slow: true, offset: 6 },
-          { dir: 'dir-right', slow: false, offset: 2 },
-          { dir: 'dir-left', slow: false, offset: 5 },
-          { dir: 'dir-right', slow: true, offset: 8 }
-        ];
-        rows.forEach((row) => {
-          const track = document.createElement('div');
-          track.className = `marquee-track ${row.dir}${row.slow ? ' slow' : ''}`;
-          const items = [...BG_KEYS.slice(row.offset), ...BG_KEYS.slice(0, row.offset)];
-          const doubled = [...items, ...items];
-          track.innerHTML = doubled
-            .map(
-              (item) =>
-                `<span class="i18n-token"><span class="loc">${item.loc}</span><span class="k">${item.k}</span><span class="eq">=</span><span class="v">"${item.v}"</span></span>`
-            )
-            .join('');
-          wall.appendChild(track);
-        });
-      }
-
-      const UI = {
+      const copy = {
         uk: {
-          badge: 'i10n.meowlab // У РОЗРОБЦІ',
-          title: 'Сайт поки в розробці',
-          sub: 'Це окремий модуль локалізації <strong>i10n MeowLab</strong> — платформа для спільного перекладу Minecraft-лаунчерів, модів і документації. Проєкт фінансується людьми, тож підтримка допоможе швидше запустити повну версію.',
-          slider: 'Слайдер ключів перекладу (live preview)',
-          mono: 'Monobank Банка',
-          yt: 'YouTube Спонсорство',
-          back: '← MeowLab Каталог',
-          samples: [
-            ['site.status', '"Сайт поки в розробці"'],
-            ['funding.model', '"Фінансується людьми"'],
-            ['catalog.tag.archived', '"Проєкт закинутий в архів :("'],
-            ['i10n.goal', '"Єдиний переклад Minecraft українською"'],
-            ['bot.sync', '"Автоматичний PR через meowblin"'],
-            ['console.easter_egg', '"Ти.....навіщо туди поліз ?"']
-          ]
+          pill: 'В РОЗРОБЦІ',
+          title: 'Сайт перекладів ще в розробці',
+          lead: 'Тут можна буде безкоштовно завантажувати готові українські переклади для модпаків, модів та шейдерів Minecraft. Зараз ми активно працюємо над запуском платформи.',
+          boostTitle: 'Хочеш пришвидшити вихід сайту?',
+          boostDesc: 'Будь-який донат напряму прискорює розробку, оплату інфраструктури та підготовку перших перекладів модпаків і модів. Приймаються картки з будь-якої країни та в будь-якій валюті.',
+          cardsNote: 'Visa / Mastercard через Monobank',
+          btnMono: 'Підтримати через Monobank ↗',
+          btnYt: 'Спонсорство YouTube ↗',
+          backLink: '← Повернутися до каталогу MeowLab'
         },
         en: {
-          badge: 'i10n.meowlab // IN DEVELOPMENT',
-          title: 'Site is currently in development',
-          sub: 'This is the dedicated <strong>i10n MeowLab</strong> localization module — a community platform to translate Minecraft launchers, mods, and docs. Funded by people; your support speeds up the launch.',
-          slider: 'Translation key slider (live preview)',
-          mono: 'Monobank Jar',
-          yt: 'YouTube Membership',
-          back: '← MeowLab Catalog',
-          samples: [
-            ['site.status', '"Site is currently in development"'],
-            ['funding.model', '"Funded by the community"'],
-            ['catalog.tag.archived', '"Archived & unmaintained :("'],
-            ['i10n.goal', '"Unified Minecraft localization hub"'],
-            ['bot.sync', '"Automated PR via meowblin"'],
-            ['console.easter_egg', '"You.....why did you go in there ?"']
-          ]
-        },
-        pl: {
-          badge: 'i10n.meowlab // W BUDOWIE',
-          title: 'Strona jest jeszcze w budowie',
-          sub: 'To osobny moduł lokalizacji <strong>i10n MeowLab</strong> — platforma do tłumaczenia launcherów i modów Minecrafta. Projekt finansowany przez ludzi — wsparcie przyspieszy start.',
-          slider: 'Suwak kluczy tłumaczeń (podgląd)',
-          mono: 'Monobank Słoik',
-          yt: 'Wspieranie YouTube',
-          back: '← Katalog MeowLab',
-          samples: [
-            ['site.status', '"Strona jest jeszcze w budowie"'],
-            ['funding.model', '"Finansowane przez ludzi"'],
-            ['catalog.tag.archived', '"Projekt zarchiwizowany :("'],
-            ['i10n.goal', '"Centrum tłumaczeń Minecrafta"'],
-            ['bot.sync', '"Automatyczny PR przez meowblin"'],
-            ['console.easter_egg', '"Ty.....po co tam wlazłeś ?"']
-          ]
-        },
-        de: {
-          badge: 'i10n.meowlab // IN ENTWICKLUNG',
-          title: 'Website befindet sich noch im Aufbau',
-          sub: 'Dies ist das Lokalisierungsmodul <strong>i10n MeowLab</strong> für Minecraft-Launcher, Mods und Dokumentationen. Von der Community finanziert — Unterstützung beschleunigt den Start.',
-          slider: 'Übersetzungsschlüssel-Slider (Vorschau)',
-          mono: 'Monobank Spendentopf',
-          yt: 'YouTube-Mitgliedschaft',
-          back: '← MeowLab Katalog',
-          samples: [
-            ['site.status', '"Website noch in Entwicklung"'],
-            ['funding.model', '"Finanziert von der Community"'],
-            ['catalog.tag.archived', '"Projekt archiviert :("'],
-            ['i10n.goal', '"Zentrale Minecraft-Übersetzungen"'],
-            ['bot.sync', '"Automatischer PR über meowblin"'],
-            ['console.easter_egg', '"Du.....warum bist du da reingegangen ?"']
-          ]
-        },
-        be: {
-          badge: 'i10n.meowlab // У РАСПРАЦОЎЦЫ',
-          title: 'Сайт пакуль у распрацоўцы',
-          sub: 'Гэта асобны модуль лакалізацыі <strong>i10n MeowLab</strong> — платформа для перакладу лаўнчараў і модаў Minecraft. Праект фінансуецца людзьмі, таму падтрымка паскорыць запуск.',
-          slider: 'Слайдар ключоў перакладу (прагляд)',
-          mono: 'Monobank Банка',
-          yt: 'YouTube Спонсарства',
-          back: '← Каталог MeowLab',
-          samples: [
-            ['site.status', '"Сайт пакуль у распрацоўцы"'],
-            ['funding.model', '"Фінансуецца людзьмі"'],
-            ['catalog.tag.archived', '"Праект закінуты ў архіў :("'],
-            ['i10n.goal', '"Адзіны цэнтр перакладу Minecraft"'],
-            ['bot.sync', '"Аўтаматычны PR праз meowblin"'],
-            ['console.easter_egg', '"Ты.....навошта туды палез ?"']
-          ]
-        },
-        kk: {
-          badge: 'i10n.meowlab // ӘЗІРЛЕНУДЕ',
-          title: 'Сайт әзірлену үстінде',
-          sub: 'Бұл Minecraft лаунчерлері мен модтарын аударуға арналған <strong>i10n MeowLab</strong> модулі. Жобаны адамдар қаржыландырады, қолдау іске қосуды жеделдетеді.',
-          slider: 'Аударма кілттерінің слайдері',
-          mono: 'Monobank Банка',
-          yt: 'YouTube Демеушілік',
-          back: '← MeowLab Каталогы',
-          samples: [
-            ['site.status', '"Сайт әзірлену үстінде"'],
-            ['funding.model', '"Адамдар қаржыландырады"'],
-            ['catalog.tag.archived', '"Жоба мұрағатқа жіберілді :("'],
-            ['i10n.goal', '"Minecraft аударма орталығы"'],
-            ['bot.sync', '"meowblin арқылы автоматты PR"'],
-            ['console.easter_egg', '"Сен.....ол жаққа неге кірдің ?"']
-          ]
+          pill: 'IN DEVELOPMENT',
+          title: 'Translations site is still in development',
+          lead: 'Soon you will be able to freely download ready-made translations for Minecraft modpacks, mods, and shaders here. We are actively building the platform.',
+          boostTitle: 'Want to speed up the launch?',
+          boostDesc: 'Any donation directly accelerates development, infrastructure funding, and the first batch of modpack and mod translations. Cards from any country and currency are accepted.',
+          cardsNote: 'Visa / Mastercard via Monobank',
+          btnMono: 'Donate via Monobank ↗',
+          btnYt: 'YouTube Membership ↗',
+          backLink: '← Back to MeowLab Catalog'
         }
       };
 
-      let currentLang = 'uk';
-      const slider = document.getElementById('key-range-slider');
-      const kpKey = document.getElementById('kp-key');
-      const kpVal = document.getElementById('kp-val');
-      const sliderIdx = document.getElementById('ui-slider-index');
-
-      function updateSliderPreview() {
-        const idx = Number(slider.value || 0);
-        const list = UI[currentLang].samples;
-        const pair = list[idx] || list[0];
-        kpKey.textContent = pair[0];
-        kpVal.textContent = pair[1];
-        sliderIdx.textContent = `${idx + 1} / ${list.length}`;
-      }
-
-      function applyLang(lang) {
-        currentLang = UI[lang] ? lang : 'uk';
-        const d = UI[currentLang];
-        document.getElementById('ui-badge').textContent = d.badge;
-        document.getElementById('ui-title').textContent = d.title;
-        document.getElementById('ui-sub').innerHTML = d.sub;
-        document.getElementById('ui-slider-label').textContent = d.slider;
-        document.getElementById('ui-mono').textContent = d.mono;
-        document.getElementById('ui-yt').textContent = d.yt;
-        document.getElementById('ui-back').textContent = d.back;
-        document.querySelectorAll('.lang-pill').forEach((btn) => {
-          btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+      document.querySelectorAll('.lang-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const l = btn.getAttribute('data-lang') || 'uk';
+          const c = copy[l] || copy.uk;
+          document.querySelectorAll('.lang-btn').forEach((b) => b.classList.toggle('active', b === btn));
+          document.getElementById('status-pill').textContent = c.pill;
+          document.getElementById('page-title').textContent = c.title;
+          document.getElementById('page-lead').textContent = c.lead;
+          document.getElementById('boost-title').textContent = c.boostTitle;
+          document.getElementById('boost-desc').textContent = c.boostDesc;
+          document.getElementById('cards-note').textContent = c.cardsNote;
+          document.getElementById('btn-mono').textContent = c.btnMono;
+          document.getElementById('btn-yt').textContent = c.btnYt;
+          document.getElementById('back-link').textContent = c.backLink;
         });
-        updateSliderPreview();
-      }
-
-      slider.addEventListener('input', updateSliderPreview);
-      document.querySelectorAll('.lang-pill').forEach((btn) => {
-        btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
       });
-      applyLang('uk');
     </script>
   </body>
 </html>
