@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T07:45:41.984Z",
+  "updatedAt": "2026-11-18T08:03:41.542Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -85,6 +85,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "bbsmc": {
+      "issueNumber": 38,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/38",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "clegendary-launcher": {
       "issueNumber": 37,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/37",
@@ -104,6 +112,14 @@
     "cubecraft": {
       "issueNumber": 25,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "curseforge": {
+      "issueNumber": 39,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/39",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -241,6 +257,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "modrinth": {
+      "issueNumber": 40,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/40",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "multimc": {
       "issueNumber": 34,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/34",
@@ -252,6 +276,14 @@
     "pika-network": {
       "issueNumber": 25,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "planetminecraft": {
+      "issueNumber": 41,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/41",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
