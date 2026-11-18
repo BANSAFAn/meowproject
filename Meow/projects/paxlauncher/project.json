@@ -1,0 +1,37 @@
+{
+  "slug": "paxlauncher",
+  "name": "PaxLauncher",
+  "shortName": "PaxLauncher",
+  "category": "launcher",
+  "icon": "/favicon.svg",
+  "country": "Україна",
+  "developer": "Kryp-s",
+  "license": "GPL-3.0",
+  "platforms": [
+    "Windows",
+    "Linux"
+  ],
+  "website": "https://paxlauncher.pp.ua/",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/Kryp-s/PaxLauncher"
+    }
+  ],
+  "issueThreadNumber": 44,
+  "issueSearchTerm": "PaxLauncher",
+  "tags": [
+    "launcher",
+    "Windows",
+    "Linux",
+    "Україна"
+  ],
+  "screenshots": [
+    "/projects/paxlauncher/screen-1.png",
+    "/projects/paxlauncher/screen-2.png",
+    "/projects/paxlauncher/screen-3.png",
+    "/projects/paxlauncher/screen-4.png",
+    "/projects/paxlauncher/screen-5.png"
+  ]
+}
