@@ -3693,22 +3693,132 @@ const jsonLdSchema = {
         font-weight: 700;
       }
 
-      /* Trigger rules */
-      html.gate-mobile-blocked #gate-mobile-modal {
-        display: flex !important;
-      }
-
-      html.gate-mobile-blocked body {
-        overflow: hidden !important;
-      }
-
-      /* Desktop small screen rule: viewport width < 1024px and NOT mobile */
-      @media (max-width: 1023px) {
-        html:not(.gate-mobile-blocked) #gate-desktop-resize-modal {
-          display: flex !important;
+      /* Responsive Mobile & Tablet Layout */
+      @media (max-width: 768px) {
+        html,
+        body {
+          overflow-x: hidden;
         }
-        html:not(.gate-mobile-blocked) body {
-          overflow: hidden !important;
+        .container {
+          padding-left: 0.85rem !important;
+          padding-right: 0.85rem !important;
+        }
+        .topbar-inner {
+          flex-wrap: wrap;
+          gap: 0.6rem;
+          padding: 0.65rem 0;
+        }
+        .header-actions {
+          flex-wrap: wrap;
+          gap: 0.45rem;
+          width: 100%;
+          justify-content: space-between;
+        }
+        .folder-tabs-nav {
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          gap: 0.35rem;
+          padding-bottom: 0.35rem;
+          scrollbar-width: none;
+        }
+        .folder-tabs-nav::-webkit-scrollbar {
+          display: none;
+        }
+        .folder-tab-btn {
+          flex: 0 0 auto;
+          white-space: nowrap;
+          padding: 0.45rem 0.72rem;
+          font-size: 0.8rem;
+        }
+        .hero-inner-card {
+          padding: 1.15rem 1rem !important;
+        }
+        .hero-title {
+          font-size: 1.45rem !important;
+          line-height: 1.2 !important;
+        }
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .hero-actions .paper-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .hero-meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 0.5rem !important;
+        }
+        .catalog-sidebar-left,
+        .catalog-sidebar-right {
+          padding: 0.75rem !important;
+          max-height: none !important;
+        }
+        .catalog-sidebar-left .index-tabs {
+          gap: 0.35rem;
+        }
+        .catalog-sidebar-left .tab-btn {
+          padding: 0.38rem 0.6rem;
+          font-size: 0.78rem;
+        }
+        .filter-toolbar-top {
+          flex-direction: column;
+          gap: 0.65rem;
+        }
+        .catalog-main-col .filter-selects-group {
+          grid-template-columns: 1fr;
+          gap: 0.55rem;
+        }
+        .dossier-header {
+          flex-direction: column;
+          align-items: stretch !important;
+          gap: 0.85rem;
+        }
+        .dossier-actions {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.45rem;
+          width: 100%;
+        }
+        .dossier-actions > *:first-child {
+          grid-column: 1 / -1;
+        }
+        .dossier-actions .paper-btn {
+          width: 100%;
+          justify-content: center;
+          min-height: 38px;
+        }
+        .dossier-meta-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .screenshots-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .footer-legal-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1.25rem !important;
+        }
+        .lightbox-frame {
+          width: calc(100vw - 1.2rem) !important;
+          max-width: none !important;
+          max-height: 88vh !important;
+          overflow-y: auto !important;
+          padding: 1.05rem !important;
+        }
+        .floating-quick-dock {
+          right: 0.85rem !important;
+          bottom: 0.85rem !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-meta-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .dossier-actions {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -4207,74 +4317,9 @@ const jsonLdSchema = {
       }
     </style>
     <script is:inline>
-      (function() {
-        try {
-          var ua = navigator.userAgent || '';
-          var isMob = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
-            (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua) && screen.width < 1024);
-          if (isMob) {
-            document.documentElement.classList.add('gate-mobile-blocked');
-          }
-        } catch (_) {}
-      })();
     </script>
   </head>
   <body>
-            <div id="gate-mobile-modal" class="device-gate-backdrop" role="alertdialog" aria-modal="true" aria-labelledby="gate-mobile-title">
-      <div class="device-gate-card">
-        <div class="device-gate-top">
-          <span>GATE // SEC-01</span>
-          <span class="stamp stamp-alpha">{t.mobileBlockedBadge}</span>
-        </div>
-        <div class="device-gate-icon">
-          <svg width="44" height="44" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M4 1h8v14H4V1zm2 2v10h4V3H6z" />
-            <rect x="7" y="11" width="2" height="1" />
-            <path d="M1 2l14 12" stroke="var(--stamp-red, #e74c3c)" stroke-width="1.8" />
-          </svg>
-        </div>
-        <h2 id="gate-mobile-title" class="device-gate-title">{t.mobileBlockedTitle}</h2>
-        <p class="device-gate-desc">{t.mobileBlockedDesc}</p>
-        <div class="device-gate-meta">
-          <div class="device-gate-row">
-            <span class="gate-label">{t.blockedRequiredDevice}</span>
-          </div>
-          <div class="device-gate-row">
-            <span class="gate-label">{t.blockedCurrentViewport}</span>
-            <span class="gate-val" data-viewport-val>...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-        <div id="gate-desktop-resize-modal" class="device-gate-backdrop" role="alertdialog" aria-modal="true" aria-labelledby="gate-resize-title">
-      <div class="device-gate-card">
-        <div class="device-gate-top">
-          <span>GATE // RES-02</span>
-          <span class="stamp stamp-alpha">{t.screenTooSmallBadge}</span>
-        </div>
-        <div class="device-gate-icon">
-          <svg width="44" height="44" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M1 2h14v10H1V2zm2 2v6h10V4H3z" />
-            <rect x="6" y="13" width="4" height="2" />
-            <rect x="4" y="14" width="8" height="1" />
-            <rect x="4" y="6" width="2" height="2" fill="var(--stamp-red, #e74c3c)" />
-            <rect x="10" y="6" width="2" height="2" fill="var(--stamp-red, #e74c3c)" />
-          </svg>
-        </div>
-        <h2 id="gate-resize-title" class="device-gate-title">{t.screenTooSmallTitle}</h2>
-        <p class="device-gate-desc">{t.screenTooSmallDesc}</p>
-        <div class="device-gate-meta">
-          <div class="device-gate-row">
-            <span class="gate-label">{t.blockedRequiredDevice}</span>
-          </div>
-          <div class="device-gate-row">
-            <span class="gate-label">{t.blockedCurrentViewport}</span>
-            <span class="gate-val" data-viewport-val>...</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
         <header class="site-header">
       <div class="container header-inner">
@@ -6196,6 +6241,10 @@ const jsonLdSchema = {
                         <button type="button" class="paper-select-option" data-value="Bad Reputation / Doxxing / Abuse" data-label={t.reportReasonAbuse}>
                           <span>{t.reportReasonAbuse}</span>
                           <span class="paper-select-opt-meta">Abuse</span>
+                        </button>
+                        <button type="button" class="paper-select-option" data-value="Fake Online / Bottled Players" data-label={t.reportReasonFakeOnline}>
+                          <span>{t.reportReasonFakeOnline}</span>
+                          <span class="paper-select-opt-meta">Fake Online</span>
                         </button>
                         <button type="button" class="paper-select-option" data-value="Other Security Issue" data-label={t.reportReasonOther}>
                           <span>{t.reportReasonOther}</span>
@@ -9262,31 +9311,6 @@ const jsonLdSchema = {
             window.open(issueUrl, '_blank');
           });
         }
-
-        // Check device and window resolution
-        function checkDeviceAndResolution() {
-          try {
-            const ua = navigator.userAgent || '';
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
-              (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua) && screen.width < 1024);
-
-            if (isMobile) {
-              document.documentElement.classList.add('gate-mobile-blocked');
-            } else {
-              document.documentElement.classList.remove('gate-mobile-blocked');
-            }
-
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            const valStr = `${w} × ${h} px`;
-            document.querySelectorAll('[data-viewport-val]').forEach((el) => {
-              el.textContent = valStr;
-            });
-          } catch (_) {}
-        }
-
-        checkDeviceAndResolution();
-        window.addEventListener('resize', checkDeviceAndResolution);
       }
 
       if (!window.__meowPageLoadBound) {

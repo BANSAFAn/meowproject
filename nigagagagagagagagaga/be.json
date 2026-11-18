@@ -427,5 +427,6 @@
   "catHintWebsitePh": "Напр. Modrinth або ChunkBase",
   "catHintProject": "<strong>Праект:</strong> апішыце тып інструмента, плагіна або бібліятэкі для супольнасці Minecraft.",
   "catHintProjectPh": "Напр. PaperMC або MCStatus API",
-  "footerCardsDonate": "Прымаем данаты з усяго свету праз Monobank:"
+  "footerCardsDonate": "Прымаем данаты з усяго свету праз Monobank:",
+  "reportReasonFakeOnline": "Накручаны анлайн (фэйкавыя гульцы / боты)"
 }

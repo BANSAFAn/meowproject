@@ -427,5 +427,6 @@
   "catHintWebsitePh": "Мыс. Modrinth немесе ChunkBase",
   "catHintProject": "<strong>Жоба:</strong> Minecraft қауымдастығына арналған құрал, плагин немесе кітапхана түрін сипаттаңыз.",
   "catHintProjectPh": "Мыс. PaperMC немесе MCStatus API",
-  "footerCardsDonate": "Бүкіл әлемнен Monobank арқылы донаттар қабылдаймыз:"
+  "footerCardsDonate": "Бүкіл әлемнен Monobank арқылы донаттар қабылдаймыз:",
+  "reportReasonFakeOnline": "Жалған онлайн (фейк ойыншылар / боттар)"
 }

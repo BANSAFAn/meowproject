@@ -425,5 +425,6 @@
   "catHintWebsitePh": "e.g. Modrinth or ChunkBase",
   "catHintProject": "<strong>Project:</strong> describe the type of tool, plugin, or library for the Minecraft community.",
   "catHintProjectPh": "e.g. PaperMC or MCStatus API",
-  "footerCardsDonate": "We accept donations worldwide via Monobank:"
+  "footerCardsDonate": "We accept donations worldwide via Monobank:",
+  "reportReasonFakeOnline": "Fake Online / Bottled Players"
 }
