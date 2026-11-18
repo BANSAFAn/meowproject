@@ -1,0 +1,36 @@
+{
+  "slug": "clegendary-launcher",
+  "name": "Clegendary Launcher",
+  "shortName": "Clegendary Launcher",
+  "category": "launcher",
+  "icon": "/projects/clegendary-launcher/icon.png",
+  "country": "Україна",
+  "developer": "WER-CORE",
+  "license": "GPL-3.0",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://cl-launcher.app/",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/WER-CORE/CL-OpenSource"
+    }
+  ],
+  "issueThreadNumber": 35,
+  "issueSearchTerm": "Clegendary Launcher",
+  "tags": [
+    "launcher",
+    "Windows",
+    "macOS",
+    "Linux",
+    "Україна"
+  ],
+  "screenshots": [
+    "/projects/clegendary-launcher/screen-1.png",
+    "/projects/clegendary-launcher/screen-2.png"
+  ]
+}
