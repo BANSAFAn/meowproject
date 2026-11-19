@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-19T20:06:34.140Z",
+  "updatedAt": "2026-11-19T20:13:43.125Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/11",
       "averageRating": 98,
-      "totalRatings": 1,
-      "commentsCount": 1,
+      "totalRatings": 2,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6797979650,
@@ -19,6 +19,18 @@
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/11#issuecomment-6797979650",
           "issueNum": 11
+        },
+        {
+          "id": "gl-4279317830",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-11",
+          "body": "good launcher",
+          "score": 98,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/11#note_4279317830",
+          "issueNum": 11
         }
       ]
     },
@@ -26,8 +38,8 @@
       "issueNumber": 12,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/12",
       "averageRating": 100,
-      "totalRatings": 1,
-      "commentsCount": 1,
+      "totalRatings": 2,
+      "commentsCount": 3,
       "reviews": [
         {
           "id": 6797985068,
@@ -40,6 +52,30 @@
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/12#issuecomment-6797985068",
           "issueNum": 12
+        },
+        {
+          "id": "gl-4279317925",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-11",
+          "body": "very fast launcher",
+          "score": 100,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/12#note_4279317925",
+          "issueNum": 12
+        },
+        {
+          "id": "gl-4279369269",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-19",
+          "body": "Привіт я з Gitlab !",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/12#note_4279369269",
+          "issueNum": 12
         }
       ]
     },
@@ -47,8 +83,8 @@
       "issueNumber": 13,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/13",
       "averageRating": 94,
-      "totalRatings": 1,
-      "commentsCount": 1,
+      "totalRatings": 2,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6805703550,
@@ -61,6 +97,18 @@
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/13#issuecomment-6805703550",
           "issueNum": 13
+        },
+        {
+          "id": "gl-4279317964",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-11",
+          "body": "ну норм зборка",
+          "score": 94,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/13#note_4279317964",
+          "issueNum": 13
         }
       ]
     },
@@ -69,8 +117,21 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/14",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": "gl-4279318326",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-18",
+          "body": "### [MeowProject Bot] Project Accepted & Published to Catalog! 🎉\n\n**Modrinth** has been accepted and merged into the live MeowProject catalog!\n\nThe official community discussion and reviews thread has been established here: #40.\n\n*Closing this proposal issue as completed.*",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/14#note_4279318326",
+          "issueNum": 14
+        }
+      ]
     },
     "lunarclient": {
       "issueNumber": 15,
@@ -141,7 +202,7 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/28",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 1,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6900909684,
@@ -156,6 +217,18 @@
           },
           "url": "https://github.com/BANSAFAn/meowproject/issues/28#issuecomment-6900909684",
           "issueNum": 28
+        },
+        {
+          "id": "gl-4279318968",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-15",
+          "body": "Зараз граю на цьому модпаці і скажу ідеально",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/28#note_4279318968",
+          "issueNum": 28
         }
       ]
     },
@@ -163,8 +236,8 @@
       "issueNumber": 19,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/19",
       "averageRating": 80,
-      "totalRatings": 1,
-      "commentsCount": 3,
+      "totalRatings": 2,
+      "commentsCount": 6,
       "reviews": [
         {
           "id": 6822271226,
@@ -200,6 +273,42 @@
           "score": null,
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/19#issuecomment-6958952650",
+          "issueNum": 19
+        },
+        {
+          "id": "gl-4279318674",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-12",
+          "body": "Жаль що пійшов на покой....упс точніше в архів",
+          "score": 80,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/19#note_4279318674",
+          "issueNum": 19
+        },
+        {
+          "id": "gl-4279318683",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-17",
+          "body": "Тепер він в архівчику...:(",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/19#note_4279318683",
+          "issueNum": 19
+        },
+        {
+          "id": "gl-4279318686",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-17",
+          "body": "А в мене ще 3 PR на нього залишилось :3",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/19#note_4279318686",
           "issueNum": 19
         }
       ]
@@ -249,15 +358,28 @@
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/50",
       "averageRating": null,
       "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": "gl-4279411930",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-19",
+          "body": "Чудовий клієнт який вільний в інтернеті",
+          "score": null,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/50#note_4279411930",
+          "issueNum": 50
+        }
+      ]
     },
     "mcc-island": {
       "issueNumber": 22,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
       "averageRating": 100,
-      "totalRatings": 1,
-      "commentsCount": 1,
+      "totalRatings": 2,
+      "commentsCount": 2,
       "reviews": [
         {
           "id": 6822315810,
@@ -269,6 +391,18 @@
           "score": 100,
           "reactions": {},
           "url": "https://github.com/BANSAFAn/meowproject/issues/22#issuecomment-6822315810",
+          "issueNum": 22
+        },
+        {
+          "id": "gl-4279318743",
+          "source": "gitlab",
+          "author": "banernotfake",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795118511",
+          "date": "2026-11-12",
+          "body": "міні ігри, стиль і головне цікавість дуже чудова",
+          "score": 100,
+          "reactions": {},
+          "url": "https://gitlab.com/banernotfake/meowproject/-/work_items/22#note_4279318743",
           "issueNum": 22
         }
       ]
