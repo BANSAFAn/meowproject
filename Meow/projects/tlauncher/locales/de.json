@@ -1,0 +1,11 @@
+{
+  "tagline": "Bekannter inoffizieller Minecraft-Launcher (RU) — als GEFÄHRLICH markiert",
+  "description": "TLauncher ist ein proprietärer Minecraft-Launcher russischer Herkunft. Er ermöglicht das Starten verschiedener Versionen sowie die Installation von Forge, Fabric, OptiFine und Skins, ist jedoch Closed-Source und aufgrund dokumentierter Sicherheitsrisiken als GEFÄHRLICH eingestuft.",
+  "features": [
+    "Startet verschiedene Minecraft-Versionen inkl. Forge, Fabric und OptiFine",
+    "Integrierter Katalog für Mods, Skins und Modpacks",
+    "Closed-Source / Proprietär (Herkunft: Russland)",
+    "Als GEFÄHRLICH markiert — Videobeweis im Sicherheitsbericht"
+  ],
+  "screenshotCaptions": []
+}

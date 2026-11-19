@@ -1,0 +1,28 @@
+{
+  "slug": "legacy-launcher",
+  "category": "launcher",
+  "name": "Legacy Launcher",
+  "shortName": "Legacy",
+  "icon": "/projects/legacy-launcher/icon.png",
+  "website": "https://llaun.ch/",
+  "country": "RU",
+  "isOpenSource": false,
+  "license": "Proprietary",
+  "developer": "turikhay",
+  "verified": false,
+  "issueSearchTerm": "Legacy Launcher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "Minecraft Launcher",
+    "Proprietary",
+    "Russia",
+    "Mods",
+    "Skins"
+  ],
+  "screenshots": []
+}

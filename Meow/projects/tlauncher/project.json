@@ -1,0 +1,39 @@
+{
+  "slug": "tlauncher",
+  "category": "launcher",
+  "name": "TLauncher",
+  "shortName": "TLauncher",
+  "icon": "/projects/tlauncher/icon.png",
+  "website": "https://tlauncher.org/",
+  "country": "RU",
+  "isOpenSource": false,
+  "license": "Proprietary",
+  "developer": "TLauncher Inc.",
+  "verified": false,
+  "issueSearchTerm": "TLauncher",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "sourceLinks": [],
+  "dangerReport": {
+    "reportedAt": "2026-11-19",
+    "reasonType": "malware",
+    "summary": "Небезпечний пропрієтарний лаунчер (РФ) із закритим кодом та зафіксованими доказами підозрілої/шкідливої поведінки.",
+    "evidenceMarkdown": "### Попередження безпеки\n\nПроєкт **TLauncher** позначено як **НЕБЕЗПЕЧНИЙ** через закритий вихідний код, приховані завантаження/рекламні модулі та ризики безпеки.\n\n- Відео-доказ: https://youtu.be/5j4bOXms4mo?si=ZlN2ZeeEiE8e3NZX\n\nРекомендуємо не встановлювати цей лаунчер і користуватися перевіреними open-source альтернативами (наприклад, **Prism Launcher**, **XMCL** або **HMCL**).",
+    "evidenceLinks": [
+      "https://youtu.be/5j4bOXms4mo?si=ZlN2ZeeEiE8e3NZX"
+    ],
+    "issueNumber": 0,
+    "reportedBy": "BANSAFAn"
+  },
+  "tags": [
+    "Minecraft Launcher",
+    "Proprietary",
+    "Danger",
+    "Virus Warning",
+    "Russia"
+  ],
+  "screenshots": []
+}

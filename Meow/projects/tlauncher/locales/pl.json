@@ -1,0 +1,11 @@
+{
+  "tagline": "Popularny nieoficjalny launcher Minecraft (RU) oznaczony jako NIEBEZPIECZNY",
+  "description": "TLauncher to własnościowy launcher Minecraft pochodzenia rosyjskiego. Umożliwia uruchamianie wersji gry oraz instalację Forge, Fabric, OptiFine i skinów, jednak ma zamknięty kod źródłowy i jest oznaczony jako NIEBEZPIECZNY z powodu udokumentowanych zagrożeń bezpieczeństwa.",
+  "features": [
+    "Uruchamianie wersji Minecraft z instalacją Forge, Fabric i OptiFine",
+    "Wbudowany katalog modów, paczek i skinów",
+    "Zamknięty kod źródłowy (Proprietary, pochodzenie: Rosja)",
+    "Oznaczony jako NIEBEZPIECZNY — zobacz dowód wideo w raporcie"
+  ],
+  "screenshotCaptions": []
+}

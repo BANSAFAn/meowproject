@@ -1,0 +1,11 @@
+{
+  "tagline": "Popular unofficial Minecraft launcher (RU) flagged as DANGEROUS",
+  "description": "TLauncher is a proprietary Minecraft launcher of Russian origin. It supports launching various Minecraft versions, installing Forge, Fabric, OptiFine, modpacks, and custom skins, but it is closed-source and flagged as DANGEROUS due to documented security concerns and suspicious behavior.",
+  "features": [
+    "Quick launch for Minecraft versions with built-in Forge, Fabric, and OptiFine setup",
+    "Built-in mods, skins, and resource pack catalog",
+    "Closed-source proprietary software (origin: Russia)",
+    "Flagged as DANGEROUS — see video evidence in the danger report"
+  ],
+  "screenshotCaptions": []
+}
