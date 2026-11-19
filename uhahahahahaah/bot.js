@@ -176,10 +176,35 @@ async function downloadImage(url, destPath) {
 }
 
 // -----------------------------------------------------------------------------
-// A. REVIEW COMPILER (issues comments -> static reviews.json)
+// A. REVIEW COMPILER (GitHub + GitLab issues comments -> static reviews.json)
 // -----------------------------------------------------------------------------
+const GITLAB_PROJECT = process.env.GITLAB_PROJECT || 'banernotfake/meowproject';
+
+async function fetchGitLabIssues() {
+  try {
+    const res = await fetch(`https://gitlab.com/api/v4/projects/${encodeURIComponent(GITLAB_PROJECT)}/issues?state=opened&per_page=100`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+async function fetchGitLabNotes(iid) {
+  try {
+    const res = await fetch(`https://gitlab.com/api/v4/projects/${encodeURIComponent(GITLAB_PROJECT)}/issues/${iid}/notes?per_page=100`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
 async function compileReviews(issues, slugs, projectsDir) {
   appendSummary('### 💬 Compiling Community Reviews & Ratings into static reviews.json');
+  const gitlabIssues = await fetchGitLabIssues();
   
   const reviewsData = {
     updatedAt: new Date().toISOString(),
@@ -250,6 +275,7 @@ async function compileReviews(issues, slugs, projectsDir) {
 
       reviewsList.push({
         id: c.id,
+        source: 'github',
         author: c.user?.login || 'community-user',
         avatar: c.user?.avatar_url || '',
         date: (c.created_at || '').slice(0, 10),
@@ -259,6 +285,42 @@ async function compileReviews(issues, slugs, projectsDir) {
         url: c.html_url || issue.html_url,
         issueNum: issue.number
       });
+    }
+
+    // Merge GitLab issue notes if a matching GitLab issue exists
+    const glIssue = (meta.gitlabIssueId && gitlabIssues.find(gi => gi.iid === meta.gitlabIssueId)) ||
+      gitlabIssues.find(gi => {
+        const t = (gi.title || '').toLowerCase();
+        return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase());
+      });
+    if (glIssue && glIssue.user_notes_count > 0) {
+      const glNotes = await fetchGitLabNotes(glIssue.iid);
+      for (const n of glNotes) {
+        if (n.system) continue;
+        const rawBody = (n.body || '').trim();
+        const match = rawBody.match(RATING_REGEX);
+        let score = null;
+        if (match) {
+          const val = Number(match[1] || match[2] || match[3]);
+          if (!isNaN(val) && val >= 0 && val <= 100) {
+            score = val;
+            ratings.push(score);
+          }
+        }
+        const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
+        reviewsList.push({
+          id: `gl-${n.id}`,
+          source: 'gitlab',
+          author: n.author?.username || n.author?.name || 'gitlab-user',
+          avatar: n.author?.avatar_url || '',
+          date: (n.created_at || '').slice(0, 10),
+          body: cleanedBody,
+          score,
+          reactions: {},
+          url: `${glIssue.web_url}#note_${n.id}`,
+          issueNum: glIssue.iid
+        });
+      }
     }
 
     const avg = ratings.length > 0 ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length) : null;

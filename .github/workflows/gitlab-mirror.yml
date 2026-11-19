@@ -1,0 +1,24 @@
+name: Mirror GitHub main to GitLab
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  mirror-to-gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push mirror to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          if [ -z "$GITLAB_TOKEN" ]; then
+            echo "GITLAB_TOKEN secret is not set. Skipping GitLab mirror."
+            exit 0
+          fi
+          git push --force "https://oauth2:${GITLAB_TOKEN}@gitlab.com/banernotfake/meowproject.git" HEAD:main

@@ -253,10 +253,25 @@ const jsonLdSchema = {
       ) {
         location.replace('https://' + location.host + location.pathname + location.search + location.hash);
       }
+      try {
+        if ((location.pathname === '/' || location.pathname === '/index.html') && !localStorage.getItem('meow_lang_manual')) {
+          var ua = navigator.userAgent || '';
+          if (!/bot|crawl|spider|slurp|google|bing|yandex|duckduck/i.test(ua)) {
+            var supported = ['uk', 'en', 'de', 'pl', 'be', 'kk'];
+            var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(function (l) {
+              return String(l || '').toLowerCase().slice(0, 2);
+            });
+            var picked = langs.find(function (c) { return supported.indexOf(c) !== -1; }) || 'en';
+            if (picked !== 'uk') {
+              location.replace('/' + picked + '/' + location.search + location.hash);
+            }
+          }
+        }
+      } catch (_) {}
     </script>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -4487,6 +4502,7 @@ const jsonLdSchema = {
                     <a
                       href={getLangHref(l.code as any)}
                       class={`lang-dropdown-item ${isActive ? 'active' : ''}`}
+                      data-lang-choice={l.code}
                       role="option"
                       aria-selected={isActive ? 'true' : 'false'}
                     >
@@ -7402,6 +7418,18 @@ const jsonLdSchema = {
           });
         }
 
+        if (langMenu && !langMenu.dataset.choiceBound) {
+          langMenu.dataset.choiceBound = '1';
+          langMenu.querySelectorAll('[data-lang-choice]').forEach((item) => {
+            item.addEventListener('click', () => {
+              try {
+                const chosen = item.getAttribute('data-lang-choice');
+                if (chosen) localStorage.setItem('meow_lang_manual', chosen);
+              } catch (_) {}
+            });
+          });
+        }
+
         // 2. Top-Level Views & Dedicated Single-Project View Mode
         const viewButtons = document.querySelectorAll('[data-view-btn]');
         const viewPanels = {
@@ -8782,7 +8810,7 @@ const jsonLdSchema = {
             }
           } catch (_) {}
 
-          // STEP 2: Progressive live fetch from GitHub Issues if rate limit permits
+          // STEP 2: Progressive live fetch from GitHub & GitLab Issues if rate limit permits
           let allIssues = null;
           try {
             const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=open&per_page=100`, {
@@ -8790,6 +8818,15 @@ const jsonLdSchema = {
             });
             if (res.ok) {
               allIssues = await res.json();
+            }
+          } catch (_) {}
+
+          let allGitlabIssues = null;
+          try {
+            const glProject = encodeURIComponent('banernotfake/meowproject');
+            const glRes = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues?state=opened&per_page=100`);
+            if (glRes.ok) {
+              allGitlabIssues = await glRes.json();
             }
           } catch (_) {}
 
@@ -8826,6 +8863,7 @@ const jsonLdSchema = {
                     score: typeof r.score === 'number' ? r.score : null,
                     url: r.url || projStatic.issueUrl,
                     issueNum: projStatic.issueNumber || issueNumber,
+                    source: r.source || (String(r.url || '').includes('gitlab.com') ? 'gitlab' : 'github'),
                   });
                   if (typeof r.score === 'number') {
                     ratings.push(r.score);
@@ -8897,6 +8935,52 @@ const jsonLdSchema = {
                             reactions,
                             url: c.html_url || iss.html_url,
                             issueNum: iss.number,
+                            source: 'github',
+                          });
+                        });
+                      }
+                    }
+                  } catch (_) {}
+                }
+              }
+            }
+
+            // C. Merge live comments from GitLab Issues (if GitLab mirror/project has open issue)
+            if (Array.isArray(allGitlabIssues) && searchTerm) {
+              const glMatching = allGitlabIssues.filter(
+                (iss) => iss.title && iss.title.toLowerCase().includes(searchTerm)
+              );
+              for (const glIss of glMatching) {
+                if (glIss.user_notes_count > 0) {
+                  try {
+                    const glProject = encodeURIComponent('banernotfake/meowproject');
+                    const nRes = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues/${glIss.iid}/notes?per_page=100`);
+                    if (nRes.ok) {
+                      const notes = await nRes.json();
+                      if (Array.isArray(notes)) {
+                        notes.forEach((n) => {
+                          if (n.system) return;
+                          const rawBody = sanitizePlainText(n.body || '');
+                          const match = rawBody.match(ratingRegex);
+                          let score = null;
+                          if (match) {
+                            const val = Number(match[1] || match[2] || match[3]);
+                            if (!isNaN(val) && val >= 0 && val <= 100) {
+                              score = val;
+                              ratings.push(score);
+                            }
+                          }
+                          const cleanedBody = rawBody.replace(ratingRegex, '').trim();
+                          collectedItems.push({
+                            author: sanitizePlainText(n.author?.username || n.author?.name || 'gitlab-user'),
+                            avatar: n.author?.avatar_url || '',
+                            date: sanitizePlainText((n.created_at || '').slice(0, 10)),
+                            body: cleanedBody,
+                            score,
+                            reactions: {},
+                            url: `${glIss.web_url}#note_${n.id}`,
+                            issueNum: glIss.iid,
+                            source: 'gitlab',
                           });
                         });
                       }
@@ -8954,7 +9038,7 @@ const jsonLdSchema = {
                 userLink.target = '_blank';
                 userLink.rel = 'noopener noreferrer';
 
-                if (item.avatar && /^https:\/\/avatars\.githubusercontent\.com\//.test(item.avatar)) {
+                if (item.avatar && /^https:\/\/(avatars\.githubusercontent\.com|gitlab\.com|secure\.gravatar\.com|www\.gravatar\.com)\//.test(item.avatar)) {
                   const img = document.createElement('img');
                   img.src = item.avatar;
                   img.alt = item.author;
@@ -8974,6 +9058,17 @@ const jsonLdSchema = {
                   img.style.display = 'inline-block';
                   userLink.appendChild(img);
                 }
+
+                const isGitlab = item.source === 'gitlab' || String(item.url || '').includes('gitlab.com');
+                const srcIcon = document.createElement('span');
+                srcIcon.title = isGitlab ? 'GitLab' : 'GitHub';
+                srcIcon.style.display = 'inline-flex';
+                srcIcon.style.alignItems = 'center';
+                srcIcon.style.flexShrink = '0';
+                srcIcon.innerHTML = isGitlab
+                  ? '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#E24329" d="M23.546 10.93L13.067.452a1.55 1.55 0 0 0-2.188 0L8.708 2.627l2.76 2.76a1.838 1.838 0 0 1 2.327 2.341l2.66 2.66a1.838 1.838 0 1 1-1.103 1.033l-2.48-2.48v6.53a1.838 1.838 0 1 1-1.512-.054V8.81a1.838 1.838 0 0 1-.998-2.41L7.63 3.668.454 10.844a1.55 1.55 0 0 0 0 2.187l10.48 10.48a1.55 1.55 0 0 0 2.187 0l10.426-10.394a1.55 1.55 0 0 0 0-2.187z" style="display:none"/><path fill="#FC6D26" d="M12 21.5L16.4 8H7.6L12 21.5z"/><path fill="#E24329" d="M12 21.5L7.6 8H1.5L12 21.5z"/><path fill="#FCA326" d="M1.5 8L.1 12.3c-.1.4 0 .9.4 1.1L12 21.5 1.5 8z"/><path fill="#E24329" d="M1.5 8h6.1L5 1.9c-.1-.3-.6-.3-.7 0L1.5 8z"/><path fill="#E24329" d="M12 21.5L16.4 8h6.1L12 21.5z"/><path fill="#FCA326" d="M22.5 8l1.4 4.3c.1.4 0 .9-.4 1.1L12 21.5 22.5 8z"/><path fill="#E24329" d="M22.5 8h-6.1L19 1.9c.1-.3.6-.3.7 0L22.5 8z"/></svg>'
+                  : '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+                userLink.appendChild(srcIcon);
 
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = `@${item.author}`;
