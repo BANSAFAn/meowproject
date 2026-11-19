@@ -8823,10 +8823,16 @@ const jsonLdSchema = {
 
           let allGitlabIssues = null;
           try {
-            const glProject = encodeURIComponent('banernotfake/meowproject');
-            const glRes = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues?state=opened&per_page=100`);
+            const glRes = await fetch('https://gitlab.com/api/graphql', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                query: `{ project(fullPath: "banernotfake/meowproject") { issues(state: opened, first: 100) { nodes { iid title webUrl notes(first: 100) { nodes { id body system createdAt url author { username name avatarUrl } } } } } } }`,
+              }),
+            });
             if (glRes.ok) {
-              allGitlabIssues = await glRes.json();
+              const glJson = await glRes.json();
+              allGitlabIssues = glJson?.data?.project?.issues?.nodes || null;
             }
           } catch (_) {}
 
@@ -8945,48 +8951,44 @@ const jsonLdSchema = {
               }
             }
 
-            // C. Merge live comments from GitLab Issues (if GitLab mirror/project has open issue)
+            // C. Merge live comments from GitLab Issues via GraphQL (publicly readable without auth)
             if (Array.isArray(allGitlabIssues) && searchTerm) {
               const glMatching = allGitlabIssues.filter(
                 (iss) => iss.title && iss.title.toLowerCase().includes(searchTerm)
               );
               for (const glIss of glMatching) {
-                if (glIss.user_notes_count > 0) {
-                  try {
-                    const glProject = encodeURIComponent('banernotfake/meowproject');
-                    const nRes = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues/${glIss.iid}/notes?per_page=100`);
-                    if (nRes.ok) {
-                      const notes = await nRes.json();
-                      if (Array.isArray(notes)) {
-                        notes.forEach((n) => {
-                          if (n.system) return;
-                          const rawBody = sanitizePlainText(n.body || '');
-                          const match = rawBody.match(ratingRegex);
-                          let score = null;
-                          if (match) {
-                            const val = Number(match[1] || match[2] || match[3]);
-                            if (!isNaN(val) && val >= 0 && val <= 100) {
-                              score = val;
-                              ratings.push(score);
-                            }
-                          }
-                          const cleanedBody = rawBody.replace(ratingRegex, '').trim();
-                          collectedItems.push({
-                            author: sanitizePlainText(n.author?.username || n.author?.name || 'gitlab-user'),
-                            avatar: n.author?.avatar_url || '',
-                            date: sanitizePlainText((n.created_at || '').slice(0, 10)),
-                            body: cleanedBody,
-                            score,
-                            reactions: {},
-                            url: `${glIss.web_url}#note_${n.id}`,
-                            issueNum: glIss.iid,
-                            source: 'gitlab',
-                          });
-                        });
-                      }
+                const notes = glIss.notes?.nodes || [];
+                notes.forEach((n) => {
+                  if (n.system) return;
+                  const noteUrl = n.url || glIss.webUrl;
+                  if (collectedItems.some((item) => item.url === noteUrl)) return;
+
+                  const rawBody = sanitizePlainText(n.body || '');
+                  const match = rawBody.match(ratingRegex);
+                  let score = null;
+                  if (match) {
+                    const val = Number(match[1] || match[2] || match[3]);
+                    if (!isNaN(val) && val >= 0 && val <= 100) {
+                      score = val;
+                      ratings.push(score);
                     }
-                  } catch (_) {}
-                }
+                  }
+                  const cleanedBody = rawBody.replace(ratingRegex, '').trim();
+                  const rawAvatar = n.author?.avatarUrl || '';
+                  const avatar = rawAvatar.startsWith('/') ? `https://gitlab.com${rawAvatar}` : rawAvatar;
+
+                  collectedItems.push({
+                    author: sanitizePlainText(n.author?.username || n.author?.name || 'gitlab-user'),
+                    avatar,
+                    date: sanitizePlainText((n.createdAt || '').slice(0, 10)),
+                    body: cleanedBody,
+                    score,
+                    reactions: {},
+                    url: noteUrl,
+                    issueNum: Number(glIss.iid) || glIss.iid,
+                    source: 'gitlab',
+                  });
+                });
               }
             }
 

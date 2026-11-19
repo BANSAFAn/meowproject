@@ -180,23 +180,19 @@ async function downloadImage(url, destPath) {
 // -----------------------------------------------------------------------------
 const GITLAB_PROJECT = process.env.GITLAB_PROJECT || 'banernotfake/meowproject';
 
-async function fetchGitLabIssues() {
+async function fetchGitLabIssuesWithNotes() {
   try {
-    const res = await fetch(`https://gitlab.com/api/v4/projects/${encodeURIComponent(GITLAB_PROJECT)}/issues?state=opened&per_page=100`);
+    const res = await fetch('https://gitlab.com/api/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `{ project(fullPath: "${GITLAB_PROJECT}") { issues(state: opened, first: 100) { nodes { iid title webUrl notes(first: 100) { nodes { id body system createdAt url author { username name avatarUrl } } } } } } }`
+      })
+    });
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
-}
-
-async function fetchGitLabNotes(iid) {
-  try {
-    const res = await fetch(`https://gitlab.com/api/v4/projects/${encodeURIComponent(GITLAB_PROJECT)}/issues/${iid}/notes?per_page=100`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    const nodes = data?.data?.project?.issues?.nodes;
+    return Array.isArray(nodes) ? nodes : [];
   } catch {
     return [];
   }
@@ -204,7 +200,7 @@ async function fetchGitLabNotes(iid) {
 
 async function compileReviews(issues, slugs, projectsDir) {
   appendSummary('### 💬 Compiling Community Reviews & Ratings into static reviews.json');
-  const gitlabIssues = await fetchGitLabIssues();
+  const gitlabIssues = await fetchGitLabIssuesWithNotes();
   
   const reviewsData = {
     updatedAt: new Date().toISOString(),
@@ -288,39 +284,40 @@ async function compileReviews(issues, slugs, projectsDir) {
     }
 
     // Merge GitLab issue notes if a matching GitLab issue exists
-    const glIssue = (meta.gitlabIssueId && gitlabIssues.find(gi => gi.iid === meta.gitlabIssueId)) ||
+    const glIssue = (meta.gitlabIssueId && gitlabIssues.find(gi => Number(gi.iid) === Number(meta.gitlabIssueId))) ||
       gitlabIssues.find(gi => {
         const t = (gi.title || '').toLowerCase();
         return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase());
       });
-    if (glIssue && glIssue.user_notes_count > 0) {
-      const glNotes = await fetchGitLabNotes(glIssue.iid);
-      for (const n of glNotes) {
-        if (n.system) continue;
-        const rawBody = (n.body || '').trim();
-        const match = rawBody.match(RATING_REGEX);
-        let score = null;
-        if (match) {
-          const val = Number(match[1] || match[2] || match[3]);
-          if (!isNaN(val) && val >= 0 && val <= 100) {
-            score = val;
-            ratings.push(score);
-          }
+    const glNotes = glIssue?.notes?.nodes || [];
+    for (const n of glNotes) {
+      if (n.system) continue;
+      const rawBody = (n.body || '').trim();
+      const match = rawBody.match(RATING_REGEX);
+      let score = null;
+      if (match) {
+        const val = Number(match[1] || match[2] || match[3]);
+        if (!isNaN(val) && val >= 0 && val <= 100) {
+          score = val;
+          ratings.push(score);
         }
-        const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
-        reviewsList.push({
-          id: `gl-${n.id}`,
-          source: 'gitlab',
-          author: n.author?.username || n.author?.name || 'gitlab-user',
-          avatar: n.author?.avatar_url || '',
-          date: (n.created_at || '').slice(0, 10),
-          body: cleanedBody,
-          score,
-          reactions: {},
-          url: `${glIssue.web_url}#note_${n.id}`,
-          issueNum: glIssue.iid
-        });
       }
+      const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
+      const rawAvatar = n.author?.avatarUrl || '';
+      const avatar = rawAvatar.startsWith('/') ? `https://gitlab.com${rawAvatar}` : rawAvatar;
+      const noteId = String(n.id || '').split('/').pop();
+      reviewsList.push({
+        id: `gl-${noteId}`,
+        source: 'gitlab',
+        author: n.author?.username || n.author?.name || 'gitlab-user',
+        avatar,
+        date: (n.createdAt || '').slice(0, 10),
+        body: cleanedBody,
+        score,
+        reactions: {},
+        url: n.url || glIssue.webUrl,
+        issueNum: Number(glIssue.iid) || glIssue.iid
+      });
     }
 
     const avg = ratings.length > 0 ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length) : null;
