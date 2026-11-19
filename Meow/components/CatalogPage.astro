@@ -158,6 +158,7 @@ const COUNTRY_ALIASES: Record<string, string> = {
   au: 'AU', aus: 'AU', australia: 'AU', 'австралія': 'AU',
   kz: 'KZ', kaz: 'KZ', kazakhstan: 'KZ', 'казахстан': 'KZ',
   by: 'BY', blr: 'BY', belarus: 'BY', 'білорусь': 'BY', 'беларусь': 'BY',
+  ru: 'RU', rus: 'RU', russia: 'RU', 'росія': 'RU', 'россия': 'RU', 'рф': 'RU',
   eu: 'EU', europe: 'EU', 'європа': 'EU',
   global: 'GLOBAL', international: 'GLOBAL', world: 'GLOBAL', 'глобальний': 'GLOBAL', 'міжнародний': 'GLOBAL', 'світ': 'GLOBAL',
 };
@@ -169,7 +170,7 @@ const normalizeCountryCode = (raw: string) => {
 
 const KNOWN_FLAG_CODES = new Set([
   'CN', 'US', 'DE', 'GB', 'UA', 'PL', 'CA', 'FR', 'NL', 'JP', 'KR',
-  'CZ', 'IT', 'ES', 'SE', 'FI', 'NO', 'BR', 'AU', 'KZ', 'BY', 'EU', 'GLOBAL',
+  'CZ', 'IT', 'ES', 'SE', 'FI', 'NO', 'BR', 'AU', 'KZ', 'BY', 'RU', 'EU', 'GLOBAL',
 ]);
 
 const projectCountry = (code: string) => {
@@ -5195,6 +5196,13 @@ const jsonLdSchema = {
                               <svg width="14" height="10" viewBox="0 0 24 16" aria-hidden="true">
                                 <rect width="24" height="5.33" fill="#FFF" />
                                 <rect y="5.33" width="24" height="5.33" fill="#D22730" />
+                                <rect y="10.66" width="24" height="5.34" fill="#FFF" />
+                              </svg>
+                            )}
+                            {cCode === 'RU' && (
+                              <svg width="14" height="10" viewBox="0 0 24 16" aria-hidden="true">
+                                <rect width="24" height="5.33" fill="#FFF" />
+                                <rect y="5.33" width="24" height="5.33" fill="#0083D6" />
                                 <rect y="10.66" width="24" height="5.34" fill="#FFF" />
                               </svg>
                             )}
