@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T20:13:43.125Z",
+  "updatedAt": "2026-11-19T20:28:40.058Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -374,6 +374,14 @@
         }
       ]
     },
+    "legacy-launcher": {
+      "issueNumber": 51,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/51",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "mcc-island": {
       "issueNumber": 22,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/22",
@@ -466,6 +474,14 @@
     "sklauncher": {
       "issueNumber": 30,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/30",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "tlauncher": {
+      "issueNumber": 52,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/52",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
