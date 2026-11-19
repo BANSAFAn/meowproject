@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T07:17:35.007Z",
+  "updatedAt": "2026-11-19T09:48:29.403Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -232,6 +232,14 @@
     "hypixel": {
       "issueNumber": 20,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "labymod": {
+      "issueNumber": 50,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/50",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
