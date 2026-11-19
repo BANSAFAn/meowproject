@@ -1,0 +1,29 @@
+{
+  "slug": "labymod",
+  "name": "LabyMod",
+  "shortName": "LabyMod",
+  "category": "client",
+  "icon": "/projects/labymod/icon.png",
+  "country": "DE",
+  "developer": "LabyMedia GmbH",
+  "license": "Proprietary",
+  "platforms": [
+    "Windows",
+    "macOS",
+    "Linux"
+  ],
+  "website": "https://www.labymod.net",
+  "sourceLinks": [],
+  "issueThreadNumber": 0,
+  "issueSearchTerm": "LabyMod",
+  "tags": [
+    "Client",
+    "PvP",
+    "Mods",
+    "Cosmetics",
+    "Voice Chat",
+    "Proprietary",
+    "Germany"
+  ],
+  "screenshots": []
+}

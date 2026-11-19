@@ -1,0 +1,11 @@
+{
+  "tagline": "Popularny klient PvP i utility do Minecraft z wbudowanymi dodatkami i optymalizacją",
+  "description": "LabyMod to znany niemiecki klient dla Minecraft Java Edition łączący optymalizację FPS, widżety PvP, wbudowany sklep z dodatkami, czat głosowy, system znajomych oraz szeroką personalizację interfejsu.",
+  "features": [
+    "Wbudowany menedżer dodatków i personalizowany HUD",
+    "Optymalizacja wydajności i wzrost FPS",
+    "Zintegrowany czat głosowy i lista znajomych",
+    "Wsparcie dla nowych i starszych wersji Minecraft Java Edition"
+  ],
+  "screenshotCaptions": []
+}
