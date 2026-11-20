@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-20T09:29:26.898Z",
+  "updatedAt": "2026-11-20T09:40:00.200Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -346,8 +346,8 @@
       "reviews": []
     },
     "hypixel": {
-      "issueNumber": 20,
-      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/20",
+      "issueNumber": 56,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/56",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -456,8 +456,8 @@
       "reviews": []
     },
     "pika-network": {
-      "issueNumber": 25,
-      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
+      "issueNumber": 57,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/57",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
