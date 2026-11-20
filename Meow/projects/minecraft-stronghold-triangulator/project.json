@@ -1,0 +1,29 @@
+{
+  "slug": "minecraft-stronghold-triangulator",
+  "name": "Minecraft Stronghold Triangulator",
+  "shortName": "Minecraft Stronghold Triangulator",
+  "category": "website",
+  "icon": "/favicon.svg",
+  "country": "Global",
+  "developer": "ens-gijs",
+  "license": "Apache-2.0",
+  "platforms": [
+    "Web"
+  ],
+  "website": "https://ens-gijs.github.io/minecraft-stronghold-locator/",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "Github",
+      "url": "https://github.com/ens-gijs/minecraft-stronghold-locator"
+    }
+  ],
+  "issueThreadNumber": 58,
+  "issueSearchTerm": "Minecraft Stronghold Triangulator",
+  "tags": [
+    "website",
+    "Web",
+    "Global"
+  ],
+  "screenshots": []
+}
