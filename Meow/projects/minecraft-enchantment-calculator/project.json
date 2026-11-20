@@ -1,0 +1,23 @@
+{
+  "slug": "minecraft-enchantment-calculator",
+  "name": "Minecraft Enchantment Calculator",
+  "shortName": "Minecraft Enchantment Calculator",
+  "category": "website",
+  "icon": "/projects/minecraft-enchantment-calculator/icon.png",
+  "country": "Global",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "Web / Browser"
+  ],
+  "website": "https://enchantmentcalculator.online/",
+  "sourceLinks": [],
+  "issueThreadNumber": 53,
+  "issueSearchTerm": "Minecraft Enchantment Calculator",
+  "tags": [
+    "website",
+    "Web / Browser",
+    "Global"
+  ],
+  "screenshots": []
+}
