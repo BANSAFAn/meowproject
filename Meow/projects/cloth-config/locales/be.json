@@ -1,0 +1,10 @@
+{
+  "tagline": "Папулярная бібліятэка для экранаў налад модаў непасрэдна ў гульні",
+  "description": "Cloth Config API — стандартная бібліятэка канфігурацый для модаў Minecraft на Fabric, Forge і NeoForge, якая забяспечвае зручнае меню налад.",
+  "features": [
+    "Зручныя экраны налад для соцень модаў",
+    "Падтрымка Fabric, Forge і NeoForge",
+    "Адкрыты код (LGPL-3.0)"
+  ],
+  "screenshotCaptions": []
+}

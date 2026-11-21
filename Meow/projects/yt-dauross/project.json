@@ -1,0 +1,44 @@
+{
+  "slug": "yt-dauross",
+  "category": "youtuber",
+  "name": "Dauross",
+  "shortName": "Dauross",
+  "icon": "/projects/yt-dauross/icon.jpg",
+  "banner": "/projects/yt-dauross/banner.jpg",
+  "website": "https://www.youtube.com/@dauross",
+  "youtubeUrl": "https://www.youtube.com/@dauross",
+  "youtubeChannelId": "UC8JSQsPmd_qYVK6YoA8E22g",
+  "latestVideos": [
+    {
+      "id": "PLP5mpfYG58",
+      "title": "Вижив У ЗАКРИТОМУ ХОРРОР КОЛІ в Майнкрафт",
+      "published": "2026-11-21"
+    },
+    {
+      "id": "EW1gnBxfqSE",
+      "title": "100 Днів у ЗАКРИТОМУ КОЛІ в МАЙНКРАФТ ХАРДКОР Українською",
+      "published": "2026-11-12"
+    },
+    {
+      "id": "XquyfWuXwPg",
+      "title": "я ВИЖИВ з ВЕРІТІ в Майнкрафт Хоррор Українською",
+      "published": "2026-11-05"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@dauross",
+  "verified": false,
+  "issueSearchTerm": "Dauross",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "dauross"
+  ],
+  "screenshots": []
+}

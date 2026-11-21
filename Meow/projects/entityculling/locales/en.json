@@ -1,0 +1,10 @@
+{
+  "tagline": "Async path-tracing to skip rendering hidden block/entities for higher FPS",
+  "description": "Entity Culling uses asynchronous path-tracing on a separate CPU thread to skip rendering block entities and mobs that are hidden behind walls out of the player view.",
+  "features": [
+    "Async visibility checks off the main render thread",
+    "Significant FPS boost near dense bases and farms",
+    "Available for Fabric, Forge, NeoForge, and Quilt"
+  ],
+  "screenshotCaptions": []
+}

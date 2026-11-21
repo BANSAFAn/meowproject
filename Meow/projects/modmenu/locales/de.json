@@ -1,0 +1,10 @@
+{
+  "tagline": "Fügt ein übersichtliches Mod-Menü mit Konfigurationszugriff für Fabric & Quilt hinzu",
+  "description": "Mod Menu ergänzt Minecraft auf Fabric und Quilt um ein Menü zum Durchsuchen, Sortieren und Konfigurieren aller installierten Mods.",
+  "features": [
+    "Durchsuchbare Liste aller installierten Mods",
+    "Direkter Zugriff auf Mod-Einstellungen",
+    "Open-Source unter MIT-Lizenz"
+  ],
+  "screenshotCaptions": []
+}

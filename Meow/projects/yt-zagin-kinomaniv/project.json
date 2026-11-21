@@ -1,0 +1,44 @@
+{
+  "slug": "yt-zagin-kinomaniv",
+  "category": "youtuber",
+  "name": "Загін Кіноманів",
+  "shortName": "Загін Кіноманів",
+  "icon": "/projects/yt-zagin-kinomaniv/icon.jpg",
+  "banner": "/projects/yt-zagin-kinomaniv/banner.jpg",
+  "website": "https://www.youtube.com/@zagin_kinomaniv",
+  "youtubeUrl": "https://www.youtube.com/@zagin_kinomaniv",
+  "youtubeChannelId": "UCig7t6LFOjS2fKkhjbVLpjw",
+  "latestVideos": [
+    {
+      "id": "8UdvYT1Togc",
+      "title": "ЩО ПРИХОВАЛИ ПРО СКРЯБІНА? Огляд фільму \"Кузьма: Страшно веселий\"",
+      "published": "2026-11-19"
+    },
+    {
+      "id": "UrzJeLIWu30",
+      "title": "На що держава витратила 20 мільйонів?",
+      "published": "2026-11-02"
+    },
+    {
+      "id": "Pw1INAZgRm0",
+      "title": "\"В БІЙ ІДУТЬ ОДНІ СТАРИКИ\": Як росіяни вкрали український фільм?",
+      "published": "2026-06-27"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@zagin_kinomaniv",
+  "verified": false,
+  "issueSearchTerm": "Загін Кіноманів",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "zagin_kinomaniv"
+  ],
+  "screenshots": []
+}

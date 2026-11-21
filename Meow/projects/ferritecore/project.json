@@ -1,0 +1,37 @@
+{
+  "slug": "ferritecore",
+  "category": "mod",
+  "name": "FerriteCore",
+  "shortName": "FerriteCore",
+  "icon": "/projects/ferritecore/icon.webp",
+  "website": "https://modrinth.com/mod/ferrite-core",
+  "country": "DE",
+  "isOpenSource": true,
+  "license": "MIT",
+  "developer": "malte0811",
+  "verified": true,
+  "issueSearchTerm": "FerriteCore",
+  "platforms": [
+    "Fabric",
+    "Forge",
+    "NeoForge",
+    "Quilt"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/malte0811/FerriteCore"
+    }
+  ],
+  "tags": [
+    "Mod",
+    "Optimization",
+    "Memory",
+    "Fabric",
+    "Forge",
+    "NeoForge",
+    "Open Source"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,44 @@
+{
+  "slug": "yt-retkon18",
+  "category": "youtuber",
+  "name": "ReTkon",
+  "shortName": "ReTkon",
+  "icon": "/projects/yt-retkon18/icon.jpg",
+  "banner": "/projects/yt-retkon18/banner.jpg",
+  "website": "https://www.youtube.com/@ReTkon18",
+  "youtubeUrl": "https://www.youtube.com/@ReTkon18",
+  "youtubeChannelId": "UC8j8i5D78msRBXL076BuKYw",
+  "latestVideos": [
+    {
+      "id": "xGHzvZZAAIs",
+      "title": "ХІРОБРІН ЦЕ СТІВ З МАЙБУТНЬОГО? (Розбір Теорії Herobrine Is Steve From The Future)",
+      "published": "2026-11-15"
+    },
+    {
+      "id": "WP_By0toIMI",
+      "title": "ФІНАЛ ЦЬОГО ХОРРОРУ ПРО СОБАКУ МЕНЕ ЗДИВУВАВ... | Огляд Something Is Wrong With My Dog",
+      "published": "2026-11-01"
+    },
+    {
+      "id": "CwPG8ckofCk",
+      "title": "ЦЕЙ \"СТРАШНИЙ\" ХОРРОР ПРО СОБАКУ МЕНЕ ЗНИЩИВ...  (Розбір Something Is Wrong With My Dog)",
+      "published": "2026-10-25"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@ReTkon18",
+  "verified": false,
+  "issueSearchTerm": "ReTkon",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "ReTkon18"
+  ],
+  "screenshots": []
+}

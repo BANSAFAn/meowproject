@@ -1,0 +1,36 @@
+{
+  "slug": "iris",
+  "category": "mod",
+  "name": "Iris Shaders",
+  "shortName": "Iris",
+  "icon": "/projects/iris/icon.webp",
+  "website": "https://irisshaders.dev/",
+  "country": "US",
+  "isOpenSource": true,
+  "license": "LGPL-3.0",
+  "developer": "coderbot / IrisShaders",
+  "verified": true,
+  "issueSearchTerm": "Iris Shaders",
+  "platforms": [
+    "Fabric",
+    "NeoForge",
+    "Quilt"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/IrisShaders/Iris"
+    }
+  ],
+  "tags": [
+    "Mod",
+    "Optimization",
+    "Shaders",
+    "Fabric",
+    "NeoForge",
+    "Quilt",
+    "Open Source"
+  ],
+  "screenshots": []
+}

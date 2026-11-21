@@ -1,0 +1,10 @@
+{
+  "tagline": "Жүздеген Minecraft модтарына арналған конфигурация кітапханасы",
+  "description": "Cloth Config API — Fabric, Forge және NeoForge модтарына ойын ішінде ыңғайлы баптау мәзірін беретін танымал конфигурация кітапханасы.",
+  "features": [
+    "Ойын ішіндегі ыңғайлы баптау экраны",
+    "Fabric, Forge және NeoForge қолдауы",
+    "LGPL-3.0 ашық бастапқы коды"
+  ],
+  "screenshotCaptions": []
+}

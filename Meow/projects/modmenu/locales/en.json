@@ -1,0 +1,10 @@
+{
+  "tagline": "Adds a clean mod list and config access screen for Fabric and Quilt",
+  "description": "Mod Menu adds a dedicated Mods screen to Minecraft on Fabric and Quilt, letting you browse installed mods, search by name, and open each mod config screen.",
+  "features": [
+    "Searchable list of all installed Fabric/Quilt mods",
+    "Direct access to mod configuration screens",
+    "Open-source under MIT license"
+  ],
+  "screenshotCaptions": []
+}

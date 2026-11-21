@@ -1,0 +1,10 @@
+{
+  "tagline": "Biblioteka ekranów konfiguracji dla setek modów Minecrafta",
+  "description": "Cloth Config API to standardowa biblioteka konfiguracyjna dla modów Minecrafta na Fabric, Forge i NeoForge, zapewniająca wygodne menu ustawień w grze.",
+  "features": [
+    "Czytelne ekrany konfiguracji w grze",
+    "Obsługa Fabric, Forge i NeoForge",
+    "Otwarty kod na licencji LGPL-3.0"
+  ],
+  "screenshotCaptions": []
+}

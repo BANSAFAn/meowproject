@@ -1,0 +1,10 @@
+{
+  "tagline": "Sodium және OptiFine пакеттерімен үйлесімді заманауи Minecraft шейдер жүктегіші",
+  "description": "Iris Shaders — Minecraft: Java Edition үшін жоғары өнімділікке және OptiFine шейдер пакеттерімен үйлесімділікке арналған ашық бастапқы коды бар шейдер жүктегіші.",
+  "features": [
+    "Sodium-мен толық үйлесімділік және жоғары FPS",
+    "OptiFine шейдер пакеттерін қолдау",
+    "LGPL-3.0 ашық бастапқы коды"
+  ],
+  "screenshotCaptions": []
+}

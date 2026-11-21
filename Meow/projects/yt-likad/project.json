@@ -1,0 +1,44 @@
+{
+  "slug": "yt-likad",
+  "category": "youtuber",
+  "name": "LikaD",
+  "shortName": "LikaD",
+  "icon": "/projects/yt-likad/icon.jpg",
+  "banner": "/projects/yt-likad/banner.jpg",
+  "website": "https://www.youtube.com/@LikaD",
+  "youtubeUrl": "https://www.youtube.com/@LikaD",
+  "youtubeChannelId": "UCPGG7eCl5MhKjN7Lh2C42tg",
+  "latestVideos": [
+    {
+      "id": "3n8xEq-VbRU",
+      "title": "Террарія - 1000 Годин ШЕДЕВРУ",
+      "published": "2026-07-21"
+    },
+    {
+      "id": "x88RUXiayKE",
+      "title": "Тобі (не) Набридне Майнкрафт",
+      "published": "2026-06-26"
+    },
+    {
+      "id": "qOHz0bS4_RI",
+      "title": "Ми Не Зрозуміли Майнкрафт Дропи..",
+      "published": "2026-06-07"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@LikaD",
+  "verified": false,
+  "issueSearchTerm": "LikaD",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "LikaD"
+  ],
+  "screenshots": []
+}

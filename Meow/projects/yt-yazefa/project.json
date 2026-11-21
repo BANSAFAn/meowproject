@@ -1,0 +1,44 @@
+{
+  "slug": "yt-yazefa",
+  "category": "youtuber",
+  "name": "язєфа",
+  "shortName": "язєфа",
+  "icon": "/projects/yt-yazefa/icon.jpg",
+  "banner": "/projects/yt-yazefa/banner.jpg",
+  "website": "https://www.youtube.com/@yazefa",
+  "youtubeUrl": "https://www.youtube.com/@yazefa",
+  "youtubeChannelId": "UCY8fABRHgVZJTqg0WkFhPPQ",
+  "latestVideos": [
+    {
+      "id": "d62GOGsRKHc",
+      "title": "Українські Майнкрафтери ЗРАДНИКИ | Бірка, Кавун, Стеффанка, Лупрей",
+      "published": "2026-11-15"
+    },
+    {
+      "id": "Ci1ja1O8JLQ",
+      "title": "Бонні - Персонаж Якого Боявся Його ж Творець",
+      "published": "2026-10-10"
+    },
+    {
+      "id": "ooGj173RVgI",
+      "title": "Що Люди Думали про Фнаф 1 в 2014",
+      "published": "2026-10-01"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@yazefa",
+  "verified": false,
+  "issueSearchTerm": "язєфа",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "yazefa"
+  ],
+  "screenshots": []
+}

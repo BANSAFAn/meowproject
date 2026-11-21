@@ -1,0 +1,44 @@
+{
+  "slug": "yt-baneronetwo",
+  "category": "youtuber",
+  "name": "Baneronetwo",
+  "shortName": "Baneronetwo",
+  "icon": "/projects/yt-baneronetwo/icon.jpg",
+  "banner": "/projects/yt-baneronetwo/banner.jpg",
+  "website": "https://www.youtube.com/@Baneronetwo",
+  "youtubeUrl": "https://www.youtube.com/@Baneronetwo",
+  "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
+  "latestVideos": [
+    {
+      "id": "5j4bOXms4mo",
+      "title": "TLauncher без вірусів! Але чому він небезпечний?",
+      "published": "2026-11-20"
+    },
+    {
+      "id": "He-mSCzRgg4",
+      "title": "Millida Launcher - новий TLauncher ? Розбір коду і слід РФ ?",
+      "published": "2026-11-10"
+    },
+    {
+      "id": "vVlS3KgxuEs",
+      "title": "З російського Minecraft на український ! НАВІЩО?",
+      "published": "2026-10-30"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@Baneronetwo",
+  "verified": false,
+  "issueSearchTerm": "Baneronetwo",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "Baneronetwo"
+  ],
+  "screenshots": []
+}

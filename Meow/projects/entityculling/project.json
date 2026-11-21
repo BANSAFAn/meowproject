@@ -1,0 +1,37 @@
+{
+  "slug": "entityculling",
+  "category": "mod",
+  "name": "Entity Culling",
+  "shortName": "EntityCulling",
+  "icon": "/projects/entityculling/icon.webp",
+  "website": "https://modrinth.com/mod/entityculling",
+  "country": "DE",
+  "isOpenSource": true,
+  "license": "tr7zw-Protective",
+  "developer": "tr7zw",
+  "verified": true,
+  "issueSearchTerm": "Entity Culling",
+  "platforms": [
+    "Fabric",
+    "Forge",
+    "NeoForge",
+    "Quilt"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/tr7zw/EntityCulling"
+    }
+  ],
+  "tags": [
+    "Mod",
+    "Optimization",
+    "FPS",
+    "Fabric",
+    "Forge",
+    "NeoForge",
+    "Open Source"
+  ],
+  "screenshots": []
+}

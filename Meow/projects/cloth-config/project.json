@@ -1,0 +1,36 @@
+{
+  "slug": "cloth-config",
+  "category": "mod",
+  "name": "Cloth Config API",
+  "shortName": "Cloth Config",
+  "icon": "/projects/cloth-config/icon.webp",
+  "website": "https://modrinth.com/mod/cloth-config",
+  "country": "GLOBAL",
+  "isOpenSource": true,
+  "license": "LGPL-3.0",
+  "developer": "shedaniel",
+  "verified": true,
+  "issueSearchTerm": "Cloth Config API",
+  "platforms": [
+    "Fabric",
+    "Forge",
+    "NeoForge"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/shedaniel/ClothConfig"
+    }
+  ],
+  "tags": [
+    "Mod",
+    "Library",
+    "Config",
+    "Fabric",
+    "Forge",
+    "NeoForge",
+    "Open Source"
+  ],
+  "screenshots": []
+}

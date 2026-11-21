@@ -1,0 +1,10 @@
+{
+  "tagline": "Dodaje ekran listy modów i szybkiego dostępu do ustawień dla Fabric i Quilt",
+  "description": "Mod Menu dodaje ekran z listą zainstalowanych modów na Fabric i Quilt z wyszukiwaniem oraz szybkim przejściem do ich konfiguracji.",
+  "features": [
+    "Przejrzysta lista zainstalowanych modów z wyszukiwarką",
+    "Szybki dostęp do konfiguracji modów",
+    "Otwarty kod na licencji MIT"
+  ],
+  "screenshotCaptions": []
+}

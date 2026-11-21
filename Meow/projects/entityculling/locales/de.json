@@ -1,0 +1,10 @@
+{
+  "tagline": "Asynchrones Path-Tracing zum Ausblenden verdeckter Block-/Entities für mehr FPS",
+  "description": "Entity Culling nutzt asynchrones Path-Tracing, um Blöcke und Entities hinter Wänden nicht zu rendern, was die Bildrate deutlich erhöht.",
+  "features": [
+    "Asynchrone Sichtbarkeitsprüfung auf eigenem Thread",
+    "Deutlich mehr FPS bei Basen und Farmen",
+    "Für Fabric, Forge, NeoForge und Quilt"
+  ],
+  "screenshotCaptions": []
+}

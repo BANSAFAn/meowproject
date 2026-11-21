@@ -515,6 +515,60 @@ async function handlePushOrDispatch() {
   // Compile reviews.json from real comments!
   await compileReviews(issues, slugs, projectsDir);
 
+  // Refresh YouTubers' 3 latest regular videos (UULF = no Shorts, no Live)
+  try {
+    const ytFile = path.resolve(process.cwd(), 'public', 'data', 'youtubers.json');
+    let ytData = { updatedAt: new Date().toISOString(), channels: {} };
+    if (fs.existsSync(ytFile)) {
+      try { ytData = readJsonFile(ytFile); } catch (_) {}
+    }
+    const decodeXml = (s) => (s || '')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>');
+
+    let ytChanged = false;
+    for (const slug of slugs) {
+      const metaPath = path.join(projectsDir, slug, 'project.json');
+      const meta = readJsonFile(metaPath);
+      if (meta.category !== 'youtuber' || !meta.youtubeChannelId || !meta.youtubeChannelId.startsWith('UC')) continue;
+      const uulf = 'UULF' + meta.youtubeChannelId.slice(2);
+      try {
+        const res = await fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${uulf}`);
+        if (!res.ok) continue;
+        const rss = await res.text();
+        const vids = [...rss.matchAll(/<entry>[\s\S]*?<yt:videoId>([^<]+)<\/yt:videoId>[\s\S]*?<title>([^<]+)<\/title>[\s\S]*?<published>([^<]+)<\/published>[\s\S]*?<\/entry>/g)]
+          .slice(0, 3)
+          .map(m => ({ id: m[1], title: decodeXml(m[2]), published: m[3].slice(0, 10) }));
+        if (vids.length > 0) {
+          const prevIds = (meta.latestVideos || []).map(v => v.id).join(',');
+          const nextIds = vids.map(v => v.id).join(',');
+          if (prevIds !== nextIds) {
+            meta.latestVideos = vids;
+            fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
+            modifiedMeta = true;
+            ytChanged = true;
+          }
+          ytData.channels[slug] = {
+            youtubeChannelId: meta.youtubeChannelId,
+            banner: meta.banner || null,
+            latestVideos: vids
+          };
+        }
+      } catch (_) {}
+    }
+    if (ytChanged) {
+      ytData.updatedAt = new Date().toISOString();
+      fs.mkdirSync(path.dirname(ytFile), { recursive: true });
+      fs.writeFileSync(ytFile, JSON.stringify(ytData, null, 2) + '\n', 'utf8');
+      appendSummary('📺 Refreshed YouTubers latest regular videos (no Shorts/Live).');
+    }
+  } catch (e) {
+    appendSummary(`⚠️ YouTubers refresh skipped: ${e.message}`);
+  }
+
   // Auto-close accidental PRs for existing catalog issues (#3 ATM9, #4 Sodium, #5 Lunar Client)
   try {
     const { data: openPrs } = await githubApi(`/repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=50`);
@@ -1406,11 +1460,11 @@ async function handleIssues(eventPayload) {
   }
 
   // 3. New Project Submission: prefix check
-  const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'server:', 'website:', 'project:'];
+  const validPrefixes = ['launcher:', 'modpack:', 'mod:', 'client:', 'server:', 'website:', 'youtuber:', 'project:'];
   const matchedPrefix = validPrefixes.find(p => lowerTitle.startsWith(p));
 
   if (!matchedPrefix) {
-    await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`server: Name\`\n- \`website: Name\`\n- \`project: Name\``);
+    await postOrUpdateBotComment(issue.number, `### [MeowProject Bot] Title Format Verification Required\n\nPlease start the issue title with a valid project type prefix:\n- \`launcher: Name\`\n- \`modpack: Name\`\n- \`mod: Name\`\n- \`client: Name\`\n- \`server: Name\`\n- \`website: Name\`\n- \`youtuber: Name\`\n- \`project: Name\``);
     return;
   }
 
@@ -1437,7 +1491,7 @@ async function main() {
     } catch (_) {}
   }
 
-  if (GITHUB_EVENT_NAME === 'push' || GITHUB_EVENT_NAME === 'workflow_dispatch' || GITHUB_EVENT_NAME === 'discussion' || GITHUB_EVENT_NAME === 'discussion_comment') {
+  if (GITHUB_EVENT_NAME === 'push' || GITHUB_EVENT_NAME === 'workflow_dispatch' || GITHUB_EVENT_NAME === 'schedule' || GITHUB_EVENT_NAME === 'discussion' || GITHUB_EVENT_NAME === 'discussion_comment') {
     await handlePushOrDispatch();
   } else if (GITHUB_EVENT_NAME === 'issue_comment') {
     await handleComment();

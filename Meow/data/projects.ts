@@ -14,8 +14,8 @@ import { LANG_CODES, type LangCode } from '../i18n/translations';
  * Folders are discovered automatically, nothing has to be registered here.
  */
 
-export type ProjectCategory = 'launcher' | 'client' | 'modpack' | 'mod' | 'server' | 'website' | 'project';
-export const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'] as const;
+export type ProjectCategory = 'launcher' | 'client' | 'modpack' | 'mod' | 'server' | 'website' | 'youtuber' | 'project';
+export const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'youtuber', 'project'] as const;
 export type SourceHost = 'github' | 'gitlab' | 'gitea' | 'sourceforge' | 'gitee' | 'cnb';
 
 export interface ProjectSourceLink {
@@ -52,6 +52,11 @@ export interface ProjectMeta {
   };
   platforms: string[];
   website?: string;
+  /** YouTuber-specific metadata */
+  banner?: string | null;
+  youtubeUrl?: string;
+  youtubeChannelId?: string;
+  latestVideos?: { id: string; title: string; published?: string }[];
   /** Server-specific metadata */
   serverIp?: string;
   serverOnline?: string;
@@ -136,9 +141,10 @@ export const PROJECTS: ProjectEntry[] = Object.entries(metaFiles)
       localeFiles[`../projects/${slug}/locales/en.json`];
     if (!base) throw new Error(`Project "${slug}" has no locales/uk.json or locales/en.json`);
 
+    const minDescLen = meta.category === 'youtuber' ? 1 : 20;
     const availableLangs: LangCode[] = LANG_CODES.filter((code) => {
       const loc = localeFiles[`../projects/${slug}/locales/${code}.json`];
-      return Boolean(loc && loc.description && loc.description.trim().length >= 20);
+      return Boolean(loc && loc.description && loc.description.trim().length >= minDescLen);
     });
 
     const locales = Object.fromEntries(

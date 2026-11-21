@@ -1,0 +1,121 @@
+name: Announce New Projects on Reddit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Meow/projects/*/project.json'
+
+jobs:
+  reddit-post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Post newly added projects to Reddit
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          REDDIT_SUBREDDIT: ${{ secrets.REDDIT_SUBREDDIT }}
+        run: |
+          node - <<'EOF'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+
+          const {
+            REDDIT_CLIENT_ID,
+            REDDIT_CLIENT_SECRET,
+            REDDIT_USERNAME,
+            REDDIT_PASSWORD,
+            REDDIT_SUBREDDIT,
+          } = process.env;
+
+          if (!REDDIT_CLIENT_ID || !REDDIT_CLIENT_SECRET || !REDDIT_USERNAME || !REDDIT_PASSWORD || !REDDIT_SUBREDDIT) {
+            console.log('Reddit secrets are not configured yet. Skipping auto-post.');
+            process.exit(0);
+          }
+
+          const diff = execSync('git diff --diff-filter=A --name-only HEAD~1 HEAD -- "Meow/projects/*/project.json"', {
+            encoding: 'utf8',
+          }).trim();
+
+          if (!diff) {
+            console.log('No newly added project.json files in this push.');
+            process.exit(0);
+          }
+
+          async function run() {
+            const auth = Buffer.from(`${REDDIT_CLIENT_ID}:${REDDIT_CLIENT_SECRET}`).toString('base64');
+            const tokenRes = await fetch('https://www.reddit.com/api/v1/access_token', {
+              method: 'POST',
+              headers: {
+                Authorization: `Basic ${auth}`,
+                'User-Agent': 'MeowLabBot/1.0 by u/' + REDDIT_USERNAME,
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: new URLSearchParams({
+                grant_type: 'password',
+                username: REDDIT_USERNAME,
+                password: REDDIT_PASSWORD,
+              }),
+            });
+
+            const tokenData = await tokenRes.json();
+            if (!tokenData.access_token) {
+              throw new Error('Failed to obtain Reddit OAuth token: ' + JSON.stringify(tokenData));
+            }
+
+            const files = diff.split(/\r?\n/).filter(Boolean);
+            for (const file of files) {
+              const meta = JSON.parse(fs.readFileSync(file, 'utf8'));
+              const slug = meta.slug || file.split('/')[2];
+              let loc = {};
+              const enPath = `Meow/projects/${slug}/locales/en.json`;
+              const ukPath = `Meow/projects/${slug}/locales/uk.json`;
+              if (fs.existsSync(enPath)) loc = JSON.parse(fs.readFileSync(enPath, 'utf8'));
+              else if (fs.existsSync(ukPath)) loc = JSON.parse(fs.readFileSync(ukPath, 'utf8'));
+
+              const title = `New on MeowLab [${String(meta.category || 'project').toUpperCase()}]: ${meta.name}`;
+              const text = [
+                loc.tagline || '',
+                '',
+                loc.description || '',
+                '',
+                `Platforms: ${(meta.platforms || []).join(', ') || 'N/A'}`,
+                `License: ${meta.license || 'N/A'}`,
+                `MeowLab page: https://meowlab.pp.ua/en/project/${slug}/`,
+              ]
+                .join('\n')
+                .trim();
+
+              const postRes = await fetch('https://oauth.reddit.com/api/submit', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${tokenData.access_token}`,
+                  'User-Agent': 'MeowLabBot/1.0 by u/' + REDDIT_USERNAME,
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                  api_type: 'json',
+                  kind: 'self',
+                  sr: REDDIT_SUBREDDIT,
+                  title,
+                  text,
+                  resubmit: 'true',
+                }),
+              });
+              const postData = await postRes.json();
+              console.log(`Posted ${slug} to r/${REDDIT_SUBREDDIT}:`, JSON.stringify(postData));
+            }
+          }
+
+          run().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF

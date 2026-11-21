@@ -80,7 +80,7 @@ function getCategoryHref(targetLang: LangCode, category: string) {
   return targetLang === 'uk' ? `/category/${category}/` : `/${targetLang}/category/${category}/`;
 }
 
-const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'] as const;
+const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'youtuber', 'project'] as const;
 
 const categoryCounts: Record<string, number> = Object.fromEntries(
   PREFIXES.map((c) => [c, PROJECTS.filter((p) => p.category === c).length]),
@@ -272,7 +272,7 @@ const jsonLdSchema = {
     </script>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -4441,6 +4441,149 @@ const jsonLdSchema = {
         border-radius: 6px;
       }
 
+      .youtuber-banner-wrap {
+        width: 100%;
+        aspect-ratio: 6 / 1;
+        min-height: 110px;
+        max-height: 185px;
+        overflow: hidden;
+        border-bottom: 2px solid var(--border-ink);
+        background: var(--paper-inset);
+      }
+
+      .youtuber-banner-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .yt-featured-card {
+        border: 1.5px solid var(--border-ink);
+        border-left: 4px solid var(--accent);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--paper-inset);
+        margin-bottom: 0.9rem;
+      }
+
+      .yt-embed-box {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #0b0c0f;
+        border-bottom: 1.5px solid var(--border-ink);
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .yt-embed-box img,
+      .yt-embed-box :global(iframe) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 0;
+        display: block;
+      }
+
+      .yt-play-badge {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.28);
+        transition: background 0.15s ease;
+      }
+
+      .yt-embed-box:hover .yt-play-badge {
+        background: rgba(0, 0, 0, 0.45);
+      }
+
+      .yt-play-circle {
+        width: 54px;
+        height: 38px;
+        border-radius: 10px;
+        background: #ff0000;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      }
+
+      .yt-prev-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 0.85rem;
+      }
+
+      .yt-prev-card {
+        border: 1.5px solid var(--border-ink);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--paper-inset);
+      }
+
+      .yt-card-meta {
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.28rem;
+      }
+
+      .yt-card-title {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.35;
+      }
+
+      .danger-evidence-list {
+        list-style: none !important;
+        padding-left: 0 !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .danger-video-card {
+        border: 1.5px solid var(--border-ink);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--paper-inset);
+      }
+
+      .danger-video-frame {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 0;
+        display: block;
+        background: #0b0c0f;
+      }
+
+      .danger-link-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 0.75rem;
+        background: var(--paper-inset);
+        border: 1.5px solid var(--border-ink);
+        border-radius: 6px;
+        color: var(--ink) !important;
+        font-weight: 700;
+        font-size: 0.82rem;
+        text-decoration: none;
+        word-break: break-all;
+      }
+
+      .danger-link-pill:hover {
+        border-color: var(--accent);
+        color: var(--accent) !important;
+      }
+
       .floating-quick-dock {
         position: fixed;
         right: 1.5rem;
@@ -5074,7 +5217,7 @@ const jsonLdSchema = {
               const features = hasTranslation ? loc.features : (project.locales.en?.features || project.locales.uk?.features || []);
               const initialScore = (reviewsData as any)?.projects?.[project.slug]?.averageRating || 0;
               const primaryProjectLink = project.primaryLink;
-              const primaryLinkLabel = project.website ? t.officialSite : t.fallbackProjectLink;
+              const primaryLinkLabel = project.category === 'youtuber' ? 'YouTube' : (project.website ? t.officialSite : t.fallbackProjectLink);
               const cCode = normalizeCountryCode(project.country);
               const cName = projectCountry(project.country);
               const reviewUrl = `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(`${project.category}: ${project.name}`)}&body=${encodeURIComponent(t.reviewTemplateBody)}`;
@@ -5098,12 +5241,18 @@ const jsonLdSchema = {
                   data-danger={project.dangerReport ? 'true' : 'false'}
                   data-sponsor={project.sponsor ? 'true' : 'false'}
                   data-search={`${project.category}: ${project.name} ${project.shortName} ${tagline} ${cName} ${project.tags.join(' ')}`.toLowerCase()}
-                  style={initialProjectSlug && project.slug !== initialProjectSlug ? 'display: none;' : ''}
+                  style={(initialProjectSlug && project.slug !== initialProjectSlug) || (initialCategory && initialCategory !== 'all' && project.category !== initialCategory) ? 'display: none;' : ''}
                 >
                                     <div class="dossier-top-bar">
                     <span>// {project.category.toUpperCase()}</span>
                     <span data-rating-top-badge={project.slug}></span>
                   </div>
+
+                  {project.banner && (
+                    <div class="youtuber-banner-wrap">
+                      <img src={project.banner} alt={`${project.name} banner`} loading="lazy" decoding="async" />
+                    </div>
+                  )}
 
                                     <div class="dossier-header">
                     <div class="dossier-identity">
@@ -5295,77 +5444,79 @@ const jsonLdSchema = {
                             <span>{t.countryOrigin}: {cName}</span>
                           </span>
 
-                                                    {project.isOpenSource ? (
-                            project.sourceLinks.map((src) => {
-                              const sLow = `${src.label || ''} ${src.url || ''}`.toLowerCase();
-                              const isGh = sLow.includes('github');
-                              const isGl = sLow.includes('gitlab');
-                              const isGitee = sLow.includes('gitee');
-                              const isCnb = sLow.includes('cnb');
-                              const isGitea = sLow.includes('gitea') || sLow.includes('codeberg');
-                              const isSf = sLow.includes('sourceforge');
-                              const isBb = sLow.includes('bitbucket');
-                              return (
-                                <a
-                                  href={src.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  class="stamp stamp-opensource-link"
-                                  title={`${t.openSourceBadge} — ${src.label}`}
-                                >
-                                  {isGh ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <path d="M8 1a7 7 0 0 0-2.2 13.6c.35.06.48-.15.48-.34v-1.2c-1.95.42-2.36-.94-2.36-.94-.32-.8-.78-1.02-.78-1.02-.64-.43.05-.42.05-.42.7.05 1.07.72 1.07.72.63 1.07 1.64.76 2.04.58.06-.45.25-.76.45-.94-1.56-.18-3.2-.78-3.2-3.47 0-.77.27-1.4.72-1.89-.07-.18-.31-.89.07-1.86 0 0 .59-.19 1.93.72a6.7 6.7 0 0 1 3.5 0c1.34-.91 1.93-.72 1.93-.72.38.97.14 1.68.07 1.86.45.49.72 1.12.72 1.89 0 2.7-1.64 3.29-3.21 3.46.25.22.48.65.48 1.31v1.94c0 .19.13.41.48.34A7 7 0 0 0 8 1z" />
+                          {project.category !== 'youtuber' && (
+                            project.isOpenSource ? (
+                              project.sourceLinks.map((src) => {
+                                const sLow = `${src.label || ''} ${src.url || ''}`.toLowerCase();
+                                const isGh = sLow.includes('github');
+                                const isGl = sLow.includes('gitlab');
+                                const isGitee = sLow.includes('gitee');
+                                const isCnb = sLow.includes('cnb');
+                                const isGitea = sLow.includes('gitea') || sLow.includes('codeberg');
+                                const isSf = sLow.includes('sourceforge');
+                                const isBb = sLow.includes('bitbucket');
+                                return (
+                                  <a
+                                    href={src.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="stamp stamp-opensource-link"
+                                    title={`${t.openSourceBadge} — ${src.label}`}
+                                  >
+                                    {isGh ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <path d="M8 1a7 7 0 0 0-2.2 13.6c.35.06.48-.15.48-.34v-1.2c-1.95.42-2.36-.94-2.36-.94-.32-.8-.78-1.02-.78-1.02-.64-.43.05-.42.05-.42.7.05 1.07.72 1.07.72.63 1.07 1.64.76 2.04.58.06-.45.25-.76.45-.94-1.56-.18-3.2-.78-3.2-3.47 0-.77.27-1.4.72-1.89-.07-.18-.31-.89.07-1.86 0 0 .59-.19 1.93.72a6.7 6.7 0 0 1 3.5 0c1.34-.91 1.93-.72 1.93-.72.38.97.14 1.68.07 1.86.45.49.72 1.12.72 1.89 0 2.7-1.64 3.29-3.21 3.46.25.22.48.65.48 1.31v1.94c0 .19.13.41.48.34A7 7 0 0 0 8 1z" />
+                                      </svg>
+                                    ) : isGl ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <path d="M14.9 9.1L14.1 6.6L12.5 1.7C12.4 1.4 12 1.4 11.9 1.7L10.3 6.6H5.7L4.1 1.7C4 1.4 3.6 1.4 3.5 1.7L1.9 6.6L1.1 9.1C1 9.4 1.1 9.7 1.3 9.9L8 14.8L14.7 9.9C14.9 9.7 15 9.4 14.9 9.1Z" />
+                                      </svg>
+                                    ) : isGitee ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <path d="M8 1a7 7 0 1 0 7 7H8v2.2h4.1A4.8 4.8 0 1 1 8 3.2c1.4 0 2.6.6 3.5 1.5l1.6-1.6A7 7 0 0 0 8 1z" />
+                                      </svg>
+                                    ) : isCnb ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <polygon points="8,1 14,4.5 14,11.5 8,15 2,11.5 2,4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+                                        <rect x="6" y="6" width="4" height="4" />
+                                      </svg>
+                                    ) : isGitea ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <path d="M3 4h8v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V4zm8 1h3v3a2 2 0 0 1-2 2h-1V5z" />
+                                      </svg>
+                                    ) : isSf ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <polygon points="8,1 15,8 8,15 1,8" />
+                                      </svg>
+                                    ) : isBb ? (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <polygon points="1,2 15,2 13,14 3,14" />
+                                      </svg>
+                                    ) : (
+                                      <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                        <rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" />
+                                        <polygon points="6,5 4,8 6,11" />
+                                        <polygon points="10,5 12,8 10,11" />
+                                      </svg>
+                                    )}
+                                    <span>{t.openSourceBadge} · {src.label}</span>
+                                    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                      <polygon points="4,2 14,2 14,12 12,12 12,5.5 4.5,13 3,11.5 10.5,4 4,4"></polygon>
                                     </svg>
-                                  ) : isGl ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <path d="M14.9 9.1L14.1 6.6L12.5 1.7C12.4 1.4 12 1.4 11.9 1.7L10.3 6.6H5.7L4.1 1.7C4 1.4 3.6 1.4 3.5 1.7L1.9 6.6L1.1 9.1C1 9.4 1.1 9.7 1.3 9.9L8 14.8L14.7 9.9C14.9 9.7 15 9.4 14.9 9.1Z" />
-                                    </svg>
-                                  ) : isGitee ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <path d="M8 1a7 7 0 1 0 7 7H8v2.2h4.1A4.8 4.8 0 1 1 8 3.2c1.4 0 2.6.6 3.5 1.5l1.6-1.6A7 7 0 0 0 8 1z" />
-                                    </svg>
-                                  ) : isCnb ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <polygon points="8,1 14,4.5 14,11.5 8,15 2,11.5 2,4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-                                      <rect x="6" y="6" width="4" height="4" />
-                                    </svg>
-                                  ) : isGitea ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <path d="M3 4h8v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V4zm8 1h3v3a2 2 0 0 1-2 2h-1V5z" />
-                                    </svg>
-                                  ) : isSf ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <polygon points="8,1 15,8 8,15 1,8" />
-                                    </svg>
-                                  ) : isBb ? (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <polygon points="1,2 15,2 13,14 3,14" />
-                                    </svg>
-                                  ) : (
-                                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                      <rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" />
-                                      <polygon points="6,5 4,8 6,11" />
-                                      <polygon points="10,5 12,8 10,11" />
-                                    </svg>
-                                  )}
-                                  <span>{t.openSourceBadge} · {src.label}</span>
-                                  <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                    <polygon points="4,2 14,2 14,12 12,12 12,5.5 4.5,13 3,11.5 10.5,4 4,4"></polygon>
-                                  </svg>
-                                </a>
-                              );
-                            })
-                          ) : (
-                            <span class="stamp stamp-proprietary">
-                              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                                <path d="M5 7V5a3 3 0 0 1 6 0v2h2v7H3V7h2zm2 0h2V5a1 1 0 0 0-2 0v2z"></path>
-                              </svg>
-                              {t.proprietaryBadge}
-                            </span>
+                                  </a>
+                                );
+                              })
+                            ) : (
+                              <span class="stamp stamp-proprietary">
+                                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                  <path d="M5 7V5a3 3 0 0 1 6 0v2h2v7H3V7h2zm2 0h2V5a1 1 0 0 0-2 0v2z"></path>
+                                </svg>
+                                {t.proprietaryBadge}
+                              </span>
+                            )
                           )}
 
-                          {project.isOpenSource && (
+                          {project.category !== 'youtuber' && project.isOpenSource && (
                             <button
                               type="button"
                               class="stamp stamp-open stamp-license-btn"
@@ -5382,7 +5533,7 @@ const jsonLdSchema = {
                             </button>
                           )}
 
-                                                    {project.verified && (
+                          {project.category !== 'youtuber' && project.verified && (
                             <button
                               type="button"
                               class="stamp stamp-verified"
@@ -5604,16 +5755,18 @@ const jsonLdSchema = {
                         <div>
                           <div class="description-sheet">{desc}</div>
 
-                          <div class="features-list">
-                            {features.map((feat) => (
-                              <div class="feature-box">
-                                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="flex-shrink: 0; margin-top: 2px;">
-                                  <polygon points="2,9 6,13 14,4 12,2 6,9 4,7" />
-                                </svg>
-                                <span>{feat}</span>
-                              </div>
-                            ))}
-                          </div>
+                          {features.length > 0 && project.category !== 'youtuber' && (
+                            <div class="features-list">
+                              {features.map((feat) => (
+                                <div class="feature-box">
+                                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="flex-shrink: 0; margin-top: 2px;">
+                                    <polygon points="2,9 6,13 14,4 12,2 6,9 4,7" />
+                                  </svg>
+                                  <span>{feat}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div class="no-translation-box">
@@ -5643,46 +5796,133 @@ const jsonLdSchema = {
                     </div>
 
                                         <div>
-                      <div class="section-head">
-                        <span class="section-title">
-                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M1 2h14v12H1V2zm2 2v8h10V4H3zm2 6l2-3 2 2 2-3 2 4H5z" />
-                          </svg>
-                          {t.screenshotsLabel} [{project.screenshots.length}]
-                        </span>
-                      </div>
+                      {project.category === 'youtuber' && Array.isArray(project.latestVideos) && project.latestVideos.length > 0 ? (
+                        <div>
+                          <div class="section-head">
+                            <span class="section-title">
+                              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d="M15.6 4.4s-.2-1.1-.6-1.6c-.6-.6-1.3-.6-1.6-.7C11.1 2 8 2 8 2s-3.1 0-5.4.1c-.3.1-1 .1-1.6.7-.4.5-.6 1.6-.6 1.6S0 5.7 0 7v1.9c0 1.3.2 2.6.2 2.6s.2 1.1.6 1.6c.6.6 1.4.6 1.7.7 1.3.1 5.5.1 5.5.1s3.1 0 5.4-.1c.3-.1 1-.1 1.6-.7.4-.5.6-1.6.6-1.6s.2-1.3.2-2.6V7c0-1.3-.2-2.6-.2-2.6zM6.4 10.1V5.6l4.3 2.3-4.3 2.2z" />
+                              </svg>
+                              {t.videosLabel || 'Останні відео'} [{project.latestVideos.length}]
+                            </span>
+                          </div>
 
-                      {project.screenshots.length > 0 ? (
-                        <div class="screenshots-grid">
-                          {project.screenshots.map((shotUrl, i) => {
-                            const caption = loc.screenshotCaptions[i] || project.name;
+                          {(() => {
+                            const newestVideo = project.latestVideos[0];
+                            const prevVideos = project.latestVideos.slice(1, 3);
                             return (
-                              <button
-                                type="button"
-                                class="polaroid-card"
-                                data-lightbox-src={shotUrl}
-                                data-lightbox-caption={caption}
-                                title={t.openScreenshot}
-                              >
-                                <div class="polaroid-img-wrap">
-                                  <img src={shotUrl} alt={caption} loading="lazy" decoding="async" />
-                                </div>
-                                <div class="polaroid-caption">{caption}</div>
-                              </button>
+                              <div>
+                                {newestVideo && (
+                                  <div class="yt-featured-card">
+                                    <div
+                                      class="yt-embed-box"
+                                      data-yt-play-id={newestVideo.id}
+                                      data-yt-play-title={newestVideo.title}
+                                      title={newestVideo.title}
+                                    >
+                                      <img src={`https://i.ytimg.com/vi/${newestVideo.id}/hqdefault.jpg`} alt={newestVideo.title} loading="lazy" decoding="async" />
+                                      <div class="yt-play-badge">
+                                        <div class="yt-play-circle">
+                                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <polygon points="8,5 19,12 8,19" />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="yt-card-meta">
+                                      <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                                        <span class="stamp stamp-alpha" style="font-size: 0.68rem;">{t.latestVideoBadge || 'НОВЕ ВІДЕО'}</span>
+                                        {newestVideo.published && <span class="mono" style="font-size: 0.72rem; color: var(--ink-muted);">{newestVideo.published}</span>}
+                                      </div>
+                                      <a href={`https://www.youtube.com/watch?v=${newestVideo.id}`} target="_blank" rel="noopener noreferrer" class="yt-card-title" style="text-decoration: none;">
+                                        {newestVideo.title} ↗
+                                      </a>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {prevVideos.length > 0 && (
+                                  <div>
+                                    <div class="mono" style="font-size: 0.72rem; color: var(--ink-muted); font-weight: 800; margin-bottom: 0.45rem;">
+                                      {t.previousVideosLabel || 'Попередні відео'}
+                                    </div>
+                                    <div class="yt-prev-grid">
+                                      {prevVideos.map((v) => (
+                                        <div class="yt-prev-card">
+                                          <div
+                                            class="yt-embed-box"
+                                            data-yt-play-id={v.id}
+                                            data-yt-play-title={v.title}
+                                            title={v.title}
+                                          >
+                                            <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt={v.title} loading="lazy" decoding="async" />
+                                            <div class="yt-play-badge">
+                                              <div class="yt-play-circle" style="width: 44px; height: 30px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                  <polygon points="8,5 19,12 8,19" />
+                                                </svg>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="yt-card-meta">
+                                            {v.published && <span class="mono" style="font-size: 0.68rem; color: var(--ink-muted);">{v.published}</span>}
+                                            <a href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener noreferrer" class="yt-card-title" style="font-size: 0.82rem; text-decoration: none;">
+                                              {v.title} ↗
+                                            </a>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             );
-                          })}
+                          })()}
                         </div>
                       ) : (
-                        <div class="no-screenshots-sheet">
-                          <svg width="26" height="26" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M1 2h14v12H1V2zm2 2v8h10V4H3z" />
-                            <path d="M2 2l12 12" stroke="currentColor" stroke-width="1.5" />
-                          </svg>
-                          <strong>{t.noScreenshotsTitle}</strong>
-                          <p style="font-size: 0.84rem; color: var(--ink-muted); max-width: 48ch;">
-                            {t.noScreenshotsDesc}
-                          </p>
-                        </div>
+                        <>
+                          <div class="section-head">
+                            <span class="section-title">
+                              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M1 2h14v12H1V2zm2 2v8h10V4H3zm2 6l2-3 2 2 2-3 2 4H5z" />
+                              </svg>
+                              {t.screenshotsLabel} [{project.screenshots.length}]
+                            </span>
+                          </div>
+
+                          {project.screenshots.length > 0 ? (
+                            <div class="screenshots-grid">
+                              {project.screenshots.map((shotUrl, i) => {
+                                const caption = loc.screenshotCaptions[i] || project.name;
+                                return (
+                                  <button
+                                    type="button"
+                                    class="polaroid-card"
+                                    data-lightbox-src={shotUrl}
+                                    data-lightbox-caption={caption}
+                                    title={t.openScreenshot}
+                                  >
+                                    <div class="polaroid-img-wrap">
+                                      <img src={shotUrl} alt={caption} loading="lazy" decoding="async" />
+                                    </div>
+                                    <div class="polaroid-caption">{caption}</div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div class="no-screenshots-sheet">
+                              <svg width="26" height="26" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M1 2h14v12H1V2zm2 2v8h10V4H3z" />
+                                <path d="M2 2l12 12" stroke="currentColor" stroke-width="1.5" />
+                              </svg>
+                              <strong>{t.noScreenshotsTitle}</strong>
+                              <p style="font-size: 0.84rem; color: var(--ink-muted); max-width: 48ch;">
+                                {t.noScreenshotsDesc}
+                              </p>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
 
@@ -7306,7 +7546,16 @@ const jsonLdSchema = {
                 <option value="mod">{t.suggestCatOptMod}</option>
                 <option value="server">{t.suggestCatOptServer}</option>
                 <option value="website">{t.suggestCatOptWebsite}</option>
+                <option value="youtuber">{t.catYoutuber || 'Ютубери'}</option>
                 <option value="project">{t.suggestCatOptProject}</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-action">Дія / Запит:</label>
+              <select id="suggest-action" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="edit">Доповнити / Змінити</option>
+                <option value="delete">Видалити з каталогу</option>
               </select>
             </div>
 
@@ -7315,12 +7564,12 @@ const jsonLdSchema = {
               <input type="text" id="suggest-country" class="suggest-form-input" placeholder="Global, Ukraine, China, USA, Europe..." />
             </div>
 
-            <div class="suggest-form-field">
+            <div class="suggest-form-field" data-suggest-non-yt>
               <label for="suggest-license">{t.suggestLicenseLabel}</label>
               <input type="text" id="suggest-license" class="suggest-form-input" placeholder="MIT, GPL-3.0, BSD-3-Clause, Proprietary..." />
             </div>
 
-            <div class="suggest-form-field">
+            <div class="suggest-form-field" data-suggest-non-yt>
               <label for="suggest-is-open-source">{t.suggestOpenSourceLabel}</label>
               <select id="suggest-is-open-source" class="suggest-form-input" style="padding: 0.45rem;">
                 <option value="yes">{t.suggestOpenSourceYes}</option>
@@ -7328,17 +7577,17 @@ const jsonLdSchema = {
               </select>
             </div>
 
-            <div class="suggest-form-field">
+            <div class="suggest-form-field" data-suggest-non-yt>
               <label for="suggest-repo-url">{t.suggestRepoLabel}</label>
               <input type="url" id="suggest-repo-url" class="suggest-form-input" placeholder="https://github.com/owner/repo" />
             </div>
 
             <div class="suggest-form-field">
-              <label for="suggest-website">{t.suggestWebsiteLabel}</label>
+              <label for="suggest-website" id="suggest-website-label">{t.suggestWebsiteLabel}</label>
               <input type="url" id="suggest-website" class="suggest-form-input" placeholder="https://project.org" />
             </div>
 
-            <div class="suggest-form-field">
+            <div class="suggest-form-field" data-suggest-non-yt>
               <label for="suggest-platforms">{t.suggestPlatformsLabel}</label>
               <input type="text" id="suggest-platforms" class="suggest-form-input" placeholder="Windows 10, Windows 11, Linux, macOS" />
             </div>
@@ -7354,12 +7603,12 @@ const jsonLdSchema = {
             <input type="text" id="suggest-server-ip" class="suggest-form-input" placeholder="play.server.com" />
           </div>
 
-          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+          <div class="suggest-form-field" data-suggest-non-yt style="margin-top: 0.75rem;">
             <label for="suggest-screenshots">{t.suggestScreenshotsLabel}</label>
             <textarea id="suggest-screenshots" class="suggest-form-textarea" style="min-height: 55px;" placeholder="https://example.com/screen1.png&#10;https://example.com/screen2.png"></textarea>
           </div>
 
-          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+          <div class="suggest-form-field" data-suggest-non-yt style="margin-top: 0.75rem;">
             <label for="suggest-screenshot-captions">{t.suggestCaptionsLabel || 'Опис до скріншотів / картинок (по одному на рядок, у порядку посилань):'}</label>
             <textarea id="suggest-screenshot-captions" class="suggest-form-textarea" style="min-height: 55px;" placeholder={t.suggestCaptionsPh}></textarea>
           </div>
@@ -7455,6 +7704,7 @@ const jsonLdSchema = {
           client: t.catClient,
           server: t.catServer,
           website: t.catWebsite,
+          youtuber: t.catYoutuber || 'Ютубери',
           project: t.catProject,
         },
         uiStrings: {
@@ -7986,11 +8236,15 @@ const jsonLdSchema = {
         const CAT_GUIDE_MAP = uiStrings.catHints;
 
         function updateCategoryFieldsUI(prefix) {
-          const cfg = CAT_GUIDE_MAP[prefix] || CAT_GUIDE_MAP.project;
+          const isYt = prefix === 'youtuber';
+          const cfg = CAT_GUIDE_MAP[prefix] || (isYt
+            ? { guide: 'Для додавання ютубера достатньо вказати назву, країну та посилання на YouTube-канал (<code>https://www.youtube.com/@handle</code>). Аватарка, банер і 3 останні звичайні відео підтягнуться автоматично.', namePh: 'Назва каналу або @handle', platPh: 'YouTube' }
+            : CAT_GUIDE_MAP.project);
           const guideEl = document.getElementById('sub-cat-guide');
           if (guideEl) guideEl.innerHTML = cfg.guide;
           if (subName) subName.placeholder = cfg.namePh;
           if (subPlatforms) subPlatforms.placeholder = cfg.platPh;
+          if (subSite) subSite.placeholder = isYt ? 'https://www.youtube.com/@handle' : 'https://...';
           document.querySelectorAll('[data-cat-group]').forEach((grp) => {
             const list = (grp.getAttribute('data-cat-group') || '').split(/\s+/);
             grp.style.display = list.includes(prefix) ? 'grid' : 'none';
@@ -9323,11 +9577,38 @@ const jsonLdSchema = {
           });
         }
 
+        function toggleSuggestCategoryFields(cat) {
+          const isYt = cat === 'youtuber';
+          document.querySelectorAll('[data-suggest-non-yt]').forEach((el) => {
+            el.style.display = isYt ? 'none' : '';
+          });
+          const webLbl = document.getElementById('suggest-website-label');
+          const webInp = document.getElementById('suggest-website');
+          if (webLbl) {
+            if (!webLbl.dataset.origLabel) webLbl.dataset.origLabel = webLbl.textContent || '';
+            webLbl.textContent = isYt ? 'YouTube-канал (посилання):' : webLbl.dataset.origLabel;
+          }
+          if (webInp) {
+            webInp.placeholder = isYt ? 'https://www.youtube.com/@handle' : 'https://project.org';
+          }
+          if (suggestServerIpField) {
+            suggestServerIpField.style.display = cat === 'server' ? 'block' : 'none';
+          }
+        }
+
+        const suggestCatSelect = document.getElementById('suggest-category');
+        if (suggestCatSelect) {
+          suggestCatSelect.addEventListener('change', (e) => {
+            toggleSuggestCategoryFields(e.target.value);
+          });
+        }
+
         function openSuggestEditModal(slug, name, cat, country, license, isOpen, repoUrl, website, platforms, tags, serverIp, captions, descUk, descEn, descDe, descPl, descBe, descKk) {
           if (!suggestModal) return;
           if (document.getElementById('suggest-project-slug')) document.getElementById('suggest-project-slug').value = slug || '';
           if (document.getElementById('suggest-name')) document.getElementById('suggest-name').value = name || '';
           if (document.getElementById('suggest-category')) document.getElementById('suggest-category').value = cat || 'launcher';
+          if (document.getElementById('suggest-action')) document.getElementById('suggest-action').value = 'edit';
           if (document.getElementById('suggest-country')) document.getElementById('suggest-country').value = country || '';
           if (document.getElementById('suggest-license')) document.getElementById('suggest-license').value = license || '';
           if (document.getElementById('suggest-is-open-source')) document.getElementById('suggest-is-open-source').value = isOpen || 'yes';
@@ -9347,9 +9628,7 @@ const jsonLdSchema = {
           if (suggestTitle) {
             suggestTitle.textContent = `${uiStrings.suggestTitlePrefix} ${name || slug}`;
           }
-          if (suggestServerIpField) {
-            suggestServerIpField.style.display = cat === 'server' ? 'block' : 'none';
-          }
+          toggleSuggestCategoryFields(cat || 'launcher');
           suggestModal.classList.add('open');
           suggestModal.setAttribute('aria-hidden', 'false');
         }
@@ -9400,6 +9679,7 @@ const jsonLdSchema = {
             const slug = (document.getElementById('suggest-project-slug')?.value || '').trim();
             const name = (document.getElementById('suggest-name')?.value || '').trim();
             const cat = (document.getElementById('suggest-category')?.value || '').trim();
+            const actionType = (document.getElementById('suggest-action')?.value || 'edit').trim();
             const country = (document.getElementById('suggest-country')?.value || '').trim();
             const license = (document.getElementById('suggest-license')?.value || '').trim();
             const isOpen = (document.getElementById('suggest-is-open-source')?.value || '').trim();
@@ -9422,16 +9702,19 @@ const jsonLdSchema = {
 
             let body = `### Project Name\n${name}\n\n`;
             body += `### Category\n${cat}\n\n`;
+            if (actionType === 'delete') body += `### Action\nDELETE\n\n`;
             if (country) body += `### Country\n${country}\n\n`;
-            if (license) body += `### License\n${license}\n\n`;
-            body += `### Open Source\n${isOpen === 'yes' ? 'Так' : 'Ні'}\n\n`;
-            if (repoUrl) body += `### Repository URL\n${repoUrl}\n\n`;
+            if (cat !== 'youtuber') {
+              if (license) body += `### License\n${license}\n\n`;
+              body += `### Open Source\n${isOpen === 'yes' ? 'Так' : 'Ні'}\n\n`;
+              if (repoUrl) body += `### Repository URL\n${repoUrl}\n\n`;
+              if (platforms) body += `### Platforms\n${platforms}\n\n`;
+              if (screens) body += `### Screenshots\n${screens}\n\n`;
+              if (captions) body += `### Screenshot Captions\n${captions}\n\n`;
+            }
             if (website) body += `### Website\n${website}\n\n`;
-            if (platforms) body += `### Platforms\n${platforms}\n\n`;
             if (tags) body += `### Tags\n${tags}\n\n`;
             if (cat === 'server' && serverIp) body += `### Server IP\n\`${serverIp}\`\n\n`;
-            if (screens) body += `### Screenshots\n${screens}\n\n`;
-            if (captions) body += `### Screenshot Captions\n${captions}\n\n`;
             if (descUk || descEn || descDe || descPl || descBe || descKk) {
               body += `### Description\n\n`;
               if (descUk) body += `#### UK\n${descUk}\n\n`;
@@ -9491,10 +9774,42 @@ const jsonLdSchema = {
         const dangerModalLinksWrap = document.getElementById('danger-modal-links-wrap');
         const dangerModalLinks = document.getElementById('danger-modal-links');
 
+        function extractYoutubeId(url) {
+          try {
+            const u = new URL(url);
+            if (u.hostname.includes('youtu.be')) {
+              return u.pathname.replace(/^\//, '').split('/')[0] || null;
+            }
+            if (u.hostname.includes('youtube.com')) {
+              if (u.searchParams.get('v')) return u.searchParams.get('v');
+              const m = u.pathname.match(/\/(?:shorts|embed|live)\/([^/?#]+)/);
+              if (m) return m[1];
+            }
+          } catch (_) {}
+          return null;
+        }
+
+        document.querySelectorAll('[data-yt-play-id]').forEach((box) => {
+          box.addEventListener('click', () => {
+            const vid = box.getAttribute('data-yt-play-id');
+            const vtitle = box.getAttribute('data-yt-play-title') || 'YouTube Video';
+            if (!vid || box.querySelector('iframe')) return;
+            box.innerHTML = '';
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(vid)}?autoplay=1&rel=0`;
+            iframe.title = vtitle;
+            iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;display:block;';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            box.appendChild(iframe);
+          });
+        });
+
         function closeDangerModal() {
           if (dangerModal) {
             dangerModal.classList.remove('open');
             dangerModal.setAttribute('aria-hidden', 'true');
+            if (dangerModalLinks) dangerModalLinks.innerHTML = '';
           }
         }
 
@@ -9527,16 +9842,49 @@ const jsonLdSchema = {
             }
             if (dangerModalLinks && dangerModalLinksWrap) {
               dangerModalLinks.innerHTML = '';
-              if (Array.isArray(links) && links.length > 0) {
-                links.forEach((u) => {
+              dangerModalLinks.classList.add('danger-evidence-list');
+              const combinedLinks = Array.isArray(links) ? [...links] : [];
+              const extraUrls = reason.match(/https?:\/\/[^\s)>"']+/gi) || [];
+              extraUrls.forEach((u) => {
+                if (!combinedLinks.includes(u)) combinedLinks.push(u);
+              });
+              if (combinedLinks.length > 0) {
+                combinedLinks.forEach((u) => {
                   if (/^https?:\/\//i.test(u)) {
                     const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = u;
-                    a.target = '_blank';
-                    a.rel = 'noopener noreferrer';
-                    a.textContent = u;
-                    li.appendChild(a);
+                    const ytId = extractYoutubeId(u);
+                    if (ytId) {
+                      const card = document.createElement('div');
+                      card.className = 'danger-video-card';
+                      const iframe = document.createElement('iframe');
+                      iframe.className = 'danger-video-frame';
+                      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}?rel=0`;
+                      iframe.title = `${pName} — YouTube Evidence`;
+                      iframe.loading = 'lazy';
+                      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                      iframe.allowFullscreen = true;
+                      card.appendChild(iframe);
+                      const bar = document.createElement('div');
+                      bar.style.cssText = 'padding: 0.45rem 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; border-top: 1px solid var(--border-ink);';
+                      const a = document.createElement('a');
+                      a.href = u;
+                      a.target = '_blank';
+                      a.rel = 'noopener noreferrer';
+                      a.className = 'mono';
+                      a.style.cssText = 'font-size: 0.74rem; color: var(--accent); font-weight: 700; text-decoration: none;';
+                      a.textContent = `YouTube ↗`;
+                      bar.appendChild(a);
+                      card.appendChild(bar);
+                      li.appendChild(card);
+                    } else {
+                      const a = document.createElement('a');
+                      a.href = u;
+                      a.target = '_blank';
+                      a.rel = 'noopener noreferrer';
+                      a.className = 'danger-link-pill';
+                      a.textContent = `${u} ↗`;
+                      li.appendChild(a);
+                    }
                     dangerModalLinks.appendChild(li);
                   }
                 });

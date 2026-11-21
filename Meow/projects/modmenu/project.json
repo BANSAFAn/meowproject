@@ -1,0 +1,34 @@
+{
+  "slug": "modmenu",
+  "category": "mod",
+  "name": "Mod Menu",
+  "shortName": "Mod Menu",
+  "icon": "/projects/modmenu/icon.png",
+  "website": "https://modrinth.com/mod/modmenu",
+  "country": "GLOBAL",
+  "isOpenSource": true,
+  "license": "MIT",
+  "developer": "TerraformersMC",
+  "verified": true,
+  "issueSearchTerm": "Mod Menu",
+  "platforms": [
+    "Fabric",
+    "Quilt"
+  ],
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/TerraformersMC/ModMenu"
+    }
+  ],
+  "tags": [
+    "Mod",
+    "Utility",
+    "UI",
+    "Fabric",
+    "Quilt",
+    "Open Source"
+  ],
+  "screenshots": []
+}

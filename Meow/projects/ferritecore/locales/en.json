@@ -1,0 +1,10 @@
+{
+  "tagline": "Memory (RAM) usage optimizations for Minecraft clients and servers",
+  "description": "FerriteCore significantly reduces memory usage in Minecraft clients and servers by optimizing blockstate storage, model caches, and internal data structures.",
+  "features": [
+    "Reduces RAM usage in large modpacks",
+    "Works on both client and server",
+    "Open-source under MIT license"
+  ],
+  "screenshotCaptions": []
+}

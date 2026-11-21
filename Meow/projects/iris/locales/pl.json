@@ -1,0 +1,10 @@
+{
+  "tagline": "Nowoczesny loader shaderów do Minecrafta kompatybilny z Sodium i paczkami OptiFine",
+  "description": "Iris Shaders to otwartoźródłowy loader shaderów dla Minecraft: Java Edition, zaprojektowany z myślą o wysokiej wydajności z Sodium oraz kompatybilności z paczkami shaderów OptiFine.",
+  "features": [
+    "Wysoka wydajność i współpraca z Sodium",
+    "Obsługa paczek shaderów OptiFine",
+    "Otwarty kod na licencji LGPL-3.0"
+  ],
+  "screenshotCaptions": []
+}

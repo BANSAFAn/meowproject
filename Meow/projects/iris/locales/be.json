@@ -1,0 +1,10 @@
+{
+  "tagline": "Сучасны загрузчык шэйдараў для Minecraft, сумяшчальны з Sodium і OptiFine",
+  "description": "Iris Shaders — гэта адкрыты загрузчык шэйдараў для Minecraft: Java Edition, створаны для высокай прадукцыйнасці з Sodium і сумяшчальнасці з шэйдар-пакамі OptiFine.",
+  "features": [
+    "Высокі FPS і сумяшчальнасць з Sodium",
+    "Падтрымка шэйдар-пакаў OptiFine",
+    "Адкрыты зыходны код (LGPL-3.0)"
+  ],
+  "screenshotCaptions": []
+}

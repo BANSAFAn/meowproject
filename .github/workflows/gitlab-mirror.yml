@@ -1,19 +1,26 @@
-name: Mirror GitHub main to GitLab
+name: Mirror GitHub main and Issues to GitLab
 
 on:
   push:
     branches: [main]
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   mirror-to-gitlab:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout full history
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Push mirror to GitLab
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
@@ -22,3 +29,95 @@ jobs:
             exit 0
           fi
           git push --force "https://oauth2:${GITLAB_TOKEN}@gitlab.com/banernotfake/meowproject.git" HEAD:main
+
+      - name: Sync GitHub Issues to GitLab
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ -z "$GITLAB_TOKEN" ]; then
+            echo "GITLAB_TOKEN secret is not set. Skipping GitLab issues sync."
+            exit 0
+          fi
+          node - <<'EOF'
+          const glProject = encodeURIComponent('banernotfake/meowproject');
+          const ghRepo = process.env.GITHUB_REPOSITORY;
+          const ghHeaders = {
+            Accept: 'application/vnd.github.v3+json',
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            'User-Agent': 'MeowLab-GitLab-Sync'
+          };
+          const glHeaders = {
+            'PRIVATE-TOKEN': process.env.GITLAB_TOKEN,
+            'Content-Type': 'application/json'
+          };
+
+          async function fetchAllGhIssues() {
+            const out = [];
+            for (let page = 1; page <= 5; page++) {
+              const res = await fetch(`https://api.github.com/repos/${ghRepo}/issues?state=all&per_page=100&page=${page}`, { headers: ghHeaders });
+              if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+              const data = await res.json();
+              if (!Array.isArray(data) || data.length === 0) break;
+              out.push(...data.filter(i => !i.pull_request));
+              if (data.length < 100) break;
+            }
+            return out;
+          }
+
+          async function fetchAllGlIssues() {
+            const out = [];
+            for (let page = 1; page <= 5; page++) {
+              const res = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues?state=all&per_page=100&page=${page}`, { headers: glHeaders });
+              if (res.status === 401 || res.status === 403) {
+                console.log('Warning: GITLAB_TOKEN lacks "api" scope to read/write GitLab issues. Add "api" scope to GITLAB_TOKEN in GitLab.');
+                return null;
+              }
+              if (!res.ok) throw new Error(`GitLab API ${res.status}`);
+              const data = await res.json();
+              if (!Array.isArray(data) || data.length === 0) break;
+              out.push(...data);
+              if (data.length < 100) break;
+            }
+            return out;
+          }
+
+          const ghIssues = await fetchAllGhIssues();
+          const glIssues = await fetchAllGlIssues();
+          if (!glIssues) process.exit(0);
+
+          const glByTitle = new Map();
+          for (const gi of glIssues) {
+            glByTitle.set((gi.title || '').trim().toLowerCase(), gi);
+          }
+
+          let created = 0;
+          let closed = 0;
+          for (const gh of ghIssues) {
+            const key = (gh.title || '').trim().toLowerCase();
+            const existing = glByTitle.get(key);
+            if (!existing && gh.state === 'open') {
+              const labels = (gh.labels || []).map(l => l.name).filter(Boolean).join(',');
+              const desc = `${gh.body || ''}\n\n---\n*Synced from GitHub Issue #${gh.number}: ${gh.html_url}*`;
+              const res = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues`, {
+                method: 'POST',
+                headers: glHeaders,
+                body: JSON.stringify({ title: gh.title, description: desc, labels })
+              });
+              if (res.status === 401 || res.status === 403) {
+                console.log('Warning: GITLAB_TOKEN needs "api" scope to create GitLab issues.');
+                process.exit(0);
+              }
+              if (res.ok) created++;
+            } else if (existing && gh.state === 'closed' && existing.state === 'opened') {
+              const res = await fetch(`https://gitlab.com/api/v4/projects/${glProject}/issues/${existing.iid}`, {
+                method: 'PUT',
+                headers: glHeaders,
+                body: JSON.stringify({ state_event: 'close' })
+              });
+              if (res.ok) closed++;
+            }
+          }
+          console.log(`GitLab Issues sync complete: ${created} created, ${closed} closed.`);
+          EOF

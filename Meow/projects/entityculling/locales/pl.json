@@ -1,0 +1,10 @@
+{
+  "tagline": "Asynchroniczny path-tracing ukrywający niewidoczne byty i bloki dla wyższego FPS",
+  "description": "Entity Culling wykorzystuje asynchroniczne śledzenie ścieżek, aby nie renderować mobów i bloków ukrytych za ścianami poza polem widzenia gracza.",
+  "features": [
+    "Asynchroniczne sprawdzanie widoczności bez obciążania głównego wątku",
+    "Wyraźny wzrost FPS przy farmach i bazach",
+    "Działa na Fabric, Forge, NeoForge i Quilt"
+  ],
+  "screenshotCaptions": []
+}

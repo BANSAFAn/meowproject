@@ -1,0 +1,10 @@
+{
+  "tagline": "Optymalizacja zużycia pamięci RAM dla klienta i serwera Minecraft",
+  "description": "FerriteCore zmniejsza zużycie pamięci RAM przez klienta i serwer Minecraft dzięki optymalizacji stanów bloków i modeli.",
+  "features": [
+    "Niższe zużycie RAM w dużych paczkach modów",
+    "Działa po stronie klienta i serwera",
+    "Otwarty kod na licencji MIT"
+  ],
+  "screenshotCaptions": []
+}

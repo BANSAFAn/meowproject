@@ -5,7 +5,7 @@
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  Content-Security-Policy: default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests;
+  Content-Security-Policy: default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests;
 
 /projects/*
   Cache-Control: public, max-age=31536000, immutable

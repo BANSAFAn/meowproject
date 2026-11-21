@@ -1,0 +1,10 @@
+{
+  "tagline": "Speicher-Optimierung (RAM) für Minecraft-Clients und -Server",
+  "description": "FerriteCore reduziert den Arbeitsspeicherverbrauch von Minecraft-Clients und -Servern durch effizientere Speicherung von Blockstates und Modellen.",
+  "features": [
+    "Weniger RAM-Verbrauch in großen Modpacks",
+    "Funktioniert auf Client und Server",
+    "Open-Source unter MIT-Lizenz"
+  ],
+  "screenshotCaptions": []
+}

@@ -1,0 +1,44 @@
+{
+  "slug": "yt-weezzykk",
+  "category": "youtuber",
+  "name": "Weezzy",
+  "shortName": "Weezzy",
+  "icon": "/projects/yt-weezzykk/icon.jpg",
+  "banner": null,
+  "website": "https://www.youtube.com/@weezzykk",
+  "youtubeUrl": "https://www.youtube.com/@weezzykk",
+  "youtubeChannelId": "UC2SAJd-6s1KtTPRDQFcd2mw",
+  "latestVideos": [
+    {
+      "id": "r8zGe4wHve4",
+      "title": "Я прожив 100 днів на ОДНОМУ ЧАНКУ в Minecraft Hardcore",
+      "published": "2026-11-07"
+    },
+    {
+      "id": "4l-Ty_OX7Xo",
+      "title": "100 днів, але я НЕ МОЖУ ПОКИНУТИ це КОЛО в Minecraft Hardcore",
+      "published": "2026-08-01"
+    },
+    {
+      "id": "2EPAPnwvX1E",
+      "title": "Я прожив 100 днів в ЧОРНОБИЛІ в Minecraft Hardcore",
+      "published": "2026-06-20"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@weezzykk",
+  "verified": false,
+  "issueSearchTerm": "Weezzy",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "weezzykk"
+  ],
+  "screenshots": []
+}
