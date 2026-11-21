@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-20T19:54:09.156Z",
+  "updatedAt": "2026-11-21T15:14:44.110Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -24,7 +24,7 @@
           "id": "gl-4279317830",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-11",
           "body": "good launcher",
           "score": 98,
@@ -57,7 +57,7 @@
           "id": "gl-4279317925",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-11",
           "body": "very fast launcher",
           "score": 100,
@@ -69,7 +69,7 @@
           "id": "gl-4279369269",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-19",
           "body": "Привіт я з Gitlab !",
           "score": null,
@@ -102,7 +102,7 @@
           "id": "gl-4279317964",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-11",
           "body": "ну норм зборка",
           "score": 94,
@@ -123,7 +123,7 @@
           "id": "gl-4279318326",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-18",
           "body": "### [MeowProject Bot] Project Accepted & Published to Catalog! 🎉\n\n**Modrinth** has been accepted and merged into the live MeowProject catalog!\n\nThe official community discussion and reviews thread has been established here: #40.\n\n*Closing this proposal issue as completed.*",
           "score": null,
@@ -165,6 +165,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "cloth-config": {
+      "issueNumber": 61,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/61",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "complex-gaming": {
       "issueNumber": 17,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/17",
@@ -197,6 +205,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "entityculling": {
+      "issueNumber": 62,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/62",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "fabulously-optimized": {
       "issueNumber": 28,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/28",
@@ -222,7 +238,7 @@
           "id": "gl-4279318968",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-15",
           "body": "Зараз граю на цьому модпаці і скажу ідеально",
           "score": null,
@@ -231,6 +247,14 @@
           "issueNum": 28
         }
       ]
+    },
+    "ferritecore": {
+      "issueNumber": 63,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/63",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
     },
     "fluenlauncher": {
       "issueNumber": 19,
@@ -279,7 +303,7 @@
           "id": "gl-4279318674",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-12",
           "body": "Жаль що пійшов на покой....упс точніше в архів",
           "score": 80,
@@ -291,7 +315,7 @@
           "id": "gl-4279318683",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-17",
           "body": "Тепер він в архівчику...:(",
           "score": null,
@@ -303,7 +327,7 @@
           "id": "gl-4279318686",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-17",
           "body": "А в мене ще 3 PR на нього залишилось :3",
           "score": null,
@@ -353,6 +377,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "iris": {
+      "issueNumber": 64,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/64",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "labymod": {
       "issueNumber": 50,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/50",
@@ -364,7 +396,7 @@
           "id": "gl-4279411930",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-19",
           "body": "Чудовий клієнт який вільний в інтернеті",
           "score": null,
@@ -405,7 +437,7 @@
           "id": "gl-4279318743",
           "source": "gitlab",
           "author": "banernotfake",
-          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795165893",
+          "avatar": "https://gitlab.com/uploads/-/system/user/avatar/30774313/avatar.png?v=1795271655",
           "date": "2026-11-12",
           "body": "міні ігри, стиль і головне цікавість дуже чудова",
           "score": 100,
@@ -434,6 +466,14 @@
     "minehut": {
       "issueNumber": 23,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/23",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "modmenu": {
+      "issueNumber": 65,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/65",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -506,6 +546,62 @@
     "wynncraft": {
       "issueNumber": 31,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/31",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-baneronetwo": {
+      "issueNumber": 66,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/66",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-dauross": {
+      "issueNumber": 67,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/67",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-likad": {
+      "issueNumber": 68,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/68",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-retkon18": {
+      "issueNumber": 69,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/69",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-weezzykk": {
+      "issueNumber": 70,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/70",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-yazefa": {
+      "issueNumber": 71,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/71",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-zagin-kinomaniv": {
+      "issueNumber": 72,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/72",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
