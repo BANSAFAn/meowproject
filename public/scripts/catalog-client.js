@@ -743,18 +743,23 @@
           const allText = [name, countryRaw, siteRaw, repoRaw, iconRaw, screensRaw, platformsRaw, captionsRaw, featuresRaw, ...Object.values(descs)];
           const noScripts = allText.every((v) => !hasForbiddenScriptPayload(v));
 
-          // 1. Name
-          const okName = name.length >= 2 && noScripts;
+          const isYtPrefix = prefix === 'youtuber';
 
-          // 2. Country: real country (any of 6 languages / ISO) or region
-          const okCountry = countrySet.has(country.toLowerCase());
+          // 1. Name (for youtuber, can also be auto-derived from YouTube URL handle)
+          const siteUrl = parseHttpsUrl(siteRaw);
+          const isYtUrl = !!siteUrl && /(?:^|\.)(?:youtube\.com|youtu\.be)$/i.test(siteUrl.hostname);
+          const autoYtHandle = isYtUrl ? (siteUrl.pathname.match(/\/(@[a-zA-Z0-9_.-]+)/)?.[1] || siteUrl.pathname.replace(/^\/+|\/+$/g, '')) : '';
+          const effectiveName = name.length >= 2 ? name : (isYtPrefix && autoYtHandle ? autoYtHandle : name);
+          const okName = effectiveName.length >= 2 && noScripts;
+
+          // 2. Country: real country (any supported language / ISO) or region (optional for youtuber -> defaults to Global)
+          const okCountry = (isYtPrefix && !country) ? true : countrySet.has(country.toLowerCase());
           showError('err-country', country.length > 0 && !okCountry);
 
           // 3. Website + repository domain must match the selected host
-          const siteUrl = parseHttpsUrl(siteRaw);
-          showError('err-site', siteRaw.length > 0 && !siteUrl);
+          showError('err-site', siteRaw.length > 0 && (!siteUrl || (isYtPrefix && !isYtUrl)));
           let okRepo = true;
-          if (!isProprietary) {
+          if (!isProprietary && !isYtPrefix) {
             const repoUrl = parseHttpsUrl(repoRaw);
             const domains = HOST_DOMAINS[host] || [];
             okRepo = !!repoUrl && hostMatches(repoUrl, domains) && repoUrl.pathname.length > 1;
@@ -764,7 +769,7 @@
           } else {
             showError('err-repo', false);
           }
-          const okLink = !!siteUrl && okRepo && noScripts;
+          const okLink = !!siteUrl && (!isYtPrefix || isYtUrl) && okRepo && noScripts;
 
           // 4. Media: icon (.svg/.png/.jpg) optional, screenshots (.png/.jpg) optional
           let okIcon = true;
@@ -787,11 +792,14 @@
           );
           const okMedia = okIcon && badScreens.length === 0 && screenList.length <= 10;
 
-          // 5. Descriptions: at least one language 20–2000 chars, none over 2000
-          const okDesc =
-            filledLangs.length > 0 &&
-            filledLangs.every((k) => descs[k].length >= 20 && descs[k].length <= 2000) &&
-            noScripts;
+          // 5. Descriptions: at least one language 20–2000 chars (for youtuber, optional — bot auto-fetches from YouTube)
+          const okDesc = isYtPrefix && filledLangs.length === 0
+            ? noScripts
+            : (
+              filledLangs.length > 0 &&
+              filledLangs.every((k) => descs[k].length >= 20 && descs[k].length <= 2000) &&
+              noScripts
+            );
 
           const extraCatLines = [];
           let okCatExtra = true;
@@ -838,18 +846,20 @@
             sanitizePlainText(descs[k]),
             '',
           ]);
-          const sourceLine = isProprietary
+          const sourceLine = (isProprietary || isYtPrefix)
             ? '- Proprietary (closed source)'
             : `- ${host}: ${repoRaw}`;
+          const finalName = effectiveName || name;
+          const finalCountry = country || (isYtPrefix ? 'Global' : '');
           const issueBody = [
             '### Type & Name',
-            `\`${prefix}: ${name}\``,
+            `\`${prefix}: ${finalName}\``,
             '',
             '### Country',
-            country,
+            finalCountry,
             '',
             '### Platforms',
-            platformsRaw || 'Windows, macOS, Linux',
+            platformsRaw || (isYtPrefix ? 'YouTube' : 'Windows, macOS, Linux'),
             '',
             ...(extraCatLines.length ? ['### Category Details', ...extraCatLines, ''] : []),
             '### Website',

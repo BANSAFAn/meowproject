@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-22T08:54:18.975Z",
+  "updatedAt": "2026-11-22T18:50:44.551Z",
   "channels": {
     "yt-baneronetwo": {
       "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
@@ -208,6 +208,17 @@
           "id": "i0CsOzGlJto",
           "title": "Я Видалив Всі Блоки Поверхні в Майнкрафт!",
           "published": "2026-08-15"
+        }
+      ]
+    },
+    "farmer_fox": {
+      "youtubeChannelId": "UC3KhtTM7rLrKznvWwJlgjHA",
+      "banner": "/projects/farmer_fox/banner.jpg",
+      "latestVideos": [
+        {
+          "id": "sekwFD74Ydc",
+          "title": "Мафія у Minecraft - Тизер Трейлер",
+          "published": "2026-10-22"
         }
       ]
     }

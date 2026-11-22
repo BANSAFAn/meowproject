@@ -155,6 +155,98 @@ function extractSection(text, title) {
   return m ? m[1].trim() : '';
 }
 
+function decodeHtmlEntities(s) {
+  return (s || '')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+async function fetchYoutubeLatestVideos(channelId) {
+  if (!channelId || !channelId.startsWith('UC')) return [];
+  const uulf = 'UULF' + channelId.slice(2);
+  try {
+    let res = await fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${uulf}`);
+    if (!res.ok) {
+      res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
+    }
+    if (!res.ok) return [];
+    const rss = await res.text();
+    return [...rss.matchAll(/<entry>[\s\S]*?<yt:videoId>([^<]+)<\/yt:videoId>[\s\S]*?<title>([^<]+)<\/title>[\s\S]*?<published>([^<]+)<\/published>[\s\S]*?<\/entry>/g)]
+      .slice(0, 3)
+      .map(m => ({ id: m[1], title: decodeHtmlEntities(m[2]), published: m[3].slice(0, 10) }));
+  } catch (_) {
+    return [];
+  }
+}
+
+async function fetchYoutubeChannelInfo(rawUrl) {
+  if (!rawUrl) return null;
+  let url = rawUrl.trim();
+  if (!/^https?:\/\//i.test(url)) {
+    url = url.startsWith('@') ? `https://www.youtube.com/${url}` : `https://${url}`;
+  }
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        'Accept-Language': 'uk-UA,uk;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Cookie': 'CONSENT=YES+cb.20210328-17-p0.en+FX+667'
+      }
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+
+    const cidMatch =
+      html.match(/"channelId"\s*:\s*"(UC[a-zA-Z0-9_-]{22})"/) ||
+      html.match(/"externalId"\s*:\s*"(UC[a-zA-Z0-9_-]{22})"/) ||
+      html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[a-zA-Z0-9_-]{22})"/);
+    const channelId = cidMatch ? cidMatch[1] : null;
+
+    const handleMatch =
+      url.match(/\/(@[a-zA-Z0-9_.-]+)/) ||
+      html.match(/"vanityChannelUrl"\s*:\s*"https?:\/\/(?:www\.)?youtube\.com\/(@[a-zA-Z0-9_.-]+)"/);
+    const handle = handleMatch ? handleMatch[1] : null;
+
+    const ogTitle = html.match(/<meta property="og:title" content="([^"]+)"/);
+    const channelName = ogTitle ? decodeHtmlEntities(ogTitle[1]).trim() : (handle || null);
+
+    let description = '';
+    const metaDescMatch = html.match(/"channelMetadataRenderer"\s*:\s*\{[\s\S]*?"description"\s*:\s*"((?:\\.|[^"\\])*)"/);
+    if (metaDescMatch) {
+      try { description = JSON.parse(`"${metaDescMatch[1]}"`).trim(); } catch (_) {}
+    }
+    if (!description) {
+      const ogDesc = html.match(/<meta property="og:description" content="([^"]*)"/);
+      if (ogDesc) description = decodeHtmlEntities(ogDesc[1]).trim();
+    }
+
+    const ogImg = html.match(/<meta property="og:image" content="([^"]+)"/);
+    let avatarUrl = ogImg ? ogImg[1] : null;
+    if (avatarUrl) avatarUrl = avatarUrl.replace(/=s\d+-/, '=s400-');
+
+    let bannerUrl = null;
+    const bannerBlock =
+      html.match(/"imageBannerViewModel"\s*:\s*\{[\s\S]*?"sources"\s*:\s*(\[[\s\S]*?\])/) ||
+      html.match(/"tvBanner"\s*:\s*\{\s*"thumbnails"\s*:\s*(\[[\s\S]*?\])/) ||
+      html.match(/"banner"\s*:\s*\{\s*"thumbnails"\s*:\s*(\[[\s\S]*?\])/);
+    if (bannerBlock) {
+      try {
+        const list = JSON.parse(bannerBlock[1]);
+        if (Array.isArray(list) && list.length > 0) {
+          bannerUrl = list[list.length - 1].url || null;
+        }
+      } catch (_) {}
+    }
+
+    return { channelId, channelName, handle, description, avatarUrl, bannerUrl };
+  } catch (_) {
+    return null;
+  }
+}
+
 async function downloadImage(url, destPath) {
   try {
     let rawUrl = url;
@@ -573,33 +665,80 @@ async function handlePushOrDispatch() {
   // Compile reviews.json from real comments!
   await compileReviews(issues, slugs, projectsDir);
 
-  // Refresh YouTubers' 3 latest regular videos (UULF = no Shorts, no Live)
+  // Refresh YouTubers: auto-enrich missing channelId / avatar / banner / description + 3 latest regular videos (UULF = no Shorts, no Live)
   try {
     const ytFile = path.resolve(process.cwd(), 'public', 'data', 'youtubers.json');
     let ytData = { updatedAt: new Date().toISOString(), channels: {} };
     if (fs.existsSync(ytFile)) {
       try { ytData = readJsonFile(ytFile); } catch (_) {}
     }
-    const decodeXml = (s) => (s || '')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>');
 
     let ytChanged = false;
     for (const slug of slugs) {
       const metaPath = path.join(projectsDir, slug, 'project.json');
       const meta = readJsonFile(metaPath);
-      if (meta.category !== 'youtuber' || !meta.youtubeChannelId || !meta.youtubeChannelId.startsWith('UC')) continue;
-      const uulf = 'UULF' + meta.youtubeChannelId.slice(2);
+      if (meta.category !== 'youtuber') continue;
+
+      const publicDir = path.resolve(process.cwd(), 'public', 'projects', slug);
+      const needsEnrich = !meta.youtubeChannelId || !meta.youtubeChannelId.startsWith('UC') || !meta.icon || meta.icon === '/favicon.svg' || !meta.banner;
+
+      if (needsEnrich && (meta.website || meta.youtubeHandle)) {
+        const ytUrl = meta.website || `https://www.youtube.com/${meta.youtubeHandle}`;
+        const info = await fetchYoutubeChannelInfo(ytUrl);
+        if (info) {
+          if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+          if (info.channelId && !meta.youtubeChannelId) {
+            meta.youtubeChannelId = info.channelId;
+            modifiedMeta = true;
+            ytChanged = true;
+          }
+          if (info.handle && !meta.youtubeHandle) {
+            meta.youtubeHandle = info.handle;
+            modifiedMeta = true;
+          }
+          if (info.channelName && (!meta.name || meta.name.startsWith('@'))) {
+            meta.name = info.channelName;
+            meta.shortName = info.channelName;
+            modifiedMeta = true;
+          }
+          if (info.avatarUrl && (!meta.icon || meta.icon === '/favicon.svg')) {
+            const ok = await downloadImage(info.avatarUrl, path.join(publicDir, 'icon.jpg'));
+            if (ok) {
+              meta.icon = `/projects/${slug}/icon.jpg`;
+              modifiedMeta = true;
+              ytChanged = true;
+            }
+          }
+          if (info.bannerUrl && !meta.banner) {
+            const ok = await downloadImage(info.bannerUrl, path.join(publicDir, 'banner.jpg'));
+            if (ok) {
+              meta.banner = `/projects/${slug}/banner.jpg`;
+              modifiedMeta = true;
+              ytChanged = true;
+            }
+          }
+          if (info.description) {
+            const ukLocPath = path.join(projectsDir, slug, 'locales', 'uk.json');
+            if (!fs.existsSync(ukLocPath)) {
+              fs.mkdirSync(path.dirname(ukLocPath), { recursive: true });
+              fs.writeFileSync(ukLocPath, JSON.stringify({
+                tagline: info.channelName || meta.name,
+                description: info.description,
+                features: [],
+                screenshotCaptions: []
+              }, null, 2) + '\n', 'utf8');
+              modifiedMeta = true;
+            }
+          }
+          if (modifiedMeta) {
+            fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n', 'utf8');
+          }
+        }
+      }
+
+      if (!meta.youtubeChannelId || !meta.youtubeChannelId.startsWith('UC')) continue;
       try {
-        const res = await fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${uulf}`);
-        if (!res.ok) continue;
-        const rss = await res.text();
-        const vids = [...rss.matchAll(/<entry>[\s\S]*?<yt:videoId>([^<]+)<\/yt:videoId>[\s\S]*?<title>([^<]+)<\/title>[\s\S]*?<published>([^<]+)<\/published>[\s\S]*?<\/entry>/g)]
-          .slice(0, 3)
-          .map(m => ({ id: m[1], title: decodeXml(m[2]), published: m[3].slice(0, 10) }));
+        const vids = await fetchYoutubeLatestVideos(meta.youtubeChannelId);
         if (vids.length > 0) {
           const prevIds = (meta.latestVideos || []).map(v => v.id).join(',');
           const nextIds = vids.map(v => v.id).join(',');
@@ -614,6 +753,7 @@ async function handlePushOrDispatch() {
             banner: meta.banner || null,
             latestVideos: vids
           };
+          ytChanged = true;
         }
       } catch (_) {}
     }
@@ -621,7 +761,7 @@ async function handlePushOrDispatch() {
       ytData.updatedAt = new Date().toISOString();
       fs.mkdirSync(path.dirname(ytFile), { recursive: true });
       fs.writeFileSync(ytFile, JSON.stringify(ytData, null, 2) + '\n', 'utf8');
-      appendSummary('📺 Refreshed YouTubers latest regular videos (no Shorts/Live).');
+      appendSummary('📺 Refreshed YouTubers metadata (avatar/banner/channelId) & latest regular videos (no Shorts/Live).');
     }
   } catch (e) {
     appendSummary(`⚠️ YouTubers refresh skipped: ${e.message}`);
@@ -902,6 +1042,31 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     }
   }
 
+  // Auto-fetch YouTube channel metadata (avatar, banner, channelId, description, videos) if category is youtuber
+  let ytInfo = null;
+  let ytVideos = [];
+  if (category === 'youtuber') {
+    const ytUrlMatch = (website || body || '').match(/https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/[^\s)>"]+/i);
+    const ytUrl = ytUrlMatch ? ytUrlMatch[0] : (name.startsWith('@') ? `https://www.youtube.com/${name}` : '');
+    if (ytUrl) {
+      ytInfo = await fetchYoutubeChannelInfo(ytUrl);
+      if (ytInfo) {
+        if (!website) website = ytUrl;
+        if (ytInfo.channelId) {
+          ytVideos = await fetchYoutubeLatestVideos(ytInfo.channelId);
+        }
+        if (validLangs.length === 0) {
+          const autoDesc = (ytInfo.description && ytInfo.description.trim().length >= 5)
+            ? ytInfo.description.trim()
+            : `YouTube-канал ${ytInfo.channelName || name} (${ytUrl})`;
+          parsedDescriptions.uk = autoDesc;
+          validLangs.push('uk');
+          langTableRows.push(`| 🇺🇦 **UK** (Auto from YouTube) | ${autoDesc.length} chars | ✅ **Included in PR** |`);
+        }
+      }
+    }
+  }
+
   if (validLangs.length === 0) {
     await postOrUpdateBotComment(issue.number, [
       `### [MeowProject Bot] Description Required ❌`,
@@ -940,6 +1105,9 @@ async function handleProjectSubmission(issue, matchedPrefix) {
   const iconRaw = extractSection(body, 'Icon');
   if (iconRaw && /^https?:\/\//i.test(iconRaw)) {
     iconCandidates.push(iconRaw);
+  }
+  if (ytInfo && ytInfo.avatarUrl) {
+    iconCandidates.push(ytInfo.avatarUrl);
   }
 
   const ghRepoLink = sourceLinks.find(s => (s.url || '').includes('github.com'));
@@ -1056,33 +1224,63 @@ async function handleProjectSubmission(issue, matchedPrefix) {
     }
   }
 
+  // Download YouTube channel banner if available
+  let ytBannerFinal = null;
+  if (ytInfo && ytInfo.bannerUrl) {
+    const localBannerPath = path.join(publicDir, 'banner.jpg');
+    const ok = await downloadImage(ytInfo.bannerUrl, localBannerPath);
+    if (ok) ytBannerFinal = `/projects/${slug}/banner.jpg`;
+  }
+
   // Write project.json
   const projectJsonPath = path.join(projectDir, 'project.json');
+  const displayName = (category === 'youtuber' && ytInfo?.channelName && name.startsWith('@')) ? ytInfo.channelName : name;
   const projectMeta = {
     slug,
-    name,
-    shortName: name,
+    name: displayName,
+    shortName: displayName,
     category,
     icon: iconFinal,
     country,
-    developer: detectedDeveloper,
+    developer: category === 'youtuber' ? displayName : detectedDeveloper,
     license: detectedLicense,
-    platforms,
+    platforms: category === 'youtuber' ? ['YouTube'] : platforms,
     website: website || sourceLinks[0]?.url || '',
     sourceLinks,
     issueThreadNumber: issue.number,
-    issueSearchTerm: name,
-    tags: [category, ...platforms, country].filter(Boolean),
-    screenshots: screenshotsFinal
+    issueSearchTerm: displayName,
+    tags: [category, ...(category === 'youtuber' ? ['YouTube'] : platforms), country].filter(Boolean),
+    screenshots: screenshotsFinal,
+    ...(ytInfo?.channelId ? { youtubeChannelId: ytInfo.channelId } : {}),
+    ...(ytInfo?.handle ? { youtubeHandle: ytInfo.handle } : {}),
+    ...(ytBannerFinal ? { banner: ytBannerFinal } : {}),
+    ...(ytVideos.length > 0 ? { latestVideos: ytVideos } : {})
   };
   fs.writeFileSync(projectJsonPath, JSON.stringify(projectMeta, null, 2) + '\n', 'utf8');
+
+  if (category === 'youtuber' && ytInfo?.channelId && ytVideos.length > 0) {
+    try {
+      const ytFile = path.resolve(process.cwd(), 'public', 'data', 'youtubers.json');
+      let ytData = { updatedAt: new Date().toISOString(), channels: {} };
+      if (fs.existsSync(ytFile)) {
+        try { ytData = readJsonFile(ytFile); } catch (_) {}
+      }
+      ytData.channels[slug] = {
+        youtubeChannelId: ytInfo.channelId,
+        banner: ytBannerFinal,
+        latestVideos: ytVideos
+      };
+      ytData.updatedAt = new Date().toISOString();
+      fs.writeFileSync(ytFile, JSON.stringify(ytData, null, 2) + '\n', 'utf8');
+    } catch (_) {}
+  }
 
   // Git Branch & Commit & Push
   const branchName = `add-project-${slug}-issue-${issue.number}`;
   try {
     configureBotGitAuthor();
     execSync(`git checkout -B ${branchName}`);
-    execSync(`git add Meow/projects/${slug}/ public/projects/${slug}/ wrangler.jsonc`);
+    execSync(`git add Meow/projects/${slug}/ public/projects/${slug}/ public/data/youtubers.json wrangler.jsonc`);
     execSync(`git commit -m "feat(catalog): propose ${category} ${name} from issue #${issue.number}"`);
     execSync(`git push origin ${branchName} --force`);
     appendSummary(`✅ Created & pushed branch: \`${branchName}\``);

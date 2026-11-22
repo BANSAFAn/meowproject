@@ -1,11 +1,11 @@
 {
   "slug": "farmer_fox",
-  "name": "@farmer_fox",
-  "shortName": "@farmer_fox",
+  "name": "Фермер Лис",
+  "shortName": "Фермер Лис",
   "category": "youtuber",
-  "icon": "/favicon.svg",
+  "icon": "/projects/farmer_fox/icon.jpg",
   "country": "Україна",
-  "developer": "Community",
+  "developer": "Фермер Лис",
   "license": "Open Source",
   "platforms": [
     "YouTube"
@@ -13,11 +13,21 @@
   "website": "https://www.youtube.com/@farmer_fox",
   "sourceLinks": [],
   "issueThreadNumber": 80,
-  "issueSearchTerm": "@farmer_fox",
+  "issueSearchTerm": "Фермер Лис",
   "tags": [
     "youtuber",
     "YouTube",
     "Україна"
   ],
-  "screenshots": []
+  "screenshots": [],
+  "banner": "/projects/farmer_fox/banner.jpg",
+  "youtubeChannelId": "UC3KhtTM7rLrKznvWwJlgjHA",
+  "youtubeHandle": "@farmer_fox",
+  "latestVideos": [
+    {
+      "id": "sekwFD74Ydc",
+      "title": "Мафія у Minecraft - Тизер Трейлер",
+      "published": "2026-10-22"
+    }
+  ]
 }
