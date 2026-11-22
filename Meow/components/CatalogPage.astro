@@ -237,7 +237,7 @@ const seoCategoryLabel = selectedProject
     </script>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://codeberg.org https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://codeberg.org https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -7092,6 +7092,19 @@ const seoCategoryLabel = selectedProject
                     <path d="M14.9 9.1L14.1 6.6L12.5 1.7C12.4 1.4 12 1.4 11.9 1.7L10.3 6.6H5.7L4.1 1.7C4 1.4 3.6 1.4 3.5 1.7L1.9 6.6L1.1 9.1C1 9.4 1.1 9.7 1.3 9.9L8 14.8L14.7 9.9C14.9 9.7 15 9.4 14.9 9.1Z" />
                   </svg>
                 </a>
+                <a
+                  href="https://codeberg.org/Baneronetwo/meowlab/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="paper-btn footer-icon-btn"
+                  title="Codeberg Issues"
+                  aria-label="Codeberg"
+                  style="color: #2185d0;"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M11.955.49A12 12 0 0 0 0 12.49a12 12 0 0 0 1.832 6.372L11.836 5.955a.208.208 0 0 1 .328 0l10.004 12.907A12 12 0 0 0 24 12.49a12 12 0 0 0-12-12c-.015 0-.03 0-.045 0zm.375 6.473l4.426 16.59A12 12 0 0 0 21.842 19.3z" />
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
@@ -9171,6 +9184,14 @@ const seoCategoryLabel = selectedProject
             }
           } catch (_) {}
 
+          let allCodebergIssues = null;
+          try {
+            const cbRes = await fetch('https://codeberg.org/api/v1/repos/Baneronetwo/meowlab/issues?state=open&limit=50');
+            if (cbRes.ok) {
+              allCodebergIssues = await cbRes.json();
+            }
+          } catch (_) {}
+
           for (const panel of panels) {
             const slug = panel.getAttribute('data-project-slug');
             const listEl = panel.querySelector('[data-reviews-list]');
@@ -9327,6 +9348,51 @@ const seoCategoryLabel = selectedProject
               }
             }
 
+            // D. Merge live comments from Codeberg Issues
+            if (Array.isArray(allCodebergIssues) && searchTerm) {
+              const cbMatching = allCodebergIssues.filter(
+                (iss) => iss.title && iss.title.toLowerCase().includes(searchTerm)
+              );
+              for (const cbIss of cbMatching) {
+                if (cbIss.comments > 0) {
+                  try {
+                    const cRes = await fetch(`https://codeberg.org/api/v1/repos/Baneronetwo/meowlab/issues/${cbIss.number}/comments?limit=50`);
+                    if (cRes.ok) {
+                      const cbComments = await cRes.json();
+                      if (Array.isArray(cbComments)) {
+                        cbComments.forEach((c) => {
+                          const cUrl = c.html_url || cbIss.html_url;
+                          if (collectedItems.some((item) => item.url === cUrl)) return;
+                          const rawBody = sanitizePlainText(c.body || '');
+                          const match = rawBody.match(ratingRegex);
+                          let score = null;
+                          if (match) {
+                            const val = Number(match[1] || match[2] || match[3]);
+                            if (!isNaN(val) && val >= 0 && val <= 100) {
+                              score = val;
+                              ratings.push(score);
+                            }
+                          }
+                          const cleanedBody = rawBody.replace(ratingRegex, '').trim();
+                          collectedItems.push({
+                            author: sanitizePlainText(c.user?.login || c.user?.username || 'codeberg-user'),
+                            avatar: c.user?.avatar_url || '',
+                            date: sanitizePlainText((c.created_at || '').slice(0, 10)),
+                            body: cleanedBody,
+                            score,
+                            reactions: {},
+                            url: cUrl,
+                            issueNum: cbIss.number,
+                            source: 'codeberg',
+                          });
+                        });
+                      }
+                    }
+                  } catch (_) {}
+                }
+              }
+            }
+
             // Update Project Average Rating (0-100)
             if (ratings.length > 0) {
               const avg = Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length);
@@ -9397,14 +9463,17 @@ const seoCategoryLabel = selectedProject
                 }
 
                 const isGitlab = item.source === 'gitlab' || String(item.url || '').includes('gitlab.com');
+                const isCodeberg = item.source === 'codeberg' || String(item.url || '').includes('codeberg.org');
                 const srcIcon = document.createElement('span');
-                srcIcon.title = isGitlab ? 'GitLab' : 'GitHub';
+                srcIcon.title = isCodeberg ? 'Codeberg' : isGitlab ? 'GitLab' : 'GitHub';
                 srcIcon.style.display = 'inline-flex';
                 srcIcon.style.alignItems = 'center';
                 srcIcon.style.flexShrink = '0';
-                srcIcon.innerHTML = isGitlab
-                  ? '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#E24329" d="M23.546 10.93L13.067.452a1.55 1.55 0 0 0-2.188 0L8.708 2.627l2.76 2.76a1.838 1.838 0 0 1 2.327 2.341l2.66 2.66a1.838 1.838 0 1 1-1.103 1.033l-2.48-2.48v6.53a1.838 1.838 0 1 1-1.512-.054V8.81a1.838 1.838 0 0 1-.998-2.41L7.63 3.668.454 10.844a1.55 1.55 0 0 0 0 2.187l10.48 10.48a1.55 1.55 0 0 0 2.187 0l10.426-10.394a1.55 1.55 0 0 0 0-2.187z" style="display:none"/><path fill="#FC6D26" d="M12 21.5L16.4 8H7.6L12 21.5z"/><path fill="#E24329" d="M12 21.5L7.6 8H1.5L12 21.5z"/><path fill="#FCA326" d="M1.5 8L.1 12.3c-.1.4 0 .9.4 1.1L12 21.5 1.5 8z"/><path fill="#E24329" d="M1.5 8h6.1L5 1.9c-.1-.3-.6-.3-.7 0L1.5 8z"/><path fill="#E24329" d="M12 21.5L16.4 8h6.1L12 21.5z"/><path fill="#FCA326" d="M22.5 8l1.4 4.3c.1.4 0 .9-.4 1.1L12 21.5 22.5 8z"/><path fill="#E24329" d="M22.5 8h-6.1L19 1.9c.1-.3.6-.3.7 0L22.5 8z"/></svg>'
-                  : '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+                srcIcon.innerHTML = isCodeberg
+                  ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#2185D0" aria-hidden="true"><path d="M11.955.49A12 12 0 0 0 0 12.49a12 12 0 0 0 1.832 6.372L11.836 5.955a.208.208 0 0 1 .328 0l10.004 12.907A12 12 0 0 0 24 12.49a12 12 0 0 0-12-12c-.015 0-.03 0-.045 0zm.375 6.473l4.426 16.59A12 12 0 0 0 21.842 19.3z"/></svg>'
+                  : isGitlab
+                    ? '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FC6D26" d="M12 21.5L16.4 8H7.6L12 21.5z"/><path fill="#E24329" d="M12 21.5L7.6 8H1.5L12 21.5z"/><path fill="#FCA326" d="M1.5 8L.1 12.3c-.1.4 0 .9.4 1.1L12 21.5 1.5 8z"/><path fill="#E24329" d="M1.5 8h6.1L5 1.9c-.1-.3-.6-.3-.7 0L1.5 8z"/><path fill="#E24329" d="M12 21.5L16.4 8h6.1L12 21.5z"/><path fill="#FCA326" d="M22.5 8l1.4 4.3c.1.4 0 .9-.4 1.1L12 21.5 22.5 8z"/><path fill="#E24329" d="M22.5 8h-6.1L19 1.9c.1-.3.6-.3.7 0L22.5 8z"/></svg>'
+                    : '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
                 userLink.appendChild(srcIcon);
 
                 const nameSpan = document.createElement('span');

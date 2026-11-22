@@ -10,6 +10,7 @@
 [![Website](https://img.shields.io/badge/Website-meowlab.pp.ua-0ea5e9?style=for-the-badge&logo=googlechrome&logoColor=white)](https://meowlab.pp.ua)
 [![GitHub Issues](https://img.shields.io/badge/Reviews_%26_Issues-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/BANSAFAn/meowproject/issues)
 [![GitLab Issues](https://img.shields.io/badge/Write_%26_Comment_via-GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)](https://gitlab.com/banernotfake/meowproject/-/issues)
+[![Codeberg](https://img.shields.io/badge/Mirror_%26_Issues-Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=white)](https://codeberg.org/Baneronetwo/meowlab)
 
 It's just a website.
 

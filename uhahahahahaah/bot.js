@@ -179,6 +179,29 @@ async function downloadImage(url, destPath) {
 // A. REVIEW COMPILER (GitHub + GitLab issues comments -> static reviews.json)
 // -----------------------------------------------------------------------------
 const GITLAB_PROJECT = process.env.GITLAB_PROJECT || 'banernotfake/meowproject';
+const CODEBERG_REPO = process.env.CODEBERG_REPO || 'Baneronetwo/meowlab';
+
+async function fetchCodebergIssues() {
+  try {
+    const res = await fetch(`https://codeberg.org/api/v1/repos/${CODEBERG_REPO}/issues?state=open&limit=50`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+async function fetchCodebergComments(num) {
+  try {
+    const res = await fetch(`https://codeberg.org/api/v1/repos/${CODEBERG_REPO}/issues/${num}/comments?limit=50`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
 
 async function fetchGitLabIssuesWithNotes() {
   try {
@@ -201,6 +224,7 @@ async function fetchGitLabIssuesWithNotes() {
 async function compileReviews(issues, slugs, projectsDir) {
   appendSummary('### 💬 Compiling Community Reviews & Ratings into static reviews.json');
   const gitlabIssues = await fetchGitLabIssuesWithNotes();
+  const codebergIssues = await fetchCodebergIssues();
   
   const reviewsData = {
     updatedAt: new Date().toISOString(),
@@ -318,6 +342,40 @@ async function compileReviews(issues, slugs, projectsDir) {
         url: n.url || glIssue.webUrl,
         issueNum: Number(glIssue.iid) || glIssue.iid
       });
+    }
+
+    // Merge Codeberg issue comments if a matching Codeberg issue exists
+    const cbIssue = codebergIssues.find(ci => {
+      const t = (ci.title || '').toLowerCase();
+      return t.includes(meta.name.toLowerCase()) || t.includes(slug.toLowerCase());
+    });
+    if (cbIssue && cbIssue.comments > 0) {
+      const cbComments = await fetchCodebergComments(cbIssue.number);
+      for (const c of cbComments) {
+        const rawBody = (c.body || '').trim();
+        const match = rawBody.match(RATING_REGEX);
+        let score = null;
+        if (match) {
+          const val = Number(match[1] || match[2] || match[3]);
+          if (!isNaN(val) && val >= 0 && val <= 100) {
+            score = val;
+            ratings.push(score);
+          }
+        }
+        const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
+        reviewsList.push({
+          id: `cb-${c.id}`,
+          source: 'codeberg',
+          author: c.user?.login || c.user?.username || 'codeberg-user',
+          avatar: c.user?.avatar_url || '',
+          date: (c.created_at || '').slice(0, 10),
+          body: cleanedBody,
+          score,
+          reactions: {},
+          url: c.html_url || cbIssue.html_url,
+          issueNum: cbIssue.number
+        });
+      }
     }
 
     const avg = ratings.length > 0 ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length) : null;
