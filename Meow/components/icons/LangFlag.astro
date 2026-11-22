@@ -1,0 +1,104 @@
+---
+interface Props {
+  code: string;
+  width?: number;
+  height?: number;
+}
+
+const { code, width = 16, height = 11 } = Astro.props;
+---
+
+{code === 'uk' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="8" fill="#0057B7" />
+    <rect y="8" width="24" height="8" fill="#FFD700" />
+  </svg>
+)}
+{code === 'en' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="16" fill="#012169" />
+    <path d="M0 0L24 16M24 0L0 16" stroke="#fff" stroke-width="3" />
+    <path d="M0 0L24 16M24 0L0 16" stroke="#C8102E" stroke-width="1.5" />
+    <path d="M12 0V16M0 8H24" stroke="#fff" stroke-width="5" />
+    <path d="M12 0V16M0 8H24" stroke="#C8102E" stroke-width="3" />
+  </svg>
+)}
+{code === 'de' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="5.33" fill="#000" />
+    <rect y="5.33" width="24" height="5.33" fill="#DD0000" />
+    <rect y="10.66" width="24" height="5.34" fill="#FFCE00" />
+  </svg>
+)}
+{code === 'pl' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="8" fill="#fff" />
+    <rect y="8" width="24" height="8" fill="#DC143C" />
+  </svg>
+)}
+{code === 'be' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="5.33" fill="#fff" />
+    <rect y="5.33" width="24" height="5.33" fill="#CE1126" />
+    <rect y="10.66" width="24" height="5.34" fill="#fff" />
+  </svg>
+)}
+{code === 'kk' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="16" fill="#00AFCA" />
+    <circle cx="12" cy="8" r="3" fill="#FEC50C" />
+  </svg>
+)}
+{code === 'cs' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="8" fill="#ffffff" />
+    <rect y="8" width="24" height="8" fill="#D7141A" />
+    <polygon points="0,0 12,8 0,16" fill="#11457E" />
+  </svg>
+)}
+{code === 'ro' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="8" height="16" fill="#002B7F" />
+    <rect x="8" width="8" height="16" fill="#FCD116" />
+    <rect x="16" width="8" height="16" fill="#CE1126" />
+  </svg>
+)}
+{code === 'mo' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="8" height="16" fill="#0046AE" />
+    <rect x="8" width="8" height="16" fill="#FFD200" />
+    <rect x="16" width="8" height="16" fill="#CC092F" />
+    <rect x="10.2" y="5.2" width="3.6" height="5.6" rx="0.6" fill="#7A4B1E" />
+    <circle cx="12" cy="7.5" r="1.1" fill="#FFD200" />
+  </svg>
+)}
+{code === 'hu' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="5.33" fill="#CE2939" />
+    <rect y="5.33" width="24" height="5.33" fill="#ffffff" />
+    <rect y="10.66" width="24" height="5.34" fill="#477050" />
+  </svg>
+)}
+{code === 'fr' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="8" height="16" fill="#002395" />
+    <rect x="8" width="8" height="16" fill="#ffffff" />
+    <rect x="16" width="8" height="16" fill="#ED2939" />
+  </svg>
+)}
+{code === 'es' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="4" fill="#AA151B" />
+    <rect y="4" width="24" height="8" fill="#F1BF00" />
+    <rect y="12" width="24" height="4" fill="#AA151B" />
+    <rect x="5" y="6" width="3" height="4" fill="#AA151B" />
+  </svg>
+)}
+{code === 'tr' && (
+  <svg width={width} height={height} viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="16" fill="#E30A17" />
+    <circle cx="9.5" cy="8" r="4" fill="#ffffff" />
+    <circle cx="10.8" cy="8" r="3.2" fill="#E30A17" />
+    <circle cx="14.2" cy="8" r="1.2" fill="#ffffff" />
+  </svg>
+)}

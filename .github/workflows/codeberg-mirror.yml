@@ -9,6 +9,10 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: read
+
 jobs:
   mirror-to-codeberg:
     runs-on: ubuntu-latest
@@ -41,82 +45,122 @@ jobs:
             exit 0
           fi
           node - <<'EOF'
-          const cbRepo = 'Baneronetwo/meowlab';
-          const ghRepo = process.env.GITHUB_REPOSITORY;
-          const ghHeaders = {
-            Accept: 'application/vnd.github.v3+json',
-            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-            'User-Agent': 'MeowLab-Codeberg-Sync'
-          };
-          const cbHeaders = {
-            Authorization: `token ${process.env.CODEBERG_TOKEN}`,
-            'Content-Type': 'application/json'
-          };
+          (async () => {
+            const cbRepo = 'Baneronetwo/meowlab';
+            const ghRepo = process.env.GITHUB_REPOSITORY;
+            const ghHeaders = {
+              Accept: 'application/vnd.github.v3+json',
+              Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+              'User-Agent': 'MeowLab-Codeberg-Sync'
+            };
+            const cbHeaders = {
+              Authorization: `token ${process.env.CODEBERG_TOKEN}`,
+              'Content-Type': 'application/json'
+            };
 
-          async function fetchAllGhIssues() {
-            const out = [];
-            for (let page = 1; page <= 5; page++) {
-              const res = await fetch(`https://api.github.com/repos/${ghRepo}/issues?state=all&per_page=100&page=${page}`, { headers: ghHeaders });
-              if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-              const data = await res.json();
-              if (!Array.isArray(data) || data.length === 0) break;
-              out.push(...data.filter(i => !i.pull_request));
-              if (data.length < 100) break;
-            }
-            return out;
-          }
-
-          async function fetchAllCbIssues() {
-            const out = [];
-            for (let page = 1; page <= 5; page++) {
-              const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues?state=all&limit=50&page=${page}`, { headers: cbHeaders });
-              if (res.status === 401 || res.status === 403) {
-                console.log('Warning: CODEBERG_TOKEN lacks write:issue scope to read/write Codeberg issues.');
-                return null;
+            async function fetchAllGhIssues() {
+              const out = [];
+              for (let page = 1; page <= 5; page++) {
+                const res = await fetch(`https://api.github.com/repos/${ghRepo}/issues?state=all&per_page=100&page=${page}`, { headers: ghHeaders });
+                if (!res.ok) throw new Error(`GitHub API ${res.status}: ${await res.text()}`);
+                const data = await res.json();
+                if (!Array.isArray(data) || data.length === 0) break;
+                out.push(...data.filter((i) => !i.pull_request));
+                if (data.length < 100) break;
               }
-              if (!res.ok) throw new Error(`Codeberg API ${res.status}`);
-              const data = await res.json();
-              if (!Array.isArray(data) || data.length === 0) break;
-              out.push(...data);
-              if (data.length < 50) break;
+              return out;
             }
-            return out;
-          }
 
-          const ghIssues = await fetchAllGhIssues();
-          const cbIssues = await fetchAllCbIssues();
-          if (!cbIssues) process.exit(0);
+            async function fetchAllCbIssues() {
+              const out = [];
+              for (let page = 1; page <= 5; page++) {
+                const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues?state=all&limit=50&page=${page}`, { headers: cbHeaders });
+                if (res.status === 401 || res.status === 403) {
+                  console.error('ERROR: CODEBERG_TOKEN lacks write:issue scope to read/write Codeberg issues.');
+                  return null;
+                }
+                if (!res.ok) throw new Error(`Codeberg API ${res.status}: ${await res.text()}`);
+                const data = await res.json();
+                if (!Array.isArray(data) || data.length === 0) break;
+                out.push(...data);
+                if (data.length < 50) break;
+              }
+              return out;
+            }
 
-          const cbByTitle = new Map();
-          for (const ci of cbIssues) {
-            cbByTitle.set((ci.title || '').trim().toLowerCase(), ci);
-          }
+            const ghIssues = await fetchAllGhIssues();
+            const cbIssues = await fetchAllCbIssues();
+            console.log(`Fetched ${ghIssues.length} GitHub issues.`);
+            if (!cbIssues) process.exit(0);
+            console.log(`Fetched ${cbIssues.length} Codeberg issues.`);
 
-          let created = 0;
-          let closed = 0;
-          for (const gh of ghIssues) {
-            const key = (gh.title || '').trim().toLowerCase();
-            const existing = cbByTitle.get(key);
-            if (!existing && gh.state === 'open') {
+            const cbByGhNum = new Map();
+            const cbByTitle = new Map();
+            for (const ci of cbIssues) {
+              const m = (ci.body || '').match(/Synced from GitHub Issue #(\d+)/);
+              if (m) cbByGhNum.set(Number(m[1]), ci);
+              cbByTitle.set((ci.title || '').trim().toLowerCase(), ci);
+            }
+
+            let created = 0;
+            let updated = 0;
+            let closed = 0;
+            let reopened = 0;
+
+            for (const gh of ghIssues.reverse()) {
+              const existing = cbByGhNum.get(gh.number) || cbByTitle.get((gh.title || '').trim().toLowerCase());
               const body = `${gh.body || ''}\n\n---\n*Synced from GitHub Issue #${gh.number}: ${gh.html_url}*`;
-              const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues`, {
-                method: 'POST',
-                headers: cbHeaders,
-                body: JSON.stringify({ title: gh.title, body })
-              });
-              if (res.status === 401 || res.status === 403) {
-                console.log('Warning: CODEBERG_TOKEN needs write:issue scope to create Codeberg issues.');
-                process.exit(0);
+
+              if (!existing) {
+                const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues`, {
+                  method: 'POST',
+                  headers: cbHeaders,
+                  body: JSON.stringify({ title: gh.title, body })
+                });
+                if (res.status === 401 || res.status === 403) {
+                  console.error('ERROR: CODEBERG_TOKEN needs write:issue scope to create Codeberg issues.');
+                  process.exit(0);
+                }
+                if (!res.ok) {
+                  console.error(`Failed to create Codeberg issue for GH #${gh.number}: ${res.status} ${await res.text()}`);
+                  continue;
+                }
+                const createdIssue = await res.json();
+                created++;
+                if (gh.state === 'closed' && createdIssue?.number) {
+                  const cRes = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues/${createdIssue.number}`, {
+                    method: 'PATCH',
+                    headers: cbHeaders,
+                    body: JSON.stringify({ state: 'closed' })
+                  });
+                  if (cRes.ok) closed++;
+                }
+              } else {
+                const needsClose = gh.state === 'closed' && existing.state === 'open';
+                const needsReopen = gh.state === 'open' && existing.state === 'closed';
+                const needsContentUpdate = existing.title !== gh.title || (existing.body || '').trim() !== body.trim();
+                if (needsClose || needsReopen || needsContentUpdate) {
+                  const payload = { title: gh.title, body };
+                  if (needsClose) payload.state = 'closed';
+                  if (needsReopen) payload.state = 'open';
+                  const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues/${existing.number}`, {
+                    method: 'PATCH',
+                    headers: cbHeaders,
+                    body: JSON.stringify(payload)
+                  });
+                  if (res.ok) {
+                    if (needsClose) closed++;
+                    else if (needsReopen) reopened++;
+                    else updated++;
+                  } else {
+                    console.error(`Failed to update Codeberg issue #${existing.number}: ${res.status} ${await res.text()}`);
+                  }
+                }
               }
-              if (res.ok) created++;
-            } else if (existing && gh.state === 'closed' && existing.state === 'open') {
-              const res = await fetch(`https://codeberg.org/api/v1/repos/${cbRepo}/issues/${existing.number}`, {
-                method: 'PATCH',
-                headers: cbHeaders,
-                body: JSON.stringify({ state: 'closed' })
-              });
-              if (res.ok) closed++;
             }
-          }
-          console.log(`Codeberg Issues sync complete: ${created} created, ${closed} closed.`);
+            console.log(`Codeberg Issues sync complete: ${created} created, ${updated} updated, ${closed} closed, ${reopened} reopened.`);
+          })().catch((err) => {
+            console.error('Codeberg Issues sync failed:', err);
+            process.exit(1);
+          });
           EOF

@@ -23,8 +23,9 @@ const REGION_ALIASES = [
 ];
 
 function displayNames(lang: string) {
+  const intlLang = lang === 'mo' ? 'ro-MD' : lang;
   try {
-    return new Intl.DisplayNames([lang], { type: 'region' });
+    return new Intl.DisplayNames([intlLang], { type: 'region' });
   } catch {
     return new Intl.DisplayNames(['en'], { type: 'region' });
   }
@@ -78,7 +79,7 @@ export function countryOptions(lang: LangCode) {
     } catch {
       return c;
     }
-  }).sort((a, b) => a.localeCompare(b, lang));
+  }).sort((a, b) => a.localeCompare(b, lang === 'mo' ? 'ro-MD' : lang));
 }
 
 /** Every accepted lowercase value: country names in all 6 languages, ISO codes and regions */

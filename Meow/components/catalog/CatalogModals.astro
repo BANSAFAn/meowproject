@@ -1,0 +1,518 @@
+---
+import MonobankIcon from '../icons/MonobankIcon.astro';
+import { LANGUAGES, type UITranslations } from '../../i18n/translations';
+import { SITE_REPO_URL } from '../../data/projects';
+
+interface Props {
+  t: UITranslations;
+  monobankUrl: string;
+}
+
+const { t, monobankUrl: MONOBANK_URL } = Astro.props;
+const langList = Object.values(LANGUAGES);
+---
+        <div id="lightbox-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame">
+        <div class="lightbox-bar">
+          <span id="lightbox-caption" class="mono" style="font-size: 0.82rem; font-weight: 700;"></span>
+          <button type="button" id="lightbox-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div class="lightbox-img-box">
+          <img id="lightbox-img" src="" alt="" />
+        </div>
+      </div>
+    </div>
+
+        <div id="verified-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--stamp-green-bg); border: 1.5px solid var(--stamp-green); color: var(--stamp-green);">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm-1 9.5L4.5 8l1.2-1.2L7 8.1l3.3-3.3L11.5 6 7 10.5z"></path></svg>
+            </div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 900;">{t.verifiedTitle}</h3>
+          </div>
+          <button type="button" id="verified-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <p style="font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem; color: var(--ink);">
+          {t.verifiedDesc}
+        </p>
+        <div style="background: var(--paper-inset); border: 1px dashed var(--border-ink); padding: 0.85rem; font-size: 0.82rem; line-height: 1.5;">
+          <strong>{t.verifyCriteriaTitle}</strong>
+          <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0;">
+            <li>{t.verifyCriterion1}</li>
+            <li>{t.verifyCriterion2}</li>
+            <li>{t.verifyCriterion3}</li>
+            <li>{t.verifyCriterion4}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+        <div id="danger-report-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 720px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid #ef4444;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid #ef4444; padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.74rem; color: #ef4444; font-weight: 900; letter-spacing: 0.06em;">
+              {t.dangerModalKicker}
+            </span>
+            <h3 id="danger-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.2rem; font-weight: 900; color: var(--ink);">
+              Небезпечний проєкт
+            </h3>
+            <div id="danger-modal-meta" class="mono" style="font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.25rem;"></div>
+          </div>
+          <button type="button" id="danger-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <div id="danger-modal-summary" style="background: rgba(185, 28, 28, 0.12); border-left: 4px solid #ef4444; padding: 0.75rem 1rem; font-weight: 700; font-size: 0.92rem; margin-bottom: 1rem;"></div>
+
+        <div id="danger-modal-body" class="danger-md-body"></div>
+
+        <div id="danger-modal-links-wrap" style="display: none; margin-top: 1.25rem; border-top: 1px dashed var(--border-ink); padding-top: 0.85rem;">
+          <div class="mono" style="font-size: 0.76rem; font-weight: 900; margin-bottom: 0.45rem;">{t.dangerModalEvidenceHeading}</div>
+          <ul id="danger-modal-links" style="margin: 0; padding-left: 1.2rem; font-size: 0.84rem; line-height: 1.6;"></ul>
+        </div>
+      </div>
+    </div>
+
+        <div id="privacy-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // PRIVACY POLICY]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.privacyModalTitle}</h3>
+          </div>
+          <button type="button" id="privacy-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.privacyClause1Head}</div>
+            <p class="legal-clause-body">{t.privacyModalText}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">02 // Cloudflare &amp; GitHub CDN</div>
+            <p class="legal-clause-body">{t.privacyClause2Body}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.privacyClause3Head}</div>
+            <p class="legal-clause-body">{t.privacyClause3Body}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div id="confidentiality-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // CONFIDENTIALITY]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.confidentialityModalTitle || 'РЕГЛАМЕНТ КОНФІДЕНЦІЙНОСТІ'}</h3>
+          </div>
+          <button type="button" id="confidentiality-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.confClause1Head}</div>
+            <p class="legal-clause-body">{t.confidentialityModalText || 'Усі звернення через GitHub Issues є публічними. Не публікуйте паролі, приватні ключі чи персональні документи третіх осіб.'}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.confClause2Head}</div>
+            <p class="legal-clause-body">{t.confClause2Body}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div id="roadmap-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame news-modal-frame">
+        <div class="news-modal-header">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[NEWS // GLOBAL ALPHA]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.2rem; font-weight: 900;">{t.newsModalTitle}</h3>
+          </div>
+          <button type="button" id="roadmap-close" class="paper-btn" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <div class="roadmap-item-head">
+              <strong style="font-size: 1.02rem;">New 5-Year Domain &amp; GitLab Support!</strong>
+              <span class="stamp stamp-alpha">NEW // GITLAB &amp; DOMAIN</span>
+            </div>
+            <img src="/banner-domain-gitlab.jpg" alt="MeowLab — New 5-Year Domain & GitLab" class="news-banner-img" loading="lazy" />
+            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
+              We opened a fundraiser for a new 5-year domain ($72 / 3 000 UAH, 35.5% raised) and launched full GitLab integration — you can now leave reviews and comments via both GitHub and GitLab!
+            </p>
+          </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-item-head">
+              <strong style="font-size: 1.02rem;">MeowLab is now available on mobile!</strong>
+              <span class="stamp stamp-alpha">NEW // MOBILE</span>
+            </div>
+            <img src="/banner-mobile.jpg" alt="MeowLab — NOW ON MOBILE!" class="news-banner-img" loading="lazy" />
+            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
+              We removed the mobile restriction and rolled out a responsive layout for meowlab.pp.ua. You can now browse launchers, mods, modpacks, and servers, read reviews, and submit projects or reports directly from your phone or tablet.
+            </p>
+          </div>
+
+          <div class="roadmap-item">
+            <div class="roadmap-item-head">
+              <strong style="font-size: 1.02rem;">{t.newsAlphaTitle}</strong>
+              <span class="stamp stamp-alpha">{t.newsAlphaBadge}</span>
+            </div>
+            <img src="/banner-alpha.jpg" alt="MeowProject Global Alpha" class="news-banner-img" loading="lazy" />
+            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
+              {t.newsAlphaDesc}
+            </p>
+          </div>
+
+          <div class="roadmap-subgrid">
+            <div class="roadmap-item">
+              <div class="roadmap-item-head" style="margin-bottom: 0;">
+                <strong style="font-size: 0.92rem;">{t.i10nRoadmap1Title}</strong>
+                <span class="stamp stamp-open">{t.i10nRoadmap1Badge}</span>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-item-head" style="margin-bottom: 0;">
+                <strong style="font-size: 0.92rem;">{t.i10nRoadmap2Title}</strong>
+                <span class="stamp stamp-amber">{t.i10nRoadmap2Badge}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sponsor-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 580px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.65rem;">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[SPONSOR // PARTNER]</span>
+            <h3 id="sponsor-modal-title" style="margin: 0.2rem 0 0; font-size: 1.14rem; font-weight: 900;">{t.sponsorModalTitle}</h3>
+          </div>
+          <button type="button" id="sponsor-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p style="font-size: 0.88rem; line-height: 1.55; color: var(--ink); margin: 0 0 1rem;">
+          {t.sponsorModalIntro}
+        </p>
+
+        <div style="background: var(--paper-inset); border: 1.5px solid var(--border-ink); border-left: 4px solid var(--accent); border-radius: 6px; padding: 0.9rem 1rem; margin-bottom: 1.15rem;">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.45rem;">
+            <span style="display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 900; font-size: 0.92rem; color: var(--ink);">
+              <MonobankIcon size={16} />
+              {t.sponsorMonoTitle}
+            </span>
+            <span class="stamp stamp-open" style="font-size: 0.7rem; padding: 0.14rem 0.48rem;">{t.sponsorMonoBadge}</span>
+          </div>
+          <p style="font-size: 0.84rem; line-height: 1.48; color: var(--ink-muted); margin: 0 0 0.75rem;">
+            {t.sponsorMonoDesc}
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.55rem;">
+            <div style="background: var(--paper-sheet); border: 1.5px solid var(--border-muted); border-radius: 5px; padding: 0.55rem 0.75rem; display: flex; flex-direction: column; gap: 0.15rem;">
+              <span class="mono" style="font-size: 0.85rem; font-weight: 900; color: var(--accent);">{t.sponsorTier1Amount}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink);">{t.sponsorTier1Reward}</span>
+            </div>
+            <div style="background: var(--paper-sheet); border: 1.5px solid var(--border-muted); border-radius: 5px; padding: 0.55rem 0.75rem; display: flex; flex-direction: column; gap: 0.15rem;">
+              <span class="mono" style="font-size: 0.85rem; font-weight: 900; color: var(--accent);">{t.sponsorTier2Amount}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink);">{t.sponsorTier2Reward}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
+          <a href={MONOBANK_URL} target="_blank" rel="noopener noreferrer" class="paper-btn paper-btn-accent" style="font-weight: 800;">
+            <MonobankIcon size={15} />
+            {t.monobankSupportBtn}
+          </a>
+          <a href="https://discord.com/invite/FEyMjn3mtA" target="_blank" rel="noopener noreferrer" class="paper-btn">
+            Discord ↗
+          </a>
+          <a href="mailto:baneronetwo@memeware.net" class="paper-btn">
+            baneronetwo@memeware.net
+          </a>
+          <a href={`${SITE_REPO_URL}/issues`} target="_blank" rel="noopener noreferrer" class="paper-btn">
+            GitHub Issues ↗
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <div id="terms-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // TERMS OF USE]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.termsModalTitle}</h3>
+          </div>
+          <button type="button" id="terms-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+        <div class="legal-clauses-grid">
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.termsClause1Head}</div>
+            <p class="legal-clause-body">{t.termsModalText}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.termsClause2Head}</div>
+            <p class="legal-clause-body">{t.termsClause2Body}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{t.termsClause3Head}</div>
+            <p class="legal-clause-body">{t.termsClause3Body}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div id="license-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div id="license-modal-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: rgba(52, 152, 219, 0.15); border: 1.5px solid #3498db; border-radius: 4px; color: #3498db;">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M4 7V5a4 4 0 0 1 8 0v2h2v8H2V7h2zm2 0h4V5a2 2 0 0 0-4 0v2z" /></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="license-modal-badge" class="stamp stamp-open" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;">GPL-3.0</span>
+                <span id="license-modal-type" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700;">Copyleft</span>
+              </div>
+              <h3 id="license-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.15rem; font-weight: 900; color: var(--ink);">GNU General Public License v3.0</h3>
+            </div>
+          </div>
+          <button type="button" id="license-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p id="license-modal-desc" style="font-size: 0.88rem; line-height: 1.55; margin-bottom: 1.2rem; color: var(--ink);">
+          {t.licenseModalSubtitle}
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+                    <div style="background: rgba(46, 204, 113, 0.08); border: 1.5px solid #2ecc71; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #27ae60; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><polygon points="2,9 6,13 14,4 12,2 6,9 4,7" /></svg>
+              <span>{t.licensePermitted}</span>
+            </div>
+            <ul id="license-modal-permissions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+
+                    <div style="background: rgba(52, 152, 219, 0.08); border: 1.5px solid #3498db; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #2980b9; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 2h2v7H7V2zm0 9h2v2H7v-2z" /></svg>
+              <span>{t.licenseConditions}</span>
+            </div>
+            <ul id="license-modal-conditions" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+
+                    <div style="background: rgba(231, 76, 60, 0.08); border: 1.5px solid #e74c3c; border-radius: 4px; padding: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; color: #c0392b; font-weight: 800; font-size: 0.82rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 8,6 12,2 14,4 10,8 14,12 12,14 8,10 4,14 2,12 6,8 2,4" /></svg>
+              <span>{t.licenseLimitations}</span>
+            </div>
+            <ul id="license-modal-limitations" style="margin: 0; padding-left: 1.1rem; font-size: 0.78rem; line-height: 1.45; color: var(--ink);">
+            </ul>
+          </div>
+        </div>
+
+        <div style="background: var(--paper); border: 1px dashed var(--border-ink); padding: 0.6rem 0.85rem; font-size: 0.76rem; color: var(--ink-faint); display: flex; justify-content: space-between; align-items: center;">
+          <span>{t.licenseFooterNote}</span>
+          <span style="font-weight: 700; color: var(--ink);">{t.licenseLegalInfo}</span>
+        </div>
+      </div>
+    </div>
+
+        <div id="suggest-edit-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame" style="max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1.5px solid var(--border-ink); padding-bottom: 0.75rem;">
+          <div>
+            <span class="mono" style="font-size: 0.75rem; color: var(--accent); font-weight: 800;">[COMMUNITY CONTRIBUTION]</span>
+            <h3 id="suggest-modal-title" style="margin: 0.2rem 0 0 0; font-size: 1.15rem; font-weight: 900; color: var(--ink);">
+              {t.suggestModalTitle}
+            </h3>
+          </div>
+          <button type="button" id="suggest-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p style="font-size: 0.88rem; line-height: 1.55; margin-bottom: 1.1rem; color: var(--ink);">
+          {t.suggestModalDesc}
+        </p>
+
+        <form id="suggest-edit-form">
+          <input type="hidden" id="suggest-project-slug" value="" />
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
+            <div class="suggest-form-field">
+              <label for="suggest-name">{t.suggestNameLabel}</label>
+              <input type="text" id="suggest-name" class="suggest-form-input" required />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-category">{t.suggestCategoryLabel}</label>
+              <select id="suggest-category" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="launcher">{t.suggestCatOptLauncher}</option>
+                <option value="client">{t.suggestCatOptClient}</option>
+                <option value="modpack">{t.suggestCatOptModpack}</option>
+                <option value="mod">{t.suggestCatOptMod}</option>
+                <option value="server">{t.suggestCatOptServer}</option>
+                <option value="website">{t.suggestCatOptWebsite}</option>
+                <option value="youtuber">{t.catYoutuber || 'Ютубери'}</option>
+                <option value="project">{t.suggestCatOptProject}</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-action">Дія / Запит:</label>
+              <select id="suggest-action" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="edit">Доповнити / Змінити</option>
+                <option value="delete">Видалити з каталогу</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-country">{t.suggestCountryLabel}</label>
+              <input type="text" id="suggest-country" class="suggest-form-input" placeholder="Global, Ukraine, China, USA, Europe..." />
+            </div>
+
+            <div class="suggest-form-field" data-suggest-non-yt>
+              <label for="suggest-license">{t.suggestLicenseLabel}</label>
+              <input type="text" id="suggest-license" class="suggest-form-input" placeholder="MIT, GPL-3.0, BSD-3-Clause, Proprietary..." />
+            </div>
+
+            <div class="suggest-form-field" data-suggest-non-yt>
+              <label for="suggest-is-open-source">{t.suggestOpenSourceLabel}</label>
+              <select id="suggest-is-open-source" class="suggest-form-input" style="padding: 0.45rem;">
+                <option value="yes">{t.suggestOpenSourceYes}</option>
+                <option value="no">{t.suggestOpenSourceNo}</option>
+              </select>
+            </div>
+
+            <div class="suggest-form-field" data-suggest-non-yt>
+              <label for="suggest-repo-url">{t.suggestRepoLabel}</label>
+              <input type="url" id="suggest-repo-url" class="suggest-form-input" placeholder="https://github.com/owner/repo" />
+            </div>
+
+            <div class="suggest-form-field">
+              <label for="suggest-website" id="suggest-website-label">{t.suggestWebsiteLabel}</label>
+              <input type="url" id="suggest-website" class="suggest-form-input" placeholder="https://project.org" />
+            </div>
+
+            <div class="suggest-form-field" data-suggest-non-yt>
+              <label for="suggest-platforms">{t.suggestPlatformsLabel}</label>
+              <input type="text" id="suggest-platforms" class="suggest-form-input" placeholder="Windows 10, Windows 11, Linux, macOS" />
+            </div>
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-tags">{t.suggestTagsLabel}</label>
+            <input type="text" id="suggest-tags" class="suggest-form-input" placeholder="Optimization, Fabric, Shaders, Performance" />
+          </div>
+
+          <div class="suggest-form-field" id="suggest-server-ip-field" style="display: none; margin-top: 0.75rem;">
+            <label for="suggest-server-ip">{t.suggestServerIpLabel}</label>
+            <input type="text" id="suggest-server-ip" class="suggest-form-input" placeholder="play.server.com" />
+          </div>
+
+          <div class="suggest-form-field" data-suggest-non-yt style="margin-top: 0.75rem;">
+            <label for="suggest-screenshots">{t.suggestScreenshotsLabel}</label>
+            <textarea id="suggest-screenshots" class="suggest-form-textarea" style="min-height: 55px;" placeholder="https://example.com/screen1.png&#10;https://example.com/screen2.png"></textarea>
+          </div>
+
+          <div class="suggest-form-field" data-suggest-non-yt style="margin-top: 0.75rem;">
+            <label for="suggest-screenshot-captions">{t.suggestCaptionsLabel || 'Опис до скріншотів / картинок (по одному на рядок, у порядку посилань):'}</label>
+            <textarea id="suggest-screenshot-captions" class="suggest-form-textarea" style="min-height: 55px;" placeholder={t.suggestCaptionsPh}></textarea>
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span>{t.suggestDescsLabel}</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 700;">{t.suggestDescsLangBadge}</span>
+            </label>
+
+                        <div class="suggest-lang-tabs" id="suggest-lang-tabs">
+              {langList.map((l, idx) => (
+                <button
+                  type="button"
+                  class={`suggest-lang-tab-btn ${idx === 0 ? 'active' : ''}`}
+                  data-suggest-tab={l.code}
+                >
+                  {l.short} ({l.label})
+                </button>
+              ))}
+            </div>
+
+            {langList.map((l, idx) => (
+              <div class={`suggest-lang-pane ${idx === 0 ? 'active' : ''}`} id={`suggest-pane-${l.code}`}>
+                <textarea
+                  id={`suggest-desc-${l.code}`}
+                  class="suggest-form-textarea"
+                  style="min-height: 65px;"
+                  placeholder={`${l.label}...`}
+                ></textarea>
+              </div>
+            ))}
+          </div>
+
+          <div class="suggest-form-field" style="margin-top: 0.75rem;">
+            <label for="suggest-notes">{t.suggestNotesLabel}</label>
+            <textarea id="suggest-notes" class="suggest-form-textarea" style="min-height: 45px;" placeholder={t.suggestNotesPh}></textarea>
+          </div>
+
+          <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.6rem;">
+            <button type="button" id="btn-cancel-suggest" class="paper-btn">
+              {t.cancelBtn}
+            </button>
+            <button type="submit" class="paper-btn paper-btn-ink" style="font-weight: 800;">
+              🚀 {t.suggestSubmitBtn}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockTop}>
+      <button type="button" id="dock-top-btn" class="floating-dock-btn" title={t.floatingDockTop}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <polygon points="8,2 14,9 10,9 10,14 6,14 6,9 2,9" />
+        </svg>
+        <span>{t.floatingDockTop}</span>
+      </button>
+    </div>
+
+    <div id="meow-bsod-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">
+      <div class="meow-bsod-inner">
+        <div class="meow-bsod-face">:(</div>
+        <div class="meow-bsod-title">{t.bsodTitle}</div>
+        <div class="meow-bsod-sub">{t.bsodSubtitle}</div>
+        <div class="meow-bsod-progress">
+          <span id="meow-bsod-pct">0%</span> — {t.bsodProgressLabel}
+        </div>
+        <div class="meow-bsod-code">
+          Stop code: MEOWLAB_CRITICAL_CURIOSITY_EXCEPTION
+        </div>
+      </div>
+    </div>
+

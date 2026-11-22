@@ -147,10 +147,11 @@ export const PROJECTS: ProjectEntry[] = Object.entries(metaFiles)
       return Boolean(loc && loc.description && loc.description.trim().length >= minDescLen);
     });
 
+    const enFallback = localeFiles[`../projects/${slug}/locales/en.json`] ?? base;
     const locales = Object.fromEntries(
       LANG_CODES.map((code) => {
         const loc = localeFiles[`../projects/${slug}/locales/${code}.json`];
-        return [code, loc ?? base];
+        return [code, loc ?? (code === 'uk' ? base : enFallback)];
       }),
     ) as Record<LangCode, ProjectLocale>;
 

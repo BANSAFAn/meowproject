@@ -1,0 +1,221 @@
+---
+import LangFlag from '../icons/LangFlag.astro';
+import { LANGUAGES, type LangCode, type UITranslations } from '../../i18n/translations';
+import { SITE_REPO_URL } from '../../data/projects';
+
+interface Props {
+  lang: LangCode;
+  t: UITranslations;
+  brandDisplay: string;
+  initialFluffies: number;
+}
+
+const { lang, t, brandDisplay, initialFluffies } = Astro.props;
+const langList = Object.values(LANGUAGES);
+const currentLangMeta = LANGUAGES[lang];
+
+function getLangHref(targetLang: LangCode) {
+  return targetLang === 'uk' ? '/' : `/${targetLang}/`;
+}
+---
+        <header class="site-header">
+      <div class="container header-inner">
+        <div class="header-top-row">
+          <a href={getLangHref(lang)} class="brand" data-switch-view="catalog">
+            <img src="/favicon.svg" alt={brandDisplay} class="brand-icon" width="38" height="38" />
+            <span class="brand-title">{brandDisplay}</span>
+          </a>
+
+          <div class="header-utilities">
+            <div class="custom-lang-dropdown" id="lang-dropdown" role="navigation" aria-label="Language Selector">
+              <button
+                type="button"
+                class="lang-dropdown-btn"
+                id="lang-dropdown-trigger"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-label={t.langAriaLabel}
+              >
+                <span class="lang-flag-svg" style="display:inline-flex;align-items:center;" aria-hidden="true"><LangFlag code={lang} /></span>
+                <span class="lang-current-code">{currentLangMeta.short}</span>
+                <span class="lang-current-sep">—</span>
+                <span class="lang-current-name">{currentLangMeta.label}</span>
+                <svg class="lang-chevron" width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <polygon points="3,5 13,5 8,11"></polygon>
+                </svg>
+              </button>
+
+              <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox" aria-hidden="true">
+                {langList.map((l) => {
+                  const isActive = l.code === lang;
+                  return (
+                    <a
+                      href={getLangHref(l.code as any)}
+                      class={`lang-dropdown-item ${isActive ? 'active' : ''}`}
+                      data-lang-choice={l.code}
+                      role="option"
+                      aria-selected={isActive ? 'true' : 'false'}
+                    >
+                      <span class="lang-flag-svg" style="display:inline-flex;align-items:center;" aria-hidden="true"><LangFlag code={l.code} /></span>
+                      <span class="item-code">{l.short}</span>
+                      <span class="item-sep">—</span>
+                      <span class="item-label">{l.label}</span>
+                      {isActive && (
+                        <span class="item-check">
+                          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                            <polygon points="2,9 6,13 14,4 12,2 6,9 4,7" />
+                          </svg>
+                        </span>
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+
+            <a
+              href={`${SITE_REPO_URL}/stargazers`}
+              target="_blank"
+              rel="noopener noreferrer"
+              id="repo-fluffies-badge"
+              class="fluffies-badge"
+              title={t.fluffiesTooltip}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <polygon points="2,3 5,6 11,6 14,3 14,12 11,14 5,14 2,12" />
+              </svg>
+              <span>{t.fluffiesLabel}</span>
+              <span class="fluffies-count" id="repo-fluffies-count">{initialFluffies.toLocaleString()}</span>
+            </a>
+
+            <button
+              type="button"
+              id="open-roadmap-btn"
+              class="paper-btn"
+              style="padding: 0.42rem 0.78rem; font-size: 0.8rem; font-weight: 700;"
+              title={t.newsModalTitle}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <rect x="1" y="2" width="14" height="2" />
+                <rect x="1" y="7" width="10" height="2" />
+                <rect x="1" y="12" width="6" height="2" />
+                <polygon points="12,7 16,10 12,13" />
+              </svg>
+              <span>{t.newsBtn}</span>
+            </button>
+
+            <button
+              type="button"
+              id="theme-toggle"
+              class="theme-btn"
+              aria-label="Toggle theme"
+              title="Switch Light / Dark Paper Theme"
+            >
+              <svg class="icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M6 1a7 7 0 1 0 9 9 6 6 0 0 1-9-9z" />
+              </svg>
+              <svg class="icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="5" y="5" width="6" height="6" />
+                <rect x="7" y="1" width="2" height="2" />
+                <rect x="7" y="13" width="2" height="2" />
+                <rect x="1" y="7" width="2" height="2" />
+                <rect x="13" y="7" width="2" height="2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <nav class="nav-folder-tabs" aria-label="Main Views">
+            <button
+              type="button"
+              class="folder-tab-btn active"
+              data-view-btn="catalog"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <rect x="1" y="1" width="6" height="6"></rect>
+                <rect x="9" y="1" width="6" height="6"></rect>
+                <rect x="1" y="9" width="6" height="6"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+              </svg>
+              <span>{t.navCatalog}</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="guide"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M2 1h8l4 4v10H2V1zm2 2v10h8V6H9V3H4z"></path>
+                <rect x="5" y="8" width="6" height="1.5"></rect>
+                <rect x="5" y="10.5" width="4" height="1.5"></rect>
+              </svg>
+              <span>{t.navHowItWorks}</span>
+              <span class="folder-tab-badge">01</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="submit"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <rect x="7" y="2" width="2" height="12"></rect>
+                <rect x="2" y="7" width="12" height="2"></rect>
+              </svg>
+              <span>{t.navSubmit}</span>
+              <span class="folder-tab-badge">02</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="expenses"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M1 3h14v10H1V3zm2 2v2h10V5H3zm0 4v2h10V9H3z"></path>
+              </svg>
+              <span>{t.navExpenses}</span>
+              <span class="folder-tab-badge">03</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="report"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <polygon points="8,1 15,14 1,14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="miter"></polygon>
+                <rect x="7.2" y="5.5" width="1.6" height="4.5"></rect>
+                <rect x="7.2" y="11" width="1.6" height="1.6"></rect>
+              </svg>
+              <span>{t.navReport}</span>
+              <span class="folder-tab-badge">04</span>
+            </button>
+
+            <button
+              type="button"
+              class="folder-tab-btn"
+              data-view-btn="discussions"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M2 2h12v9H6l-4 3V2zm2 2v6.2L5.3 9H12V4H4z"></path>
+              </svg>
+              <span>{t.navDiscussions}</span>
+              <span class="folder-tab-badge">05</span>
+            </button>
+
+            <a
+              href="/i10n/"
+              class="folder-tab-btn"
+              style="text-decoration: none;"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M1 2h6v2H5.2c.4 1.4 1.1 2.7 2 3.7l1.3-1.3 1.1 1.1-1.3 1.3c.7.6 1.5 1.1 2.4 1.4l-.6 1.5c-1.1-.4-2.1-1-3-1.8-.9.8-2 1.4-3.1 1.8l-.6-1.5c.9-.3 1.8-.8 2.5-1.4-.9-1-1.6-2.3-2-3.8H1V2zm9.5 3h2l2.8 9h-1.8l-.6-2h-2.8l-.6 2H7.7l2.8-9zm.2 5.5h1.6l-.8-2.8-.8 2.8z"></path>
+              </svg>
+              <span>{t.navI10n}</span>
+              <span class="folder-tab-badge">06</span>
+            </a>
+          </nav>
+      </div>
+    </header>
