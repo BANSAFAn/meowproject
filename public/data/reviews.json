@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-22T08:46:51.401Z",
+  "updatedAt": "2026-11-22T11:10:44.372Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -559,6 +559,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "yt-bakiua": {
+      "issueNumber": 74,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/74",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "yt-baneronetwo": {
       "issueNumber": 66,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/66",
@@ -583,6 +591,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "yt-potomkich": {
+      "issueNumber": 75,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/75",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "yt-retkon18": {
       "issueNumber": 69,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/69",
@@ -591,9 +607,25 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "yt-sanyaua": {
+      "issueNumber": 76,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/76",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "yt-weezzykk": {
       "issueNumber": 70,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/70",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "yt-winord-ua": {
+      "issueNumber": 77,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/77",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
