@@ -1,0 +1,44 @@
+{
+  "slug": "yt-potomkich",
+  "category": "youtuber",
+  "name": "Потомкіч Майнкрафт",
+  "shortName": "Потомкіч Майнкрафт",
+  "icon": "/projects/yt-potomkich/icon.jpg",
+  "banner": "/projects/yt-potomkich/banner.jpg",
+  "website": "https://www.youtube.com/@PotomKich_",
+  "youtubeUrl": "https://www.youtube.com/@PotomKich_",
+  "youtubeChannelId": "UCLDdsDgpi1wu4LTSgFwKrAg",
+  "latestVideos": [
+    {
+      "id": "PCpgSiWkhVs",
+      "title": "Майнкрафт, Але в Нас Один Інвентар?!",
+      "published": "2026-10-25"
+    },
+    {
+      "id": "vbGqc48jZsE",
+      "title": "Я Видалив Всі Текстури в Майнкрафт?!",
+      "published": "2026-09-19"
+    },
+    {
+      "id": "i0CsOzGlJto",
+      "title": "Я Видалив Всі Блоки Поверхні в Майнкрафт!",
+      "published": "2026-08-15"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@PotomKich_",
+  "verified": false,
+  "issueSearchTerm": "Потомкіч Майнкрафт",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "PotomKich_"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,44 @@
+{
+  "slug": "yt-sanyaua",
+  "category": "youtuber",
+  "name": "Саня - Майнкрафт",
+  "shortName": "Саня - Майнкрафт",
+  "icon": "/projects/yt-sanyaua/icon.jpg",
+  "banner": "/projects/yt-sanyaua/banner.jpg",
+  "website": "https://www.youtube.com/@Sanyaua",
+  "youtubeUrl": "https://www.youtube.com/@Sanyaua",
+  "youtubeChannelId": "UC_KxaH-8z9G9yI6w99Q0ouQ",
+  "latestVideos": [
+    {
+      "id": "SMYswzHo5Rs",
+      "title": "ВИЦЕПИВ НОВУ ХАТУ В ГТА ВЕРБА ОНЛАЙН!",
+      "published": "2026-11-20"
+    },
+    {
+      "id": "H5ivWUzCX-Y",
+      "title": "ЦЕ НАЙКРУТІША МАШИНА В ГТА ВЕРБА ОНЛАЙН!",
+      "published": "2026-11-16"
+    },
+    {
+      "id": "icoZMexa_Sk",
+      "title": "ПРОЖИВ 100 ДНІВ В НАЙТЕХНОЛОГІЧНІ ЗБІРЦІ З 1000 МОДІВ В МАЙНКРАФТ! МАЙНКРАФТ УКРАЇНСЬКОЮ!",
+      "published": "2026-11-13"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@Sanyaua",
+  "verified": false,
+  "issueSearchTerm": "Саня - Майнкрафт",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "Sanyaua"
+  ],
+  "screenshots": []
+}

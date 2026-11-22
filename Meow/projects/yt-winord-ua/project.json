@@ -1,0 +1,44 @@
+{
+  "slug": "yt-winord-ua",
+  "category": "youtuber",
+  "name": "Вінорд",
+  "shortName": "Вінорд",
+  "icon": "/projects/yt-winord-ua/icon.jpg",
+  "banner": "/projects/yt-winord-ua/banner.jpg",
+  "website": "https://www.youtube.com/@winord-ua",
+  "youtubeUrl": "https://www.youtube.com/@winord-ua",
+  "youtubeChannelId": "UC1i8TYOGOErEu7ODy4lB4tA",
+  "latestVideos": [
+    {
+      "id": "rtqUNwiAr_4",
+      "title": "Я прожив 100 днів у АФРИЦІ в Minecraft Hardcore",
+      "published": "2026-10-24"
+    },
+    {
+      "id": "u-NMA803GRk",
+      "title": "100 днів, але СВІТ з РАНДОМНИХ БЛОКІВ в Minecraft Hardcore",
+      "published": "2026-07-04"
+    },
+    {
+      "id": "ZhJUYmw2r40",
+      "title": "100 днів, але СВІТ РАНДОМНО РОЗШИРЮЄТЬСЯ КОЖНОГО ДНЯ в Minecraft Hardcore",
+      "published": "2026-05-09"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@winord-ua",
+  "verified": false,
+  "issueSearchTerm": "Вінорд",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "winord-ua"
+  ],
+  "screenshots": []
+}

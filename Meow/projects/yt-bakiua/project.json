@@ -1,0 +1,44 @@
+{
+  "slug": "yt-bakiua",
+  "category": "youtuber",
+  "name": "Бакі",
+  "shortName": "Бакі",
+  "icon": "/projects/yt-bakiua/icon.jpg",
+  "banner": "/projects/yt-bakiua/banner.jpg",
+  "website": "https://www.youtube.com/@bakiUA",
+  "youtubeUrl": "https://www.youtube.com/@bakiUA",
+  "youtubeChannelId": "UCulflMIQOErPM4hhxLwKXhA",
+  "latestVideos": [
+    {
+      "id": "CjBPOVYJ8Go",
+      "title": "🇺🇦 МАЙНКРАФТ АЛЕ ОБЕРИ ПРАВИЛЬНУ ЧИПСУ ЩОБ ВИЖИТИ! БАКІ І МІКА",
+      "published": "2026-11-21"
+    },
+    {
+      "id": "dZ9PthTfwcc",
+      "title": "🇺🇦 НЕ ХЛЮПАЙ У ВОДІ В МАЙНКРАФТІ! БАКІ І МІКА",
+      "published": "2026-11-19"
+    },
+    {
+      "id": "I5xlQnSAams",
+      "title": "🇺🇦 ВТЕЧА З В'ЯЗНИЦІ ЗА 1$ ТА 1000000$ В МАЙНКРАФТІ! БАКІ І МІКА",
+      "published": "2026-11-17"
+    }
+  ],
+  "country": "UA",
+  "isOpenSource": false,
+  "license": "YouTube",
+  "developer": "@bakiUA",
+  "verified": false,
+  "issueSearchTerm": "Бакі",
+  "platforms": [
+    "YouTube"
+  ],
+  "sourceLinks": [],
+  "tags": [
+    "YouTube",
+    "Creator",
+    "bakiUA"
+  ],
+  "screenshots": []
+}

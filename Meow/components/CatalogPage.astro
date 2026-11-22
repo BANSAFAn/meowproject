@@ -8039,6 +8039,81 @@ const seoCategoryLabel = selectedProject
                 return 'CRITICAL_MEOWLAB_CURIOSITY_BSOD';
               },
             });
+            Object.defineProperty(window, 'meow', {
+              configurable: true,
+              get() {
+                if (window.__meowEncounterRunning) return 'MEOW_FIGHT_ALREADY_STARTING...';
+                window.__meowEncounterRunning = true;
+                const pathMatch = window.location.pathname.match(/^\/(uk|en|de|pl|be|kk)(\/|$)/);
+                const lang = (pathMatch && pathMatch[1]) || document.documentElement.lang || 'uk';
+
+                // Play classic Undertale 3-beep encounter sound
+                try {
+                  const AC = window.AudioContext || window.webkitAudioContext;
+                  if (AC) {
+                    const ac = new AC();
+                    const beep = (t, freq, dur) => {
+                      const o = ac.createOscillator();
+                      const g = ac.createGain();
+                      o.type = 'square';
+                      o.frequency.setValueAtTime(freq, ac.currentTime + t);
+                      g.gain.setValueAtTime(0.12, ac.currentTime + t);
+                      g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + t + dur);
+                      o.connect(g); g.connect(ac.destination);
+                      o.start(ac.currentTime + t); o.stop(ac.currentTime + t + dur);
+                    };
+                    beep(0.05, 620, 0.07);
+                    beep(0.24, 620, 0.07);
+                    beep(0.43, 620, 0.07);
+                    beep(0.65, 280, 0.28);
+                  }
+                } catch (_) {}
+
+                // Fullscreen Undertale encounter overlay
+                const ov = document.createElement('div');
+                ov.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:#000;opacity:0;pointer-events:all;transition:opacity 0.08s linear;display:flex;align-items:center;justify-content:center;';
+                const heart = document.createElement('div');
+                heart.innerHTML = '<svg width="34" height="30" viewBox="0 0 14 12" style="image-rendering:pixelated;shape-rendering:crispEdges"><path fill="#ff0000" d="M2 0h3v1h1v1h2V1h1V0h3v1h1v1h1v4h-1v1h-1v1h-1v1h-1v1H9v1H8v1H6v-1H5v-1H4V9H3V8H2V7H1V6H0V2h1V1h1z"/></svg>';
+                heart.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(1.2);transition:transform 0.55s cubic-bezier(0.22,1,0.36,1), top 0.55s cubic-bezier(0.22,1,0.36,1), left 0.55s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease;opacity:0;';
+                ov.appendChild(heart);
+                document.body.appendChild(ov);
+
+                // 3 dramatic black/visible Undertale flashes + blinking red soul
+                const flash = (on, ms) => setTimeout(() => {
+                  ov.style.opacity = on ? '1' : '0';
+                  heart.style.opacity = on ? '1' : '0';
+                }, ms);
+                flash(true, 40);
+                flash(false, 135);
+                flash(true, 230);
+                flash(false, 325);
+                flash(true, 420);
+                flash(false, 515);
+
+                // Hold solid black, then glide the soul down to the battle menu position
+                setTimeout(() => {
+                  ov.style.transition = 'opacity 0.25s ease';
+                  ov.style.opacity = '1';
+                  heart.style.opacity = '1';
+                }, 610);
+
+                setTimeout(() => {
+                  heart.style.left = '24%';
+                  heart.style.top = '86%';
+                  heart.style.transform = 'translate(-50%,-50%) scale(0.95)';
+                }, 780);
+
+                setTimeout(() => {
+                  heart.style.opacity = '0';
+                }, 1360);
+
+                setTimeout(() => {
+                  window.location.href = `/meow-fight/?lang=${encodeURIComponent(lang)}`;
+                }, 1580);
+
+                return 'MEOW_FIGHT_INITIALIZED...';
+              },
+            });
           } catch (_) {}
         }
 
