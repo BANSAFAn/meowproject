@@ -64,27 +64,6 @@
         }
       ]
     },
-    "yt-zagin-kinomaniv": {
-      "youtubeChannelId": "UCig7t6LFOjS2fKkhjbVLpjw",
-      "banner": "/projects/yt-zagin-kinomaniv/banner.jpg",
-      "latestVideos": [
-        {
-          "id": "8UdvYT1Togc",
-          "title": "ЩО ПРИХОВАЛИ ПРО СКРЯБІНА? Огляд фільму \"Кузьма: Страшно веселий\"",
-          "published": "2026-11-19"
-        },
-        {
-          "id": "UrzJeLIWu30",
-          "title": "На що держава витратила 20 мільйонів?",
-          "published": "2026-11-02"
-        },
-        {
-          "id": "Pw1INAZgRm0",
-          "title": "\"В БІЙ ІДУТЬ ОДНІ СТАРИКИ\": Як росіяни вкрали український фільм?",
-          "published": "2026-06-27"
-        }
-      ]
-    },
     "yt-dauross": {
       "youtubeChannelId": "UC8JSQsPmd_qYVK6YoA8E22g",
       "banner": "/projects/yt-dauross/banner.jpg",
