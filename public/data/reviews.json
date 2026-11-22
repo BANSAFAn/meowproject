@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-22T18:27:08.209Z",
+  "updatedAt": "2026-11-22T18:35:39.871Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -247,6 +247,14 @@
           "issueNum": 28
         }
       ]
+    },
+    "farmer_fox": {
+      "issueNumber": 80,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/80",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
     },
     "ferritecore": {
       "issueNumber": 63,
