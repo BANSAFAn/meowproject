@@ -1,0 +1,23 @@
+{
+  "slug": "farmer_fox",
+  "name": "@farmer_fox",
+  "shortName": "@farmer_fox",
+  "category": "youtuber",
+  "icon": "/favicon.svg",
+  "country": "Україна",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "YouTube"
+  ],
+  "website": "https://www.youtube.com/@farmer_fox",
+  "sourceLinks": [],
+  "issueThreadNumber": 78,
+  "issueSearchTerm": "@farmer_fox",
+  "tags": [
+    "youtuber",
+    "YouTube",
+    "Україна"
+  ],
+  "screenshots": []
+}
