@@ -18,6 +18,7 @@ import {
 import { ClientRouter } from 'astro:transitions';
 import MonobankIcon from './icons/MonobankIcon.astro';
 import YoutubeIcon from './icons/YoutubeIcon.astro';
+import SeoHead from './SeoHead.astro';
 import reviewsData from '../../public/data/reviews.json';
 import discussionsData from '../../public/data/discussions.json';
 import repoStatsData from '../../public/data/repo-stats.json';
@@ -188,57 +189,21 @@ const canonicalUrl = selectedProject
 
 const seoPageTitle = pageTitle.includes('MeowLab') ? pageTitle : `${pageTitle} | MeowLab`;
 const seoKeywords = `meowlab, meowl, meowlabs, baneronetwo, meowlab.pp.ua, MeowProject, ${t.metaKeywords || ''}`;
-
-const jsonLdSchema = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebSite',
-      '@id': `${siteOrigin}/#website`,
-      name: 'MeowLab — MeowProject',
-      alternateName: ['MeowLab', 'meowlab', 'meowl', 'meowlabs', 'meowlab.pp.ua', 'baneronetwo', 'MeowProject', t.metaTitle],
-      url: `${siteOrigin}/`,
-      inLanguage: lang,
-      description: pageDescription,
-      publisher: {
-        '@type': 'Person',
-        '@id': `${siteOrigin}/#author`,
-        name: 'Baneronetwo',
-        alternateName: ['baneronetwo', 'BANSAFAn'],
-        url: YOUTUBE_JOIN_URL,
-        sameAs: [SITE_REPO_URL, YOUTUBE_JOIN_URL],
-      },
-    },
-    {
-      '@type': 'Organization',
-      '@id': `${siteOrigin}/#organization`,
-      name: 'MeowLab',
-      alternateName: ['meowlab', 'meowl', 'meowlabs', 'MeowProject', 'meowlab.pp.ua'],
-      url: `${siteOrigin}/`,
-      logo: `${siteOrigin}/favicon.svg`,
-      founder: { '@id': `${siteOrigin}/#author` },
-      sameAs: [SITE_REPO_URL, YOUTUBE_JOIN_URL],
-    },
-    {
-      '@type': 'ItemList',
-      name: t.heroTitle,
-      itemListElement: PROJECTS.map((p, idx) => ({
-        '@type': 'ListItem',
-        position: idx + 1,
-        item: {
-          '@type': 'SoftwareApplication',
-          name: p.name,
-          applicationCategory: 'GameApplication',
-          operatingSystem: p.platforms.join(', '),
-          url: p.primaryLink,
-          image: `${siteOrigin}${p.icon}`,
-          description: p.locales[lang]?.tagline || p.name,
-          license: p.license,
-        },
-      })),
-    },
-  ],
+const seoCategoryMap: Record<string, string> = {
+  launcher: t.catLauncher,
+  modpack: t.catModpack,
+  mod: t.catMod,
+  client: t.catClient,
+  server: t.catServer,
+  website: t.catWebsite,
+  youtuber: t.catYoutuber || 'Ютубери',
+  project: t.catProject,
 };
+const seoCategoryLabel = selectedProject
+  ? seoCategoryMap[selectedProject.category] || selectedProject.category
+  : initialCategory && initialCategory !== 'all'
+    ? seoCategoryMap[initialCategory] || initialCategory
+    : undefined;
 ---
 
 <!doctype html>
@@ -278,38 +243,22 @@ const jsonLdSchema = {
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>{seoPageTitle}</title>
-    <meta name="description" content={pageDescription} />
-    <meta name="keywords" content={seoKeywords} />
-    <meta name="author" content="Baneronetwo (MeowLab)" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href={canonicalUrl} />
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-
-        <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/`} />
-    {
-      langList.map((l) => (
-        <link
-          rel="alternate"
-          hreflang={l.code}
-          href={`${siteOrigin}${getLangHref(l.code)}`}
-        />
-      ))
-    }
-
-        <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MeowLab — MeowProject" />
-    <meta property="og:title" content={t.metaTitle} />
-    <meta property="og:description" content={t.metaDescription} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:locale" content={currentLangMeta.ogLocale} />
-    <meta property="og:image" content={`${siteOrigin}/projects/xmcl/screen-1.png`} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={t.metaTitle} />
-    <meta name="twitter:description" content={t.metaDescription} />
-    <meta name="twitter:image" content={`${siteOrigin}/projects/xmcl/screen-1.png`} />
-
-        <script type="application/ld+json" set:html={JSON.stringify(jsonLdSchema)} />
+    <SeoHead
+      lang={lang}
+      siteOrigin={siteOrigin}
+      seoPageTitle={seoPageTitle}
+      pageDescription={pageDescription}
+      seoKeywords={seoKeywords}
+      canonicalUrl={canonicalUrl}
+      selectedProject={selectedProject}
+      initialCategory={initialCategory}
+      categoryLabel={seoCategoryLabel}
+      projects={PROJECTS}
+      reviewsData={reviewsData}
+      heroTitle={t.heroTitle}
+      siteRepoUrl={SITE_REPO_URL}
+      youtubeJoinUrl={YOUTUBE_JOIN_URL}
+    />
 
     <script is:inline>
       (function () {
@@ -8806,6 +8755,10 @@ const jsonLdSchema = {
 
         // Initialize category tags
         updateVisibleTagsForCategory(activeCategory);
+        try {
+          const initialQ = new URLSearchParams(window.location.search).get('q');
+          if (initialQ && searchInput) searchInput.value = initialQ;
+        } catch (_) {}
         filterProjects();
 
         // 7. Lightbox

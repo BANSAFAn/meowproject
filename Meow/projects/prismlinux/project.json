@@ -1,0 +1,37 @@
+{
+  "slug": "prismlinux",
+  "category": "project",
+  "name": "PrismLinux",
+  "shortName": "PrismLinux",
+  "icon": "/projects/prismlinux/icon.svg",
+  "website": "https://prismlinux.org/uk/",
+  "country": "UA",
+  "isOpenSource": true,
+  "license": "GPL-3.0",
+  "developer": "PrismLinux Community",
+  "verified": true,
+  "issueSearchTerm": "PrismLinux",
+  "platforms": [
+    "Linux (x86_64)",
+    "Arch-based"
+  ],
+  "sourceLinks": [
+    {
+      "host": "gitlab",
+      "label": "GitLab",
+      "url": "https://gitlab.com/prismlinux"
+    }
+  ],
+  "tags": [
+    "Linux",
+    "Arch Linux",
+    "Minecraft",
+    "Distro",
+    "KDE Plasma",
+    "GNOME",
+    "niri",
+    "Open Source",
+    "GPL-3.0"
+  ],
+  "screenshots": []
+}

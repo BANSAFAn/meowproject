@@ -1,0 +1,231 @@
+---
+import type { LangCode } from '../i18n/translations';
+import { LANGUAGES } from '../i18n/translations';
+import type { ProjectEntry } from '../data/projects';
+
+interface Props {
+  lang: LangCode;
+  siteOrigin: string;
+  seoPageTitle: string;
+  pageDescription: string;
+  seoKeywords: string;
+  canonicalUrl: string;
+  selectedProject?: ProjectEntry;
+  initialCategory?: string;
+  categoryLabel?: string;
+  projects: ProjectEntry[];
+  reviewsData: any;
+  heroTitle: string;
+  siteRepoUrl: string;
+  youtubeJoinUrl: string;
+}
+
+const {
+  lang,
+  siteOrigin,
+  seoPageTitle,
+  pageDescription,
+  seoKeywords,
+  canonicalUrl,
+  selectedProject,
+  initialCategory,
+  categoryLabel,
+  projects,
+  reviewsData,
+  heroTitle,
+  siteRepoUrl,
+  youtubeJoinUrl,
+} = Astro.props;
+
+const currentLangMeta = LANGUAGES[lang];
+const allLangList = Object.values(LANGUAGES);
+
+function localizedPathFor(targetLang: LangCode): string {
+  const prefix = targetLang === 'uk' ? '' : `/${targetLang}`;
+  if (selectedProject) return `${prefix}/project/${selectedProject.slug}/`;
+  if (initialCategory && initialCategory !== 'all') return `${prefix}/category/${initialCategory}/`;
+  return targetLang === 'uk' ? '/' : `/${targetLang}/`;
+}
+
+const defaultOgImage = `${siteOrigin}/banner-alpha.jpg`;
+let ogImage = defaultOgImage;
+if (selectedProject) {
+  if (selectedProject.banner) {
+    ogImage = selectedProject.banner.startsWith('http') ? selectedProject.banner : `${siteOrigin}${selectedProject.banner}`;
+  } else if (selectedProject.screenshots?.length > 0) {
+    ogImage = `${siteOrigin}${selectedProject.screenshots[0]}`;
+  } else if (selectedProject.icon && /\.(png|jpe?g|webp)$/i.test(selectedProject.icon)) {
+    ogImage = `${siteOrigin}${selectedProject.icon}`;
+  }
+}
+
+const breadcrumbItems: any[] = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'MeowLab',
+    item: `${siteOrigin}${lang === 'uk' ? '/' : `/${lang}/`}`,
+  },
+];
+
+if (selectedProject) {
+  breadcrumbItems.push(
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: categoryLabel || selectedProject.category,
+      item: `${siteOrigin}${lang === 'uk' ? '' : `/${lang}`}/category/${selectedProject.category}/`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: selectedProject.name,
+      item: canonicalUrl,
+    }
+  );
+} else if (initialCategory && initialCategory !== 'all') {
+  breadcrumbItems.push({
+    '@type': 'ListItem',
+    position: 2,
+    name: categoryLabel || initialCategory,
+    item: canonicalUrl,
+  });
+}
+
+const mainEntityList = !selectedProject
+  ? {
+      '@type': 'ItemList',
+      name: categoryLabel || heroTitle,
+      numberOfItems: projects.length,
+      itemListElement: projects.slice(0, 40).map((p, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        url: `${siteOrigin}${lang === 'uk' ? '' : `/${lang}`}/project/${p.slug}/`,
+        name: p.name,
+      })),
+    }
+  : (() => {
+      const rev = reviewsData?.projects?.[selectedProject.slug];
+      const ratingBlock =
+        rev && typeof rev.averageRating === 'number' && rev.totalRatings > 0
+          ? {
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: rev.averageRating,
+                bestRating: 100,
+                worstRating: 0,
+                ratingCount: rev.totalRatings,
+              },
+            }
+          : {};
+
+      if (selectedProject.category === 'youtuber') {
+        return {
+          '@type': 'Person',
+          name: selectedProject.name,
+          description: selectedProject.locales[lang]?.description || selectedProject.locales[lang]?.tagline || selectedProject.name,
+          image: ogImage,
+          url: canonicalUrl,
+          sameAs: selectedProject.youtubeUrl ? [selectedProject.youtubeUrl] : [],
+        };
+      }
+
+      return {
+        '@type': 'SoftwareApplication',
+        name: selectedProject.name,
+        applicationCategory: 'GameApplication',
+        operatingSystem: selectedProject.platforms.join(', '),
+        url: canonicalUrl,
+        image: ogImage,
+        description: selectedProject.locales[lang]?.description || selectedProject.locales[lang]?.tagline || selectedProject.name,
+        license: selectedProject.license,
+        ...ratingBlock,
+      };
+    })();
+
+const jsonLdSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteOrigin}/#website`,
+      name: 'MeowLab — MeowProject',
+      alternateName: ['MeowLab', 'meowlab', 'meowl', 'meowlabs', 'meowlab.pp.ua', 'baneronetwo', 'MeowProject'],
+      url: `${siteOrigin}/`,
+      inLanguage: lang,
+      description: pageDescription,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${siteOrigin}/?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+      publisher: {
+        '@type': 'Person',
+        '@id': `${siteOrigin}/#author`,
+        name: 'Baneronetwo',
+        alternateName: ['baneronetwo', 'BANSAFAn'],
+        url: youtubeJoinUrl,
+        sameAs: [siteRepoUrl, youtubeJoinUrl],
+      },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteOrigin}/#organization`,
+      name: 'MeowLab',
+      alternateName: ['meowlab', 'meowl', 'meowlabs', 'MeowProject', 'meowlab.pp.ua'],
+      url: `${siteOrigin}/`,
+      logo: `${siteOrigin}/favicon.svg`,
+      founder: { '@id': `${siteOrigin}/#author` },
+      sameAs: [siteRepoUrl, youtubeJoinUrl, 'https://gitlab.com/banernotfake/meowproject'],
+    },
+    ...(breadcrumbItems.length > 1
+      ? [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: breadcrumbItems,
+          },
+        ]
+      : []),
+    mainEntityList,
+  ],
+};
+---
+
+<title>{seoPageTitle}</title>
+<meta name="description" content={pageDescription} />
+<meta name="keywords" content={seoKeywords} />
+<meta name="author" content="Baneronetwo (MeowLab)" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href={canonicalUrl} />
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+<link rel="alternate" type="application/rss+xml" title="MeowLab RSS" href="/rss.xml" />
+
+<link rel="alternate" hreflang="x-default" href={`${siteOrigin}${localizedPathFor('uk')}`} />
+{
+  allLangList.map((l) => (
+    <link
+      rel="alternate"
+      hreflang={l.code}
+      href={`${siteOrigin}${localizedPathFor(l.code)}`}
+    />
+  ))
+}
+
+<meta property="og:type" content={selectedProject ? 'article' : 'website'} />
+<meta property="og:site_name" content="MeowLab — MeowProject" />
+<meta property="og:title" content={seoPageTitle} />
+<meta property="og:description" content={pageDescription} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:locale" content={currentLangMeta.ogLocale} />
+{
+  allLangList
+    .filter((l) => l.code !== lang)
+    .map((l) => <meta property="og:locale:alternate" content={l.ogLocale} />)
+}
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seoPageTitle} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content={ogImage} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdSchema)} />

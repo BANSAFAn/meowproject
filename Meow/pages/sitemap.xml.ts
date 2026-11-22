@@ -1,33 +1,48 @@
 import type { APIRoute } from 'astro';
 import { LANGUAGES } from '../i18n/translations';
-import { PROJECTS } from '../data/projects';
-
-const PREFIXES = ['launcher', 'modpack', 'mod', 'client', 'server', 'website', 'project'];
+import { PROJECTS, PREFIXES } from '../data/projects';
 
 export const GET: APIRoute = ({ site, url }) => {
   const origin = site?.origin || url.origin || 'https://meowlab.pp.ua';
   const langs = Object.keys(LANGUAGES);
   const lastmod = new Date().toISOString().split('T')[0];
 
-  const urls: { loc: string; priority: string }[] = [
-    { loc: `${origin}/`, priority: '1.0' },
-    ...langs.map((l) => ({ loc: `${origin}/${l}/`, priority: '0.9' })),
-  ];
+  const makeAlternates = (pathSuffix: string) =>
+    [
+      `<xhtml:link rel="alternate" hreflang="x-default" href="${origin}${pathSuffix}" />`,
+      ...langs.map((l) => {
+        const href = l === 'uk' ? `${origin}${pathSuffix}` : `${origin}/${l}${pathSuffix}`;
+        return `<xhtml:link rel="alternate" hreflang="${l}" href="${href}" />`;
+      }),
+    ].join('\n    ');
 
-  // Projects
-  PROJECTS.forEach((p) => {
-    urls.push({ loc: `${origin}/project/${p.slug}/`, priority: '0.85' });
-    langs.forEach((l) => {
-      urls.push({ loc: `${origin}/${l}/project/${p.slug}/`, priority: '0.8' });
-    });
-  });
+  const urls: { loc: string; priority: string; pathSuffix: string }[] = [
+    { loc: `${origin}/`, priority: '1.0', pathSuffix: '/' },
+    ...langs
+      .filter((l) => l !== 'uk')
+      .map((l) => ({ loc: `${origin}/${l}/`, priority: '0.95', pathSuffix: '/' })),
+  ];
 
   // Categories
   PREFIXES.forEach((cat) => {
-    urls.push({ loc: `${origin}/category/${cat}/`, priority: '0.85' });
-    langs.forEach((l) => {
-      urls.push({ loc: `${origin}/${l}/category/${cat}/`, priority: '0.8' });
-    });
+    const suffix = `/category/${cat}/`;
+    urls.push({ loc: `${origin}${suffix}`, priority: '0.85', pathSuffix: suffix });
+    langs
+      .filter((l) => l !== 'uk')
+      .forEach((l) => {
+        urls.push({ loc: `${origin}/${l}${suffix}`, priority: '0.8', pathSuffix: suffix });
+      });
+  });
+
+  // Projects
+  PROJECTS.forEach((p) => {
+    const suffix = `/project/${p.slug}/`;
+    urls.push({ loc: `${origin}${suffix}`, priority: '0.85', pathSuffix: suffix });
+    langs
+      .filter((l) => l !== 'uk')
+      .forEach((l) => {
+        urls.push({ loc: `${origin}/${l}${suffix}`, priority: '0.8', pathSuffix: suffix });
+      });
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -37,6 +52,7 @@ ${urls
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
+    ${makeAlternates(u.pathSuffix)}
     <lastmod>${lastmod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>${u.priority}</priority>

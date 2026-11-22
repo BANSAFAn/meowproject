@@ -1,0 +1,11 @@
+{
+  "tagline": "Дыстрыбутыў Linux на базе Arch (KDE, GNOME, Cinnamon, niri) для Minecraft і штодзённай працы",
+  "description": "PrismLinux — адкрыты дыстрыбутыў Linux ад супольнасці на аснове Arch Linux і пакетнага менеджара pacman. Адзін універсальны ISO-вобраз дазваляе абраць пры ўсталёўцы KDE Plasma, GNOME, Cinnamon або Wayland-кампазітар niri і выдатна падыходзіць для гульняў і Minecraft.",
+  "features": [
+    "На базе Arch Linux з пакетным менеджарам pacman і свежымі драйверамі",
+    "Універсальны ISO з выбарам KDE Plasma, GNOME, Cinnamon або niri",
+    "Прадуманыя налады з каробкі для гульняў і Minecraft",
+    "Адкрытая распрацоўка супольнасцю на GitLab (GPL-3.0)"
+  ],
+  "screenshotCaptions": []
+}

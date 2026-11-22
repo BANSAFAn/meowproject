@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="112 112 800 800" role="img" aria-labelledby="title description">
+  <title id="title">PrismLinux Prism Core logotype</title>
+  <desc id="description">Ten crystalline PrismLinux blades arranged around a bright refractive core.</desc>
+  <defs>
+    <path id="blade" d="M -27,-92 L 0,-306 L 104,-188 Z"/>
+    <path id="highlight" d="M -23,-96 L 0,-205 L 66,-132 Z"/>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#d8fffd"/>
+      <stop offset="1" stop-color="#70dcd9"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#39d5ed"/>
+      <stop offset="1" stop-color="#0795c4"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2382da"/>
+      <stop offset="1" stop-color="#0d468f"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8a78ff"/>
+      <stop offset="1" stop-color="#5148d8"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#f5fbff"/>
+      <stop offset="1" stop-color="#9edcff"/>
+    </linearGradient>
+    <filter id="core-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(512 512)" stroke="#effcff" stroke-width="5" stroke-linejoin="round">
+    <circle r="348" fill="none" stroke="#69dbe8" stroke-width="4" stroke-opacity=".28"/>
+    <use href="#blade" fill="url(#mint)"/>
+    <use href="#blade" transform="rotate(36)" fill="url(#blue)"/>
+    <use href="#blade" transform="rotate(72)" fill="url(#cyan)"/>
+    <use href="#blade" transform="rotate(108)" fill="url(#blue)"/>
+    <use href="#blade" transform="rotate(144)" fill="url(#mint)"/>
+    <use href="#blade" transform="rotate(180)" fill="url(#blue)"/>
+    <use href="#blade" transform="rotate(216)" fill="url(#cyan)"/>
+    <use href="#blade" transform="rotate(252)" fill="url(#violet)"/>
+    <use href="#blade" transform="rotate(288)" fill="url(#cyan)"/>
+    <use href="#blade" transform="rotate(324)" fill="url(#mint)"/>
+
+    <g fill="#ffffff" stroke="none">
+      <use href="#highlight" opacity=".54"/>
+      <use href="#highlight" transform="rotate(72)" opacity=".22"/>
+      <use href="#highlight" transform="rotate(144)" opacity=".42"/>
+      <use href="#highlight" transform="rotate(216)" opacity=".18"/>
+      <use href="#highlight" transform="rotate(288)" opacity=".34"/>
+    </g>
+
+    <circle r="58" fill="#05080d" stroke="none"/>
+    <path d="M 0,-64 L 44,0 L 0,64 L -44,0 Z" fill="#dff8ff" stroke="none" opacity=".32" filter="url(#core-glow)"/>
+    <path d="M 0,-58 L 40,0 L 0,58 L -40,0 Z" fill="url(#core)" stroke="#ffffff" stroke-width="4"/>
+    <path d="M 0,-58 L -40,0 L 0,58 L 0,0 Z" fill="#a9cce8" opacity=".3" stroke="none"/>
+    <path d="M 0,-58 L 40,0 L 0,0 Z" fill="#ffffff" opacity=".48" stroke="none"/>
+  </g>
+</svg>

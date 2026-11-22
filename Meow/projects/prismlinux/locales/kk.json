@@ -1,0 +1,11 @@
+{
+  "tagline": "Minecraft және күнделікті жұмысқа арналған Arch негізіндегі Linux дистрибутиві",
+  "description": "PrismLinux — Arch Linux және pacman пакет менеджері негізіндегі қауымдастық жасаған ашық Linux дистрибутиві. Бір әмбебап ISO орнату кезінде KDE Plasma, GNOME, Cinnamon немесе niri Wayland композиторын таңдауға мүмкіндік береді.",
+  "features": [
+    "Arch Linux негізінде (pacman және жаңа драйверлер)",
+    "Бір әмбебап ISO: KDE Plasma, GNOME, Cinnamon немесе niri таңдауы",
+    "Ойындар мен Minecraft үшін дайын оңтайлы баптаулар",
+    "GitLab-тағы ашық қауымдастық жобасы (GPL-3.0)"
+  ],
+  "screenshotCaptions": []
+}

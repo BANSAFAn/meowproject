@@ -1,0 +1,11 @@
+{
+  "tagline": "Arch-basierte Community-Linux-Distribution (KDE, GNOME, Cinnamon, niri) für Minecraft & Alltag",
+  "description": "PrismLinux ist eine quelloffene Community-Linux-Distribution auf Basis von Arch Linux und pacman. Eine einzige universelle ISO lässt dich bei der Installation zwischen KDE Plasma, GNOME, Cinnamon oder dem Wayland-Tiling-Compositor niri wählen – ideal mit aktuellen Treibern für Gaming und Minecraft.",
+  "features": [
+    "Basiert auf Arch Linux mit pacman und aktuellen Grafiktreibern",
+    "Universelle ISO mit Auswahl von KDE Plasma, GNOME, Cinnamon oder niri",
+    "Durchdachte Standardkonfiguration für Gaming, Minecraft und Alltag",
+    "Offene Community-Entwicklung auf GitLab (GPL-3.0)"
+  ],
+  "screenshotCaptions": []
+}
