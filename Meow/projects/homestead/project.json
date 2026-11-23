@@ -1,0 +1,29 @@
+{
+  "slug": "homestead",
+  "name": "Homestead",
+  "shortName": "Homestead",
+  "category": "modpack",
+  "icon": "/projects/homestead/icon.webp",
+  "country": "Global",
+  "developer": "Tokimi",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/homestead",
+  "sourceLinks": [],
+  "issueSearchTerm": "Homestead",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Multiplayer",
+    "Quests"
+  ],
+  "screenshots": [
+    "/projects/homestead/screen-1.webp",
+    "/projects/homestead/screen-2.webp",
+    "/projects/homestead/screen-3.webp"
+  ]
+}

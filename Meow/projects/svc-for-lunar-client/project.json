@@ -1,0 +1,28 @@
+{
+  "slug": "svc-for-lunar-client",
+  "name": "SVC for Lunar Client",
+  "shortName": "SVC for Lunar Client",
+  "category": "modpack",
+  "icon": "/projects/svc-for-lunar-client/icon.webp",
+  "country": "Global",
+  "developer": "LunarClient",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/svc-for-lunar-client",
+  "sourceLinks": [],
+  "issueSearchTerm": "SVC for Lunar Client",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Lightweight",
+    "Multiplayer",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/svc-for-lunar-client/screen-1.webp",
+    "/projects/svc-for-lunar-client/screen-2.webp"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "skyblocker-modpack",
+  "name": "Skyblocker Modpack - Hypixel Skyblock",
+  "shortName": "Skyblocker Modpack - Hypixel Skyblock",
+  "category": "modpack",
+  "icon": "/projects/skyblocker-modpack/icon.png",
+  "country": "Global",
+  "developer": "Wohlhabend",
+  "license": "LGPL-3.0-only",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/skyblocker-modpack",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
+    }
+  ],
+  "issueSearchTerm": "Skyblocker Modpack - Hypixel Skyblock",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Lightweight",
+    "Multiplayer"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,10 @@
+{
+  "tagline": "A Hypixel Skyblock Modpack with common client-side utilities, along with the Skyblocker mod.",
+  "description": "A Hypixel Skyblock Modpack with common client-side utilities, along with the Skyblocker mod.",
+  "features": [
+    "Modloader: Fabric",
+    "Lightweight",
+    "Multiplayer"
+  ],
+  "screenshotCaptions": []
+}

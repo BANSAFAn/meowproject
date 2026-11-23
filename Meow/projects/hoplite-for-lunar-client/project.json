@@ -1,0 +1,29 @@
+{
+  "slug": "hoplite-for-lunar-client",
+  "name": "Hoplite for Lunar Client",
+  "shortName": "Hoplite for Lunar Client",
+  "category": "modpack",
+  "icon": "/projects/hoplite-for-lunar-client/icon.webp",
+  "country": "Global",
+  "developer": "LunarClient",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/hoplite-for-lunar-client",
+  "sourceLinks": [],
+  "issueSearchTerm": "Hoplite for Lunar Client",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Combat",
+    "Multiplayer",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/hoplite-for-lunar-client/screen-1.webp",
+    "/projects/hoplite-for-lunar-client/screen-2.webp",
+    "/projects/hoplite-for-lunar-client/screen-3.webp"
+  ]
+}

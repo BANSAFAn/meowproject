@@ -1,0 +1,11 @@
+{
+  "tagline": "Modpack originally made for the Pokemon Elysium server, a Cobblemon-focused pack with hints of low-tech steampunk.",
+  "description": "Modpack originally made for the Pokemon Elysium server, a Cobblemon-focused pack with hints of low-tech steampunk.",
+  "features": [
+    "Modloader: Fabric",
+    "Adventure",
+    "Combat",
+    "Multiplayer"
+  ],
+  "screenshotCaptions": []
+}

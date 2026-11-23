@@ -1,0 +1,29 @@
+{
+  "slug": "rso",
+  "name": "红石生电优化【Redstone Survival Optimization】",
+  "shortName": "红石生电优化【Redstone Survival Optimization】",
+  "category": "modpack",
+  "icon": "/projects/rso/icon.webp",
+  "country": "Global",
+  "developer": "moonboss666",
+  "license": "GPL-3.0-only",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/rso",
+  "sourceLinks": [],
+  "issueSearchTerm": "红石生电优化【Redstone Survival Optimization】",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Lightweight",
+    "Multiplayer",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/rso/screen-1.webp",
+    "/projects/rso/screen-2.webp",
+    "/projects/rso/screen-3.webp"
+  ]
+}

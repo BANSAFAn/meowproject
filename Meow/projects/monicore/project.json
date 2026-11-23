@@ -1,0 +1,25 @@
+{
+  "slug": "monicore",
+  "name": "Monicore (Монікор)",
+  "shortName": "Monicore",
+  "category": "website",
+  "icon": "/projects/monicore/icon.webp",
+  "country": "UA",
+  "developer": "Monicore Team",
+  "license": "Proprietary",
+  "platforms": [
+    "Web"
+  ],
+  "website": "https://monicore.com.ua",
+  "sourceLinks": [],
+  "issueSearchTerm": "Monicore",
+  "tags": [
+    "website",
+    "Україна",
+    "Minecraft",
+    "Discord",
+    "Моніторинг",
+    "Сервери"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "the-horrors-in-the-fog",
+  "name": "the horrors in the fog",
+  "shortName": "the horrors in the fog",
+  "category": "modpack",
+  "icon": "/projects/the-horrors-in-the-fog/icon.jpg",
+  "country": "Global",
+  "developer": "theernyclan",
+  "license": "GPL-3.0-only",
+  "platforms": [
+    "Forge"
+  ],
+  "website": "https://modrinth.com/modpack/the-horrors-in-the-fog",
+  "sourceLinks": [],
+  "issueSearchTerm": "the horrors in the fog",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Forge",
+    "Adventure",
+    "Challenging",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/the-horrors-in-the-fog/screen-1.webp",
+    "/projects/the-horrors-in-the-fog/screen-2.webp",
+    "/projects/the-horrors-in-the-fog/screen-3.webp"
+  ]
+}

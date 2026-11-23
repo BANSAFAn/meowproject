@@ -1,0 +1,31 @@
+{
+  "slug": "fresh-smooth",
+  "name": "Fresh & Smooth",
+  "shortName": "Fresh & Smooth",
+  "category": "modpack",
+  "icon": "/projects/fresh-smooth/icon.webp",
+  "country": "Global",
+  "developer": "EnderPacks",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric",
+    "Neoforge"
+  ],
+  "website": "https://modrinth.com/modpack/fresh-smooth",
+  "sourceLinks": [],
+  "issueSearchTerm": "Fresh & Smooth",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Neoforge",
+    "Adventure",
+    "Lightweight",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/fresh-smooth/screen-1.webp",
+    "/projects/fresh-smooth/screen-2.webp",
+    "/projects/fresh-smooth/screen-3.webp"
+  ]
+}

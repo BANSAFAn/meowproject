@@ -1,0 +1,29 @@
+{
+  "slug": "remarkably",
+  "name": "Remarkably Optimized",
+  "shortName": "Remarkably Optimized",
+  "category": "modpack",
+  "icon": "/projects/remarkably/icon.webp",
+  "country": "Global",
+  "developer": "ThatDeeJay",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/remarkably",
+  "sourceLinks": [],
+  "issueSearchTerm": "Remarkably Optimized",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Lightweight",
+    "Multiplayer",
+    "Optimization"
+  ],
+  "screenshots": [
+    "/projects/remarkably/screen-1.webp",
+    "/projects/remarkably/screen-2.webp",
+    "/projects/remarkably/screen-3.webp"
+  ]
+}

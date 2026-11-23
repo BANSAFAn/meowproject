@@ -1,0 +1,34 @@
+{
+  "slug": "backroomsff",
+  "name": "Backrooms: Found Footage",
+  "shortName": "Backrooms: Found Footage",
+  "category": "modpack",
+  "icon": "/projects/backroomsff/icon.webp",
+  "country": "Global",
+  "developer": "onr23",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/backroomsff",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/SpacePotatoee/MinecraftFoundFootage"
+    }
+  ],
+  "issueSearchTerm": "Backrooms: Found Footage",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Multiplayer"
+  ],
+  "screenshots": [
+    "/projects/backroomsff/screen-1.webp",
+    "/projects/backroomsff/screen-2.webp",
+    "/projects/backroomsff/screen-3.webp"
+  ]
+}

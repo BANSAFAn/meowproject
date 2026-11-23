@@ -59,9 +59,19 @@ const REGION_TO_ISO_OR_UN: Record<string, string> = {
   world: '001',
 };
 
-/** Localized country name by ISO code / region (or the "Global" label) */
-export function countryName(code: string, lang: LangCode, globalLabel: string) {
+/** Localized country name by ISO code / region (supports comma-separated multi-country values like "CN, UA") */
+export function countryName(code: string, lang: LangCode, globalLabel: string): string {
   if (!code || code.toUpperCase() === 'GLOBAL') return globalLabel;
+  if (code.includes(',')) {
+    const parts = code.split(',').map((s) => s.trim()).filter(Boolean).map((p) => countryName(p, lang, globalLabel));
+    if (parts.length === 2 && lang === 'uk') return `${parts[0]} та ${parts[1]}`;
+    try {
+      const intlLang = lang === 'mo' ? 'ro-MD' : lang;
+      return new Intl.ListFormat(intlLang, { style: 'long', type: 'conjunction' }).format(parts);
+    } catch {
+      return parts.join(', ');
+    }
+  }
   const lookup = REGION_TO_ISO_OR_UN[code.toLowerCase()] || code.toUpperCase();
   try {
     return displayNames(lang).of(lookup) ?? code;

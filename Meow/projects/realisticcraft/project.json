@@ -1,0 +1,34 @@
+{
+  "slug": "realisticcraft",
+  "name": "RealisticCraft",
+  "shortName": "RealisticCraft",
+  "category": "modpack",
+  "icon": "/projects/realisticcraft/icon.webp",
+  "country": "Global",
+  "developer": "brynblack",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/realisticcraft",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/brynblack/RealisticCraft"
+    }
+  ],
+  "issueSearchTerm": "RealisticCraft",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Challenging"
+  ],
+  "screenshots": [
+    "/projects/realisticcraft/screen-1.webp",
+    "/projects/realisticcraft/screen-2.webp",
+    "/projects/realisticcraft/screen-3.webp"
+  ]
+}

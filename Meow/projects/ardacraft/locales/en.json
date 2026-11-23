@@ -1,0 +1,13 @@
+{
+  "tagline": "The modpack for the ArdaCraft server, a Lord of the Rings project re-creating J.R.R. Tolkien's Middle-earth in Minecraft",
+  "description": "The modpack for the ArdaCraft server, a Lord of the Rings project re-creating J.R.R. Tolkien's Middle-earth in Minecraft.",
+  "features": [
+    "Modloader: Fabric",
+    "Multiplayer"
+  ],
+  "screenshotCaptions": [
+    "Edoras",
+    "The Argonath",
+    "Caves in Moria"
+  ]
+}

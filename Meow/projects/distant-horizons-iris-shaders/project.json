@@ -1,0 +1,30 @@
+{
+  "slug": "distant-horizons-iris-shaders",
+  "name": "Distant Horizons & Iris Shaders",
+  "shortName": "Distant Horizons & Iris Shaders",
+  "category": "modpack",
+  "icon": "/projects/distant-horizons-iris-shaders/icon.webp",
+  "country": "Global",
+  "developer": "Piotr_Barcz",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric",
+    "Neoforge"
+  ],
+  "website": "https://modrinth.com/modpack/distant-horizons-iris-shaders",
+  "sourceLinks": [],
+  "issueSearchTerm": "Distant Horizons & Iris Shaders",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Neoforge",
+    "Optimization",
+    "Technology"
+  ],
+  "screenshots": [
+    "/projects/distant-horizons-iris-shaders/screen-1.webp",
+    "/projects/distant-horizons-iris-shaders/screen-2.webp",
+    "/projects/distant-horizons-iris-shaders/screen-3.webp"
+  ]
+}

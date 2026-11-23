@@ -1,0 +1,14 @@
+{
+  "tagline": "A light-weight modpack to jump straight into a world with friends, using Simple Voice Chat, on Lunar Client.",
+  "description": "A light-weight modpack to jump straight into a world with friends, using Simple Voice Chat, on Lunar Client.",
+  "features": [
+    "Modloader: Fabric",
+    "Lightweight",
+    "Multiplayer",
+    "Optimization"
+  ],
+  "screenshotCaptions": [
+    "SVC for Lunar Client",
+    "In-game Voice Chat"
+  ]
+}

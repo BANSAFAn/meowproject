@@ -1,0 +1,27 @@
+{
+  "slug": "ardacraft",
+  "name": "ArdaCraft",
+  "shortName": "ArdaCraft",
+  "category": "modpack",
+  "icon": "/projects/ardacraft/icon.webp",
+  "country": "Global",
+  "developer": "Fornad",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/ardacraft",
+  "sourceLinks": [],
+  "issueSearchTerm": "ArdaCraft",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Multiplayer"
+  ],
+  "screenshots": [
+    "/projects/ardacraft/screen-1.webp",
+    "/projects/ardacraft/screen-2.webp",
+    "/projects/ardacraft/screen-3.webp"
+  ]
+}

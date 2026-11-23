@@ -1,0 +1,35 @@
+{
+  "slug": "landscapes-reimagined-genesis",
+  "name": "Landscapes Reimagined Genesis",
+  "shortName": "Landscapes Reimagined Genesis",
+  "category": "modpack",
+  "icon": "/projects/landscapes-reimagined-genesis/icon.webp",
+  "country": "Global",
+  "developer": "M0nkeyPr0grammer",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/landscapes-reimagined-genesis",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/M0nkeyPr0grammer/Landscapes-Reimagined"
+    }
+  ],
+  "issueSearchTerm": "Landscapes Reimagined Genesis",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Optimization",
+    "Quests"
+  ],
+  "screenshots": [
+    "/projects/landscapes-reimagined-genesis/screen-1.webp",
+    "/projects/landscapes-reimagined-genesis/screen-2.webp",
+    "/projects/landscapes-reimagined-genesis/screen-3.webp"
+  ]
+}

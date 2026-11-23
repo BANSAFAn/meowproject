@@ -1,0 +1,25 @@
+{
+  "slug": "brasil-cobblemon-mobile",
+  "name": "Cobblemon Brasil [Mobile]",
+  "shortName": "Cobblemon Brasil [Mobile]",
+  "category": "modpack",
+  "icon": "/projects/brasil-cobblemon-mobile/icon.webp",
+  "country": "Global",
+  "developer": "brasilcobblemon",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/brasil-cobblemon-mobile",
+  "sourceLinks": [],
+  "issueSearchTerm": "Cobblemon Brasil [Mobile]",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure"
+  ],
+  "screenshots": [
+    "/projects/brasil-cobblemon-mobile/screen-1.webp"
+  ]
+}

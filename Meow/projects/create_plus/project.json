@@ -1,0 +1,27 @@
+{
+  "slug": "create_plus",
+  "name": "Create+",
+  "shortName": "Create+",
+  "category": "modpack",
+  "icon": "/projects/create_plus/icon.webp",
+  "country": "Global",
+  "developer": "Sshmoob",
+  "license": "LGPL-3.0-only",
+  "platforms": [
+    "Forge",
+    "Neoforge"
+  ],
+  "website": "https://modrinth.com/modpack/create_plus",
+  "sourceLinks": [],
+  "issueSearchTerm": "Create+",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Forge",
+    "Neoforge",
+    "Lightweight",
+    "Multiplayer",
+    "Technology"
+  ],
+  "screenshots": []
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "aged",
+  "name": "Aged",
+  "shortName": "Aged",
+  "category": "modpack",
+  "icon": "/projects/aged/icon.png",
+  "country": "Global",
+  "developer": "xR4YM0ND",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/aged",
+  "sourceLinks": [
+    {
+      "host": "github",
+      "label": "GitHub",
+      "url": "https://github.com/xR4YM0ND/Aged/tree/1.21.1"
+    }
+  ],
+  "issueSearchTerm": "Aged",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Challenging",
+    "Combat"
+  ],
+  "screenshots": [
+    "/projects/aged/screen-1.webp",
+    "/projects/aged/screen-2.webp",
+    "/projects/aged/screen-3.webp"
+  ]
+}

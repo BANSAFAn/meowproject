@@ -1,0 +1,25 @@
+{
+  "slug": "pokemon-elysium",
+  "name": "Pokemon Elysium",
+  "shortName": "Pokemon Elysium",
+  "category": "modpack",
+  "icon": "/projects/pokemon-elysium/icon.png",
+  "country": "Global",
+  "developer": "Chubblezap",
+  "license": "MIT",
+  "platforms": [
+    "Fabric"
+  ],
+  "website": "https://modrinth.com/modpack/pokemon-elysium",
+  "sourceLinks": [],
+  "issueSearchTerm": "Pokemon Elysium",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Fabric",
+    "Adventure",
+    "Combat",
+    "Multiplayer"
+  ],
+  "screenshots": []
+}

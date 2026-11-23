@@ -1,0 +1,14 @@
+{
+  "tagline": "A STABLE, 100 PERCENT WORKING modpack for Distant Horizons & Iris Shaders compatibility.",
+  "description": "A STABLE, 100 PERCENT WORKING modpack for Distant Horizons & Iris Shaders compatibility.",
+  "features": [
+    "Modloader: Fabric, Neoforge",
+    "Optimization",
+    "Technology"
+  ],
+  "screenshotCaptions": [
+    "128 chunk render distance, complementary shaders",
+    "WWEE + DH + Iris",
+    "Tried to load 1024 chunk render distance, DIDN'T WORK"
+  ]
+}

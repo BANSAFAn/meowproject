@@ -4,7 +4,7 @@
   "shortName": "XMCL",
   "category": "launcher",
   "icon": "/projects/xmcl/icon.svg",
-  "country": "CN",
+  "country": "CN, UA",
   "developer": "Voxelum (ci010)",
   "license": "MIT",
   "platforms": [

@@ -177,8 +177,15 @@ const COUNTRY_ALIASES: Record<string, string> = {
 };
 
 const normalizeCountryCode = (raw: string) => {
-  const clean = (raw || '').trim().toLowerCase();
-  return COUNTRY_ALIASES[clean] || (raw || '').trim().toUpperCase();
+  const s = (raw || '').trim();
+  if (s.includes(',')) {
+    return s.split(',').map((p) => {
+      const c = p.trim().toLowerCase();
+      return COUNTRY_ALIASES[c] || p.trim().toUpperCase();
+    }).filter(Boolean).join(', ');
+  }
+  const clean = s.toLowerCase();
+  return COUNTRY_ALIASES[clean] || s.toUpperCase();
 };
 
 const KNOWN_FLAG_CODES = new Set([

@@ -1,0 +1,29 @@
+{
+  "slug": "parasites-reloaded",
+  "name": "Parasites: Reloaded",
+  "shortName": "Parasites: Reloaded",
+  "category": "modpack",
+  "icon": "/projects/parasites-reloaded/icon.webp",
+  "country": "Global",
+  "developer": "Xircon",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "platforms": [
+    "Forge"
+  ],
+  "website": "https://modrinth.com/modpack/parasites-reloaded",
+  "sourceLinks": [],
+  "issueSearchTerm": "Parasites: Reloaded",
+  "tags": [
+    "modpack",
+    "Modrinth",
+    "Forge",
+    "Adventure",
+    "Challenging",
+    "Combat"
+  ],
+  "screenshots": [
+    "/projects/parasites-reloaded/screen-1.webp",
+    "/projects/parasites-reloaded/screen-2.webp",
+    "/projects/parasites-reloaded/screen-3.webp"
+  ]
+}
