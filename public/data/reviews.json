@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-23T12:02:20.090Z",
+  "updatedAt": "2026-11-23T20:56:45.809Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -149,9 +149,41 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "aged": {
+      "issueNumber": 81,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/81",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "ardacraft": {
+      "issueNumber": 82,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/82",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "backroomsff": {
+      "issueNumber": 83,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/83",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "bbsmc": {
       "issueNumber": 38,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/38",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "brasil-cobblemon-mobile": {
+      "issueNumber": 84,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/84",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -181,6 +213,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "create_plus": {
+      "issueNumber": 85,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/85",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "cubecraft": {
       "issueNumber": 25,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/25",
@@ -192,6 +232,14 @@
     "curseforge": {
       "issueNumber": 39,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/39",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "distant-horizons-iris-shaders": {
+      "issueNumber": 86,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/86",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -345,6 +393,14 @@
         }
       ]
     },
+    "fresh-smooth": {
+      "issueNumber": 87,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/87",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "gdlauncher": {
       "issueNumber": 49,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/49",
@@ -372,6 +428,22 @@
     "grubielauncher": {
       "issueNumber": 33,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/33",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "homestead": {
+      "issueNumber": 88,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/88",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "hoplite-for-lunar-client": {
+      "issueNumber": 89,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/89",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -413,6 +485,14 @@
           "issueNum": 50
         }
       ]
+    },
+    "landscapes-reimagined-genesis": {
+      "issueNumber": 90,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/90",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
     },
     "legacy-launcher": {
       "issueNumber": 51,
@@ -495,9 +575,25 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "monicore": {
+      "issueNumber": 91,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/91",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "multimc": {
       "issueNumber": 34,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/34",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "parasites-reloaded": {
+      "issueNumber": 92,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/92",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
@@ -527,6 +623,14 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "pokemon-elysium": {
+      "issueNumber": 93,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/93",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "prismlauncher": {
       "issueNumber": 29,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/29",
@@ -543,9 +647,57 @@
       "commentsCount": 0,
       "reviews": []
     },
+    "realisticcraft": {
+      "issueNumber": 94,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/94",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "remarkably": {
+      "issueNumber": 95,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/95",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "rso": {
+      "issueNumber": 96,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/96",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
     "sklauncher": {
       "issueNumber": 30,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/30",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "skyblocker-modpack": {
+      "issueNumber": 97,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/97",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "svc-for-lunar-client": {
+      "issueNumber": 98,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/98",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "the-horrors-in-the-fog": {
+      "issueNumber": 99,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/99",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
