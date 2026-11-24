@@ -365,107 +365,102 @@ const clientConfig = {
               data-initial-slug={initialProjectSlug || ''}
               data-initial-cat={initialCategory || 'all'}
             >
-                <section class="hero-wrap">
-          <div class="paper-sheet-box hero-dossier">
-            <div class="hero-inner-card">
-              <div class="hero-kicker">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
-                  <rect x="5" y="5" width="6" height="2"></rect>
-                  <rect x="5" y="9" width="4" height="2"></rect>
-                </svg>
-                {t.heroKicker}
+        <section class="hero-wrap">
+          <div class="paper-sheet-box hero-dossier hero-v2">
+            <div class="hero-glow" aria-hidden="true"></div>
+            <div class="hero-grid-bg" aria-hidden="true"></div>
+
+            <div class="hero-inner-card hero-v2-layout">
+              <div class="hero-main-col">
+                <div class="hero-kicker hero-kicker-v2">
+                  <span class="hero-kicker-dot" aria-hidden="true"></span>
+                  <span>{t.heroKicker}</span>
+                </div>
+
+                <h1 class="hero-title hero-title-v2">{t.heroTitle}</h1>
+                <p class="hero-subtitle hero-subtitle-v2">{t.heroSubtitle}</p>
+
+                <div class="hero-actions hero-actions-v2">
+                  <button
+                    type="button"
+                    id="hero-to-catalog-btn"
+                    class="paper-btn paper-btn-accent hero-btn-primary"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <polygon points="8,14 2,7 6,7 6,2 10,2 10,7 14,7"></polygon>
+                    </svg>
+                    {t.heroToCatalogBtn}
+                  </button>
+
+                  <button
+                    type="button"
+                    class="paper-btn paper-btn-ink hero-btn-secondary"
+                    data-switch-view="submit"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <rect x="7" y="2" width="2" height="12"></rect>
+                      <rect x="2" y="7" width="12" height="2"></rect>
+                    </svg>
+                    {t.heroSubmitIssueBtn}
+                  </button>
+                </div>
+
+                <div class="hero-sub-actions">
+                  <button type="button" class="hero-pill-link" data-switch-view="guide">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M2 1h8l4 4v10H2V1zm2 2v10h8V6H9V3H4z"></path>
+                    </svg>
+                    <span>{t.heroGuideBtn}</span>
+                  </button>
+                  <a href={MONOBANK_URL} target="_blank" rel="noopener noreferrer" class="hero-pill-link">
+                    <MonobankIcon size={14} />
+                    <span>{t.supportMonobank}</span>
+                  </a>
+                  <a href={YOUTUBE_JOIN_URL} target="_blank" rel="noopener noreferrer" class="hero-pill-link">
+                    <YoutubeIcon size={14} />
+                    <span>{t.supportYoutube}</span>
+                  </a>
+                </div>
               </div>
 
-              <h1 class="hero-title">{t.heroTitle}</h1>
-              <p class="hero-subtitle">{t.heroSubtitle}</p>
-
-              <div class="hero-actions">
-                <button
-                  type="button"
-                  id="hero-to-catalog-btn"
-                  class="paper-btn paper-btn-accent"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <polygon points="8,14 2,7 6,7 6,2 10,2 10,7 14,7"></polygon>
-                  </svg>
-                  {t.heroToCatalogBtn}
-                </button>
-
-                <button
-                  type="button"
-                  class="paper-btn paper-btn-ink"
-                  data-switch-view="submit"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <rect x="7" y="2" width="2" height="12"></rect>
-                    <rect x="2" y="7" width="12" height="2"></rect>
-                  </svg>
-                  {t.heroSubmitIssueBtn}
-                </button>
-
-                <button
-                  type="button"
-                  class="paper-btn"
-                  data-switch-view="guide"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <path d="M2 1h8l4 4v10H2V1zm2 2v10h8V6H9V3H4z"></path>
-                  </svg>
-                  {t.heroGuideBtn}
-                </button>
-
-                <a
-                  href={MONOBANK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="paper-btn"
-                >
-                  <MonobankIcon size={15} />
-                  {t.supportMonobank}
-                </a>
-
-                <a
-                  href={YOUTUBE_JOIN_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="paper-btn"
-                >
-                  <YoutubeIcon size={15} />
-                  {t.supportYoutube}
-                </a>
-              </div>
-
-              <div class="hero-meta-grid">
-                <div class="hero-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <rect x="1" y="1" width="6" height="6"></rect>
-                    <rect x="9" y="1" width="6" height="6"></rect>
-                    <rect x="1" y="9" width="6" height="6"></rect>
-                    <rect x="9" y="9" width="6" height="6"></rect>
-                  </svg>
-                  <span>{PROJECTS.length} · {t.statProjects}</span>
+              <div class="hero-visual-col">
+                <div class="hero-stats-grid">
+                  <div class="hero-stat-tile">
+                    <span class="hero-stat-num">{PROJECTS.length}</span>
+                    <span class="hero-stat-lbl">{t.statProjects}</span>
+                  </div>
+                  <div class="hero-stat-tile">
+                    <span class="hero-stat-num">{langList.length}</span>
+                    <span class="hero-stat-lbl">{t.statLanguages}</span>
+                  </div>
+                  <div class="hero-stat-tile">
+                    <span class="hero-stat-num">0–100</span>
+                    <span class="hero-stat-lbl">{t.ratingLabel}</span>
+                  </div>
+                  <div class="hero-stat-tile">
+                    <span class="hero-stat-num">0</span>
+                    <span class="hero-stat-lbl">{t.statNoAuth}</span>
+                  </div>
                 </div>
 
-                <div class="hero-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <path d="M5 7V5a3 3 0 0 1 6 0h-2a1 1 0 0 0-2 0v2h6v7H3V7h2zm0 2v3h6V9H5z"></path>
-                  </svg>
-                  <span>{t.statNoAuth}</span>
-                </div>
-
-                <div class="hero-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <polygon points="8,1 10,6 15,6 11,9.5 12.5,15 8,11.5 3.5,15 5,9.5 1,6 6,6"></polygon>
-                  </svg>
-                  <span>[rating](0-100)</span>
-                </div>
-
-                <div class="hero-meta-item">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                    <path d="M8 1L2 3.5v4.5c0 3.8 2.6 6.8 6 7.8 3.4-1 6-4 6-7.8V3.5L8 1zm0 2.1l4 1.7v3.2c0 2.7-1.7 5-4 5.9-2.3-.9-4-3.2-4-5.9V4.8l4-1.7z"></path>
-                  </svg>
-                  <span>Strict CSP · Anti-XSS</span>
+                <div class="hero-quick-cats" aria-label={t.categoriesSidebarTitle}>
+                  {[
+                    { key: 'launcher', label: t.catLauncher },
+                    { key: 'modpack', label: t.catModpack },
+                    { key: 'mod', label: t.catMod },
+                    { key: 'server', label: t.catServer },
+                    { key: 'youtuber', label: t.catYoutuber || 'Ютубери' },
+                    { key: 'website', label: t.catWebsite },
+                  ].map((c) => (
+                    <a
+                      href={getCategoryHref(lang, c.key)}
+                      class="hero-cat-chip"
+                      data-filter-category={c.key}
+                    >
+                      <span>{c.label}</span>
+                      <span class="hero-cat-count">{categoryCounts[c.key] || 0}</span>
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
