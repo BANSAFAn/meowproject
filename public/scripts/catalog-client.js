@@ -2568,6 +2568,45 @@
             window.open(issueUrl, '_blank');
           });
         }
+
+        // Live YouTubers subscriber count & LIVE stream status refresher
+        async function refreshYoutubersLiveStatus() {
+          const subsNodes = document.querySelectorAll('[data-yt-subs]');
+          const liveNodes = document.querySelectorAll('[data-yt-live]');
+          if (subsNodes.length === 0 && liveNodes.length === 0) return;
+          try {
+            const res = await fetch('/data/youtubers.json?t=' + Date.now(), { cache: 'no-store' });
+            if (!res.ok) return;
+            const data = await res.json();
+            const channels = data && data.channels ? data.channels : {};
+            subsNodes.forEach((el) => {
+              const slug = el.getAttribute('data-yt-subs');
+              const ch = channels[slug];
+              const valEl = el.querySelector('[data-yt-subs-val]');
+              if (ch && ch.subscribers && valEl) {
+                valEl.textContent = ch.subscribers;
+                el.style.display = '';
+              }
+            });
+            liveNodes.forEach((el) => {
+              const slug = el.getAttribute('data-yt-live');
+              const ch = channels[slug];
+              if (ch && ch.isLive) {
+                if (ch.liveVideoId) el.setAttribute('href', `https://www.youtube.com/watch?v=${ch.liveVideoId}`);
+                if (ch.liveTitle) el.setAttribute('title', ch.liveTitle);
+                el.style.display = '';
+              } else {
+                el.style.display = 'none';
+              }
+            });
+          } catch (_) {}
+        }
+
+        refreshYoutubersLiveStatus();
+        if (window.__meowYtLiveTimer) clearInterval(window.__meowYtLiveTimer);
+        window.__meowYtLiveTimer = setInterval(() => {
+          if (!document.hidden) refreshYoutubersLiveStatus();
+        }, 120000);
       }
 
       if (!window.__meowPageLoadBound) {

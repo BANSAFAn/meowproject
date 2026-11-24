@@ -27,6 +27,7 @@ import '../styles/catalog.css';
 import reviewsData from '../../public/data/reviews.json';
 import discussionsData from '../../public/data/discussions.json';
 import repoStatsData from '../../public/data/repo-stats.json';
+import youtubersData from '../../public/data/youtubers.json';
 
 const initialFluffies = typeof repoStatsData?.stars === 'number' ? repoStatsData.stars : 0;
 const initialDiscussions = Array.isArray(discussionsData?.discussions) ? discussionsData.discussions : [];
@@ -266,6 +267,8 @@ const clientConfig = {
     dangerTypeLabel: t.dangerModalTypeLabel,
     dangerDateLabel: t.dangerModalDateLabel,
     dangerSummaryDefault: t.dangerModalSummaryDefault,
+    subscribersLabel: (t as any).subscribersLabel || 'підписників',
+    liveNowBadge: (t as any).liveNowBadge || 'LIVE',
     catHints: {
       launcher: { guide: t.catHintLauncher, namePh: t.catHintLauncherPh, platPh: 'Windows, macOS, Linux' },
       client: { guide: t.catHintClient, namePh: t.catHintClientPh, platPh: 'Windows, macOS, Linux' },
@@ -690,6 +693,12 @@ const clientConfig = {
               const cName = projectCountry(project.country);
               const reviewUrl = `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(`${project.category}: ${project.name}`)}&body=${encodeURIComponent(t.reviewTemplateBody)}`;
               const contributeTranslationUrl = `${SITE_REPO_URL}/issues/new?template=submit-translation.yml&title=${encodeURIComponent(`[i18n: ${project.slug}] ${lang.toUpperCase()} translation`)}&project_slug=${encodeURIComponent(project.slug)}`;
+              const ytChannel = project.category === 'youtuber' ? (youtubersData as any)?.channels?.[project.slug] : null;
+              const ytSubsText = ytChannel?.subscribers || '';
+              const ytIsLive = Boolean(ytChannel?.isLive);
+              const ytLiveUrl = ytChannel?.liveVideoId
+                ? `https://www.youtube.com/watch?v=${ytChannel.liveVideoId}`
+                : (project.website ? `${project.website.replace(/\/+$/, '')}/live` : primaryProjectLink);
 
               return (
                 <article
@@ -911,6 +920,35 @@ const clientConfig = {
                             )}
                             <span>{t.countryOrigin}: {cName}</span>
                           </span>
+
+                          {project.category === 'youtuber' && (
+                            <>
+                              <span
+                                class="stamp stamp-yt-subs"
+                                data-yt-subs={project.slug}
+                                style={ytSubsText ? '' : 'display:none;'}
+                              >
+                                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                  <path d="M5.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm5 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM1 13.5C1 11.2 3 9.5 5.5 9.5S10 11.2 10 13.5V14H1v-.5zm9.5.5v-.5c0-1.1-.4-2.1-1-2.9.5-.1 1-.2 1.5-.2 2.2 0 4 1.4 4 3.1V14h-4.5z" />
+                                </svg>
+                                <span data-yt-subs-val>{ytSubsText}</span>
+                                <span>{(t as any).subscribersLabel || 'підписників'}</span>
+                              </span>
+
+                              <a
+                                href={ytLiveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="stamp stamp-yt-live"
+                                data-yt-live={project.slug}
+                                title={ytChannel?.liveTitle || (t as any).liveNowBadge || 'LIVE'}
+                                style={ytIsLive ? '' : 'display:none;'}
+                              >
+                                <span class="yt-live-dot" aria-hidden="true"></span>
+                                <span>{(t as any).liveNowBadge || 'LIVE'}</span>
+                              </a>
+                            </>
+                          )}
 
                           {project.category !== 'youtuber' && (
                             project.isOpenSource ? (

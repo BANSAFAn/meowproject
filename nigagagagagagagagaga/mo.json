@@ -430,5 +430,7 @@
   "catHintProject": "<strong>Proiect:</strong> descrie tipul instrumentului, pluginului sau bibliotecii pentru comunitatea Minecraft.",
   "catHintProjectPh": "de ex. PaperMC sau MCStatus API",
   "footerCardsDonate": "Acceptăm donații din întreaga lume prin Monobank:",
-  "reportReasonFakeOnline": "Online fals / Boți în loc de jucători"
+  "reportReasonFakeOnline": "Online fals / Boți în loc de jucători",
+  "subscribersLabel": "abonați",
+  "liveNowBadge": "ÎN DIRECT"
 }

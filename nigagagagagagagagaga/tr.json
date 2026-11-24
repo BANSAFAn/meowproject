@@ -430,5 +430,7 @@
   "catHintProject": "<strong>Proje:</strong> Minecraft topluluğu için aracın, eklentinin veya kütüphanenin türünü açıklayın.",
   "catHintProjectPh": "ör. PaperMC veya MCStatus API",
   "footerCardsDonate": "Monobank aracılığıyla dünya genelinden bağış kabul ediyoruz:",
-  "reportReasonFakeOnline": "Sahte Çevrimiçi Sayısı / Bot Oyuncular"
+  "reportReasonFakeOnline": "Sahte Çevrimiçi Sayısı / Bot Oyuncular",
+  "subscribersLabel": "abone",
+  "liveNowBadge": "CANLI"
 }

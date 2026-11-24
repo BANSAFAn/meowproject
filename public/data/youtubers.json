@@ -1,9 +1,13 @@
 {
-  "updatedAt": "2026-11-22T18:50:44.551Z",
+  "updatedAt": "2026-11-24T18:26:44.494Z",
   "channels": {
     "yt-baneronetwo": {
       "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
       "banner": "/projects/yt-baneronetwo/banner.jpg",
+      "subscribers": "12.6K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "5j4bOXms4mo",
@@ -25,6 +29,10 @@
     "yt-yazefa": {
       "youtubeChannelId": "UCY8fABRHgVZJTqg0WkFhPPQ",
       "banner": "/projects/yt-yazefa/banner.jpg",
+      "subscribers": "5.6K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "d62GOGsRKHc",
@@ -46,6 +54,10 @@
     "yt-weezzykk": {
       "youtubeChannelId": "UC2SAJd-6s1KtTPRDQFcd2mw",
       "banner": null,
+      "subscribers": "288K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "r8zGe4wHve4",
@@ -67,7 +79,16 @@
     "yt-dauross": {
       "youtubeChannelId": "UC8JSQsPmd_qYVK6YoA8E22g",
       "banner": "/projects/yt-dauross/banner.jpg",
+      "subscribers": "154K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
+        {
+          "id": "zeqFr8ANvE8",
+          "title": "майнкрафт АЛЕ, я ВЧУ ПОЛЬСКУ",
+          "published": "2026-11-24"
+        },
         {
           "id": "PLP5mpfYG58",
           "title": "Вижив У ЗАКРИТОМУ ХОРРОР КОЛІ в Майнкрафт",
@@ -77,17 +98,16 @@
           "id": "EW1gnBxfqSE",
           "title": "100 Днів у ЗАКРИТОМУ КОЛІ в МАЙНКРАФТ ХАРДКОР Українською",
           "published": "2026-11-12"
-        },
-        {
-          "id": "XquyfWuXwPg",
-          "title": "я ВИЖИВ з ВЕРІТІ в Майнкрафт Хоррор Українською",
-          "published": "2026-11-05"
         }
       ]
     },
     "yt-likad": {
       "youtubeChannelId": "UCPGG7eCl5MhKjN7Lh2C42tg",
       "banner": "/projects/yt-likad/banner.jpg",
+      "subscribers": "2.3K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "3n8xEq-VbRU",
@@ -109,6 +129,10 @@
     "yt-retkon18": {
       "youtubeChannelId": "UC8j8i5D78msRBXL076BuKYw",
       "banner": "/projects/yt-retkon18/banner.jpg",
+      "subscribers": "6.42K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "xGHzvZZAAIs",
@@ -130,7 +154,16 @@
     "yt-sanyaua": {
       "youtubeChannelId": "UC_KxaH-8z9G9yI6w99Q0ouQ",
       "banner": "/projects/yt-sanyaua/banner.jpg",
+      "subscribers": "197K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
+        {
+          "id": "-aM7ecfCYTI",
+          "title": "ЛЕГАЛЬНИЙ СПОСІБ ОТРИМАННЯ ГРОШЕЙ В ГТА ВЕРБА ОНЛАЙН!",
+          "published": "2026-11-24"
+        },
         {
           "id": "SMYswzHo5Rs",
           "title": "ВИЦЕПИВ НОВУ ХАТУ В ГТА ВЕРБА ОНЛАЙН!",
@@ -140,18 +173,22 @@
           "id": "H5ivWUzCX-Y",
           "title": "ЦЕ НАЙКРУТІША МАШИНА В ГТА ВЕРБА ОНЛАЙН!",
           "published": "2026-11-16"
-        },
-        {
-          "id": "icoZMexa_Sk",
-          "title": "ПРОЖИВ 100 ДНІВ В НАЙТЕХНОЛОГІЧНІ ЗБІРЦІ З 1000 МОДІВ В МАЙНКРАФТ! МАЙНКРАФТ УКРАЇНСЬКОЮ!",
-          "published": "2026-11-13"
         }
       ]
     },
     "yt-bakiua": {
       "youtubeChannelId": "UCulflMIQOErPM4hhxLwKXhA",
       "banner": "/projects/yt-bakiua/banner.jpg",
+      "subscribers": "101K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
+        {
+          "id": "tpssSqo7ywU",
+          "title": "🇺🇦 МИ ЗБУДУВАЛИ БУНКЕР УСЕРЕДИНІ СОБАКИ ПРОТИ КИСЛОТНОГО ДОЩУ В МАЙНКРАФТІ! БАКІ І МІКА",
+          "published": "2026-11-23"
+        },
         {
           "id": "CjBPOVYJ8Go",
           "title": "🇺🇦 МАЙНКРАФТ АЛЕ ОБЕРИ ПРАВИЛЬНУ ЧИПСУ ЩОБ ВИЖИТИ! БАКІ І МІКА",
@@ -161,17 +198,16 @@
           "id": "dZ9PthTfwcc",
           "title": "🇺🇦 НЕ ХЛЮПАЙ У ВОДІ В МАЙНКРАФТІ! БАКІ І МІКА",
           "published": "2026-11-19"
-        },
-        {
-          "id": "I5xlQnSAams",
-          "title": "🇺🇦 ВТЕЧА З В'ЯЗНИЦІ ЗА 1$ ТА 1000000$ В МАЙНКРАФТІ! БАКІ І МІКА",
-          "published": "2026-11-17"
         }
       ]
     },
     "yt-winord-ua": {
       "youtubeChannelId": "UC1i8TYOGOErEu7ODy4lB4tA",
       "banner": "/projects/yt-winord-ua/banner.jpg",
+      "subscribers": "80.8K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "rtqUNwiAr_4",
@@ -193,6 +229,10 @@
     "yt-potomkich": {
       "youtubeChannelId": "UCLDdsDgpi1wu4LTSgFwKrAg",
       "banner": "/projects/yt-potomkich/banner.jpg",
+      "subscribers": "3.27K",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "PCpgSiWkhVs",
@@ -214,6 +254,10 @@
     "farmer_fox": {
       "youtubeChannelId": "UC3KhtTM7rLrKznvWwJlgjHA",
       "banner": "/projects/farmer_fox/banner.jpg",
+      "subscribers": "145",
+      "isLive": false,
+      "liveVideoId": null,
+      "liveTitle": null,
       "latestVideos": [
         {
           "id": "sekwFD74Ydc",

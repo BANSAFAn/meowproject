@@ -430,5 +430,7 @@
   "catHintProject": "<strong>Projekt:</strong> popište typ nástroje, pluginu nebo knihovny pro komunitu Minecraft.",
   "catHintProjectPh": "např. PaperMC nebo MCStatus API",
   "footerCardsDonate": "Přijímáme dary z celého světa přes Monobank:",
-  "reportReasonFakeOnline": "Falešný online / Boti místo hráčů"
+  "reportReasonFakeOnline": "Falešný online / Boti místo hráčů",
+  "subscribersLabel": "odběratelů",
+  "liveNowBadge": "ŽIVĚ"
 }

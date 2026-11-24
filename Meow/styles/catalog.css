@@ -4340,3 +4340,52 @@
           transition-duration: 0.01ms !important;
         }
       }
+
+/* YouTuber live subscribers & LIVE stream badge */
+.stamp-yt-subs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid rgba(245, 158, 11, 0.55);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.stamp-yt-subs svg {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.stamp-yt-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #dc2626;
+  border: 1.5px solid #ef4444;
+  color: #ffffff !important;
+  font-weight: 900;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.55);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.stamp-yt-live:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.yt-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-block;
+  animation: ytLivePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ytLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}

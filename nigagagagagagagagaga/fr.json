@@ -430,5 +430,7 @@
   "catHintProject": "<strong>Projet :</strong> décrivez le type d'outil, de plugin ou de bibliothèque pour la communauté Minecraft.",
   "catHintProjectPh": "ex. PaperMC ou MCStatus API",
   "footerCardsDonate": "Nous acceptons les dons du monde entier via Monobank :",
-  "reportReasonFakeOnline": "Faux joueurs en ligne / Joueurs bots"
+  "reportReasonFakeOnline": "Faux joueurs en ligne / Joueurs bots",
+  "subscribersLabel": "abonnés",
+  "liveNowBadge": "EN DIRECT"
 }
