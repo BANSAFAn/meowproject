@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T17:53:21.002Z",
+  "updatedAt": "2026-11-25T18:09:23.548Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -176,10 +176,23 @@
     "bbsmc": {
       "issueNumber": 38,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/38",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 76,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 7170509639,
+          "source": "discord",
+          "author": "Asina",
+          "avatar": "https://cdn.discordapp.com/avatars/614392313325551618/198d2eb2e3656c0292775d91046dacd3.png?size=64",
+          "date": "2026-11-25",
+          "body": "чудовий сервіс, чудовий форк також, єдине це зборки які не можно встановити без Wepay та китайського диску :(",
+          "score": 76,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/38#issuecomment-7170509639",
+          "issueNum": 38
+        }
+      ]
     },
     "brasil-cobblemon-mobile": {
       "issueNumber": 84,
