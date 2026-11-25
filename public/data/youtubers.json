@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T11:56:33.816Z",
+  "updatedAt": "2026-11-25T20:58:46.855Z",
   "channels": {
     "yt-baneronetwo": {
       "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
@@ -29,7 +29,7 @@
     "yt-yazefa": {
       "youtubeChannelId": "UCY8fABRHgVZJTqg0WkFhPPQ",
       "banner": "/projects/yt-yazefa/banner.jpg",
-      "subscribers": "5.61K",
+      "subscribers": "5.62K",
       "isLive": false,
       "liveVideoId": null,
       "liveTitle": null,
@@ -185,6 +185,11 @@
       "liveTitle": null,
       "latestVideos": [
         {
+          "id": "veSgWPAahWk",
+          "title": "🇺🇦 Я ЗАТРОЛИВ МІКУ БУДИНКОМ У РЮКЗАКУ В МАЙНКРАФТІ! БАКІ І МІКА",
+          "published": "2026-11-25"
+        },
+        {
           "id": "tpssSqo7ywU",
           "title": "🇺🇦 МИ ЗБУДУВАЛИ БУНКЕР УСЕРЕДИНІ СОБАКИ ПРОТИ КИСЛОТНОГО ДОЩУ В МАЙНКРАФТІ! БАКІ І МІКА",
           "published": "2026-11-23"
@@ -193,11 +198,6 @@
           "id": "CjBPOVYJ8Go",
           "title": "🇺🇦 МАЙНКРАФТ АЛЕ ОБЕРИ ПРАВИЛЬНУ ЧИПСУ ЩОБ ВИЖИТИ! БАКІ І МІКА",
           "published": "2026-11-21"
-        },
-        {
-          "id": "dZ9PthTfwcc",
-          "title": "🇺🇦 НЕ ХЛЮПАЙ У ВОДІ В МАЙНКРАФТІ! БАКІ І МІКА",
-          "published": "2026-11-19"
         }
       ]
     },

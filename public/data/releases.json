@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T17:11:57.780Z",
+  "updatedAt": "2026-11-25T20:59:04.610Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -134,7 +134,7 @@
       "publishedAt": "2025-12-14",
       "url": "https://github.com/Landscapes-Reimagined/Landscapes-Reimagined-Genesis/releases/tag/Server-Pack",
       "prerelease": false,
-      "changelog": "**Landscapes Reimagined: Genesis – Server Pack v3.2.0**\n\nThis archive contains the complete dedicated server pack for *Landscapes Reimagined: Genesis* version **3.2.0**, including all required files to initialize and run a server.\n\n---\n\n**Server Startup Instructions**\n\n**Requirements**\n- **Java 17 (64-bit)**\n- **6 GB RAM minimum** (8 GB or more recommended)\n- Dedicated machine or VPS strongly recommended\n\n---\n\n**Setup Steps**\n1. Download and extract the server pack ZIP into a dedicated folder.\n2. Run `start.bat` (Windows) or `start.sh` (Linux/macOS) to generate initial server files.\n3. Open the generated `eula.txt` file and change: eula = false > true\n4. Save the file and run the start script again to launch the server.\n5. Allow the server to complete initial setup and world generation before connecting.\n\n---\n\n**Notes**\n- First startup may take several minutes while files and configurations are generated.\n- Do **not** interrupt the server during the initial launch.\n- Ensure your firewall or hosting provider allows traffic on the configured server port."
+      "changelog": "## **Landscapes Reimagined: Genesis – Server Pack v3.2.0**\n\nThis archive contains the complete dedicated server pack for *Landscapes Reimagined: Genesis* version **3.2.0**, including all required files to initialize and run a server.\n\n---\n\n## **Server Startup Instructions**\n\n### **Requirements**\n- **Java 17 (64-bit)**\n- **6 GB RAM minimum** (8 GB or more recommended)\n- Dedicated machine or VPS strongly recommended\n\n---\n\n### **Setup Steps**\n1. Download and extract the server pack ZIP into a dedicated folder.\n2. Run `start.bat` (Windows) or `start.sh` (Linux/macOS) to generate initial server files.\n3. Open the generated `eula.txt` file and change: eula = false > true\n4. Save the file and run the start script again to launch the server.\n5. Allow the server to complete initial setup and world generation before connecting.\n\n---\n\n### **Notes**\n- First startup may take several minutes while files and configurations are generated.\n- Do **not** interrupt the server during the initial launch.\n- Ensure your firewall or hosting provider allows traffic on the configured server port."
     },
     "modmenu": {
       "repo": "TerraformersMC/ModMenu",
@@ -152,7 +152,7 @@
       "publishedAt": "2026-11-24",
       "url": "https://github.com/modrinth/code/releases/tag/v0.23.5",
       "prerelease": false,
-      "changelog": "Security\n\n- Modrinth App will now swap out Minecraft libraries on instance launch that don't match what is recorded by the metadata service.\n\nAdded\n\n- **Modrinth Hosting:** Added feature to automatically restart servers when crashing after starting.\n\nChanged\n\n- **Modrinth Hosting:** The \"Memory\" card now uses the more accurate Java heap memory number instead of container memory."
+      "changelog": "## Security\n- Modrinth App will now swap out Minecraft libraries on instance launch that don't match what is recorded by the metadata service.\n\n## Added\n- Added a section on the sidebar of Create Aeronautic's page for the Game Awards nomination.\n- **Modrinth Hosting:** Added feature to automatically restart servers when crashing after starting.\n\n## Changed\n- When searching for filter options, a \"No results\" message will now show when there are no filters available for the query.\n- **Modrinth Hosting:** The \"Memory\" card now uses the more accurate Java heap memory number instead of container memory."
     },
     "skyblocker-modpack": {
       "repo": "SkyblockerMod/Skyblocker-modpack",
@@ -170,7 +170,7 @@
       "publishedAt": "2026-11-21",
       "url": "https://github.com/CaffeineMC/sodium/releases/tag/mc26.3-0.9.3",
       "prerelease": false,
-      "changelog": "Sodium 0.9.3 adds the option to use spherical render distance and appropriate fog. Additionally, we've implemented a number of bug fixes and minor improvements. The release now includes constraints for NeoForge to prevent launching in broken configurations. Vanilla graphics options are now automatically imported from Vanilla to ensure that default values are up to date by construction. Some refactoring to improve compatibility has also caused breakage with some other mods, which we hope can be resolved soon or has already been resolved during beta testing.\n\n- Show macOS fullscreen menu visibility option on the Sodium options screen\n- Fix Fluid Culling For Non-Full Blocks With Unusual Shapes (#3916)\n- Use SDL message box instead of TFD (#3923)\n- Optimization for shelf mushroom models (#3927)\n- Fix compatibility with Neoforge 26.3.0.65-beta and remove platform-specific LevelExtractorMixin (#3948)\n- Source vanilla option defaults and ranges directly from vanilla options (#3947)\n- Allow rendering buffer debug outside F3 Debug Screen (#3943)\n- Make VideoSettingsScreen trigger onClose in keyPressed to fix interaction with Iris, for example (#3938)\n- Fix mixin members not being prefixed w"
+      "changelog": "Sodium 0.9.3 adds the option to use spherical render distance and appropriate fog. Additionally, we've implemented a number of bug fixes and minor improvements. The release now includes constraints for NeoForge to prevent launching in broken configurations. Vanilla graphics options are now automatically imported from Vanilla to ensure that default values are up to date by construction. Some refactoring to improve compatibility has also caused breakage with some other mods, which we hope can be resolved soon or has already been resolved during beta testing.\n\n- Show macOS fullscreen menu visibility option on the Sodium options screen\n- Fix Fluid Culling For Non-Full Blocks With Unusual Shapes (#3916)\n- Use SDL message box instead of TFD (#3923)\n- Optimization for shelf mushroom models (#3927)\n- Fix compatibility with Neoforge 26.3.0.65-beta and remove platform-specific LevelExtractorMixin (#3948)\n- Source vanilla option defaults and ranges directly from vanilla options (#3947)\n- Allow rendering buffer debug outside F3 Debug Screen (#3943)\n- Make VideoSettingsScreen trigger onClose in keyPressed to fix interaction with Iris, for example (#3938)\n- Fix mixin members not being prefixed with sodium$ (#3952)\n- Fix incorrect null value for unspecified vertex normals on NeoForge BakedQuads (#3962)\n- Fix disappeared block breaking animation (#3958)\n- Added compatibility metadata for Fabri"
     }
   },
   "stars": {
@@ -200,12 +200,12 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11061,
+      "count": 11062,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
     "multimc": {
-      "count": 4705,
+      "count": 4704,
       "platform": "github",
       "url": "https://github.com/MultiMC/Launcher"
     },
@@ -215,12 +215,12 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11218,
+      "count": 11219,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
     "xmcl": {
-      "count": 1720,
+      "count": 1721,
       "platform": "github",
       "url": "https://github.com/Voxelum/x-minecraft-launcher"
     },
@@ -285,7 +285,7 @@
       "url": "https://github.com/TerraformersMC/ModMenu"
     },
     "modrinth": {
-      "count": 2549,
+      "count": 2551,
       "platform": "github",
       "url": "https://github.com/modrinth/code"
     },
@@ -300,7 +300,7 @@
       "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
     },
     "sodium": {
-      "count": 5859,
+      "count": 5858,
       "platform": "github",
       "url": "https://github.com/CaffeineMC/sodium"
     }
