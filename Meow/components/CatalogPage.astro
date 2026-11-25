@@ -28,6 +28,7 @@ import reviewsData from '../../public/data/reviews.json';
 import discussionsData from '../../public/data/discussions.json';
 import repoStatsData from '../../public/data/repo-stats.json';
 import youtubersData from '../../public/data/youtubers.json';
+import releasesData from '../../public/data/releases.json';
 
 const initialFluffies = typeof repoStatsData?.stars === 'number' ? repoStatsData.stars : 0;
 const initialDiscussions = Array.isArray(discussionsData?.discussions) ? discussionsData.discussions : [];
@@ -200,7 +201,7 @@ const projectCountry = (code: string) => {
   return res === norm && code ? code : res;
 };
 
-const siteOrigin = Astro.site?.origin || 'https://meowlab.pp.ua';
+const siteOrigin = Astro.site?.origin || 'https://meowlab.fun';
 const canonicalUrl = selectedProject
   ? `${siteOrigin}${getProjectHref(lang, selectedProject.slug)}`
   : initialCategory && initialCategory !== 'all'
@@ -208,7 +209,7 @@ const canonicalUrl = selectedProject
     : `${siteOrigin}${getLangHref(lang)}`;
 
 const seoPageTitle = pageTitle.includes('MeowLab') ? pageTitle : `${pageTitle} | MeowLab`;
-const seoKeywords = `meowlab, meowl, meowlabs, baneronetwo, meowlab.pp.ua, MeowProject, ${t.metaKeywords || ''}`;
+const seoKeywords = `meowlab, meowl, meowlabs, baneronetwo, meowlab.fun, meowlab.pp.ua, MeowProject, ${t.metaKeywords || ''}`;
 const seoCategoryMap: Record<string, string> = {
   launcher: t.catLauncher,
   modpack: t.catModpack,
@@ -225,9 +226,129 @@ const seoCategoryLabel = selectedProject
     ? seoCategoryMap[initialCategory] || initialCategory
     : undefined;
 
+const DISCORD_ICON_PATH = 'M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.1 14.1 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029zM8.02 15.331c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.946 2.418-2.157 2.418z';
+
+function formatStarCount(n: number): string {
+  if (n >= 10000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
+}
+
+function escapeHtml(str: string): string {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatInlineMd(escaped: string): string {
+  return escaped
+    .replace(/\*\*([^*]+)\*\*/g, '<strong class="gh-rn-bold">$1</strong>')
+    .replace(/`([^`]+)`/g, '<code class="gh-rn-code">$1</code>');
+}
+
+function renderReleaseNotesHtml(raw: string, tag?: string): string {
+  if (!raw) return '';
+  const lines = String(raw).replace(/\r\n/g, '\n').split('\n');
+  const normTag = String(tag || '').trim().toLowerCase();
+  const out: string[] = [];
+  let inList = false;
+
+  const closeList = () => {
+    if (inList) {
+      out.push('</ul>');
+      inList = false;
+    }
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) {
+      closeList();
+      continue;
+    }
+    // Skip redundant top line repeating the version tag
+    if (i < 2 && normTag && line.replace(/^#+\s*/, '').toLowerCase() === normTag) {
+      continue;
+    }
+    const mdHeading = line.match(/^#{1,6}\s+(.+)$/);
+    const plainHeading = !mdHeading && /^(new features|features|fixes|bug ?fixes|changed|changes|improvements|breaking changes|what's changed|other changes|notes|downloads|changelog|added|removed|deprecated|security|performance|full changelog):?$/i.test(line);
+    if (mdHeading || plainHeading) {
+      closeList();
+      const text = mdHeading ? mdHeading[1] : line.replace(/:$/, '');
+      out.push(`<div class="gh-rn-heading">${formatInlineMd(escapeHtml(text))}</div>`);
+      continue;
+    }
+    const listItem = line.match(/^[-*•]\s+(.+)$/);
+    if (listItem) {
+      if (!inList) {
+        out.push('<ul class="gh-rn-list">');
+        inList = true;
+      }
+      out.push(`<li>${formatInlineMd(escapeHtml(listItem[1]))}</li>`);
+      continue;
+    }
+    closeList();
+    out.push(`<p class="gh-rn-p">${formatInlineMd(escapeHtml(line))}</p>`);
+  }
+  closeList();
+  return out.join('');
+}
+
 const clientConfig = {
   repo: SITE_REPO,
   repoUrl: SITE_REPO_URL,
+  discordStrings: Object.fromEntries(
+    ['drModalTitle', 'drModalDesc', 'drScoreLabel', 'drTextLabel', 'drTextPlaceholder', 'drSubmit', 'drSending', 'drPrivacy',
+      'drOk', 'drUpdated', 'drErrGeneric', 'drErrYoung', 'drErrCancelled', 'drErrExpired', 'drErrShort', 'drErrNoIssue', 'drErrDisabled']
+      .map((k) => [k, (t as any)[k] || '']),
+  ),
+  compareCatalog: PROJECTS.map((p) => {
+    const rev = (reviewsData as any)?.projects?.[p.slug];
+    const rel = (releasesData as any)?.releases?.[p.slug];
+    return {
+      slug: p.slug,
+      name: p.name,
+      category: p.category,
+      icon: p.icon,
+      country: projectCountry(p.country),
+      verified: Boolean(p.verified),
+      sponsor: Boolean(p.sponsor),
+      danger: Boolean(p.dangerReport),
+      isOpenSource: Boolean(p.isOpenSource),
+      license: p.isOpenSource ? (p.license || 'Open Source') : t.proprietaryBadge,
+      platforms: p.platforms || [],
+      tags: (p.tags || []).slice(0, 5),
+      score: rev?.averageRating || 0,
+      reviewsCount: rev?.totalReviews || 0,
+      releaseTag: rel?.tag || '',
+      releaseDate: rel?.publishedAt || '',
+      href: getProjectHref(lang, p.slug),
+    };
+  }),
+  compareStrings: {
+    modalTitle: (t as any).compareModalTitle || 'Порівняння проєктів',
+    selectHint: (t as any).compareSelectHint || 'Оберіть від 2 до 5 проєктів:',
+    runBtn: (t as any).compareRunBtn || 'Порівняти',
+    backBtn: (t as any).compareBackBtn || '← Змінити вибір',
+    clearBtn: (t as any).compareClearBtn || 'Очистити',
+    winnerLabel: (t as any).compareWinnerLabel || 'Аналіз MeowLab',
+    ratingLabel: t.ratingLabel,
+    noRatingYet: t.noRatingYet,
+    securityLabel: (t as any).compareSecurityLabel || 'Безпека',
+    verifiedBadge: t.verifiedBadge,
+    dangerBadge: t.dangerBadgeLabel,
+    openSourceBadge: t.openSourceBadge,
+    proprietaryBadge: t.proprietaryBadge,
+    licenseLabel: t.licenseLabel,
+    latestVerLabel: (t as any).compareLatestVerLabel || 'Остання версія',
+    platformsLabel: t.platformsLabel,
+    countryLabel: t.countryOrigin,
+    tagsLabel: t.tagsLabel,
+    catAll: t.catAll,
+  },
   emptyReviewsMsg: t.reviewsEmpty,
   verifiedLabel: t.verifiedViaGithub,
   ratingLabel: t.ratingLabel,
@@ -313,7 +434,7 @@ const clientConfig = {
     </script>
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://codeberg.org https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://codeberg.org https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
+      content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://codeberg.org https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com https://cdn.discordapp.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://codeberg.org https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -689,6 +810,8 @@ const clientConfig = {
               const reviewUrl = `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(`${project.category}: ${project.name}`)}&body=${encodeURIComponent(t.reviewTemplateBody)}`;
               const contributeTranslationUrl = `${SITE_REPO_URL}/issues/new?template=submit-translation.yml&title=${encodeURIComponent(`[i18n: ${project.slug}] ${lang.toUpperCase()} translation`)}&project_slug=${encodeURIComponent(project.slug)}`;
               const ytChannel = project.category === 'youtuber' ? (youtubersData as any)?.channels?.[project.slug] : null;
+              const ghRelease = (releasesData as any)?.releases?.[project.slug] || null;
+              const repoStars = (releasesData as any)?.stars?.[project.slug] || null;
               const ytSubsText = ytChannel?.subscribers || '';
               const ytIsLive = Boolean(ytChannel?.isLive);
               const ytLiveUrl = ytChannel?.liveVideoId
@@ -1034,6 +1157,22 @@ const clientConfig = {
                             </button>
                           )}
 
+                          {repoStars && typeof repoStars.count === 'number' && (
+                            <a
+                              href={repoStars.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="stamp stamp-repo-stars mono"
+                              data-repo-stars={project.slug}
+                              title={`${repoStars.count.toLocaleString('en-US')} ★ (${repoStars.platform})`}
+                            >
+                              <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <polygon points="8,1 10.1,5.6 15.2,6.2 11.4,9.6 12.4,14.6 8,12 3.6,14.6 4.6,9.6 0.8,6.2 5.9,5.6"></polygon>
+                              </svg>
+                              <span>{formatStarCount(repoStars.count)}</span>
+                            </a>
+                          )}
+
                           {project.category !== 'youtuber' && project.verified && (
                             <button
                               type="button"
@@ -1203,6 +1342,39 @@ const clientConfig = {
                         </span>
                       </div>
                     </div>
+
+                    {ghRelease && (project.category === 'launcher' || project.category === 'client' || project.category === 'project' || initialProjectSlug === project.slug) && (
+                      <div class="gh-release-card" data-gh-release-box={project.slug}>
+                        <div class="gh-release-top">
+                          <div class="gh-release-title-group">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="color: #22c55e; flex-shrink: 0;" aria-hidden="true">
+                              <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v3.586a1.5 1.5 0 0 0 .44 1.06l6.914 6.914a1.5 1.5 0 0 0 2.122 0l3.585-3.586a1.5 1.5 0 0 0 0-2.121L7.146 1.44A1.5 1.5 0 0 0 6.086 1H2.5zm2 3.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                            </svg>
+                            <span class="gh-release-label">{(t as any).releaseBlockTitle || 'Останнє оновлення (GitHub Release)'}:</span>
+                            <span class="gh-release-tag mono">{ghRelease.tag}</span>
+                            {ghRelease.publishedAt && (
+                              <span class="gh-release-date mono">
+                                {(t as any).releaseDateLabel || 'Вийшло'}: {ghRelease.publishedAt}
+                              </span>
+                            )}
+                          </div>
+                          <a
+                            href={ghRelease.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="gh-release-link mono"
+                          >
+                            GitHub Release ↗
+                          </a>
+                        </div>
+                        {ghRelease.changelog && (
+                          <details class="gh-release-details">
+                            <summary>{(t as any).releaseWhatsNew || 'Що змінилось'}</summary>
+                            <div class="gh-release-notes" set:html={renderReleaseNotesHtml(ghRelease.changelog, ghRelease.tag)}></div>
+                          </details>
+                        )}
+                      </div>
+                    )}
 
                     {project.category === 'server' && project.serverIp && (
                       <div class="server-hero-banner">
@@ -1468,6 +1640,19 @@ const clientConfig = {
                             </svg>
                             {t.writeReviewBtn}
                           </a>
+
+                          <button
+                            type="button"
+                            class="paper-btn discord-review-btn"
+                            data-discord-review-btn={project.slug}
+                            data-project-name={project.name}
+                            title={(t as any).drBtnTitle}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                              <path d={DISCORD_ICON_PATH} />
+                            </svg>
+                            {(t as any).drBtn}
+                          </button>
                         </div>
                       </div>
 
@@ -2064,48 +2249,61 @@ const clientConfig = {
       </div>
 
             <div id="view-expenses" class="tab-view-panel">
-        <section class="paper-sheet-box guide-sheet">
-          <div class="hero-kicker">FINANCIAL TRANSPARENCY // ROADMAP</div>
-          <h1 class="hero-title">{t.expensesTitle}</h1>
-          <p class="hero-subtitle">{t.expensesSubtitle}</p>
-
-          <div class="expenses-grid">
-                        <div class="expense-card done">
-              <div class="expense-card-top">
-                <span class="stamp stamp-open">{t.expStatusCovered}</span>
-                <span class="expense-sum">{t.spentAmount}</span>
+        <section class="paper-sheet-box guide-sheet exp-redesign-sheet">
+          <div class="exp-header-row">
+            <div>
+              <div class="hero-kicker">FINANCIAL TRANSPARENCY // FUNDRAISER</div>
+              <h1 class="hero-title" style="margin-bottom: 0.45rem;">{t.expensesTitle}</h1>
+              <p class="hero-subtitle" style="margin-bottom: 0;">{t.expensesSubtitle}</p>
+            </div>
+            <div class="exp-kpi-strip">
+              <div class="exp-kpi-box is-done">
+                <span class="exp-kpi-label mono">{(t as any).expKpiDomainLabel || 'ДОМЕН MEOWLAB.FUN'}</span>
+                <strong class="exp-kpi-val">✓ {(t as any).expKpiDomainVal || 'Збір закрито'}</strong>
               </div>
-              <h3 class="expense-title">{t.spentLabel}</h3>
-              <p class="expense-desc">{t.spentDesc}</p>
-              <div class="expense-meta">
-                <span>{t.fundedByCommunitySource}</span>
-                <span class="status-indicator-done">{t.expStatusDone}</span>
+              <div class="exp-kpi-box is-active">
+                <span class="exp-kpi-label mono">{(t as any).expKpiActiveLabel || 'АКТИВНИЙ ЗБІР: i10n'}</span>
+                <strong class="exp-kpi-val mono">126 ₴ / 5 000 ₴</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured Active Fundraiser: i10n (Translations + Open-Source Zig App + More) -->
+          <div class="exp-featured-card">
+            <div class="exp-featured-info">
+              <div class="exp-featured-badges">
+                <span class="stamp stamp-alpha">{t.expStatusOpen}</span>
+                <span class="stamp stamp-open mono">i10n // ZIG + TRANSLATIONS</span>
+              </div>
+              <h2 class="exp-featured-title">{t.nextGoalLabel}</h2>
+              <p class="exp-featured-desc">{t.nextGoalDesc}</p>
+
+              <div class="exp-scope-list">
+                <span class="exp-scope-pill">⚡ {(t as any).expScopeZig || 'Відкрита програма на Zig'}</span>
+                <span class="exp-scope-pill">🌍 {(t as any).expScopeTrans || 'Переклади ігор, модів та лаунчерів'}</span>
+                <span class="exp-scope-pill">🛠️ {(t as any).expScopeTools || 'Інструменти вкладки i10n та інше'}</span>
+                <span class="exp-scope-pill">📖 {(t as any).expScopeOss || '100% Open Source'}</span>
               </div>
             </div>
 
-                        <div class="expense-card active-goal">
-              <div class="expense-card-top">
-                <span class="stamp stamp-alpha">{t.expStatusOpen}</span>
-                <span class="expense-sum">{t.nextGoalAmount}</span>
-              </div>
-              <h3 class="expense-title">{t.nextGoalLabel}</h3>
-              <p class="expense-desc">{t.nextGoalDesc}</p>
-
-                            <div class="fund-progress-box">
-                <div class="fund-progress-meta">
-                  <span class="fund-progress-collected">{t.expCollected}</span>
-                  <span class="fund-progress-target">{t.expTarget}</span>
+            <div class="exp-goal-panel">
+              <div class="exp-goal-numbers">
+                <div>
+                  <span class="exp-goal-sublabel mono">{(t as any).expRaisedLabel || 'ЗІБРАНО ЗАРАЗ'}</span>
+                  <div class="exp-goal-big mono">126 ₴ <span class="exp-goal-pct">(2.5%)</span></div>
                 </div>
-                <div class="fund-progress-track">
-                  <div class="fund-progress-fill" style="width: 35.5%;"></div>
-                </div>
-                <div class="fund-progress-hint">
-                  {t.expCombinedChannels}
+                <div style="text-align: right;">
+                  <span class="exp-goal-sublabel mono">{(t as any).expGoalLabelShort || 'ЦІЛЬ ЗБОРУ'}</span>
+                  <div class="exp-goal-target mono">{t.nextGoalAmount}</div>
                 </div>
               </div>
 
-              <div class="expense-meta">
-                <span>{t.expGoalDomain}</span>
+              <div class="exp-progress-track" role="progressbar" aria-valuenow="126" aria-valuemin="0" aria-valuemax="5000">
+                <div class="exp-progress-fill" style="width: 2.5%;"></div>
+              </div>
+
+              <div class="exp-goal-meta-row">
+                <span>{t.expCombinedChannels}</span>
                 <span class="status-indicator-active">{t.expStatusNeedSupport}</span>
               </div>
 
@@ -2132,8 +2330,24 @@ const clientConfig = {
                 </a>
               </div>
             </div>
+          </div>
 
-                        <div class="expense-card future">
+          <!-- Completed Milestones & Future Roadmap -->
+          <div class="exp-history-grid">
+            <div class="expense-card done exp-milestone-card">
+              <div class="expense-card-top">
+                <span class="stamp stamp-open">{t.expStatusCovered}</span>
+                <span class="expense-sum mono">✓ {(t as any).expDomainClosedSum || 'Збір закрито'}</span>
+              </div>
+              <h3 class="expense-title">{(t as any).expDomainClosedTitle || 'Новий домен meowlab.fun оплачено!'}</h3>
+              <p class="expense-desc">{(t as any).expDomainClosedDesc || 'Попередній збір на домен успішно завершено: зареєстровано й запущено meowlab.fun. Також покрито початкові витрати на запуск та CDN-інфраструктуру (400 ₴).'}</p>
+              <div class="expense-meta">
+                <span>{t.fundedByCommunitySource}</span>
+                <span class="status-indicator-done">{t.expStatusDone}</span>
+              </div>
+            </div>
+
+            <div class="expense-card future exp-milestone-card">
               <div class="expense-card-top">
                 <span class="stamp">{t.expStatusDev}</span>
                 <span class="expense-sum">{t.expStatusPerspective}</span>

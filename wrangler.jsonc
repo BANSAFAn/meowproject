@@ -2,9 +2,19 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "meowproject",
   "compatibility_date": "2026-11-01",
+  // Worker only handles /api/* (Discord reviews). Everything else is served
+  // straight from the static Astro build without invoking the Worker.
+  "main": "./worker/index.js",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   },
+  "vars": {
+    "GITHUB_REPOSITORY": "BANSAFAn/meowproject"
+  },
+  // Secrets (set in Cloudflare dashboard, NEVER commit them):
+  // DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, GITHUB_BOT_TOKEN, SESSION_SECRET
   "build": {
     "command": "npm run build"
   },

@@ -366,6 +366,18 @@ async function compileReviews(issues, slugs, projectsDir) {
       if (isBot) continue;
 
       const rawBody = (c.body || '').trim();
+      const trustedDiscordPoster = String(process.env.DISCORD_REVIEW_AUTHOR || (GITHUB_REPOSITORY || 'BANSAFAn/meowproject').split('/')[0]).toLowerCase();
+      let discordMeta = null;
+      const discordMatch = rawBody.match(/<!--\s*meowlab-discord:([A-Za-z0-9_-]+)\s*-->/);
+      if (discordMatch && String(c.user?.login || '').toLowerCase() === trustedDiscordPoster) {
+        try {
+          const parsed = JSON.parse(Buffer.from(discordMatch[1], 'base64url').toString('utf8'));
+          if (parsed && /^\d{15,22}$/.test(String(parsed.id || ''))) {
+            discordMeta = parsed;
+          }
+        } catch { /* ignore malformed marker */ }
+      }
+
       const match = rawBody.match(RATING_REGEX);
       let score = null;
       if (match) {
@@ -375,7 +387,11 @@ async function compileReviews(issues, slugs, projectsDir) {
           ratings.push(score);
         }
       }
-      const cleanedBody = rawBody.replace(RATING_REGEX, '').trim();
+      const cleanedBody = rawBody
+        .replace(/<!--\s*meowlab-discord:[A-Za-z0-9_-]+\s*-->/g, '')
+        .replace(RATING_REGEX, '')
+        .replace(/\n*— via MeowLab · Discord: [^\n]+\s*$/i, '')
+        .trim();
 
       const rawReactions = c.reactions || {};
       const reactions = {};
@@ -385,11 +401,17 @@ async function compileReviews(issues, slugs, projectsDir) {
         }
       }
 
+      const discordAvatar = discordMeta
+        ? (discordMeta.avatar && /^(a_)?[0-9a-f]{32}$/.test(String(discordMeta.avatar))
+            ? `https://cdn.discordapp.com/avatars/${discordMeta.id}/${discordMeta.avatar}.png?size=64`
+            : `https://cdn.discordapp.com/embed/avatars/${Number(String(discordMeta.id).slice(-2)) % 5}.png`)
+        : '';
+
       reviewsList.push({
         id: c.id,
-        source: 'github',
-        author: c.user?.login || 'community-user',
-        avatar: c.user?.avatar_url || '',
+        source: discordMeta ? 'discord' : 'github',
+        author: discordMeta ? (String(discordMeta.name || 'discord-user').slice(0, 40)) : (c.user?.login || 'community-user'),
+        avatar: discordMeta ? discordAvatar : (c.user?.avatar_url || ''),
         date: (c.created_at || '').slice(0, 10),
         body: cleanedBody,
         score,

@@ -2,6 +2,15 @@
 (function () {
   let repo, repoUrl, emptyReviewsMsg, verifiedLabel, ratingLabel, noRatingLabel, openTabLabel;
   let uiLang, acceptedCountries, initialSlug, initialCat, tabTitles, categoryTitles, uiStrings;
+  let compareCatalog = [], compareStrings = {}, discordStrings = {};
+
+  function decodeB64UrlUtf8(str) {
+    const pad = str.length % 4 === 0 ? '' : '='.repeat(4 - (str.length % 4));
+    const bin = atob(str.replace(/-/g, '+').replace(/_/g, '/') + pad);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
 
   function loadCatalogConfig() {
     const el = document.getElementById('meow-catalog-config');
@@ -10,6 +19,9 @@
       const cfg = JSON.parse(el.textContent || '{}');
       repo = cfg.repo;
       repoUrl = cfg.repoUrl;
+      discordStrings = cfg.discordStrings || {};
+      compareCatalog = cfg.compareCatalog || [];
+      compareStrings = cfg.compareStrings || {};
       emptyReviewsMsg = cfg.emptyReviewsMsg;
       verifiedLabel = cfg.verifiedLabel;
       ratingLabel = cfg.ratingLabel;
@@ -1562,6 +1574,11 @@
               m.classList.remove('open');
               m.setAttribute('aria-hidden', 'true');
             });
+            const cmpModal = document.getElementById('modal-compare');
+            if (cmpModal && cmpModal.classList.contains('is-open')) {
+              cmpModal.classList.remove('is-open');
+              cmpModal.setAttribute('aria-hidden', 'true');
+            }
           }
         });
 
@@ -1691,7 +1708,23 @@
                             (c.body || '').includes('[MeowProject Bot]');
                           if (isBot) return;
 
-                          const rawBody = sanitizePlainText(c.body || '');
+                          const rawComment = String(c.body || '');
+                          const repoOwner = String(repo || 'BANSAFAn/meowproject').split('/')[0].toLowerCase();
+                          let discordMeta = null;
+                          const dm = rawComment.match(/<!--\s*meowlab-discord:([A-Za-z0-9_-]+)\s*-->/);
+                          if (dm && authorLogin === repoOwner) {
+                            try {
+                              const parsed = JSON.parse(decodeB64UrlUtf8(dm[1]));
+                              if (parsed && /^\d{15,22}$/.test(String(parsed.id || ''))) {
+                                discordMeta = parsed;
+                              }
+                            } catch (_) {}
+                          }
+
+                          const strippedRaw = rawComment
+                            .replace(/<!--\s*meowlab-discord:[A-Za-z0-9_-]+\s*-->/g, '')
+                            .replace(/\n*— via MeowLab · Discord: [^\n]+\s*$/i, '');
+                          const rawBody = sanitizePlainText(strippedRaw);
                           const match = rawBody.match(ratingRegex);
                           let score = null;
                           if (match) {
@@ -1711,16 +1744,22 @@
                             }
                           });
 
+                          const discordAvatar = discordMeta
+                            ? (discordMeta.avatar && /^(a_)?[0-9a-f]{32}$/.test(String(discordMeta.avatar))
+                                ? `https://cdn.discordapp.com/avatars/${discordMeta.id}/${discordMeta.avatar}.png?size=64`
+                                : `https://cdn.discordapp.com/embed/avatars/${Number(String(discordMeta.id).slice(-2)) % 5}.png`)
+                            : '';
+
                           collectedItems.push({
-                            author: sanitizePlainText(c.user?.login || 'github-user'),
-                            avatar: c.user?.avatar_url || '',
+                            author: discordMeta ? sanitizePlainText(String(discordMeta.name || 'discord-user').slice(0, 40)) : sanitizePlainText(c.user?.login || 'github-user'),
+                            avatar: discordMeta ? discordAvatar : (c.user?.avatar_url || ''),
                             date: sanitizePlainText((c.created_at || '').slice(0, 10)),
                             body: cleanedBody,
                             score,
                             reactions,
                             url: c.html_url || iss.html_url,
                             issueNum: iss.number,
-                            source: 'github',
+                            source: discordMeta ? 'discord' : 'github',
                           });
                         });
                       }
@@ -1864,7 +1903,7 @@
                 userLink.target = '_blank';
                 userLink.rel = 'noopener noreferrer';
 
-                if (item.avatar && /^https:\/\/(avatars\.githubusercontent\.com|gitlab\.com|secure\.gravatar\.com|www\.gravatar\.com)\//.test(item.avatar)) {
+                if (item.avatar && /^https:\/\/(avatars\.githubusercontent\.com|gitlab\.com|secure\.gravatar\.com|www\.gravatar\.com|cdn\.discordapp\.com)\//.test(item.avatar)) {
                   const img = document.createElement('img');
                   img.src = item.avatar;
                   img.alt = item.author;
@@ -1885,14 +1924,17 @@
                   userLink.appendChild(img);
                 }
 
-                const isGitlab = item.source === 'gitlab' || String(item.url || '').includes('gitlab.com');
-                const isCodeberg = item.source === 'codeberg' || String(item.url || '').includes('codeberg.org');
+                const isDiscord = item.source === 'discord';
+                const isGitlab = !isDiscord && (item.source === 'gitlab' || String(item.url || '').includes('gitlab.com'));
+                const isCodeberg = !isDiscord && (item.source === 'codeberg' || String(item.url || '').includes('codeberg.org'));
                 const srcIcon = document.createElement('span');
-                srcIcon.title = isCodeberg ? 'Codeberg' : isGitlab ? 'GitLab' : 'GitHub';
+                srcIcon.title = isDiscord ? 'Discord' : isCodeberg ? 'Codeberg' : isGitlab ? 'GitLab' : 'GitHub';
                 srcIcon.style.display = 'inline-flex';
                 srcIcon.style.alignItems = 'center';
                 srcIcon.style.flexShrink = '0';
-                srcIcon.innerHTML = isCodeberg
+                srcIcon.innerHTML = isDiscord
+                  ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.1 14.1 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029zM8.02 15.331c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.946 2.418-2.157 2.418z"/></svg>'
+                  : isCodeberg
                   ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#2185D0" aria-hidden="true"><path d="M11.955.49A12 12 0 0 0 0 12.49a12 12 0 0 0 1.832 6.372L11.836 5.955a.208.208 0 0 1 .328 0l10.004 12.907A12 12 0 0 0 24 12.49a12 12 0 0 0-12-12c-.015 0-.03 0-.045 0zm.375 6.473l4.426 16.59A12 12 0 0 0 21.842 19.3z"/></svg>'
                   : isGitlab
                     ? '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="#FC6D26" d="M12 21.5L16.4 8H7.6L12 21.5z"/><path fill="#E24329" d="M12 21.5L7.6 8H1.5L12 21.5z"/><path fill="#FCA326" d="M1.5 8L.1 12.3c-.1.4 0 .9.4 1.1L12 21.5 1.5 8z"/><path fill="#E24329" d="M1.5 8h6.1L5 1.9c-.1-.3-.6-.3-.7 0L1.5 8z"/><path fill="#E24329" d="M12 21.5L16.4 8h6.1L12 21.5z"/><path fill="#FCA326" d="M22.5 8l1.4 4.3c.1.4 0 .9-.4 1.1L12 21.5 22.5 8z"/><path fill="#E24329" d="M22.5 8h-6.1L19 1.9c.1-.3.6-.3.7 0L22.5 8z"/></svg>'
@@ -2607,6 +2649,430 @@
         window.__meowYtLiveTimer = setInterval(() => {
           if (!document.hidden) refreshYoutubersLiveStatus();
         }, 120000);
+
+        // 11. Compare Projects Feature (Bottom-Left FAB, 2 to 5 projects, Analysis & Table)
+        (function initCompareTool() {
+          const fab = document.getElementById('floating-compare-btn');
+          const badge = document.getElementById('floating-compare-badge');
+          const modal = document.getElementById('modal-compare');
+          const stepSelect = document.getElementById('compare-step-select');
+          const stepResult = document.getElementById('compare-step-result');
+          const searchInput = document.getElementById('compare-search-input');
+          const catChipsWrap = document.getElementById('compare-cat-chips');
+          const gridEl = document.getElementById('compare-projects-grid');
+          const countEl = document.getElementById('compare-selected-count');
+          const clearBtn = document.getElementById('compare-clear-btn');
+          const runBtn = document.getElementById('compare-run-btn');
+          const backBtn = document.getElementById('compare-back-btn');
+          const analysisEl = document.getElementById('compare-analysis-banner');
+          const tableEl = document.getElementById('compare-result-table');
+          if (!fab || !modal || !gridEl) return;
+
+          let selectedSlugs = [];
+          try {
+            const saved = JSON.parse(sessionStorage.getItem('meow_compare_slugs') || '[]');
+            if (Array.isArray(saved)) selectedSlugs = saved.slice(0, 5);
+          } catch (_) {}
+
+          let filterCat = 'all';
+          let filterQuery = '';
+
+          function esc(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;');
+          }
+
+          function saveSelection() {
+            try { sessionStorage.setItem('meow_compare_slugs', JSON.stringify(selectedSlugs)); } catch (_) {}
+            if (countEl) countEl.textContent = String(selectedSlugs.length);
+            if (badge) {
+              badge.textContent = String(selectedSlugs.length);
+              badge.style.display = selectedSlugs.length > 0 ? 'inline-flex' : 'none';
+            }
+            if (runBtn) {
+              runBtn.disabled = selectedSlugs.length < 2 || selectedSlugs.length > 5;
+            }
+          }
+
+          function renderCatChips() {
+            if (!catChipsWrap) return;
+            const cats = ['all', 'launcher', 'modpack', 'mod', 'client', 'server', 'website', 'youtuber', 'project'];
+            catChipsWrap.innerHTML = cats.map((c) => {
+              const lbl = c === 'all' ? (compareStrings.catAll || 'All') : (categoryTitles[c] || c);
+              return `<button type="button" class="compare-cat-chip ${filterCat === c ? 'active' : ''}" data-cmp-cat="${c}">${esc(lbl)}</button>`;
+            }).join('');
+            catChipsWrap.querySelectorAll('[data-cmp-cat]').forEach((btn) => {
+              btn.addEventListener('click', () => {
+                filterCat = btn.getAttribute('data-cmp-cat') || 'all';
+                renderCatChips();
+                renderPickerGrid();
+              });
+            });
+          }
+
+          function renderPickerGrid() {
+            const q = filterQuery.trim().toLowerCase();
+            const filtered = compareCatalog.filter((p) => {
+              if (filterCat !== 'all' && p.category !== filterCat) return false;
+              if (q && !p.name.toLowerCase().includes(q) && !p.slug.toLowerCase().includes(q)) return false;
+              return true;
+            });
+
+            gridEl.innerHTML = filtered.map((p) => {
+              const isSel = selectedSlugs.includes(p.slug);
+              const catName = categoryTitles[p.category] || p.category;
+              return `
+                <button type="button" class="compare-pick-card ${isSel ? 'selected' : ''}" data-cmp-slug="${esc(p.slug)}">
+                  <img src="${esc(p.icon)}" alt="" loading="lazy" />
+                  <div class="compare-pick-meta">
+                    <span class="compare-pick-name">${esc(p.name)}</span>
+                    <span class="compare-pick-cat">${esc(catName)}${p.verified ? ' · ✓' : ''}${p.danger ? ' · ⚠' : ''}</span>
+                  </div>
+                  <span class="compare-pick-check">${isSel ? '✓' : ''}</span>
+                </button>
+              `;
+            }).join('');
+
+            gridEl.querySelectorAll('[data-cmp-slug]').forEach((card) => {
+              card.addEventListener('click', () => {
+                const sl = card.getAttribute('data-cmp-slug');
+                const idx = selectedSlugs.indexOf(sl);
+                if (idx >= 0) {
+                  selectedSlugs.splice(idx, 1);
+                } else if (selectedSlugs.length < 5) {
+                  selectedSlugs.push(sl);
+                }
+                saveSelection();
+                renderPickerGrid();
+              });
+            });
+          }
+
+          function renderComparisonResult() {
+            const items = selectedSlugs
+              .map((sl) => compareCatalog.find((x) => x.slug === sl))
+              .filter(Boolean);
+            if (items.length < 2) return;
+
+            const maxCommunity = Math.max(...items.map((x) => x.score || 0));
+            const rankVal = (p) => (p.danger ? -1000 : 0) + (p.verified ? 30 : 0) + (p.isOpenSource ? 20 : 0) + (p.score || 0);
+            const best = items.slice().sort((a, b) => rankVal(b) - rankVal(a))[0];
+            const dangerousOnes = items.filter((x) => x.danger);
+            const openOnes = items.filter((x) => x.isOpenSource);
+
+            const summaryParts = [];
+            summaryParts.push(`<strong>🏆 ${esc(compareStrings.winnerLabel || 'Аналіз MeowLab')}:</strong> <strong>${esc(best.name)}</strong>`);
+            const reasons = [];
+            if (best.verified) reasons.push(esc(compareStrings.verifiedBadge || 'VERIFIED'));
+            if (best.isOpenSource) reasons.push(`${esc(compareStrings.openSourceBadge || 'Open Source')} (${esc(best.license)})`);
+            if (best.score > 0) reasons.push(`${esc(compareStrings.ratingLabel)}: ${best.score}/100`);
+            if (best.releaseTag) reasons.push(`${esc(compareStrings.latestVerLabel)}: ${esc(best.releaseTag)}`);
+            if (reasons.length) summaryParts.push(`— ${reasons.join(' · ')}.`);
+            if (dangerousOnes.length > 0) {
+              summaryParts.push(`<br><span style="color:#ef4444;font-weight:800;">⚠️ ${esc(compareStrings.dangerBadge || 'DANGEROUS')}: ${dangerousOnes.map((d) => esc(d.name)).join(', ')}</span>`);
+            } else if (openOnes.length > 0 && openOnes.length < items.length) {
+              summaryParts.push(`<br><span style="color:var(--ink-muted);">${esc(compareStrings.openSourceBadge)}: ${openOnes.map((o) => esc(o.name)).join(', ')}</span>`);
+            }
+            if (analysisEl) analysisEl.innerHTML = summaryParts.join(' ');
+
+            const headRow = `
+              <tr>
+                <th></th>
+                ${items.map((p) => `
+                  <td>
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                      <img src="${esc(p.icon)}" alt="" style="width:30px;height:30px;border-radius:6px;object-fit:cover;" />
+                      <div>
+                        <a href="${esc(p.href)}" style="font-weight:900;color:var(--ink);text-decoration:underline;">${esc(p.name)}</a>
+                        <div style="font-size:0.7rem;color:var(--ink-muted);text-transform:uppercase;">${esc(categoryTitles[p.category] || p.category)}</div>
+                      </div>
+                    </div>
+                  </td>
+                `).join('')}
+              </tr>
+            `;
+
+            const ratingRow = `
+              <tr>
+                <th>${esc(compareStrings.ratingLabel)}</th>
+                ${items.map((p) => `
+                  <td class="${maxCommunity > 0 && p.score === maxCommunity ? 'compare-best-cell' : ''}">
+                    ${p.score > 0 ? `<strong class="mono">★ ${p.score}/100</strong> <span style="color:var(--ink-muted);font-size:0.74rem;">(${p.reviewsCount})</span>` : `<span style="color:var(--ink-muted);">${esc(compareStrings.noRatingYet)}</span>`}
+                  </td>
+                `).join('')}
+              </tr>
+            `;
+
+            const secRow = `
+              <tr>
+                <th>${esc(compareStrings.securityLabel)}</th>
+                ${items.map((p) => {
+                  if (p.danger) return `<td class="compare-danger-cell"><strong style="color:#ef4444;">⚠ ${esc(compareStrings.dangerBadge)}</strong></td>`;
+                  if (p.verified) return `<td class="compare-best-cell"><strong style="color:#22c55e;">✓ ${esc(compareStrings.verifiedBadge)}</strong></td>`;
+                  return `<td>—</td>`;
+                }).join('')}
+              </tr>
+            `;
+
+            const codeRow = `
+              <tr>
+                <th>${esc(compareStrings.licenseLabel)}</th>
+                ${items.map((p) => `
+                  <td class="${p.isOpenSource ? 'compare-best-cell' : ''}">
+                    <strong>${p.isOpenSource ? '✓ ' + esc(compareStrings.openSourceBadge) : esc(compareStrings.proprietaryBadge)}</strong>
+                    ${p.isOpenSource ? `<div class="mono" style="font-size:0.74rem;color:var(--ink-muted);">${esc(p.license)}</div>` : ''}
+                  </td>
+                `).join('')}
+              </tr>
+            `;
+
+            const verRow = `
+              <tr>
+                <th>${esc(compareStrings.latestVerLabel)}</th>
+                ${items.map((p) => `
+                  <td>
+                    ${p.releaseTag ? `<span class="gh-release-tag mono">${esc(p.releaseTag)}</span> <div class="mono" style="font-size:0.7rem;color:var(--ink-muted);margin-top:2px;">${esc(p.releaseDate)}</div>` : '—'}
+                  </td>
+                `).join('')}
+              </tr>
+            `;
+
+            const platRow = `
+              <tr>
+                <th>${esc(compareStrings.platformsLabel)}</th>
+                ${items.map((p) => `<td>${esc((p.platforms || []).join(', ') || '—')}</td>`).join('')}
+              </tr>
+            `;
+
+            const countryRow = `
+              <tr>
+                <th>${esc(compareStrings.countryLabel)}</th>
+                ${items.map((p) => `<td>${esc(p.country || '—')}</td>`).join('')}
+              </tr>
+            `;
+
+            const tagsRow = `
+              <tr>
+                <th>${esc(compareStrings.tagsLabel)}</th>
+                ${items.map((p) => `<td style="font-size:0.75rem;color:var(--ink-muted);">${esc((p.tags || []).map((tg) => '#' + tg).join(' '))}</td>`).join('')}
+              </tr>
+            `;
+
+            if (tableEl) {
+              tableEl.innerHTML = `<tbody>${headRow}${ratingRow}${secRow}${codeRow}${verRow}${platRow}${countryRow}${tagsRow}</tbody>`;
+            }
+          }
+
+          function openCompareModal() {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            stepSelect.style.display = '';
+            stepResult.style.display = 'none';
+            renderCatChips();
+            renderPickerGrid();
+            saveSelection();
+          }
+
+          function closeCompareModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+          }
+
+          fab.onclick = openCompareModal;
+          modal.querySelectorAll('[data-close-compare]').forEach((b) => { b.onclick = closeCompareModal; });
+          modal.onclick = (e) => { if (e.target === modal) closeCompareModal(); };
+
+          if (searchInput) {
+            searchInput.oninput = () => {
+              filterQuery = searchInput.value || '';
+              renderPickerGrid();
+            };
+          }
+          if (clearBtn) {
+            clearBtn.onclick = () => {
+              selectedSlugs = [];
+              saveSelection();
+              renderPickerGrid();
+            };
+          }
+          if (runBtn) {
+            runBtn.onclick = () => {
+              if (selectedSlugs.length < 2) return;
+              renderComparisonResult();
+              stepSelect.style.display = 'none';
+              stepResult.style.display = '';
+            };
+          }
+          if (backBtn) {
+            backBtn.onclick = () => {
+              stepResult.style.display = 'none';
+              stepSelect.style.display = '';
+            };
+          }
+
+          saveSelection();
+        })();
+
+        // 12. Discord 1-Click Review Modal & Return Toast
+        (function initDiscordReviewTool() {
+          const modal = document.getElementById('discord-review-modal');
+          const closeBtn = document.getElementById('dr-modal-close');
+          const form = document.getElementById('discord-review-form');
+          const slugInput = document.getElementById('dr-project-slug');
+          const projNameEl = document.getElementById('dr-project-name');
+          const scoreRange = document.getElementById('dr-score-range');
+          const scoreNum = document.getElementById('dr-score-num');
+          const textArea = document.getElementById('dr-review-text');
+          const charCounter = document.getElementById('dr-char-counter');
+          const errBox = document.getElementById('dr-error-box');
+          const submitBtn = document.getElementById('dr-submit-btn');
+          const submitLabel = document.getElementById('dr-submit-label');
+          const toastEl = document.getElementById('dr-toast');
+
+          function showToast(msg, isOk) {
+            if (!toastEl || !msg) return;
+            toastEl.textContent = msg;
+            toastEl.className = 'dr-toast ' + (isOk ? 'is-ok' : 'is-err');
+            toastEl.style.display = 'block';
+            clearTimeout(window.__drToastTimer);
+            window.__drToastTimer = setTimeout(() => {
+              toastEl.style.display = 'none';
+            }, 6500);
+          }
+
+          function errorMsgForCode(code) {
+            if (code === 'account_young') return discordStrings.drErrYoung || 'Discord account must be at least 14 days old.';
+            if (code === 'cancelled') return discordStrings.drErrCancelled || 'Discord login was cancelled.';
+            if (code === 'expired' || code === 'bad_state' || code === 'bad_signature') return discordStrings.drErrExpired || 'Review draft expired, please submit again.';
+            if (code === 'text_short') return discordStrings.drErrShort || 'Review text is too short (minimum 3 characters).';
+            if (code === 'no_issue') return discordStrings.drErrNoIssue || 'Review thread not found for this project yet.';
+            if (code === 'not_configured') return discordStrings.drErrDisabled || 'Discord reviews are not configured on this server yet.';
+            return discordStrings.drErrGeneric || 'Could not publish review. Please try again.';
+          }
+
+          // Check OAuth callback result in URL (?mlreview=ok|updated|error&mlcode=...)
+          try {
+            const url = new URL(window.location.href);
+            const res = url.searchParams.get('mlreview');
+            if (res) {
+              const code = url.searchParams.get('mlcode') || '';
+              if (res === 'ok') {
+                showToast('✅ ' + (discordStrings.drOk || 'Відгук успішно опубліковано!'), true);
+              } else if (res === 'updated') {
+                showToast('✅ ' + (discordStrings.drUpdated || 'Ваш відгук та оцінку оновлено!'), true);
+              } else {
+                showToast('⚠️ ' + errorMsgForCode(code), false);
+              }
+              url.searchParams.delete('mlreview');
+              url.searchParams.delete('mlcode');
+              window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            }
+          } catch (_) {}
+
+          if (!modal || !form) return;
+
+          function closeDrModal() {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+          }
+
+          function openDrModal(slug, name) {
+            if (slugInput) slugInput.value = slug || '';
+            if (projNameEl) projNameEl.textContent = name || slug || '';
+            if (errBox) {
+              errBox.style.display = 'none';
+              errBox.textContent = '';
+            }
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitLabel && discordStrings.drSubmit) submitLabel.textContent = discordStrings.drSubmit;
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            setTimeout(() => { if (textArea) textArea.focus(); }, 60);
+          }
+
+          document.querySelectorAll('[data-discord-review-btn]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              openDrModal(btn.getAttribute('data-discord-review-btn'), btn.getAttribute('data-project-name'));
+            });
+          });
+
+          if (closeBtn) closeBtn.onclick = closeDrModal;
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeDrModal();
+          });
+
+          if (scoreRange && scoreNum) {
+            scoreRange.oninput = () => { scoreNum.value = scoreRange.value; };
+            scoreNum.oninput = () => {
+              let v = Math.round(Number(scoreNum.value));
+              if (isNaN(v)) v = 0;
+              v = Math.max(0, Math.min(100, v));
+              scoreRange.value = String(v);
+            };
+          }
+
+          if (textArea && charCounter) {
+            textArea.oninput = () => {
+              charCounter.textContent = `${(textArea.value || '').length} / 1000`;
+            };
+          }
+
+          form.onsubmit = async (e) => {
+            e.preventDefault();
+            if (errBox) errBox.style.display = 'none';
+            const slug = (slugInput?.value || '').trim();
+            const score = Math.max(0, Math.min(100, Math.round(Number(scoreNum?.value ?? scoreRange?.value ?? 90))));
+            const text = (textArea?.value || '').trim();
+
+            if (text.length < 3) {
+              if (errBox) {
+                errBox.textContent = errorMsgForCode('text_short');
+                errBox.style.display = 'block';
+              }
+              return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            const prevLabel = submitLabel ? submitLabel.textContent : '';
+            if (submitLabel) submitLabel.textContent = discordStrings.drSending || 'Redirecting to Discord...';
+
+            try {
+              const resp = await fetch('/api/review/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  slug,
+                  score,
+                  text,
+                  back: window.location.pathname + window.location.search,
+                }),
+              });
+              let data = null;
+              try { data = await resp.json(); } catch (_) {}
+
+              if (resp.ok && data && data.ok && data.url) {
+                window.location.href = data.url;
+                return;
+              }
+              const errCode = data?.error || (resp.status === 404 ? 'not_configured' : 'generic');
+              if (errBox) {
+                errBox.textContent = errorMsgForCode(errCode);
+                errBox.style.display = 'block';
+              }
+            } catch (_) {
+              if (errBox) {
+                errBox.textContent = errorMsgForCode('generic');
+                errBox.style.display = 'block';
+              }
+            }
+
+            if (submitBtn) submitBtn.disabled = false;
+            if (submitLabel) submitLabel.textContent = prevLabel;
+          };
+        })();
       }
 
       if (!window.__meowPageLoadBound) {

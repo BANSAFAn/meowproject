@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://meowlab.pp.ua/sitemap.xml
+Sitemap: https://meowlab.fun/sitemap.xml

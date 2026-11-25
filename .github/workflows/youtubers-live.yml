@@ -22,13 +22,17 @@ jobs:
           node-version: '20'
       - name: Fetch YouTubers subscribers, LIVE status, and latest videos
         run: node uhahahahahaah/sync-youtubers.mjs
+      - name: Fetch latest GitHub Releases for launchers and projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node uhahahahahaah/sync-releases.mjs
       - name: Commit & push if changed
         run: |
-          if [ -n "$(git status --porcelain public/data/youtubers.json Meow/projects/)" ]; then
+          if [ -n "$(git status --porcelain public/data/youtubers.json public/data/releases.json Meow/projects/)" ]; then
             git config user.name "meowblin[bot]"
             git config user.email "bot@meowlab.pp.ua"
-            git add public/data/youtubers.json Meow/projects/
-            git commit -m "chore(youtubers): update live status and subscriber counts"
+            git add public/data/youtubers.json public/data/releases.json Meow/projects/
+            git commit -m "chore(sync): update live YouTubers status and GitHub releases"
             git pull --rebase origin main
             git push origin HEAD:main
           else

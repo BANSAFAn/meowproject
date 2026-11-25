@@ -3,7 +3,7 @@ import { LANGUAGES } from '../i18n/translations';
 import { PROJECTS, PREFIXES } from '../data/projects';
 
 export const GET: APIRoute = ({ site, url }) => {
-  const origin = site?.origin || url.origin || 'https://meowlab.pp.ua';
+  const origin = site?.origin || url.origin || 'https://meowlab.fun';
   const langs = Object.keys(LANGUAGES);
   const lastmod = new Date().toISOString().split('T')[0];
 

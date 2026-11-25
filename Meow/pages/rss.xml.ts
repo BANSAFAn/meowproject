@@ -11,7 +11,7 @@ function escapeXml(str: string) {
 }
 
 export const GET: APIRoute = ({ site, url }) => {
-  const origin = site?.origin || url.origin || 'https://meowlab.pp.ua';
+  const origin = site?.origin || url.origin || 'https://meowlab.fun';
   const sorted = [...PROJECTS].sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
 
   const items = sorted

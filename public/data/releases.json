@@ -1,0 +1,308 @@
+{
+  "updatedAt": "2026-11-25T17:11:57.780Z",
+  "releases": {
+    "fluenlauncher": {
+      "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
+      "tag": "v2.3.9.0",
+      "name": "refs/tags/v2.3.9.0",
+      "publishedAt": "2026-03-21",
+      "url": "https://github.com/Xcube-Studio/Natsurainko.FluentLauncher/releases/tag/v2.3.9.0",
+      "prerelease": false,
+      "changelog": "**Full Changelog**: https://github.com/Xcube-Studio/Natsurainko.FluentLauncher/compare/v2.3.8.0...v2.3.9.0"
+    },
+    "gilealauncher": {
+      "repo": "TensaCraft/GileaLauncher",
+      "tag": "v0.1.5",
+      "name": "GileaLauncher 0.1.5",
+      "publishedAt": "2026-11-20",
+      "url": "https://github.com/TensaCraft/GileaLauncher/releases/tag/v0.1.5",
+      "prerelease": false,
+      "changelog": "# v0.1.5\n\nChanges since `v0.1.4`.\n\n## New Features\n\n- **Net:** A host the system's DNS cannot find is looked up through Cloudflare and Google over HTTPS\n\n## Fixes\n\n- **Net:** A download waits up to a minute for a dropped network before the files left fail\n- **Install:** An install the network cut off tells the player plainly that a retry goes on"
+    },
+    "grubielauncher": {
+      "repo": "MOJI6416/grubielauncher",
+      "tag": "2.3.2",
+      "name": "2.3.2",
+      "publishedAt": "2026-11-21",
+      "url": "https://github.com/MOJI6416/grubielauncher/releases/tag/2.3.2",
+      "prerelease": false,
+      "changelog": "## Grubie Launcher 2.3.2\n\nMod translation that keeps you posted and a tidier instance settings screen.\n\n### Highlights\n- Improved mod translation: progress now shows in the Now block, and the translation panel keeps its status at the top without flickering.\n- Added a button next to the companion mod that opens its page on the website.\n\n### Fixed\n- Large modpack texts such as the ATM9 quest book no longer get stuck in the AI translation queue.\n- Instance settings scroll when there are unsaved changes, and “Use launcher value” for memory sits next to the title."
+    },
+    "hmcl": {
+      "repo": "HMCL-dev/HMCL",
+      "tag": "v3.17.2",
+      "name": "v3.17.2",
+      "publishedAt": "2026-11-19",
+      "url": "https://github.com/HMCL-dev/HMCL/releases/tag/v3.17.2",
+      "prerelease": false,
+      "changelog": "&nbsp;**Changelog** (Chinese)\n\n| File | SHA-256 Checksum |\n| ---  | --- |\n| HMCL-3.17.2.exe | `43ad42f37519243b117c7430f3f4a193eacab84d4cb266090ca425a7a3c09847` |\n| HMCL-3.17.2.jar | `00f7a2d59ca06079c0afb44cbb46b49775d9ce255fa21f9a1e6ea3bde7301e29` |\n| HMCL-3.17.2.sh   | `111b438b85b6652e2707810fdc37ea222318d28823e54dd63f18b5f347a1e8ab` |\n| HMCL-3.17.2.deb | `395dbbdee65941bf54f991b1083e9f4664ecf73be750a3e4f63061cc0e6076c7` |"
+    },
+    "multimc": {
+      "repo": "MultiMC/Launcher",
+      "tag": "0.6.14",
+      "name": "0.6.14",
+      "publishedAt": "2021-12-09",
+      "url": "https://github.com/MultiMC/Launcher/releases/tag/0.6.14",
+      "prerelease": false,
+      "changelog": "Go to multimc.org to get the binaries.\nSee changelog for changes."
+    },
+    "paxlauncher": {
+      "repo": "Kryp-s/PaxLauncher",
+      "tag": "v1.0.26",
+      "name": "PaxLauncher 1.0.26 Beta ",
+      "publishedAt": "2026-11-15",
+      "url": "https://github.com/Kryp-s/PaxLauncher/releases/tag/v1.0.26",
+      "prerelease": false,
+      "changelog": "1. Змінено розміщення кнопок в головному меню\n2. Частково змінено дизайн лаунчера"
+    },
+    "prismlauncher": {
+      "repo": "PrismLauncher/PrismLauncher",
+      "tag": "11.1.1",
+      "name": "Prism Launcher 11.1.1",
+      "publishedAt": "2026-09-28",
+      "url": "https://github.com/PrismLauncher/PrismLauncher/releases/tag/11.1.1",
+      "prerelease": false,
+      "changelog": "We're back!\n\nThis is a hotfix release for a security vulnerability that appeared in 11.1.0.  We'll disclose more information about this in the upcoming week. Special thanks to @OpenNerdz for reporting it!\n\n# Changelog\n\nYou can find a full list of changes here: https://github.com/PrismLauncher/PrismLauncher/compare/11.1.0...11.1.1\n\n## Fixed\n\n- Prevent path traversal in CurseForge modpack overrides by @Trial97 in #6183"
+    },
+    "xmcl": {
+      "repo": "Voxelum/x-minecraft-launcher",
+      "tag": "v0.73.1",
+      "name": "v0.73.1",
+      "publishedAt": "2026-11-03",
+      "url": "https://github.com/Voxelum/x-minecraft-launcher/releases/tag/v0.73.1",
+      "prerelease": false,
+      "changelog": "## 0.73.1\n### 🐛 Bug Fixes & Patches\n\n- preserve instance synchronization after visiting settings (#1835) (34867d137b7dec03be34a773327af25b110d6c2c)\n- preserve normal window bounds across restart (#1830) (#1833) (e542d93ef0b2f05a13563c211ca9d2778ebe9672)\n- **ftb**: harden manifest conversion and install error handling (#1832) (1c343bb14f7d4cf87cbf013a2a13446dc03bc930)\n- make AppImage update ownership explicit (#1831) (e6bba84eb58fd7d56f9f7d9750aeb24288cb2c77)\n- make agent URL and API key settings reliable (c51bea03ec114015c0b7f86983e5dc7b5aef7e24)\n\n## Downloads\n\n- Windows (x64): zip\n- Linux (x64): AppImage deb tar.xz rpm\n- Linux (arm64): AppImage deb tar.xz rpm\n- Mac (x64): dmg\n- Mac (arm64): dmg\n\n### DeskGap Windows x64 — UNSIGNED PREVIEW\n\nDownload the DeskGap EXE for **manual installation only**.\nThis preview is not Authenticode-signed. Production DeskGap signing and automatic updates are not enabled; the launcher intentionally rejects unsigned EXEs as automatic updates.\nElectron/APPX signing and publishing are unchanged. This preview is not evidence of a completed signed DeskGap update workflow."
+    },
+    "aged": {
+      "repo": "xR4YM0ND/Aged",
+      "tag": "3.1.2",
+      "name": "Aged 3.1.2",
+      "publishedAt": "2024-12-01",
+      "url": "https://github.com/xR4YM0ND/Aged/releases/tag/3.1.2",
+      "prerelease": false,
+      "changelog": "## Fixed:\n\n- Multiplayer via LAN crash\n\n## Changed:\n\n- Lowered menu text fade in time\n- Disabled fancy block animations\n\n## Removed:\n\n- Better Statistics Screen `// Crashes multiplayer / LAN & discontinued for 1.20.1`\n- Interactic `// Crashes multiplayer / LAN & discontinued for 1.20.1`\n\n## Updated:\n\n- [ETF] Entity Texture Features `6.2.8`\n- 3D Skin Layers `1.7.2`\n- Fabric Languaged Kotlin `1.13.0 + k 2.1.0`\n- Fancy Block Particles - Renewed `20.1.2.0`\n- First-person Model `2.4.6`\n- Forge Config API Port `8.0.1`\n- Formations (Structure Library) `1.0.3`\n- Fzzy Config `0.5.8`\n- ImmediatelyFast `1.3.2`\n- Immersive Aircraft `1.1.5`\n- Kiwi Library `11.8.27`\n- Luki's Grand Capitals `1.1.1`\n- ModernFix `5.19.5`\n- Moonlight Lib `2.13.33`\n- Neruina `2.2.4`\n- Presence Footsteps `1.10.1`\n- Puzzles Lib `8.1.25`\n- RAY's 3D Ladders `1.3` `Resourcepack`\n- RAY's 3D Rails `2.2` `Resourcepack`\n- SeasonHUD-Fabric `1.11.5`\n- Sounds `2.2.1`\n- Villages&Pillages `1.0.2`"
+    },
+    "backroomsff": {
+      "repo": "SpacePotatoee/MinecraftFoundFootage",
+      "tag": "v1.1.1",
+      "name": "Release 1.1.1",
+      "publishedAt": "2025-05-06",
+      "url": "https://github.com/SpacePotatoee/MinecraftFoundFootage/releases/tag/v1.1.1",
+      "prerelease": false,
+      "changelog": "### Bug Fixes\n- Fixed bugged generation\n- Fixed some skinwalker bugs\n- Fixed some other bugs that I'm probably forgetting\n\n### New Features\n- Added an option for integrated servers to change the exit spawn radius (the default is now 300 blocks instead of 1,000)\n- Added a dedicated server option for changing the exit spawn radius (backrooms-exit-spawn-radius)\n- Added an option to disable hints on world join\n\n### Optimizations\n- Scaled down textures (242mb -> 112mb)\n- Reworked level transitions\n- Reworked PBR materials\n\n### Translations\n- French\n- Spanish (Spain, Mexico, and Catalan)\n- Turkish\n- Updated Russian"
+    },
+    "entityculling": {
+      "repo": "tr7zw/EntityCulling",
+      "tag": "1.12.2",
+      "name": "1.12.2(26.3.x-1.19.4)",
+      "publishedAt": "2026-11-22",
+      "url": "https://github.com/tr7zw/EntityCulling/releases/tag/1.12.2",
+      "prerelease": false,
+      "changelog": "## What's Changed\n* Clamp velocity size. Fix #363 Prevents the culling from crashing due to abnormal velocities\n* Improve logging on issues. #363\n* Make sure (block) entities dynamicly whitelisted are visibles by @maDU59 in https://github.com/tr7zw/EntityCulling/pull/362\n\n## New Contributors\n* @maDU59 made their first contribution in https://github.com/tr7zw/EntityCulling/pull/362\n\n**Full Changelog**: https://github.com/tr7zw/EntityCulling/compare/1.12.1...1.12.2"
+    },
+    "fabulously-optimized": {
+      "repo": "Fabulously-Optimized/fabulously-optimized",
+      "tag": "v14.1.2",
+      "name": "14.1.2 for 26.2",
+      "publishedAt": "2026-11-01",
+      "url": "https://github.com/Fabulously-Optimized/fabulously-optimized/releases/tag/v14.1.2",
+      "prerelease": false,
+      "changelog": "- Updated Entity Model Features, Entity Texture Features, Better Block Entities, Cubes Without Borders, Ixeris, Sodium Extra\n  - Skyboxify update skipped as that version was removed from Modrinth\n- Backported Crash Assistant config updates\n- Updated Fabric Loader to 0.20.1"
+    },
+    "ferritecore": {
+      "repo": "malte0811/FerriteCore",
+      "tag": "build-9.0.0",
+      "name": "build-9.0.0",
+      "publishedAt": "2026-03-24",
+      "url": "https://github.com/malte0811/FerriteCore/releases/tag/build-9.0.0",
+      "prerelease": false,
+      "changelog": "Build 9.0.0"
+    },
+    "iris": {
+      "repo": "IrisShaders/Iris",
+      "tag": "1.7.3+1.21",
+      "name": "Iris 1.7.3 for Minecraft 1.21",
+      "publishedAt": "2024-07-01",
+      "url": "https://github.com/IrisShaders/Iris/releases/tag/1.7.3%2B1.21",
+      "prerelease": false,
+      "changelog": "This release fixes a critical bug relating to name tag crashes, as well as a less critical bug related to the dragon death animation."
+    },
+    "landscapes-reimagined-genesis": {
+      "repo": "M0nkeyPr0grammer/Landscapes-Reimagined",
+      "tag": "Server-Pack",
+      "name": "Version 3.2 Server Pack",
+      "publishedAt": "2025-12-14",
+      "url": "https://github.com/Landscapes-Reimagined/Landscapes-Reimagined-Genesis/releases/tag/Server-Pack",
+      "prerelease": false,
+      "changelog": "**Landscapes Reimagined: Genesis – Server Pack v3.2.0**\n\nThis archive contains the complete dedicated server pack for *Landscapes Reimagined: Genesis* version **3.2.0**, including all required files to initialize and run a server.\n\n---\n\n**Server Startup Instructions**\n\n**Requirements**\n- **Java 17 (64-bit)**\n- **6 GB RAM minimum** (8 GB or more recommended)\n- Dedicated machine or VPS strongly recommended\n\n---\n\n**Setup Steps**\n1. Download and extract the server pack ZIP into a dedicated folder.\n2. Run `start.bat` (Windows) or `start.sh` (Linux/macOS) to generate initial server files.\n3. Open the generated `eula.txt` file and change: eula = false > true\n4. Save the file and run the start script again to launch the server.\n5. Allow the server to complete initial setup and world generation before connecting.\n\n---\n\n**Notes**\n- First startup may take several minutes while files and configurations are generated.\n- Do **not** interrupt the server during the initial launch.\n- Ensure your firewall or hosting provider allows traffic on the configured server port."
+    },
+    "modmenu": {
+      "repo": "TerraformersMC/ModMenu",
+      "tag": "v21.0.1",
+      "name": "v21.0.1 for 26.3",
+      "publishedAt": "2026-11-12",
+      "url": "https://github.com/TerraformersMC/ModMenu/releases/tag/v21.0.1",
+      "prerelease": false,
+      "changelog": "- Update Uzbek translations (uz_uz.json) to the new alphabet (thanks, itsbilolbek)\n- Reset ModMenu config when malformed (resolves #1079)\n- Allow opening contributor homepages, thanks LostLuma\n- Display more of long versions in compact mod list (thanks, Jab125)\n- Use root locale for NumberFormat (thanks, Jab125; resolves #893)"
+    },
+    "modrinth": {
+      "repo": "modrinth/code",
+      "tag": "v0.23.5",
+      "name": "Modrinth App 0.23.5",
+      "publishedAt": "2026-11-24",
+      "url": "https://github.com/modrinth/code/releases/tag/v0.23.5",
+      "prerelease": false,
+      "changelog": "Security\n\n- Modrinth App will now swap out Minecraft libraries on instance launch that don't match what is recorded by the metadata service.\n\nAdded\n\n- **Modrinth Hosting:** Added feature to automatically restart servers when crashing after starting.\n\nChanged\n\n- **Modrinth Hosting:** The \"Memory\" card now uses the more accurate Java heap memory number instead of container memory."
+    },
+    "skyblocker-modpack": {
+      "repo": "SkyblockerMod/Skyblocker-modpack",
+      "tag": "3.4.22",
+      "name": "3.4.22 for 1.21.1",
+      "publishedAt": "2024-10-25",
+      "url": "https://github.com/SkyblockerMod/Skyblocker-modpack/releases/tag/3.4.22",
+      "prerelease": false,
+      "changelog": "**Updated**\n- FerriteCore\n- ImmediatelyFast\n- YetAnotherConfigLib"
+    },
+    "sodium": {
+      "repo": "CaffeineMC/sodium",
+      "tag": "mc26.3-0.9.3",
+      "name": "Sodium 0.9.3 for Minecraft 26.3",
+      "publishedAt": "2026-11-21",
+      "url": "https://github.com/CaffeineMC/sodium/releases/tag/mc26.3-0.9.3",
+      "prerelease": false,
+      "changelog": "Sodium 0.9.3 adds the option to use spherical render distance and appropriate fog. Additionally, we've implemented a number of bug fixes and minor improvements. The release now includes constraints for NeoForge to prevent launching in broken configurations. Vanilla graphics options are now automatically imported from Vanilla to ensure that default values are up to date by construction. Some refactoring to improve compatibility has also caused breakage with some other mods, which we hope can be resolved soon or has already been resolved during beta testing.\n\n- Show macOS fullscreen menu visibility option on the Sodium options screen\n- Fix Fluid Culling For Non-Full Blocks With Unusual Shapes (#3916)\n- Use SDL message box instead of TFD (#3923)\n- Optimization for shelf mushroom models (#3927)\n- Fix compatibility with Neoforge 26.3.0.65-beta and remove platform-specific LevelExtractorMixin (#3948)\n- Source vanilla option defaults and ranges directly from vanilla options (#3947)\n- Allow rendering buffer debug outside F3 Debug Screen (#3943)\n- Make VideoSettingsScreen trigger onClose in keyPressed to fix interaction with Iris, for example (#3938)\n- Fix mixin members not being prefixed w"
+    }
+  },
+  "stars": {
+    "clegendary-launcher": {
+      "count": 13,
+      "platform": "github",
+      "url": "https://github.com/WER-CORE/CL-OpenSource"
+    },
+    "fluenlauncher": {
+      "count": 420,
+      "platform": "github",
+      "url": "https://github.com/Xcube-Studio/Natsurainko.FluentLauncher"
+    },
+    "gdlauncher": {
+      "count": 247,
+      "platform": "github",
+      "url": "https://github.com/gorilla-devs/GDLauncher-Carbon"
+    },
+    "gilealauncher": {
+      "count": 5,
+      "platform": "github",
+      "url": "https://github.com/TensaCraft/GileaLauncher"
+    },
+    "grubielauncher": {
+      "count": 15,
+      "platform": "github",
+      "url": "https://github.com/MOJI6416/grubielauncher"
+    },
+    "hmcl": {
+      "count": 11061,
+      "platform": "github",
+      "url": "https://github.com/HMCL-dev/HMCL"
+    },
+    "multimc": {
+      "count": 4705,
+      "platform": "github",
+      "url": "https://github.com/MultiMC/Launcher"
+    },
+    "paxlauncher": {
+      "count": 0,
+      "platform": "github",
+      "url": "https://github.com/Kryp-s/PaxLauncher"
+    },
+    "prismlauncher": {
+      "count": 11218,
+      "platform": "github",
+      "url": "https://github.com/PrismLauncher/PrismLauncher"
+    },
+    "xmcl": {
+      "count": 1720,
+      "platform": "github",
+      "url": "https://github.com/Voxelum/x-minecraft-launcher"
+    },
+    "aged": {
+      "count": 18,
+      "platform": "github",
+      "url": "https://github.com/xR4YM0ND/Aged"
+    },
+    "atm9": {
+      "count": 253,
+      "platform": "github",
+      "url": "https://github.com/AllTheMods/ATM-9"
+    },
+    "backroomsff": {
+      "count": 125,
+      "platform": "github",
+      "url": "https://github.com/SpacePotatoee/MinecraftFoundFootage"
+    },
+    "bbsmc": {
+      "count": 31,
+      "platform": "github",
+      "url": "https://github.com/bbsmc/app"
+    },
+    "cloth-config": {
+      "count": 263,
+      "platform": "github",
+      "url": "https://github.com/shedaniel/ClothConfig"
+    },
+    "entityculling": {
+      "count": 343,
+      "platform": "github",
+      "url": "https://github.com/tr7zw/EntityCulling"
+    },
+    "fabulously-optimized": {
+      "count": 1191,
+      "platform": "github",
+      "url": "https://github.com/Fabulously-Optimized/fabulously-optimized"
+    },
+    "ferritecore": {
+      "count": 417,
+      "platform": "github",
+      "url": "https://github.com/malte0811/FerriteCore"
+    },
+    "iris": {
+      "count": 3909,
+      "platform": "github",
+      "url": "https://github.com/IrisShaders/Iris"
+    },
+    "landscapes-reimagined-genesis": {
+      "count": 5,
+      "platform": "github",
+      "url": "https://github.com/M0nkeyPr0grammer/Landscapes-Reimagined"
+    },
+    "minecraft-stronghold-triangulator": {
+      "count": 17,
+      "platform": "github",
+      "url": "https://github.com/ens-gijs/minecraft-stronghold-locator"
+    },
+    "modmenu": {
+      "count": 689,
+      "platform": "github",
+      "url": "https://github.com/TerraformersMC/ModMenu"
+    },
+    "modrinth": {
+      "count": 2549,
+      "platform": "github",
+      "url": "https://github.com/modrinth/code"
+    },
+    "realisticcraft": {
+      "count": 11,
+      "platform": "github",
+      "url": "https://github.com/brynblack/RealisticCraft"
+    },
+    "skyblocker-modpack": {
+      "count": 4,
+      "platform": "github",
+      "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
+    },
+    "sodium": {
+      "count": 5859,
+      "platform": "github",
+      "url": "https://github.com/CaffeineMC/sodium"
+    }
+  }
+}

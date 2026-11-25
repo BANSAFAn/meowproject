@@ -137,59 +137,91 @@ const langList = Object.values(LANGUAGES);
       <div class="lightbox-frame news-modal-frame">
         <div class="news-modal-header">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[NEWS // GLOBAL ALPHA]</span>
-            <h3 style="margin: 0.2rem 0 0; font-size: 1.2rem; font-weight: 900;">{t.newsModalTitle}</h3>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[NEWS // MEOWLAB UPDATES]</span>
+            <h3 style="margin: 0.2rem 0 0; font-size: 1.28rem; font-weight: 900;">{t.newsModalTitle}</h3>
           </div>
-          <button type="button" id="roadmap-close" class="paper-btn" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">
+          <button type="button" id="roadmap-close" class="paper-btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
             {t.closeModal} [ESC]
           </button>
         </div>
 
-        <div class="roadmap-list">
-          <div class="roadmap-item">
-            <div class="roadmap-item-head">
-              <strong style="font-size: 1.02rem;">New 5-Year Domain &amp; GitLab Support!</strong>
-              <span class="stamp stamp-alpha">NEW // GITLAB &amp; DOMAIN</span>
+        <div class="news-editorial-body">
+          <!-- Featured Latest Update -->
+          <article class="news-hero-card">
+            <div class="news-hero-media">
+              <img src="/banner-domain-discord.jpg" alt="MeowLab — New Domain meowlab.fun & Discord Login" class="news-hero-img" loading="lazy" />
+              <span class="news-floating-badge mono">NEW // DOMAIN &amp; DISCORD</span>
             </div>
-            <img src="/banner-domain-gitlab.jpg" alt="MeowLab — New 5-Year Domain & GitLab" class="news-banner-img" loading="lazy" />
-            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
-              We opened a fundraiser for a new 5-year domain ($72 / 3 000 UAH, 35.5% raised) and launched full GitLab integration — you can now leave reviews and comments via both GitHub and GitLab!
-            </p>
+            <div class="news-hero-content">
+              <div class="news-meta-line mono">
+                <span>LATEST RELEASE</span>
+                <span>·</span>
+                <span>meowlab.fun</span>
+              </div>
+              <h4 class="news-hero-title">New Domain meowlab.fun Funded &amp; 1-Click Discord Login!</h4>
+              <p class="news-card-text">
+                Thanks to your community contributions, we gathered the funds for our new domain and officially launched <strong>meowlab.fun</strong>! We also added <strong>1-click Discord authentication</strong> so anyone can leave ratings and reviews without needing a GitHub, GitLab, or Codeberg account — alongside our new side-by-side project comparison tool and live GitHub release changelogs.
+              </p>
+              <div class="news-highlights-row">
+                <span class="news-highlight-chip">🌐 meowlab.fun Live</span>
+                <span class="news-highlight-chip">💬 1-Click Discord Reviews</span>
+                <span class="news-highlight-chip">⚖️ Project Compare &amp; ★ Stars</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Previous Updates Grid -->
+          <div class="news-archive-grid">
+            <article class="news-card">
+              <div class="news-card-media">
+                <img src="/banner-domain-gitlab.jpg" alt="MeowLab — New 5-Year Domain & GitLab" class="news-card-img" loading="lazy" />
+                <span class="news-card-badge mono">GITLAB &amp; DOMAIN</span>
+              </div>
+              <div class="news-card-body">
+                <h4 class="news-card-title">New Domain Goal &amp; GitLab Support!</h4>
+                <p class="news-card-text">
+                  We launched full GitLab &amp; Codeberg integration alongside our domain fundraiser — you can leave reviews and comments across multiple open platforms.
+                </p>
+              </div>
+            </article>
+
+            <article class="news-card">
+              <div class="news-card-media">
+                <img src="/banner-mobile.jpg" alt="MeowLab — NOW ON MOBILE!" class="news-card-img" loading="lazy" />
+                <span class="news-card-badge mono">MOBILE</span>
+              </div>
+              <div class="news-card-body">
+                <h4 class="news-card-title">MeowLab is now available on mobile!</h4>
+                <p class="news-card-text">
+                  We rolled out a full responsive mobile layout so you can browse launchers, mods, modpacks, and servers or read reviews directly from your phone or tablet.
+                </p>
+              </div>
+            </article>
+
+            <article class="news-card news-card-wide">
+              <div class="news-card-media">
+                <img src="/banner-alpha.jpg" alt="MeowProject Global Alpha" class="news-card-img" loading="lazy" />
+                <span class="news-card-badge mono">{t.newsAlphaBadge}</span>
+              </div>
+              <div class="news-card-body">
+                <h4 class="news-card-title">{t.newsAlphaTitle}</h4>
+                <p class="news-card-text">{t.newsAlphaDesc}</p>
+              </div>
+            </article>
           </div>
 
-          <div class="roadmap-item">
-            <div class="roadmap-item-head">
-              <strong style="font-size: 1.02rem;">MeowLab is now available on mobile!</strong>
-              <span class="stamp stamp-alpha">NEW // MOBILE</span>
-            </div>
-            <img src="/banner-mobile.jpg" alt="MeowLab — NOW ON MOBILE!" class="news-banner-img" loading="lazy" />
-            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
-              We removed the mobile restriction and rolled out a responsive layout for meowlab.pp.ua. You can now browse launchers, mods, modpacks, and servers, read reviews, and submit projects or reports directly from your phone or tablet.
-            </p>
-          </div>
-
-          <div class="roadmap-item">
-            <div class="roadmap-item-head">
-              <strong style="font-size: 1.02rem;">{t.newsAlphaTitle}</strong>
-              <span class="stamp stamp-alpha">{t.newsAlphaBadge}</span>
-            </div>
-            <img src="/banner-alpha.jpg" alt="MeowProject Global Alpha" class="news-banner-img" loading="lazy" />
-            <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;">
-              {t.newsAlphaDesc}
-            </p>
-          </div>
-
+          <!-- Roadmap Strip -->
           <div class="roadmap-subgrid">
             <div class="roadmap-item">
               <div class="roadmap-item-head" style="margin-bottom: 0;">
-                <strong style="font-size: 0.92rem;">{t.i10nRoadmap1Title}</strong>
+                <strong style="font-size: 0.9rem;">{t.i10nRoadmap1Title}</strong>
                 <span class="stamp stamp-open">{t.i10nRoadmap1Badge}</span>
               </div>
             </div>
 
             <div class="roadmap-item">
               <div class="roadmap-item-head" style="margin-bottom: 0;">
-                <strong style="font-size: 0.92rem;">{t.i10nRoadmap2Title}</strong>
+                <strong style="font-size: 0.9rem;">{t.i10nRoadmap2Title}</strong>
                 <span class="stamp stamp-amber">{t.i10nRoadmap2Badge}</span>
               </div>
             </div>
@@ -492,6 +524,165 @@ const langList = Object.values(LANGUAGES);
         </form>
       </div>
     </div>
+
+    <!-- Floating Compare Projects Button (Bottom-Left) -->
+    <button
+      type="button"
+      id="floating-compare-btn"
+      class="floating-compare-fab"
+      title={(t as any).compareFloatingTitle || 'Порівняти проєкти (2–5)'}
+      aria-label={(t as any).compareFloatingTitle || 'Порівняти проєкти (2–5)'}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+        <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+        <path d="M7 21h10" />
+        <path d="M12 3v18" />
+        <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+      </svg>
+      <span id="floating-compare-badge" class="floating-compare-badge" style="display:none;">0</span>
+    </button>
+
+    <!-- Compare Projects Modal (2 to 5 projects + Analysis + Table) -->
+    <div id="modal-compare" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-card compare-modal-box">
+        <div class="modal-head">
+          <div style="display:flex; align-items:center; gap:0.55rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+              <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+              <path d="M7 21h10" />
+              <path d="M12 3v18" />
+              <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+            </svg>
+            <h3 style="margin:0; font-size:1.05rem;">{(t as any).compareModalTitle || 'Порівняння та аналіз проєктів'}</h3>
+          </div>
+          <button type="button" class="modal-close" data-close-compare aria-label={t.closeModal}>✕</button>
+        </div>
+
+        <!-- Step 1: Select 2 to 5 projects -->
+        <div id="compare-step-select" class="compare-step-pane">
+          <p class="compare-hint-text">{(t as any).compareSelectHint || 'Оберіть від 2 до 5 проєктів для детального порівняння:'}</p>
+
+          <div class="compare-filter-bar">
+            <input
+              type="search"
+              id="compare-search-input"
+              class="suggest-form-input"
+              placeholder={(t as any).compareSearchPh || 'Пошук проєкту за назвою...'}
+            />
+            <div id="compare-cat-chips" class="compare-cat-chips"></div>
+          </div>
+
+          <div id="compare-projects-grid" class="compare-projects-grid"></div>
+
+          <div class="compare-footer-bar">
+            <div class="compare-count-pill mono">
+              <span id="compare-selected-count">0</span> / 5
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" id="compare-clear-btn" class="paper-btn">
+                {(t as any).compareClearBtn || 'Очистити'}
+              </button>
+              <button type="button" id="compare-run-btn" class="paper-btn paper-btn-accent" disabled>
+                ⚖️ {(t as any).compareRunBtn || 'Порівняти обрані'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Comparison Table & Automated Analysis -->
+        <div id="compare-step-result" class="compare-step-pane" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:0.6rem; margin-bottom:0.85rem; flex-wrap:wrap;">
+            <button type="button" id="compare-back-btn" class="paper-btn">
+              {(t as any).compareBackBtn || '← Змінити вибір'}
+            </button>
+          </div>
+          <div id="compare-analysis-banner" class="compare-analysis-banner"></div>
+          <div class="compare-table-scroll">
+            <table id="compare-result-table" class="compare-result-table"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discord 1-Click Review Modal (No GitHub/GitLab/Codeberg account needed) -->
+    <div id="discord-review-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-frame discord-review-modal-box">
+        <div class="discord-review-head">
+          <div>
+            <span class="mono" style="font-size: 0.72rem; color: #5865F2; font-weight: 800;">[DISCORD // 1-CLICK REVIEW]</span>
+            <h3 style="margin: 0.2rem 0 0 0; font-size: 1.12rem; font-weight: 900; color: var(--ink);">
+              {(t as any).drModalTitle || 'Відгук через Discord'} — <span id="dr-project-name" style="color: var(--accent);"></span>
+            </h3>
+          </div>
+          <button type="button" id="dr-modal-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
+            {t.closeModal} [ESC]
+          </button>
+        </div>
+
+        <p style="font-size: 0.87rem; line-height: 1.55; margin: 0 0 1rem 0; color: var(--ink-muted);">
+          {(t as any).drModalDesc || 'Акаунт GitHub, GitLab чи Codeberg не потрібен. Увійдіть в 1 клік через Discord — ваш відгук і оцінка автоматично з’являться у каталозі.'}
+        </p>
+
+        <form id="discord-review-form">
+          <input type="hidden" id="dr-project-slug" value="" />
+
+          <div class="suggest-form-field" style="margin-bottom: 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
+              <label for="dr-score-range" style="margin:0;">{(t as any).drScoreLabel || 'Ваша оцінка (0–100)'}</label>
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <input
+                  type="number"
+                  id="dr-score-num"
+                  class="suggest-form-input mono"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value="90"
+                  style="width: 72px; text-align: center; font-weight: 800; padding: 0.25rem 0.4rem;"
+                />
+                <span class="mono" style="font-size:0.82rem; color:var(--ink-muted);">/ 100</span>
+              </div>
+            </div>
+            <input type="range" id="dr-score-range" class="dr-score-slider" min="0" max="100" step="1" value="90" />
+          </div>
+
+          <div class="suggest-form-field" style="margin-bottom: 0.85rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+              <label for="dr-review-text" style="margin:0;">{(t as any).drTextLabel || 'Текст відгуку'}</label>
+              <span id="dr-char-counter" class="mono" style="font-size:0.75rem; color:var(--ink-muted);">0 / 1000</span>
+            </div>
+            <textarea
+              id="dr-review-text"
+              class="suggest-form-input"
+              rows="4"
+              minlength="3"
+              maxlength="1000"
+              required
+              placeholder={(t as any).drTextPlaceholder || 'Поділіться враженнями: стабільність, зручність, плюси чи мінуси...'}
+            ></textarea>
+          </div>
+
+          <div id="dr-error-box" class="dr-alert-box dr-alert-error" style="display:none;"></div>
+
+          <p class="dr-privacy-note">
+            🔒 {(t as any).drPrivacy || 'Ми запитуємо лише публічний нікнейм, аватар та ID Discord (1 акаунт = 1 відгук на проєкт). Сесії та паролі не зберігаються.'}
+          </p>
+
+          <div style="display:flex; justify-content:flex-end; gap:0.6rem; flex-wrap:wrap; margin-top: 0.9rem;">
+            <button type="submit" id="dr-submit-btn" class="paper-btn discord-submit-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.1 14.1 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029zM8.02 15.331c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.332-.946 2.418-2.157 2.418z" />
+              </svg>
+              <span id="dr-submit-label">{(t as any).drSubmit || 'Підтвердити через Discord'}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="dr-toast" class="dr-toast" role="status" aria-live="polite" style="display:none;"></div>
 
     <div id="floating-quick-dock" class="floating-quick-dock" aria-label={t.floatingDockTop}>
       <button type="button" id="dock-top-btn" class="floating-dock-btn" title={t.floatingDockTop}>
