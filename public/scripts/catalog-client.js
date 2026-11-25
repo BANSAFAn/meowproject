@@ -1710,9 +1710,10 @@
 
                           const rawComment = String(c.body || '');
                           const repoOwner = String(repo || 'BANSAFAn/meowproject').split('/')[0].toLowerCase();
+                          const trustedDiscordPosters = [repoOwner, 'banikikikikiai'];
                           let discordMeta = null;
                           const dm = rawComment.match(/<!--\s*meowlab-discord:([A-Za-z0-9_-]+)\s*-->/);
-                          if (dm && authorLogin === repoOwner) {
+                          if (dm && trustedDiscordPosters.includes(authorLogin)) {
                             try {
                               const parsed = JSON.parse(decodeB64UrlUtf8(dm[1]));
                               if (parsed && /^\d{15,22}$/.test(String(parsed.id || ''))) {

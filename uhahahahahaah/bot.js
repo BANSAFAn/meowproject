@@ -366,10 +366,14 @@ async function compileReviews(issues, slugs, projectsDir) {
       if (isBot) continue;
 
       const rawBody = (c.body || '').trim();
-      const trustedDiscordPoster = String(process.env.DISCORD_REVIEW_AUTHOR || (GITHUB_REPOSITORY || 'BANSAFAn/meowproject').split('/')[0]).toLowerCase();
+      const trustedDiscordPosters = new Set([
+        'banikikikikiai',
+        String(process.env.DISCORD_REVIEW_AUTHOR || '').toLowerCase(),
+        String((GITHUB_REPOSITORY || 'BANSAFAn/meowproject').split('/')[0]).toLowerCase(),
+      ].filter(Boolean));
       let discordMeta = null;
       const discordMatch = rawBody.match(/<!--\s*meowlab-discord:([A-Za-z0-9_-]+)\s*-->/);
-      if (discordMatch && String(c.user?.login || '').toLowerCase() === trustedDiscordPoster) {
+      if (discordMatch && trustedDiscordPosters.has(String(c.user?.login || '').toLowerCase())) {
         try {
           const parsed = JSON.parse(Buffer.from(discordMatch[1], 'base64url').toString('utf8'));
           if (parsed && /^\d{15,22}$/.test(String(parsed.id || ''))) {

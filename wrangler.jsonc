@@ -11,7 +11,8 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    "GITHUB_REPOSITORY": "BANSAFAn/meowproject"
+    "GITHUB_REPOSITORY": "BANSAFAn/meowproject",
+    "DISCORD_REVIEW_AUTHOR": "BanikikikikiAI"
   },
   // Secrets (set in Cloudflare dashboard, NEVER commit them):
   // DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, GITHUB_BOT_TOKEN, SESSION_SECRET
