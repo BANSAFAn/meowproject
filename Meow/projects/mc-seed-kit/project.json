@@ -1,0 +1,23 @@
+{
+  "slug": "mc-seed-kit",
+  "name": "MC Seed Kit",
+  "shortName": "MC Seed Kit",
+  "category": "website",
+  "icon": "/projects/mc-seed-kit/icon.svg",
+  "country": "Asia",
+  "developer": "Community",
+  "license": "Open Source",
+  "platforms": [
+    "Web / Browser"
+  ],
+  "website": "https://mcseedkit.com/",
+  "sourceLinks": [],
+  "issueThreadNumber": 100,
+  "issueSearchTerm": "MC Seed Kit",
+  "tags": [
+    "website",
+    "Web / Browser",
+    "Asia"
+  ],
+  "screenshots": []
+}

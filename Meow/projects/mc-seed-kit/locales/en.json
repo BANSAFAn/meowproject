@@ -1,0 +1,14 @@
+{
+  "tagline": "Slime chunk maps for Minecraft Java and Bedrock",
+  "description": "MC Seed Kit provides free browser-based tools for Minecraft worlds. Its Slime Chunk Finder maps slime chunks near a player's position for Java and Bedrock Edition, lists the nearest chunks with their block boundaries and distances, and lets players share a map link. Java Edition uses the world seed; Bedrock Edition only needs X and Z coordinates. Calculations run locally in the browser, with no installation or account required. Players can also check whether a base lies in a slime chunk and save a world locally on their device. MC Seed Kit is an independent fan project and is not affiliated with Mojang or Microsoft.",
+  "features": [
+    "Slime chunk maps for Minecraft Java and Bedrock",
+    "Nearest slime chunks with block boundaries and distances",
+    "Shareable map links with seed and coordinates",
+    "Client-side calculations; no installation or account required",
+    "Save a world locally in your browser"
+  ],
+  "screenshotCaptions": [
+    "—"
+  ]
+}
