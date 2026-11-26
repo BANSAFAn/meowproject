@@ -82,10 +82,10 @@ const langList = Object.values(LANGUAGES);
     </div>
 
         <div id="privacy-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+      <div class="lightbox-frame" style="max-width: 720px; max-height: 88vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // PRIVACY POLICY]</span>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // PRIVACY POLICY · 2026-11-26]</span>
             <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.privacyModalTitle}</h3>
           </div>
           <button type="button" id="privacy-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
@@ -98,7 +98,11 @@ const langList = Object.values(LANGUAGES);
             <p class="legal-clause-body">{t.privacyModalText}</p>
           </div>
           <div class="legal-clause-card">
-            <div class="legal-clause-head">02 // Cloudflare &amp; GitHub CDN</div>
+            <div class="legal-clause-head">{(t as any).privacyClause4Head || '02 // Discord 1-Click OAuth Reviews'}</div>
+            <p class="legal-clause-body">{(t as any).privacyClause4Body}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">03 // Cloudflare Workers, Assets &amp; CDN</div>
             <p class="legal-clause-body">{t.privacyClause2Body}</p>
           </div>
           <div class="legal-clause-card">
@@ -110,10 +114,10 @@ const langList = Object.values(LANGUAGES);
     </div>
 
         <div id="confidentiality-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+      <div class="lightbox-frame" style="max-width: 720px; max-height: 88vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // CONFIDENTIALITY]</span>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // CONFIDENTIALITY · 2026-11-26]</span>
             <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.confidentialityModalTitle || 'РЕГЛАМЕНТ КОНФІДЕНЦІЙНОСТІ'}</h3>
           </div>
           <button type="button" id="confidentiality-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
@@ -128,6 +132,10 @@ const langList = Object.values(LANGUAGES);
           <div class="legal-clause-card">
             <div class="legal-clause-head">{t.confClause2Head}</div>
             <p class="legal-clause-body">{t.confClause2Body}</p>
+          </div>
+          <div class="legal-clause-card">
+            <div class="legal-clause-head">{(t as any).confClause3Head || '03 // Оновлення та видалення Discord-відгуків'}</div>
+            <p class="legal-clause-body">{(t as any).confClause3Body}</p>
           </div>
         </div>
       </div>
@@ -288,10 +296,10 @@ const langList = Object.values(LANGUAGES);
     </div>
 
         <div id="terms-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="lightbox-frame" style="max-width: 660px; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
+      <div class="lightbox-frame" style="max-width: 720px; max-height: 88vh; overflow-y: auto; padding: 1.5rem; background: var(--paper-sheet); border: 2px solid var(--border-ink); box-shadow: 6px 6px 0 var(--border-ink);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 2px solid var(--border-ink); padding-bottom: 0.75rem;">
           <div>
-            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // TERMS OF USE]</span>
+            <span class="mono" style="font-size: 0.72rem; color: var(--accent); font-weight: 900;">[LEGAL // TERMS OF USE · 2026-11-26]</span>
             <h3 style="margin: 0.2rem 0 0; font-size: 1.15rem; font-weight: 900;">{t.termsModalTitle}</h3>
           </div>
           <button type="button" id="terms-close" class="paper-btn" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">
