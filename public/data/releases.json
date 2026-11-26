@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T20:59:04.610Z",
+  "updatedAt": "2026-11-26T03:24:52.298Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -200,7 +200,7 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11062,
+      "count": 11066,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
@@ -215,12 +215,12 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11219,
+      "count": 11224,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
     "xmcl": {
-      "count": 1721,
+      "count": 1723,
       "platform": "github",
       "url": "https://github.com/Voxelum/x-minecraft-launcher"
     },
@@ -280,7 +280,7 @@
       "url": "https://github.com/ens-gijs/minecraft-stronghold-locator"
     },
     "modmenu": {
-      "count": 689,
+      "count": 690,
       "platform": "github",
       "url": "https://github.com/TerraformersMC/ModMenu"
     },
@@ -300,7 +300,7 @@
       "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
     },
     "sodium": {
-      "count": 5858,
+      "count": 5859,
       "platform": "github",
       "url": "https://github.com/CaffeineMC/sodium"
     }
