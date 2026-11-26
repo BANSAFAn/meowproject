@@ -10,6 +10,11 @@
   "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
   "latestVideos": [
     {
+      "id": "wdUvzeElcHw",
+      "title": "Чому Legacy Launcher НЕ можна вірити?",
+      "published": "2026-11-26"
+    },
+    {
       "id": "5j4bOXms4mo",
       "title": "TLauncher без вірусів! Але чому він небезпечний?",
       "published": "2026-11-20"
@@ -18,11 +23,6 @@
       "id": "He-mSCzRgg4",
       "title": "Millida Launcher - новий TLauncher ? Розбір коду і слід РФ ?",
       "published": "2026-11-10"
-    },
-    {
-      "id": "vVlS3KgxuEs",
-      "title": "З російського Minecraft на український ! НАВІЩО?",
-      "published": "2026-10-30"
     }
   ],
   "country": "UA",
