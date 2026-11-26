@@ -143,8 +143,17 @@ function reviewAuthor(env) {
   return String(env.DISCORD_REVIEW_AUTHOR || (env.GITHUB_REPOSITORY || 'BANSAFAn/meowproject').split('/')[0]).toLowerCase();
 }
 
+function trimSecret(v) {
+  return String(v || '').trim();
+}
+
 function hasConfig(env) {
-  return Boolean(env.DISCORD_CLIENT_ID && env.DISCORD_CLIENT_SECRET && env.GITHUB_BOT_TOKEN && env.SESSION_SECRET);
+  return Boolean(
+    trimSecret(env.DISCORD_CLIENT_ID) &&
+    trimSecret(env.DISCORD_CLIENT_SECRET) &&
+    trimSecret(env.GITHUB_BOT_TOKEN) &&
+    trimSecret(env.SESSION_SECRET)
+  );
 }
 
 async function loadReviewsIndex(env, origin) {
@@ -158,12 +167,12 @@ async function loadReviewsIndex(env, origin) {
 }
 
 async function githubApi(env, path, init = {}) {
-  const repo = env.GITHUB_REPOSITORY || 'BANSAFAn/meowproject';
+  const repo = trimSecret(env.GITHUB_REPOSITORY) || 'BANSAFAn/meowproject';
   const res = await fetch(`https://api.github.com/repos/${repo}${path}`, {
     ...init,
     headers: {
       Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${env.GITHUB_BOT_TOKEN}`,
+      Authorization: `Bearer ${trimSecret(env.GITHUB_BOT_TOKEN)}`,
       'User-Agent': 'MeowLab-Review-Worker',
       'X-GitHub-Api-Version': '2022-11-28',
       ...(init.body ? { 'Content-Type': 'application/json' } : {}),
@@ -215,10 +224,10 @@ async function handleStart(request, env, url) {
     n: nonce,
     e: Date.now() + DRAFT_TTL_SEC * 1000,
   }));
-  const cookieValue = `${payload}.${await sign(env.SESSION_SECRET, payload)}`;
+  const cookieValue = `${payload}.${await sign(trimSecret(env.SESSION_SECRET), payload)}`;
 
   const authUrl = new URL('https://discord.com/oauth2/authorize');
-  authUrl.searchParams.set('client_id', env.DISCORD_CLIENT_ID);
+  authUrl.searchParams.set('client_id', trimSecret(env.DISCORD_CLIENT_ID));
   authUrl.searchParams.set('response_type', 'code');
   authUrl.searchParams.set('scope', 'identify');
   authUrl.searchParams.set('redirect_uri', `${url.origin}/api/auth/discord/callback`);
@@ -240,7 +249,7 @@ async function handleCallback(request, env, url) {
   if (!raw || !raw.includes('.')) return redirect(withResult('/', 'error', 'expired'), true);
 
   const [payload, signature] = raw.split('.');
-  if (!(await verify(env.SESSION_SECRET, payload, signature))) {
+  if (!(await verify(trimSecret(env.SESSION_SECRET), payload, signature))) {
     return redirect(withResult('/', 'error', 'bad_signature'), true);
   }
 
@@ -266,20 +275,20 @@ async function handleCallback(request, env, url) {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      client_id: env.DISCORD_CLIENT_ID,
-      client_secret: env.DISCORD_CLIENT_SECRET,
+      client_id: trimSecret(env.DISCORD_CLIENT_ID),
+      client_secret: trimSecret(env.DISCORD_CLIENT_SECRET),
       grant_type: 'authorization_code',
       code,
       redirect_uri: `${url.origin}/api/auth/discord/callback`,
     }),
   });
-  if (!tokenRes.ok) return redirect(withResult(back, 'error', 'discord_token'), true);
+  if (!tokenRes.ok) return redirect(withResult(back, 'error', `discord_token_${tokenRes.status}`), true);
   const token = await tokenRes.json();
 
   const userRes = await fetch('https://discord.com/api/users/@me', {
     headers: { Authorization: `Bearer ${token.access_token}` },
   });
-  if (!userRes.ok) return redirect(withResult(back, 'error', 'discord_user'), true);
+  if (!userRes.ok) return redirect(withResult(back, 'error', `discord_user_${userRes.status}`), true);
   const user = await userRes.json();
 
   // Revoke the token right away — we only needed it once.
@@ -288,8 +297,8 @@ async function handleCallback(request, env, url) {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        client_id: env.DISCORD_CLIENT_ID,
-        client_secret: env.DISCORD_CLIENT_SECRET,
+        client_id: trimSecret(env.DISCORD_CLIENT_ID),
+        client_secret: trimSecret(env.DISCORD_CLIENT_SECRET),
         token: token.access_token,
       }),
     });
@@ -341,16 +350,32 @@ async function handleCallback(request, env, url) {
     ? await githubApi(env, `/issues/comments/${existingId}`, { method: 'PATCH', body: JSON.stringify({ body: commentBody }) })
     : await githubApi(env, `/issues/${issueNumber}/comments`, { method: 'POST', body: JSON.stringify({ body: commentBody }) });
 
-  if (!result.ok) return redirect(withResult(back, 'error', 'github'), true);
+  if (!result.ok) return redirect(withResult(back, 'error', `github_${result.status}`), true);
   return redirect(withResult(back, existingId ? 'updated' : 'ok'), true);
 }
 
 // ---------------------------------------------------------------------------
 // Router
 // ---------------------------------------------------------------------------
+const CANONICAL_HOST = 'meowlab.fun';
+const REDIRECT_HOSTS = new Set(['meowlab.pp.ua', 'www.meowlab.pp.ua', 'www.meowlab.fun']);
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // 301 Permanent Redirect from legacy/www domains to canonical meowlab.fun
+    // (Skip OAuth callback so in-flight Discord logins never break)
+    if (REDIRECT_HOSTS.has(url.hostname.toLowerCase()) && !url.pathname.startsWith('/api/')) {
+      const target = `https://${CANONICAL_HOST}${url.pathname}${url.search}`;
+      return new Response(null, {
+        status: 301,
+        headers: {
+          Location: target,
+          'Cache-Control': 'public, max-age=86400',
+        },
+      });
+    }
 
     if (url.pathname === '/api/review/start') {
       try { return await handleStart(request, env, url); }

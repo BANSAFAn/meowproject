@@ -12,7 +12,8 @@ export const GET: APIRoute = ({ site, url }) => {
       `<xhtml:link rel="alternate" hreflang="x-default" href="${origin}${pathSuffix}" />`,
       ...langs.map((l) => {
         const href = l === 'uk' ? `${origin}${pathSuffix}` : `${origin}/${l}${pathSuffix}`;
-        return `<xhtml:link rel="alternate" hreflang="${l}" href="${href}" />`;
+        const hreflang = l === 'mo' ? 'ro-MD' : l;
+        return `<xhtml:link rel="alternate" hreflang="${hreflang}" href="${href}" />`;
       }),
     ].join('\n    ');
 

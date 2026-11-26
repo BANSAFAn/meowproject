@@ -2951,7 +2951,8 @@
             if (code === 'text_short') return discordStrings.drErrShort || 'Review text is too short (minimum 3 characters).';
             if (code === 'no_issue') return discordStrings.drErrNoIssue || 'Review thread not found for this project yet.';
             if (code === 'not_configured') return discordStrings.drErrDisabled || 'Discord reviews are not configured on this server yet.';
-            return discordStrings.drErrGeneric || 'Could not publish review. Please try again.';
+            const base = discordStrings.drErrGeneric || 'Could not publish review. Please try again.';
+            return code ? `${base} [${code}]` : base;
           }
 
           // Check OAuth callback result in URL (?mlreview=ok|updated|error&mlcode=...)
@@ -2965,6 +2966,7 @@
               } else if (res === 'updated') {
                 showToast('✅ ' + (discordStrings.drUpdated || 'Ваш відгук та оцінку оновлено!'), true);
               } else {
+                if (code) console.warn('[MeowLab Discord Review] error:', code);
                 showToast('⚠️ ' + errorMsgForCode(code), false);
               }
               url.searchParams.delete('mlreview');

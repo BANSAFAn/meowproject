@@ -15,6 +15,7 @@ interface Props {
   categoryLabel?: string;
   projects: ProjectEntry[];
   reviewsData: any;
+  releasesData?: any;
   heroTitle: string;
   siteRepoUrl: string;
   youtubeJoinUrl: string;
@@ -32,6 +33,7 @@ const {
   categoryLabel,
   projects,
   reviewsData,
+  releasesData,
   heroTitle,
   siteRepoUrl,
   youtubeJoinUrl,
@@ -39,6 +41,7 @@ const {
 
 const currentLangMeta = LANGUAGES[lang];
 const allLangList = Object.values(LANGUAGES);
+const toHreflang = (code: string) => (code === 'mo' ? 'ro-MD' : code);
 
 function localizedPathFor(targetLang: LangCode): string {
   const prefix = targetLang === 'uk' ? '' : `/${targetLang}`;
@@ -47,7 +50,7 @@ function localizedPathFor(targetLang: LangCode): string {
   return targetLang === 'uk' ? '/' : `/${targetLang}/`;
 }
 
-const defaultOgImage = `${siteOrigin}/banner-alpha.jpg`;
+const defaultOgImage = `${siteOrigin}/banner-domain-discord.jpg`;
 let ogImage = defaultOgImage;
 if (selectedProject) {
   if (selectedProject.banner) {
@@ -130,6 +133,7 @@ const mainEntityList = !selectedProject
         };
       }
 
+      const rel = releasesData?.releases?.[selectedProject.slug];
       return {
         '@type': 'SoftwareApplication',
         name: selectedProject.name,
@@ -139,6 +143,12 @@ const mainEntityList = !selectedProject
         image: ogImage,
         description: selectedProject.locales[lang]?.description || selectedProject.locales[lang]?.tagline || selectedProject.name,
         license: selectedProject.license,
+        ...(rel?.tag ? { softwareVersion: rel.tag } : {}),
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
         ...ratingBlock,
       };
     })();
@@ -150,9 +160,9 @@ const jsonLdSchema = {
       '@type': 'WebSite',
       '@id': `${siteOrigin}/#website`,
       name: 'MeowLab — MeowProject',
-      alternateName: ['MeowLab', 'meowlab', 'meowl', 'meowlabs', 'meowlab.pp.ua', 'baneronetwo', 'MeowProject'],
+      alternateName: ['MeowLab', 'meowlab', 'meowlab.fun', 'meowl', 'meowlabs', 'meowlab.pp.ua', 'baneronetwo', 'MeowProject'],
       url: `${siteOrigin}/`,
-      inLanguage: lang,
+      inLanguage: toHreflang(lang),
       description: pageDescription,
       potentialAction: {
         '@type': 'SearchAction',
@@ -172,9 +182,9 @@ const jsonLdSchema = {
       '@type': 'Organization',
       '@id': `${siteOrigin}/#organization`,
       name: 'MeowLab',
-      alternateName: ['meowlab', 'meowl', 'meowlabs', 'MeowProject', 'meowlab.pp.ua'],
+      alternateName: ['meowlab', 'meowlab.fun', 'meowl', 'meowlabs', 'MeowProject', 'meowlab.pp.ua'],
       url: `${siteOrigin}/`,
-      logo: `${siteOrigin}/favicon.svg`,
+      logo: `${siteOrigin}/apple-touch-icon.png`,
       founder: { '@id': `${siteOrigin}/#author` },
       sameAs: [siteRepoUrl, youtubeJoinUrl, 'https://gitlab.com/banernotfake/meowproject', 'https://codeberg.org/Baneronetwo/meowlab'],
     },
@@ -205,7 +215,7 @@ const jsonLdSchema = {
   allLangList.map((l) => (
     <link
       rel="alternate"
-      hreflang={l.code}
+      hreflang={toHreflang(l.code)}
       href={`${siteOrigin}${localizedPathFor(l.code)}`}
     />
   ))
@@ -223,6 +233,13 @@ const jsonLdSchema = {
     .map((l) => <meta property="og:locale:alternate" content={l.ogLocale} />)
 }
 <meta property="og:image" content={ogImage} />
+{ogImage === defaultOgImage && (
+  <>
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="900" />
+  </>
+)}
+<meta property="og:image:alt" content={seoPageTitle} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={seoPageTitle} />
 <meta name="twitter:description" content={pageDescription} />

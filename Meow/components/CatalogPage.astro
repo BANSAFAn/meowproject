@@ -437,7 +437,8 @@ const clientConfig = {
       content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://gitlab.com https://codeberg.org https://secure.gravatar.com https://www.gravatar.com https://api.mcstatus.io https://i.ytimg.com https://yt3.googleusercontent.com https://cdn.discordapp.com data:; connect-src 'self' https://api.github.com https://gitlab.com https://codeberg.org https://img.shields.io https://api.mcstatus.io https://cloudflareinsights.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests;"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <SeoHead
@@ -452,6 +453,7 @@ const clientConfig = {
       categoryLabel={seoCategoryLabel}
       projects={PROJECTS}
       reviewsData={reviewsData}
+      releasesData={releasesData}
       heroTitle={t.heroTitle}
       siteRepoUrl={SITE_REPO_URL}
       youtubeJoinUrl={YOUTUBE_JOIN_URL}
