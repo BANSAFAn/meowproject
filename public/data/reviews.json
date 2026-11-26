@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T16:40:25.164Z",
+  "updatedAt": "2026-11-26T20:16:01.086Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -535,6 +535,14 @@
     "legacy-launcher": {
       "issueNumber": 51,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/51",
+      "averageRating": null,
+      "totalRatings": 0,
+      "commentsCount": 0,
+      "reviews": []
+    },
+    "mc-seed-kit": {
+      "issueNumber": 102,
+      "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/102",
       "averageRating": null,
       "totalRatings": 0,
       "commentsCount": 0,
