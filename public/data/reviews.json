@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T11:27:18.566Z",
+  "updatedAt": "2026-11-26T11:29:15.550Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -494,10 +494,22 @@
     "labymod": {
       "issueNumber": 50,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/50",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 1,
+      "averageRating": 91,
+      "totalRatings": 1,
+      "commentsCount": 2,
       "reviews": [
+        {
+          "id": 7190782569,
+          "source": "discord",
+          "author": "Asina",
+          "avatar": "https://cdn.discordapp.com/avatars/614392313325551618/198d2eb2e3656c0292775d91046dacd3.png?size=64",
+          "date": "2026-11-26",
+          "body": "Чудовий в них api, але сам клієнт ну так норм",
+          "score": 91,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/50#issuecomment-7190782569",
+          "issueNum": 50
+        },
         {
           "id": "gl-4279411930",
           "source": "gitlab",
