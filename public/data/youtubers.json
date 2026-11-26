@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T12:57:55.823Z",
+  "updatedAt": "2026-11-26T22:07:57.338Z",
   "channels": {
     "yt-baneronetwo": {
       "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
@@ -10,6 +10,11 @@
       "liveTitle": null,
       "latestVideos": [
         {
+          "id": "wdUvzeElcHw",
+          "title": "Чому Legacy Launcher НЕ можна вірити?",
+          "published": "2026-11-26"
+        },
+        {
           "id": "5j4bOXms4mo",
           "title": "TLauncher без вірусів! Але чому він небезпечний?",
           "published": "2026-11-20"
@@ -18,18 +23,13 @@
           "id": "He-mSCzRgg4",
           "title": "Millida Launcher - новий TLauncher ? Розбір коду і слід РФ ?",
           "published": "2026-11-10"
-        },
-        {
-          "id": "vVlS3KgxuEs",
-          "title": "З російського Minecraft на український ! НАВІЩО?",
-          "published": "2026-10-30"
         }
       ]
     },
     "yt-yazefa": {
       "youtubeChannelId": "UCY8fABRHgVZJTqg0WkFhPPQ",
       "banner": "/projects/yt-yazefa/banner.jpg",
-      "subscribers": "5.62K",
+      "subscribers": "5.63K",
       "isLive": false,
       "liveVideoId": null,
       "liveTitle": null,
@@ -85,6 +85,11 @@
       "liveTitle": null,
       "latestVideos": [
         {
+          "id": "QWPzZ0YNUpg",
+          "title": "Вижив у СВІТІ ЯКИЙ ГЕНЕРУЄТЬСЯ ВІД МОЇХ КРОКІВ",
+          "published": "2026-11-26"
+        },
+        {
           "id": "zeqFr8ANvE8",
           "title": "майнкрафт АЛЕ, я ВЧУ ПОЛЬСКУ",
           "published": "2026-11-24"
@@ -93,11 +98,6 @@
           "id": "PLP5mpfYG58",
           "title": "Вижив У ЗАКРИТОМУ ХОРРОР КОЛІ в Майнкрафт",
           "published": "2026-11-21"
-        },
-        {
-          "id": "EW1gnBxfqSE",
-          "title": "100 Днів у ЗАКРИТОМУ КОЛІ в МАЙНКРАФТ ХАРДКОР Українською",
-          "published": "2026-11-12"
         }
       ]
     },
@@ -129,7 +129,7 @@
     "yt-retkon18": {
       "youtubeChannelId": "UC8j8i5D78msRBXL076BuKYw",
       "banner": "/projects/yt-retkon18/banner.jpg",
-      "subscribers": "6.42K",
+      "subscribers": "6.43K",
       "isLive": false,
       "liveVideoId": null,
       "liveTitle": null,

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T12:58:16.015Z",
+  "updatedAt": "2026-11-26T22:08:14.115Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -200,7 +200,7 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11072,
+      "count": 11076,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
@@ -215,7 +215,7 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11226,
+      "count": 11230,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
@@ -255,7 +255,7 @@
       "url": "https://github.com/tr7zw/EntityCulling"
     },
     "fabulously-optimized": {
-      "count": 1191,
+      "count": 1190,
       "platform": "github",
       "url": "https://github.com/Fabulously-Optimized/fabulously-optimized"
     },
