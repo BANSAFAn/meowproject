@@ -1,3 +1,6 @@
 [submodule "i10n"]
 	path = i10n
 	url = https://github.com/BANSAFAn/i10n-meowlab-.git
+[submodule "i10n-downloadform"]
+	path = i10n-downloadform
+	url = https://github.com/BANSAFAn/i10n-downloadform.git
