@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T11:21:38.507Z",
+  "updatedAt": "2026-11-26T11:27:18.566Z",
   "projects": {
     "xmcl": {
       "issueNumber": 11,
@@ -425,10 +425,23 @@
     "gilealauncher": {
       "issueNumber": 32,
       "issueUrl": "https://github.com/BANSAFAn/meowproject/issues/32",
-      "averageRating": null,
-      "totalRatings": 0,
-      "commentsCount": 0,
-      "reviews": []
+      "averageRating": 67,
+      "totalRatings": 1,
+      "commentsCount": 1,
+      "reviews": [
+        {
+          "id": 7190744130,
+          "source": "discord",
+          "author": "Asina",
+          "avatar": "https://cdn.discordapp.com/avatars/614392313325551618/198d2eb2e3656c0292775d91046dacd3.png?size=64",
+          "date": "2026-11-26",
+          "body": "Багато треба його зробити",
+          "score": 67,
+          "reactions": {},
+          "url": "https://github.com/BANSAFAn/meowproject/issues/32#issuecomment-7190744130",
+          "issueNum": 32
+        }
+      ]
     },
     "gommehd": {
       "issueNumber": 20,
