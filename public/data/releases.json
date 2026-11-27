@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T13:52:19.750Z",
+  "updatedAt": "2026-11-27T22:26:32.263Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -200,12 +200,12 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11081,
+      "count": 11085,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
     "multimc": {
-      "count": 4703,
+      "count": 4705,
       "platform": "github",
       "url": "https://github.com/MultiMC/Launcher"
     },
@@ -215,12 +215,12 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11233,
+      "count": 11239,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
     "xmcl": {
-      "count": 1726,
+      "count": 1724,
       "platform": "github",
       "url": "https://github.com/Voxelum/x-minecraft-launcher"
     },
@@ -285,7 +285,7 @@
       "url": "https://github.com/TerraformersMC/ModMenu"
     },
     "modrinth": {
-      "count": 2552,
+      "count": 2553,
       "platform": "github",
       "url": "https://github.com/modrinth/code"
     },
