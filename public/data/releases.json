@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T22:08:14.115Z",
+  "updatedAt": "2026-11-27T04:12:59.886Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -200,12 +200,12 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11076,
+      "count": 11078,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
     "multimc": {
-      "count": 4704,
+      "count": 4703,
       "platform": "github",
       "url": "https://github.com/MultiMC/Launcher"
     },
@@ -215,7 +215,7 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11230,
+      "count": 11231,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
@@ -245,7 +245,7 @@
       "url": "https://github.com/bbsmc/app"
     },
     "cloth-config": {
-      "count": 263,
+      "count": 262,
       "platform": "github",
       "url": "https://github.com/shedaniel/ClothConfig"
     },
@@ -265,7 +265,7 @@
       "url": "https://github.com/malte0811/FerriteCore"
     },
     "iris": {
-      "count": 3909,
+      "count": 3908,
       "platform": "github",
       "url": "https://github.com/IrisShaders/Iris"
     },
