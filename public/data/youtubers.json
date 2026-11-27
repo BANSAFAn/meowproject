@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T22:07:57.338Z",
+  "updatedAt": "2026-11-27T13:52:03.527Z",
   "channels": {
     "yt-baneronetwo": {
       "youtubeChannelId": "UCUdk5CZfmvSIu9wmI-gx2wQ",
@@ -12,7 +12,7 @@
         {
           "id": "wdUvzeElcHw",
           "title": "Чому Legacy Launcher НЕ можна вірити?",
-          "published": "2026-11-26"
+          "published": "2026-11-27"
         },
         {
           "id": "5j4bOXms4mo",
@@ -185,6 +185,11 @@
       "liveTitle": null,
       "latestVideos": [
         {
+          "id": "qyRle4XCv-M",
+          "title": "🇺🇦 МИ СТАЛИ РИБАМИ В МАЙНКРАФТІ! БАКІ І МІКА",
+          "published": "2026-11-27"
+        },
+        {
           "id": "veSgWPAahWk",
           "title": "🇺🇦 Я ЗАТРОЛИВ МІКУ БУДИНКОМ У РЮКЗАКУ В МАЙНКРАФТІ! БАКІ І МІКА",
           "published": "2026-11-25"
@@ -193,11 +198,6 @@
           "id": "tpssSqo7ywU",
           "title": "🇺🇦 МИ ЗБУДУВАЛИ БУНКЕР УСЕРЕДИНІ СОБАКИ ПРОТИ КИСЛОТНОГО ДОЩУ В МАЙНКРАФТІ! БАКІ І МІКА",
           "published": "2026-11-23"
-        },
-        {
-          "id": "CjBPOVYJ8Go",
-          "title": "🇺🇦 МАЙНКРАФТ АЛЕ ОБЕРИ ПРАВИЛЬНУ ЧИПСУ ЩОБ ВИЖИТИ! БАКІ І МІКА",
-          "published": "2026-11-21"
         }
       ]
     },
