@@ -1,11 +1,11 @@
 {
-  "tagline": "Własnościowy launcher Minecraft (dawniej TL Legacy), pochodzenie: Rosja",
-  "description": "Legacy Launcher (dawniej TL Legacy) to własnościowy launcher Minecraft pochodzenia rosyjskiego. Obsługuje wersje vanilla oraz modowane (Forge, Fabric, NeoForge, OptiFine), a także konta Microsoft, Ely.by i tryb offline. NIE jest to oprogramowanie open-source ani wolne: brak otwartego kodu źródłowego, a udostępniane archiwum zip jest własnościowe.",
+  "tagline": "Własnościowy launcher Minecraft (dawniej TL Legacy, Rosja) — oznaczony jako NIEBEZPIECZNY",
+  "description": "Legacy Launcher (dawniej TL Legacy) to własnościowy launcher Minecraft o zamkniętym kodzie źródłowym pochodzenia rosyjskiego. NIE jest to wolne ani otwarte oprogramowanie i został oznaczony jako NIEBEZPIECZNY ze względu na udokumentowane zagrożenia bezpieczeństwa.",
   "features": [
     "Obsługa wersji vanilla, Forge, Fabric, NeoForge i OptiFine",
     "Zarządzanie kontami Microsoft, Ely.by i profilami offline",
-    "Lekki interfejs bez zbędnych dodatków",
-    "Oprogramowanie własnościowe (brak wolnego/otwartego kodu; archiwum zip nie jest wolne; pochodzenie: Rosja)"
+    "Zamknięte oprogramowanie własnościowe (pochodzenie: Rosja)",
+    "Oznaczony jako NIEBEZPIECZNY — zobacz materiał wideo w karcie projektu"
   ],
   "screenshotCaptions": []
 }

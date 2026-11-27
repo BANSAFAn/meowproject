@@ -27,10 +27,12 @@ export interface ProjectSourceLink {
 export interface ProjectDangerReport {
   summary?: string;
   reasonType?: string;
-  reason: string;
+  reason?: string;
+  evidenceMarkdown?: string;
   evidenceLinks?: string[];
   reportedAt?: string;
   issueNumber?: number;
+  reportedBy?: string;
 }
 
 export interface ProjectMeta {

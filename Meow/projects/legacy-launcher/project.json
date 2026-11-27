@@ -17,12 +17,24 @@
     "Linux"
   ],
   "sourceLinks": [],
+  "dangerReport": {
+    "reportedAt": "2026-11-27",
+    "reasonType": "malware",
+    "summary": "Небезпечний пропрієтарний лаунчер (РФ, раніше TL Legacy) із закритим кодом та зафіксованими доказами ризиків безпеки.",
+    "reason": "### Попередження безпеки\n\nПроєкт **Legacy Launcher** (колишній **TL Legacy**) позначено як **НЕБЕЗПЕЧНИЙ** через закритий пропрієтарний код, походження з РФ та зафіксовані ризики безпеки.\n\n- Відео-розбір та докази: https://youtu.be/wdUvzeElcHw?si=UCSxDFz_R4_cj2Ql\n\nРекомендуємо не встановлювати цей лаунчер і користуватися перевіреними відкритими альтернативами (наприклад, **Prism Launcher**, **XMCL** або **HMCL**).",
+    "evidenceMarkdown": "### Попередження безпеки\n\nПроєкт **Legacy Launcher** (колишній **TL Legacy**) позначено як **НЕБЕЗПЕЧНИЙ** через закритий пропрієтарний код, походження з РФ та зафіксовані ризики безпеки.\n\n- Відео-розбір та докази: https://youtu.be/wdUvzeElcHw?si=UCSxDFz_R4_cj2Ql\n\nРекомендуємо не встановлювати цей лаунчер і користуватися перевіреними відкритими альтернативами (наприклад, **Prism Launcher**, **XMCL** або **HMCL**).",
+    "evidenceLinks": [
+      "https://youtu.be/wdUvzeElcHw?si=UCSxDFz_R4_cj2Ql"
+    ],
+    "issueNumber": 0,
+    "reportedBy": "BANSAFAn"
+  },
   "tags": [
     "Minecraft Launcher",
     "Proprietary",
-    "Russia",
-    "Mods",
-    "Skins"
+    "Danger",
+    "Virus Warning",
+    "Russia"
   ],
   "screenshots": [],
   "issueThreadNumber": 51
