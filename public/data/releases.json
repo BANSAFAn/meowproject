@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T22:26:32.263Z",
+  "updatedAt": "2026-11-28T04:04:24.571Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -200,7 +200,7 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11085,
+      "count": 11087,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
@@ -215,12 +215,12 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11239,
+      "count": 11241,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
     "xmcl": {
-      "count": 1724,
+      "count": 1725,
       "platform": "github",
       "url": "https://github.com/Voxelum/x-minecraft-launcher"
     },
@@ -235,7 +235,7 @@
       "url": "https://github.com/AllTheMods/ATM-9"
     },
     "backroomsff": {
-      "count": 125,
+      "count": 126,
       "platform": "github",
       "url": "https://github.com/SpacePotatoee/MinecraftFoundFootage"
     },
@@ -285,7 +285,7 @@
       "url": "https://github.com/TerraformersMC/ModMenu"
     },
     "modrinth": {
-      "count": 2553,
+      "count": 2554,
       "platform": "github",
       "url": "https://github.com/modrinth/code"
     },
@@ -300,7 +300,7 @@
       "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
     },
     "sodium": {
-      "count": 5864,
+      "count": 5866,
       "platform": "github",
       "url": "https://github.com/CaffeineMC/sodium"
     }
