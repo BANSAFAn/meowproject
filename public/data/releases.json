@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-28T04:04:24.571Z",
+  "updatedAt": "2026-11-28T12:56:20.564Z",
   "releases": {
     "fluenlauncher": {
       "repo": "Xcube-Studio/Natsurainko.FluentLauncher",
@@ -66,12 +66,12 @@
     },
     "xmcl": {
       "repo": "Voxelum/x-minecraft-launcher",
-      "tag": "v0.73.1",
-      "name": "v0.73.1",
-      "publishedAt": "2026-11-03",
-      "url": "https://github.com/Voxelum/x-minecraft-launcher/releases/tag/v0.73.1",
+      "tag": "v0.74.0",
+      "name": "v0.74.0",
+      "publishedAt": "2026-11-28",
+      "url": "https://github.com/Voxelum/x-minecraft-launcher/releases/tag/v0.74.0",
       "prerelease": false,
-      "changelog": "## 0.73.1\n### 🐛 Bug Fixes & Patches\n\n- preserve instance synchronization after visiting settings (#1835) (34867d137b7dec03be34a773327af25b110d6c2c)\n- preserve normal window bounds across restart (#1830) (#1833) (e542d93ef0b2f05a13563c211ca9d2778ebe9672)\n- **ftb**: harden manifest conversion and install error handling (#1832) (1c343bb14f7d4cf87cbf013a2a13446dc03bc930)\n- make AppImage update ownership explicit (#1831) (e6bba84eb58fd7d56f9f7d9750aeb24288cb2c77)\n- make agent URL and API key settings reliable (c51bea03ec114015c0b7f86983e5dc7b5aef7e24)\n\n## Downloads\n\n- Windows (x64): zip\n- Linux (x64): AppImage deb tar.xz rpm\n- Linux (arm64): AppImage deb tar.xz rpm\n- Mac (x64): dmg\n- Mac (arm64): dmg\n\n### DeskGap Windows x64 — UNSIGNED PREVIEW\n\nDownload the DeskGap EXE for **manual installation only**.\nThis preview is not Authenticode-signed. Production DeskGap signing and automatic updates are not enabled; the launcher intentionally rejects unsigned EXEs as automatic updates.\nElectron/APPX signing and publishing are unchanged. This preview is not evidence of a completed signed DeskGap update workflow."
+      "changelog": "## 0.74.0\n### 🚀 Features\n\n- add per-mod update and version shortcuts (#1874) (2df0edd58f5aa018a0be90593dbf1cbb8405e582)\n- add AI translation for shader pack language files (#1871) (808d8141c70e18226e7eb503e2179c864f79c718)\n- add automatic build repair (#1873) (259cb566cec5c84ac401954ec7967281de28ee7b)\n- folder customization auto group (#1850) (829c3f26c8ef635908921088812e1ef95ca76f86)\n- add java profiles and java installer (archive) (#1859) (52ac42bf6b89350e46c1a93956f695e0c2e40fc1)\n### 🐛 Bug Fixes & Patches\n\n- **backup**: handle Windows drive roots and archive flushing (d29c6998bef5233efb60b5343ef33745b75bdb30)\n- **ui**: remember split pane sizes (#1863) (ebe22a0a77fe4337da7e0d0fad4d8dc7f0ba2d0e)\n- fix dedicated gpu detection on linux (#1864) (2ae3fa503fff15ad8d5f36f83c3a5eb9361dc1dd)\n- **unzip**: prepare a corrected npm package (#1867) (a9a175a35d04e7a41fd19c594040805230066be2)\n- fall back to original CurseForge search card images (#1868) (d019d1bf1a5997f6937b206336fd01a57077c7ff)\n- fix video player configuration error 153 on youtube embedds (#1865) (2dfe67b289772bb9214b49d019cc43a5f9a035f0)\n- respect system settings for date display (#1858) (14b1ac11e52377ee0ab34f5485d1e2758495b34f)\n- **i18n**: improve Polish translations and fix font character issues (#1855) (07af86bb0760016d087142e35fcce7ea5e679ea4)\n- **instance**: display playtime in hours and minutes (#1854) (5f7b3d0b6"
     },
     "aged": {
       "repo": "xR4YM0ND/Aged",
@@ -200,7 +200,7 @@
       "url": "https://github.com/MOJI6416/grubielauncher"
     },
     "hmcl": {
-      "count": 11087,
+      "count": 11096,
       "platform": "github",
       "url": "https://github.com/HMCL-dev/HMCL"
     },
@@ -215,12 +215,12 @@
       "url": "https://github.com/Kryp-s/PaxLauncher"
     },
     "prismlauncher": {
-      "count": 11241,
+      "count": 11243,
       "platform": "github",
       "url": "https://github.com/PrismLauncher/PrismLauncher"
     },
     "xmcl": {
-      "count": 1725,
+      "count": 1726,
       "platform": "github",
       "url": "https://github.com/Voxelum/x-minecraft-launcher"
     },
@@ -245,12 +245,12 @@
       "url": "https://github.com/bbsmc/app"
     },
     "cloth-config": {
-      "count": 262,
+      "count": 263,
       "platform": "github",
       "url": "https://github.com/shedaniel/ClothConfig"
     },
     "entityculling": {
-      "count": 343,
+      "count": 344,
       "platform": "github",
       "url": "https://github.com/tr7zw/EntityCulling"
     },
@@ -265,7 +265,7 @@
       "url": "https://github.com/malte0811/FerriteCore"
     },
     "iris": {
-      "count": 3909,
+      "count": 3910,
       "platform": "github",
       "url": "https://github.com/IrisShaders/Iris"
     },
@@ -285,7 +285,7 @@
       "url": "https://github.com/TerraformersMC/ModMenu"
     },
     "modrinth": {
-      "count": 2554,
+      "count": 2556,
       "platform": "github",
       "url": "https://github.com/modrinth/code"
     },
@@ -300,7 +300,7 @@
       "url": "https://github.com/SkyblockerMod/Skyblocker-modpack"
     },
     "sodium": {
-      "count": 5866,
+      "count": 5867,
       "platform": "github",
       "url": "https://github.com/CaffeineMC/sodium"
     }
